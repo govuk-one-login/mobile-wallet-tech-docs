@@ -45,8 +45,17 @@ Images to be included in the docs are kept in `source/images`
 
 In order to configure some aspects of layout, like the header, edit `config/tech-docs.yml`.
 
-### Preview
-Whilst writing documentation, you can run a middleman server to preview how the published version will look in the browser.
+### Build the documentation
+
+Once happy with your changes, you'll need to (re-)build the static website.
+
+```
+bundle exec middleman build
+```
+
+### Preview in the browser
+
+Whilst writing documentation, you can run a middleman server to preview how the documentation will look in the browser.
 
 The preview is only available on your own computer. Others will not be able to access it if you give them the link.
 
