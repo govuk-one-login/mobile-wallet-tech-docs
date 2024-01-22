@@ -3,7 +3,7 @@ host:
 
 # Header-related options
 show_govuk_logo: true
-service_name: Name of API
+service_name: Wallet
 service_link: https://www.larry-the-cat.service.gov.uk
 phase: Beta
 
@@ -15,7 +15,7 @@ header_links:
   Support: https://www.larry-the-cat.service.gov.uk/support
 
 # Enables search functionality. This indexes pages only and is not recommended for single-page sites.
-enable_search: false
+enable_search: true
 
 # Tracking ID from Google Analytics (e.g. UA-XXXX-Y)
 ga_tracking_id:
@@ -32,8 +32,13 @@ collapsible_nav: true
 max_toc_heading_level: 2
 
 # Prevent robots from indexing (e.g. whilst in development)
-prevent_indexing: false
+prevent_indexing: true
 
 show_contribution_banner: true
-github_repo: alphagov/YOUR_REPO
+github_repo: alphagov/mobile-wallet-tech-docs
 github_branch: main
+
+# API description
+#api_path: ./openapi/api-with-examples.yaml
+#api_path: https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/petstore.yaml
+api_path: ./openapi/petstore.yaml
