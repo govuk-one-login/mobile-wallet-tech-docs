@@ -1,7 +1,7 @@
-# [] technical documentation
-Where the documentation of the [] is located.
+# Wallet technical documentation
+Where the documentation of the Wallet is located.
 
-The [] technical documentation is based on the [Tech Docs Template](https://github.com/alphagov/tech-docs-template) - a [Middleman template](https://github.com/alphagov/tech-docs-template#:~:text=Template%20is%20a-,Middleman%20template,-that%20you%20can) to build technical documentation using a GOV.UK style.
+The Wallet technical documentation is based on the [Tech Docs Template](https://github.com/alphagov/tech-docs-template) - a [Middleman template](https://github.com/alphagov/tech-docs-template#:~:text=Template%20is%20a-,Middleman%20template,-that%20you%20can) to build technical documentation using a GOV.UK style.
 
 # Getting Started
 Middleman uses Ruby to generate static web pages from Markdown files, so you'll need Ruby installed.
