@@ -1,0 +1,563 @@
+---
+title: Wallet Credential Issuer APIs
+weight: 50
+last_reviewed_on: 2024-01-22
+review_in: 1 month
+---
+
+# Wallet Credential Issuer APIs
+
+<%= warning_text('This page will be replaced by an openAPI version.') %>
+
+```
+GET /.well-known/did.json
+response
+200
+GET /.well-known/openid-credential-issuer
+request
+response
+200
+GET /credential_offer
+request
+response
+200 
+POST /credential
+request
+response
+200 
+4XX
+```
+
+## GET /.well-known/did.json
+Public API for other systems to retrieve the `did:web` document for the issuer. 
+All keys used to sign credentials must be present in this document. 
+
+### response
+200
+
+#### response schema
+```json
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "type": "array",
+      "items": [
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "id": {
+      "type": "string",
+      "description": "description: ID of this document is "did:web:" + <domain of the webiste this is the distributed identifier for>"
+    },
+    "verificationMethod": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "For a JSON Web Key the ID of the verification method is the ID of this did:web documen + "#" + key ID"
+            },
+            "type": {
+              "type": "string"
+            },
+            "controller": {
+              "type": "string"
+            },
+            "publicKeyJwk": {
+              "type": "object",
+              "description": "Json Web Key representation of the public key corresponding to the key used to sign verified credentials",
+              "properties": {
+                "kid": {
+                  "type": "string",
+                  "description": " ???? "
+                },
+                "kty": {
+                  "type": "string"
+                },
+                "crv": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "string"
+                },
+                "y": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kid",
+                "kty",
+                "crv",
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "type",
+            "controller",
+            "publicKeyJwk"
+          ]
+        }
+      ]
+    },
+    "assertionMethod": {
+      "type": "array",
+      "description": " ???? ",
+      "items": [
+        {
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "required": [
+    "context",
+    "id",
+    "verificationMethod",
+    "assertionMethod"
+  ]
+}
+```
+
+
+#### response example
+```json
+{
+  "context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/jws-2020/v1"
+  ],
+  "id": "did:web:wallet-api.mobile.staging.account.gov.uk/hmrc-stub",
+  "verificationMethod": [
+    {
+      "id": "did:web:wallet-api.mobile.staging.account.gov.uk/hmrc-stub#xuUZtjUzW2a-FgshCsLawbi08LL3aaHHhKKw3w7O8x0",
+      "type": "JsonWebKey2020",
+      "controller": "did:web:wallet-api.mobile.staging.account.gov.uk",
+      "publicKeyJwk": {
+        "kid": "xuUZtjUzW2a-FgshCsLawbi08LL3aaHHhKKw3w7O8x0",
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "BY7gXGUvMrwrVuytSWVG4SAYD8dEYtUCdokR5q632xQ",
+        "y": "P3Zwqtz3XimgdwLEF-z7akHyiqAfsmfa5JfJlYHouZw"
+      }
+    }
+  ],
+  "assertionMethod": [
+    "did:web:mobile.staging.account.gov.uk#xuUZtjUzW2a-FgshCsLawbi08LL3aaHHhKKw3w7O8x0"
+  ]
+}
+```
+
+## GET /.well-known/openid-credential-issuer
+Public API for other systems to retrieve metadata about the credentials issued by this issuer. This includes the content that will be present on the document in the wallet.
+
+### request
+### response
+200
+
+#### response schema
+```
+TBC
+```
+
+#### response example
+```json
+{
+  "credential_issuer":"https://issuer.dbs.gov.uk",
+  "authorization_server":"https://sts.account.gov.uk",
+  "credentials_endpoint":"https://issuer.dbs.gov.uk/credential",
+  "credentials_supported": {
+    "basicDisclosure": {
+      "format": "jwt_vc_json",
+      "id": "BasicDisclosure_JWT",
+      "types": [
+        "VerifiableCredential",
+        "BasicDisclosureCredential"
+      ],
+      "cryptographic_binding_methods_supported": [
+        "did"
+      ],
+      "cryptographic_suites_supported": [
+        "ES256K"
+      ],
+      "display": [
+        {
+          // Name of the credential always displayed at the top of the card
+          "name": "Basic DBS disclosure certificate",
+          "locale": "en-GB",
+          "logo": {
+            "url": "https://issuer.gov.uk/assets/logo.png",
+            "alt_text": "a square logo of DBS"
+          },
+          "background_color": "#12107c",
+          "text_color": "#FFFFFF"
+        },
+        {
+          "name": "Tystysgrif gwiriad DBS sylfaenol",
+          "locale": "en-CY",
+          "logo": {
+            "url": "https://issuer.gov.uk/assets/logo.png",
+            "alt_text": "logo sgwâr o DBS"
+          },
+          "background_color": "#12107c",
+          "text_color": "#FFFFFF"
+        }
+      ],
+      // Biographic information about the subject of the credential
+      "credentialSubject": {
+        "lastName": {
+          "display": [
+            {
+              "field": "Auxiliaryfield1",
+              "name": "Surname",
+              "locale": "en-GB"
+            },
+            {
+              "field": "Auxiliaryfield1",
+              "name": "Cyfenw",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        "givenName": {
+          "display": [
+          {
+            "field": "Auxiliaryfield2",
+            "name": "Forename(s)",
+            "locale": "en-GB"
+          },
+          {
+            "field": "Auxiliaryfield2",
+            "name": "Enw(au) cyntaf",
+            "locale": "cy-GB"
+          }
+          ]
+        },
+        "dateOfBirth": {
+          "display": [
+            {
+              "field": "Auxiliaryfield3",
+              "name": "Date of birth",
+              "locale": "en-GB"
+            },
+            {
+              "field": "Auxiliaryfield3",
+              "name": "Dyddiad Geni",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        "firstLineOfAddress": {
+          "display": [
+            {
+              "field": "Auxiliaryfield4",
+              "name": "First line of address",
+              "locale": "en-GB"
+            },
+            {
+              "field": "Auxiliaryfield4",
+              "name": "Llinell gyntaf y cyfeiriad",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        // Issuer specific data describing the credential
+        "BasicdisclosureRecord": {},
+        "outcome": {
+          "display": [
+            {
+              "field": "PrimaryField",
+              "name": "Outcome",
+              "locale": "en-GB"
+            },
+            {
+              "field": "PrimaryField",
+              "name": "Canlyniad",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        // Date when check against Police National Computer (PNC) was carried out
+        "disclosureDate": {
+          "display": [
+            {
+              "field": "KeyField1",
+              "name": "Disclosure date",
+              "locale": "en-GB"
+            },
+            {
+              "field": "KeyField1",
+              "name": "Dyddiad datgelu",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        // 9-digit certificate number
+        "certificateNumber": {
+          "display": [
+            {
+              "field": "KeyField2",
+              "name": "Certificate number",
+              "locale": "en-GB"
+            },
+            {
+              "field": "KeyField2",
+              "name": "Rhif tystysgrif",
+              "locale": "cy-GB"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+## GET /credential_offer
+This endpoint is owned and used by the Credential Issuer.  The API returns a Credential Offer, which contains a pre-authorisation code and is displayed to the user as a QR code or deep-link, which will open the GOV.UK wallet. 
+
+### request
+
+```
+GET /credential_offer HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+... request will depend on the CRI...
+```
+
+### response
+200 
+application/json
+
+
+#### response schema
+```json
+TBC
+```
+
+#### response example
+```json
+Content-Type: application/json
+{
+  "credential_issuer": "https://credential-issuer.example.com",
+  "credentials": [
+    "BasicDisclosure"
+  ],
+  "grants": {
+    "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+    "pre-authorized_code": "adhjhdja.jkdkhj.hdj"
+    }
+  }
+}
+```
+
+The `pre-authorized_code` is a JWT, signed by the issuer, with the content:
+
+##### Header:
+```json
+{
+  "typ": "JWT",
+  "alg": "ES256",
+  "kid": "11111111-1111-1111-1111-111111111111"
+}
+```
+
+##### Body:
+```json
+{
+  "clientId": <clientId>,
+  "credentialLookupId": <credentialLookupId> ,
+  "exp": 1234567890,
+  "iat": 1234567890,
+  "iss": "urn:fdc:gov:uk:<RELYING PARTY e.g. HMRC>",
+  "aud": "urn:fdc:gov:uk:wallet"
+}
+```
+
+This must be presented to the user as a QR code or link (depending on the device the user is accessing the website on desktop or mobile)
+
+The link (identical to the content of the QR) should be:
+
+
+```
+openid-credential-offer://?credential_offer=<URL encoded credential offer>
+```
+Example credential offer link and QR
+
+```
+openid-credential-offer://?credential_offer=%7B%22credential_issuer%22:%22
+  https://credential-issuer.example.com%22,%22credentials%22:%5B%22UniversityDegree_JWT
+  %22,%7B%22format%22:%22mso_mdoc%22,%22doctype%22:%22org.iso.18013.5.1.mDL%22%7D%5D,%22
+  grants%22:%7B%22authorization_code%22:%7B%22issuer_state%22:%22eyJhbGciOiJSU0Et...FYUaBy
+  %22%7D,%22urn:ietf:params:oauth:grant-type:pre-authorized_code%22:%7B%22
+  pre-authorized_code%22:%22adhjhdjajkdkhjhdj%22,%22user_pin_required%22:true%7D%7D%7D
+```
+
+<%= image_tag "api-exemple-qr-code.png", { :alt => '' } %>
+
+
+ 
+
+## POST /credential
+API for the wallet to request the credential. Include in the request is the access token and proof of possession of the  wallet did:key. 
+
+### request
+
+```
+POST /token HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
+Authorization: BEARER czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+{
+   "credential_identifier": "12345-2023",
+   "proof": {
+      "proof_type": "jwt",
+      "jwt": "eyJraWQiOiJkaWQ6ZXhhbXBsZTplYmZlYjFmNzEyZWJjNmYxYzI3NmUxMmVjMjEva2V5cy8
+      xIiwiYWxnIjoiRVMyNTYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJzNkJoZFJrcXQzIiwiYXVkIjoiaHR
+      0cHM6Ly9zZXJ2ZXIuZXhhbXBsZS5jb20iLCJpYXQiOjE1MzY5NTk5NTksIm5vbmNlIjoidFppZ25zbk
+      ZicCJ9.ewdkIkPV50iOeBUqMXCC_aZKPxgihac0aW9EkL1nOzM"
+   }
+}
+```
+
+#### Content of the Bearer Token
+
+##### Header:
+```json
+{
+  "typ": "JWT",
+  "alg": "ES256",
+  "kid": "11111111-1111-1111-1111-111111111111"
+}
+```
+
+##### Body:
+```json
+{
+  "sub": "<walletSubjectId",
+  "iss": "urn:fdc:gov:uk:sts",
+  "aud": "urn:fdc:gov:uk:<RELYING PARTY e.g. HMRC>",
+  "nonce": "tZignsnFbp"
+  "credential_lookup_id": "<credential lookup id>"
+}
+```
+
+#### Content of the Proof JWT
+##### Header:
+```json
+{
+  "alg": "ES256",
+  "kid": "did:key:ebfeb1f712ebc6f1c276e12ec21"
+}
+```
+
+##### Body:
+```json
+{
+  "iss": "s6BhdRkqt3",
+  "aud": "https://server.example.com",
+  "iat": 1659145924,
+  "nonce": "tZignsnFbp"
+}
+```
+
+### response
+200 
+
+#### response schema
+
+```json
+TBC
+```
+
+#### response example
+```json
+{
+  "iss": "https://test.issuer.dbs.gov.uk/",
+  "sub": "did:key:ebfaeb1fd712ebf1c276e12ec21",
+  "vc": {
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "BasicDisclosureCredential"
+    ],
+    "credentialSubject": {
+      "id": "did:key:ebfeb1f712ebc6f1c276e12ec21",
+      "issuanceDate": "2023-12-10",
+      "expirationDate": "2024-12-10",
+      "name": [
+        {
+          "nameParts": [
+            {
+              "value": "Sarah",
+              "type": "GivenName"
+            },
+            {
+              "value": "Elizabeth",
+              "type": "GivenName"
+            },
+            {
+              "value": "Edwards",
+              "type": "FamilyName"
+            }
+          ]
+        }
+      ],
+      "birthDate": [
+        {
+          "value": "1985-10-18"
+        }
+      ],
+      "address": [
+        {
+          "firstLine": "10 Princess Parade"
+        }
+      ],
+      "BasicDisclosureRecord": [
+        {
+          "certificateNumber": "009878863",
+          "outcome": "Result clear",
+          "disclosureDate": "2023-12-10"
+        }
+      ],
+      "documentMetadata": [
+        {
+          "multipleCredentialsAllowed": "true"
+        }
+      ]
+    }
+  }
+}
+```
+
+
+4XX
+#### body:
+```json
+{
+  "error": "<error as per RFC6749>",
+  "error_description": "<optional error description free text"
+}
+```
+
+### [ignore until OpenAPI file ready]
+
+Use an API reference page to list your API endpoints, methods, requests, responses and errors. You should auto-generate your API reference rather than writing it by hand, so it’s easier to keep your API reference in sync with your API code.
+
+Follow the guidance on [writing API reference documentation](https://www.gov.uk/guidance/writing-api-reference-documentation).
+
+You can [convert an OpenAPI file](https://tdt-documentation.london.cloudapps.digital/write_docs/add_openapi_spec/#convert-an-openapi-specification-into-documentation) into an API reference page in your documentation.
+
+
+
