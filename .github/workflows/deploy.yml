@@ -31,21 +31,21 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 13.x
+      # - name: Install node
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: 13.x
 
-      - name: Node packages cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: Node packages cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.npm
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
-      - name: Install packages
-        run: npm install
+      # - name: Install packages
+      #   run: npm install
 
       - name: Build Middleman
         run: bundle exec middleman build
