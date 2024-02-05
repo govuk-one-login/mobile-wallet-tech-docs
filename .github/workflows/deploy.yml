@@ -4,6 +4,10 @@ name: "Deploy Middleman to GH Pages"
   push:
     branches: [gh-pages]
 
+permissions:
+  id-token: write
+  pages: write
+
 jobs:
 
   build:
