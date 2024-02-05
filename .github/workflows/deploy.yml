@@ -5,6 +5,11 @@ name: "Deploy Middleman to GH Pages"
     branches: [gh-pages]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
 
   build:
@@ -39,7 +44,6 @@ jobs:
       - name: Deploy to Github Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           path: ./build
 
       - name: Deploy to GitHub Pages
