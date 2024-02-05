@@ -2,7 +2,7 @@ name: "Deploy Middleman to GH Pages"
 
 'on':
   push:
-    branches: [gh-pages]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
