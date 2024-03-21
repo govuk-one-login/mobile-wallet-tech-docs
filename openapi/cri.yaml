@@ -30,6 +30,8 @@ paths:
             application/json:    
               schema:
                 $ref: "#/components/schemas/CredentialOffer"
+              example:
+                credential_offer_uri: https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22BasicDisclosure%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiJmZjI3NWI5Mi0wZGVmLTRkZmMtYjBmNi04N2M5NmIyNmM2YzciLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJhdWQiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJjbGllbnRJZCI6ImFiYzEyMyIsImlzcyI6InVybjpmZGM6Z292OnVrOjxITVJDPiIsImNyZWRlbnRpYWxfaWRlbnRpZmllcnMiOlsiM2U0Zjc1ZDMtNzkxMy00ZDE0LWE0YjctY2FlNzFlN2NiYmEwIl0sImV4cCI6MTcxMTAzNTkwNywiaWF0IjoxNzExMDM1NjA3fQ.6hHe0-A3n4GlBph9X4hcxbsflusco2Q7z_07-s85QmYOSCbYm8My_LGEcBD68E5lW5DCJ1yjwtPPr9VbhIlhyg%22%7D%7D%2C%22credentialIssuer%22%3A%22https%3A%2F%2Fcredential-issuer.example.com%22%7D
   /credential:
     post:
       summary: Request a credential
@@ -42,6 +44,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CredentialRequestBody'
+            example:
+              credential_identifier: 12345-2023
+              proof:
+                proof_type: jwt
+                jwt: eyJraWQiOiJkaWQ6ZXhhbXBsZTplYmZlYjFmNzEyZWJjNmYxYzI3NmUxMmVjMjEva2V5cy8xIiwiYWxnIjoiRVMyNTYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJzNkJoZFJrcXQzIiwiYXVkIjoiaHR0cHM6Ly9zZXJ2ZXIuZXhhbXBsZS5jb20iLCJpYXQiOjE1MzY5NTk5NTksIm5vbmNlIjoidFppZ25zbkZicCJ9.ewdkIkPV50iOeBUqMXCC_aZKPxgihac0aW9EkL1nOzM
       responses:
         '200':
           description: Credential
@@ -49,6 +56,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Credential"
+              example:
+                iss: https://test.issuer.dbs.gov.uk/
+                sub: did:key:ebfaeb1fd712ebf1c276e12ec21
+                vc:
+                  "@context":
+                    - https://www.w3.org/2018/credentials/v1
+                  type:
+                    - VerifiableCredential
+                    - BasicDisclosureCredential
+                  credentialSubject:
+                    id: did:key:ebfeb1f712ebc6f1c276e12ec21
+                    issuanceDate: '2023-12-10'
+                    expirationDate: '2024-12-10'
+                    name:
+                      - nameParts:
+                          - value: Sarah
+                            type: GivenName
+                          - value: Elizabeth
+                            type: GivenName
+                          - value: Edwards
+                            type: FamilyName
+                    birthDate:
+                      - value: '1985-10-18'
+                    address:
+                      - firstLine: 10 Princess Parade
+                    BasicDisclosureRecord:
+                      - certificateNumber: '009878863'
+                        outcome: Result clear
+                        disclosureDate: '2023-12-10'
+                    documentMetadata:
+                      - multipleCredentialsAllowed: 'true'
   /.well-known/openid-credential-issuer:
     get:
       summary: Retrieve credential metadata
@@ -60,6 +98,95 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CredentialMetadata"
+              example:
+                credential_issuer: https://issuer.dbs.gov.uk
+                authorization_server: https://sts.account.gov.uk
+                credentials_endpoint: https://issuer.dbs.gov.uk/credential
+                credentials_supported:
+                  basicDisclosure:
+                    format: jwt_vc_json
+                    id: BasicDisclosure_JWT
+                    types:
+                      - VerifiableCredential
+                      - BasicDisclosureCredential
+                    cryptographic_binding_methods_supported:
+                      - did
+                    cryptographic_suites_supported:
+                      - ES256K
+                    display:
+                      - name: Basic DBS disclosure certificate
+                        locale: en-GB
+                        logo:
+                          url: https://issuer.gov.uk/assets/logo.png
+                          alt_text: a square logo of DBS
+                        background_color: "#12107c"
+                        text_color: "#FFFFFF"
+                      - name: Tystysgrif gwiriad DBS sylfaenol
+                        locale: en-CY
+                        logo:
+                          url: https://issuer.gov.uk/assets/logo.png
+                          alt_text: logo sgwâr o DBS
+                        background_color: "#12107c"
+                        text_color: "#FFFFFF"
+                    credentialSubject:
+                      lastName:
+                        display:
+                          - field: Auxiliaryfield1
+                            name: Surname
+                            locale: en-GB
+                          - field: Auxiliaryfield1
+                            name: Cyfenw
+                            locale: cy-GB
+                      givenName:
+                        display:
+                          - field: Auxiliaryfield2
+                            name: Forename(s)
+                            locale: en-GB
+                          - field: Auxiliaryfield2
+                            name: Enw(au) cyntaf
+                            locale: cy-GB
+                      dateOfBirth:
+                        display:
+                          - field: Auxiliaryfield3
+                            name: Date of birth
+                            locale: en-GB
+                          - field: Auxiliaryfield3
+                            name: Dyddiad Geni
+                            locale: cy-GB
+                      firstLineOfAddress:
+                        display:
+                          - field: Auxiliaryfield4
+                            name: First line of address
+                            locale: en-GB
+                          - field: Auxiliaryfield4
+                            name: Llinell gyntaf y cyfeiriad
+                            locale: cy-GB
+                      BasicdisclosureRecord: { }
+                      outcome:
+                        display:
+                          - field: PrimaryField
+                            name: Outcome
+                            locale: en-GB
+                          - field: PrimaryField
+                            name: Canlyniad
+                            locale: cy-GB
+                      disclosureDate:
+                        display:
+                          - field: KeyField1
+                            name: Disclosure date
+                            locale: en-GB
+                          - field: KeyField1
+                            name: Dyddiad datgelu
+                            locale: cy-GB
+                      certificateNumber:
+                        display:
+                          - field: KeyField2
+                            name: Certificate number
+                            locale: en-GB
+                          - field: KeyField2
+                            name: Rhif tystysgrif
+                            locale: cy-GB
+
   /.well-known/did.json:
     get:
       summary: Retrieve did:web document
@@ -71,6 +198,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DidWebDocument"
+              example:
+                context:
+                  - https://www.w3.org/ns/did/v1
+                  - https://w3id.org/security/suites/jws-2020/v1
+                id: did:web:wallet-api.mobile.staging.account.gov.uk/hmrc-stub
+                verificationMethod:
+                  - id: did:web:wallet-api.mobile.staging.account.gov.uk/hmrc-stub#xuUZtjUzW2a-FgshCsLawbi08LL3aaHHhKKw3w7O8x0
+                    type: JsonWebKey2020
+                    controller: did:web:wallet-api.mobile.staging.account.gov.uk
+                    publicKeyJwk:
+                      kid: xuUZtjUzW2a-FgshCsLawbi08LL3aaHHhKKw3w7O8x0
+                      kty: EC
+                      crv: P-256
+                      x: BY7gXGUvMrwrVuytSWVG4SAYD8dEYtUCdokR5q632xQ
+                      "y": P3Zwqtz3XimgdwLEF-z7akHyiqAfsmfa5JfJlYHouZw
+                assertionMethod:
+                  - did:web:mobile.staging.account.gov.uk#xuUZtjUzW2a-FgshCsLawbi08LL3aaHHhKKw3w7O8x0
 components:
   securitySchemes:
     BearerAuthentication:
@@ -86,12 +230,6 @@ components:
         credential_offer_uri:
           type: string
           format: uri
-          example: "https://mobile.staging.account.gov.uk/wallet/add?credential_offer=%7B%22credential_issuer%22:%22
-  https://credential-issuer.example.com%22,%22credentials%22:%5B%22UniversityDegree_JWT
-  %22,%7B%22format%22:%22mso_mdoc%22,%22doctype%22:%22org.iso.18013.5.1.mDL%22%7D%5D,%22
-  grants%22:%7B%22authorization_code%22:%7B%22issuer_state%22:%22eyJhbGciOiJSU0Et...FYUaBy
-  %22%7D,%22urn:ietf:params:oauth:grant-type:pre-authorized_code%22:%7B%22
-  pre-authorized_code%22:%22adhjhdjajkdkhjhdj%22,%22user_pin_required%22:true%7D%7D%7D"
     CredentialRequestBody:
       type: object
       additionalProperties: false
@@ -137,11 +275,13 @@ components:
       properties:
         "@context":
           type: array
+          minItems: 1
           items:
             type: string
             format: uri
         type:
           type: array
+          minItems: 1
           items:
             type: string
         credentialSubject:
@@ -164,22 +304,27 @@ components:
           format: date
         name:
           type: array
+          minItems: 1
           items:
             $ref: "#/components/schemas/Name"
         birthDate:
           type: array
+          minItems: 1
           items:
             $ref: "#/components/schemas/BirthDate"
         address:
           type: array
+          minItems: 1
           items:
             $ref: "#/components/schemas/Address"
         BasicDisclosureRecord:
           type: array
+          minItems: 1
           items:
             $ref: "#/components/schemas/BasicDisclosureRecord"
         documentMetadata:
           type: array
+          minItems: 1
           items:
             $ref: "#/components/schemas/DocumentMetadatum"
       required:
@@ -238,6 +383,7 @@ components:
       properties:
         nameParts:
           type: array
+          minItems: 1
           items:
             $ref: "#/components/schemas/NamePart"
       required:
@@ -291,22 +437,26 @@ components:
           type: string
         types:
           type: array
+          minItems: 1
           items:
             type: string
         cryptographic_binding_methods_supported:
           type: array
+          minItems: 1
           items:
             type: string
         cryptographic_suites_supported:
           type: array
+          minItems: 1
           items:
             type: string
         display:
           type: array
+          minItems: 1
           items:
             $ref: "#/components/schemas/BasicDisclosureDisplay"
         credentialSubject:
-          $ref: "#/components/schemas/CredentialSubjectMetadata"
+          $ref: "#/components/schemas/BasicDisclosureCredentialSubject"
       required:
         - credentialSubject
         - cryptographic_binding_methods_supported
@@ -315,26 +465,27 @@ components:
         - format
         - id
         - types
-    CredentialSubjectMetadata:
+    BasicDisclosureCredentialSubject:
       type: object
       additionalProperties: false
       properties:
         lastName:
-          $ref: "#/components/schemas/CertificateNumber"
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
         givenName:
-          $ref: "#/components/schemas/CertificateNumber"
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
         dateOfBirth:
-          $ref: "#/components/schemas/CertificateNumber"
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
         firstLineOfAddress:
-          $ref: "#/components/schemas/CertificateNumber"
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
         BasicdisclosureRecord:
-          $ref: "#/components/schemas/BasicdisclosureRecord"
+          type: object
         outcome:
-          $ref: "#/components/schemas/CertificateNumber"
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
         disclosureDate:
-          $ref: "#/components/schemas/CertificateNumber"
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
+
         certificateNumber:
-          $ref: "#/components/schemas/CertificateNumber"
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
       required:
         - BasicdisclosureRecord
         - certificateNumber
@@ -344,29 +495,26 @@ components:
         - givenName
         - lastName
         - outcome
-    BasicdisclosureRecord:
-      type: object
-      additionalProperties: false
-    CertificateNumber:
+    CredentialSubjectDisplay:
       type: object
       additionalProperties: false
       properties:
         display:
           type: array
+          minItems: 1
           items:
-            $ref: "#/components/schemas/CertificateNumberDisplay"
-      required:
-        - display
-    CertificateNumberDisplay:
-      type: object
-      additionalProperties: false
-      properties:
-        field:
-          type: string
-        name:
-          type: string
-        locale:
-          $ref: "#/components/schemas/Locale"
+            type: object
+            additionalProperties: false
+            properties:
+              field:
+                type: string
+              name:
+                type: string
+              locale:
+                type: string
+                enum:
+                  - en-GB
+                  - cy-GB
       required:
         - field
         - locale
@@ -403,17 +551,13 @@ components:
       required:
         - alt_text
         - url
-    Locale:
-      type: string
-      enum:
-        - en-GB
-        - cy-GB
     DidWebDocument:
       type: object
       additionalProperties: false
       properties:
         context:
           type: array
+          minItems: 1
           items:
             type: string
             format: uri
@@ -421,10 +565,12 @@ components:
           type: string
         verificationMethod:
           type: array
+          minItems: 1
           items:
             $ref: "#/components/schemas/VerificationMethod"
         assertionMethod:
           type: array
+          minItems: 1
           items:
             type: string
       required:

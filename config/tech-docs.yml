@@ -39,6 +39,4 @@ github_repo: alphagov/mobile-wallet-tech-docs
 github_branch: main
 
 # API description
-#api_path: ./openapi/api-with-examples.yaml
-#api_path: https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/petstore.yaml
-api_path: ./openapi/petstore.yaml
+api_path: ./openapi/cri.yaml
