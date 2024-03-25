@@ -14,7 +14,8 @@
 /.sass-cache
 /.cache
 
-# Ignore .DS_store file
+# Mac
 .DS_Store
+.idea
 
 Staticfile.auth
