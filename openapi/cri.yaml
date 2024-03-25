@@ -27,9 +27,9 @@ paths:
         '200':
           description: URI encoded credential offer
           content:
-            application/json:    
+            application/json:
               schema:
-                $ref: "#/components/schemas/CredentialOffer"
+                $ref: "#/components/schemas/CredentialOfferResponse"
               example:
                 credential_offer_uri: https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22BasicDisclosure%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiJmZjI3NWI5Mi0wZGVmLTRkZmMtYjBmNi04N2M5NmIyNmM2YzciLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJhdWQiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJjbGllbnRJZCI6ImFiYzEyMyIsImlzcyI6InVybjpmZGM6Z292OnVrOjxITVJDPiIsImNyZWRlbnRpYWxfaWRlbnRpZmllcnMiOlsiM2U0Zjc1ZDMtNzkxMy00ZDE0LWE0YjctY2FlNzFlN2NiYmEwIl0sImV4cCI6MTcxMTAzNTkwNywiaWF0IjoxNzExMDM1NjA3fQ.6hHe0-A3n4GlBph9X4hcxbsflusco2Q7z_07-s85QmYOSCbYm8My_LGEcBD68E5lW5DCJ1yjwtPPr9VbhIlhyg%22%7D%7D%2C%22credentialIssuer%22%3A%22https%3A%2F%2Fcredential-issuer.example.com%22%7D
   /credential:
@@ -55,7 +55,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Credential"
+                $ref: "#/components/schemas/CredentialResponse"
               example:
                 iss: https://test.issuer.dbs.gov.uk/
                 sub: did:key:ebfaeb1fd712ebf1c276e12ec21
@@ -97,7 +97,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CredentialMetadata"
+                $ref: "#/components/schemas/CredentialMetadataResponse"
               example:
                 credential_issuer: https://issuer.dbs.gov.uk
                 authorization_server: https://sts.account.gov.uk
@@ -196,7 +196,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DidWebDocument"
+                $ref: "#/components/schemas/DidWebDocumentResponse"
               example:
                 context:
                   - https://www.w3.org/ns/did/v1
@@ -221,7 +221,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    CredentialOffer:
+    CredentialOfferResponse:
       type: object
       required:
         - credential_offer_uri
@@ -253,7 +253,7 @@ components:
       required:
         - jwt
         - proof_type
-    Credential:
+    CredentialResponse:
       type: object
       additionalProperties: false
       properties:
@@ -325,7 +325,7 @@ components:
           type: array
           minItems: 1
           items:
-            $ref: "#/components/schemas/DocumentMetadatum"
+            $ref: "#/components/schemas/DocumentMetadata"
       required:
         - basicDisclosureRecord
         - address
@@ -367,7 +367,7 @@ components:
           format: date
       required:
         - value
-    DocumentMetadatum:
+    DocumentMetadata:
       type: object
       additionalProperties: false
       properties:
@@ -398,7 +398,7 @@ components:
       required:
         - type
         - value
-    CredentialMetadata:
+    CredentialMetadataResponse:
       type: object
       additionalProperties: false
       properties:
@@ -464,6 +464,26 @@ components:
         - format
         - id
         - types
+    BasicDisclosureDisplay:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        locale:
+          type: string
+        logo:
+          $ref: "#/components/schemas/Logo"
+        background_color:
+          type: string
+        text_color:
+          type: string
+      required:
+        - background_color
+        - locale
+        - logo
+        - name
+        - text_color
     BasicDisclosureCredentialSubject:
       type: object
       additionalProperties: false
@@ -477,17 +497,14 @@ components:
         firstLineOfAddress:
           $ref: "#/components/schemas/CredentialSubjectDisplay"
         basicDisclosureRecord:
-          $ref: "#/components/schemas/BasicDisclosureRecordDisplay"
+          $ref: "#/components/schemas/CredentialSubjectBasicDisclosureRecord"
       required:
         - basicDisclosureRecord
-        - certificateNumber
         - dateOfBirth
-        - disclosureDate
         - firstLineOfAddress
         - givenName
         - lastName
-        - outcome
-    BasicDisclosureRecordDisplay:
+    CredentialSubjectBasicDisclosureRecord:
       type: object
       additionalProperties: false
       properties:
@@ -509,42 +526,26 @@ components:
           type: array
           minItems: 1
           items:
-            type: object
-            additionalProperties: false
-            properties:
-              field:
-                type: string
-              name:
-                type: string
-              locale:
-                type: string
-                enum:
-                  - en-GB
-                  - cy-GB
+            $ref: "#/components/schemas/Display"
       required:
-        - field
-        - locale
-        - name
-    BasicDisclosureDisplay:
+        - display
+    Display:
       type: object
       additionalProperties: false
       properties:
+        field:
+          type: string
         name:
           type: string
         locale:
           type: string
-        logo:
-          $ref: "#/components/schemas/Logo"
-        background_color:
-          type: string
-        text_color:
-          type: string
+          enum:
+            - en-GB
+            - cy-GB
       required:
-        - background_color
+        - field
         - locale
-        - logo
         - name
-        - text_color
     Logo:
       type: object
       additionalProperties: false
@@ -557,7 +558,7 @@ components:
       required:
         - alt_text
         - url
-    DidWebDocument:
+    DidWebDocumentResponse:
       type: object
       additionalProperties: false
       properties:
