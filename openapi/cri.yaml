@@ -81,7 +81,7 @@ paths:
                       - value: '1985-10-18'
                     address:
                       - firstLine: 10 Princess Parade
-                    BasicDisclosureRecord:
+                    basicDisclosureRecord:
                       - certificateNumber: '009878863'
                         outcome: Result clear
                         disclosureDate: '2023-12-10'
@@ -161,31 +161,31 @@ paths:
                           - field: Auxiliaryfield4
                             name: Llinell gyntaf y cyfeiriad
                             locale: cy-GB
-                      BasicdisclosureRecord: { }
-                      outcome:
-                        display:
-                          - field: PrimaryField
-                            name: Outcome
-                            locale: en-GB
-                          - field: PrimaryField
-                            name: Canlyniad
-                            locale: cy-GB
-                      disclosureDate:
-                        display:
-                          - field: KeyField1
-                            name: Disclosure date
-                            locale: en-GB
-                          - field: KeyField1
-                            name: Dyddiad datgelu
-                            locale: cy-GB
-                      certificateNumber:
-                        display:
-                          - field: KeyField2
-                            name: Certificate number
-                            locale: en-GB
-                          - field: KeyField2
-                            name: Rhif tystysgrif
-                            locale: cy-GB
+                      basicDisclosureRecord:
+                        outcome:
+                          display:
+                            - field: PrimaryField
+                              name: Outcome
+                              locale: en-GB
+                            - field: PrimaryField
+                              name: Canlyniad
+                              locale: cy-GB
+                        disclosureDate:
+                          display:
+                            - field: KeyField1
+                              name: Disclosure date
+                              locale: en-GB
+                            - field: KeyField1
+                              name: Dyddiad datgelu
+                              locale: cy-GB
+                        certificateNumber:
+                          display:
+                            - field: KeyField2
+                              name: Certificate number
+                              locale: en-GB
+                            - field: KeyField2
+                              name: Rhif tystysgrif
+                              locale: cy-GB
   /.well-known/did.json:
     get:
       summary: Retrieve did:web document
@@ -316,7 +316,7 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/Address"
-        BasicDisclosureRecord:
+        basicDisclosureRecord:
           type: array
           minItems: 1
           items:
@@ -327,7 +327,7 @@ components:
           items:
             $ref: "#/components/schemas/DocumentMetadatum"
       required:
-        - BasicDisclosureRecord
+        - basicDisclosureRecord
         - address
         - birthDate
         - documentMetadata
@@ -476,17 +476,10 @@ components:
           $ref: "#/components/schemas/CredentialSubjectDisplay"
         firstLineOfAddress:
           $ref: "#/components/schemas/CredentialSubjectDisplay"
-        BasicdisclosureRecord:
-          type: object
-        outcome:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
-        disclosureDate:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
-
-        certificateNumber:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
+        basicDisclosureRecord:
+          $ref: "#/components/schemas/BasicDisclosureRecordDisplay"
       required:
-        - BasicdisclosureRecord
+        - basicDisclosureRecord
         - certificateNumber
         - dateOfBirth
         - disclosureDate
@@ -494,6 +487,20 @@ components:
         - givenName
         - lastName
         - outcome
+    BasicDisclosureRecordDisplay:
+      type: object
+      additionalProperties: false
+      properties:
+        outcome:
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
+        disclosureDate:
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
+        certificateNumber:
+          $ref: "#/components/schemas/CredentialSubjectDisplay"
+      required:
+        - outcome
+        - disclosureDate
+        - certificateNumber
     CredentialSubjectDisplay:
       type: object
       additionalProperties: false
