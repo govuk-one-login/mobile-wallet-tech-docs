@@ -7,22 +7,48 @@ The Wallet technical documentation is based on the [Tech Docs Template](https://
 Middleman uses Ruby to generate static web pages from Markdown files, so you'll need Ruby installed.
 
 ## Install Ruby
-
-Start by installing [rbenv](https://github.com/rbenv/rbenv) and [ruby-build](https://github.com/rbenv/ruby-build):
+1. Start by installing [rbenv](https://github.com/rbenv/rbenv) and [ruby-build](https://github.com/rbenv/ruby-build):
 ```
-brew upgrade rbenv ruby-build
+brew install rbenv ruby-build
 ```
 This will allow you to compile Ruby, and makes it easier to manage multiple Ruby environments (macOS comes with Ruby installed, so this simplifies things).
 
-Download the current version of Ruby that the [application uses](.ruby-version):
+2. Run this and follow the printed instructions to load rbenv in your shell:
 ```
-rbenv install
+rbenv init
 ```
 
-Install the application's dependencies:
+Close your Terminal window and open a new one so your changes take effect.
 
+3. Download the current version of Ruby that the [application uses](.ruby-version):
+```
+rbenv install <RUBY_VERSION>
+```
+
+4. Set your Ruby version to finish installation and start using Ruby:
+```
+rbenv global <RUBY_VERSION>     # set the default Ruby version for this machine
+# or:
+rbenv local <RUBY_VERSION>      # set the Ruby version for this directory
+```
+
+5. Install this application's dependencies (you must have Bundler 2 installed):
 ```
 bundle install
+```
+
+### Fix `bundle` issue on MacOS
+You may get the following error if you need to install or upgrade Bundler:
+```
+$ gem install bundler
+ERROR: While executing gem ... (Gem::FilePermissionError)
+You don't have write permissions for the /Library/Ruby/Gems/2.6.0 directory.
+```
+
+This is likely because rbenv is still set to use the "system" Ruby, which is the default. To solve this, after installing your Ruby version, select it as a "global" version:
+```
+rbenv install 3.3.0
+rbenv global 3.3.0
 ```
 
 ### Fix `ffi` bug on MacOS
