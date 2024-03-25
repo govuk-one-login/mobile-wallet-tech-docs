@@ -19,7 +19,7 @@ paths:
             format: uuid
         - name: walletSubjectId
           in: path
-          description: Pairwise identifier
+          description: Pairwise identifier generated from the CommonSubjectId and rpSectorId
           required: true
           schema:
             type: string
@@ -37,7 +37,7 @@ paths:
       summary: Request a credential
       description: API for the wallet to request the credential
       security:
-        - BearerAuhentication: [ ]
+        - BearerAuthentication: [ ]
       requestBody:
         required: true
         content:
@@ -186,7 +186,6 @@ paths:
                           - field: KeyField2
                             name: Rhif tystysgrif
                             locale: cy-GB
-
   /.well-known/did.json:
     get:
       summary: Retrieve did:web document
@@ -264,12 +263,12 @@ components:
         sub:
           type: string
         vc:
-          $ref: "#/components/schemas/Vc"
+          $ref: "#/components/schemas/VerifiableCredential"
       required:
         - iss
         - sub
         - vc
-    Vc:
+    VerifiableCredential:
       type: object
       additionalProperties: false
       properties:
