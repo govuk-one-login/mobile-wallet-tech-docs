@@ -45,7 +45,6 @@ paths:
             schema:
               $ref: '#/components/schemas/CredentialRequestBody'
             example:
-              credential_identifier: 12345-2023
               proof:
                 proof_type: jwt
                 jwt: eyJraWQiOiJkaWQ6ZXhhbXBsZTplYmZlYjFmNzEyZWJjNmYxYzI3NmUxMmVjMjEva2V5cy8xIiwiYWxnIjoiRVMyNTYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJzNkJoZFJrcXQzIiwiYXVkIjoiaHR0cHM6Ly9zZXJ2ZXIuZXhhbXBsZS5jb20iLCJpYXQiOjE1MzY5NTk5NTksIm5vbmNlIjoidFppZ25zbkZicCJ9.ewdkIkPV50iOeBUqMXCC_aZKPxgihac0aW9EkL1nOzM
@@ -233,12 +232,9 @@ components:
       type: object
       additionalProperties: false
       properties:
-        credential_identifier:
-          type: string
         proof:
           $ref: "#/components/schemas/Proof"
       required:
-        - credential_identifier
         - proof
     Proof:
       type: object
