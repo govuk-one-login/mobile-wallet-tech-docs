@@ -7,4 +7,19 @@ review_in: 1 month
 
 # Before you issue a credential
 
-**[TO BE COPIED OVER FROM CONFLUENCE]**
+When you are preparing to issue a credential to GOV.UK One Login digital wallet, it is important to think about basic good practice. If you follow this documentation and [its sample reference material](/use-sample-reference-material.html) carefully, you will be able to:
+
+* align with open standards, particularly [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model/) for the credential itself, and [OpenID Connect for Verifiable Credential Issuance](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) (OIDC4VCI) for the issuance flow
+
+* meet the requirements of the government [Service Standard](https://www.gov.uk/service-manual/service-standard), for example making all information available in Welsh
+
+* use findings identified by your user research, for example how credentials will be presented in GOV.UK digital wallet to best meet your users' needs
+
+To help you achieve best practice, we suggest combining:
+
+* a common JWT payload structure for VCs across credential issuers, with a dedicated section for credential-specific attributes
+
+* a metadata file managed by credential issuers that instructs how given attributes for the digital wallet should be named and rendered, and in which languages
+
+We recommend the approach in the [OpenID Connect for Verifiable Credential Issuance](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) standard. The **[Understanding GOV.UK One Login digital wallet’s credential exchange flow](/issuance-flow.html)** section offers examples of a metadata file and JWT payload.
+
