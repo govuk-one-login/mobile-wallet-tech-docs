@@ -271,9 +271,9 @@ The JWT must be signed by the private key generated in **[Step 1](/set-up-your-s
 
 Description of the JWT claims in the header:
 
-* alg is the algorithm used to sign the JWT
-* typ is the format of the payload
-* kid is the key ID of the key that can be used to verify the signature of the JWT
+* `alg` is the algorithm used to sign the JWT
+* `typ` is the format of the payload
+* `kid` is the key ID of the key that can be used to verify the signature of the JWT
 
 The value in `kid` should match the `verificationMethod.id` from the did:web document published by the issuer, that contains the public signing key. `kid` must be in the code’s header to make sure the signature can be verified, and to make sure the JWT can be trusted before reading the payload.
 
