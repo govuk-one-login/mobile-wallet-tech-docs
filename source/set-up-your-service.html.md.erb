@@ -66,7 +66,7 @@ When receiving your credential, the wallet can find, or resolve, your DID docume
 
 The GOV.UK One Login digital wallet, as well as any consumer of verifiable credentials, needs to verify the validity of the credentials your service issues. Credentials issued by your service signed with your private key,  or keys, need to be verified by the public key, or keys, you made available in the did:web document.
 
-Your public keys need to stay available throughout the lifecycle of your credentials. A public key used to sign a group of VCs can not be made inactive until after the VCs have expired. Public keys should be kept in an inactive state for audit purposes.
+Your public keys need to stay available throughout the lifecycle of your credentials. A public key used to sign a group of VCs can not be made inactive until after the VCs have expired. Public keys should be kept in an inactive state, available to be verified.
 
 For their credential issuer service, credential issuers should include specific key management features.
 
