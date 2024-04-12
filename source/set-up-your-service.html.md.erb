@@ -275,7 +275,7 @@ Description of the JWT claims in the header:
 * typ is the format of the payload
 * kid is the key ID of the key that can be used to verify the signature of the JWT
 
-The value in kid should match the key ID in a did:web document published by the issuer that contains the public signing key. kid must be in the code’s header to make sure the signature can be verified, and to make sure the JWT can be trusted before reading the payload.
+The value in `kid` should match the `verificationMethod.id` from the did:web document published by the issuer, that contains the public signing key. `kid` must be in the code’s header to make sure the signature can be verified, and to make sure the JWT can be trusted before reading the payload.
 
 ### Payload
 
