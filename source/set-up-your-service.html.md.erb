@@ -92,8 +92,11 @@ To fetch a credential from a credential issuer, GOV.UK digital wallet needs to o
 The metadata file is a JSON file published at the well-known path: `/.well-known/openid-credential-issuer`.
 
 Credential issuers using GOV.UK One Login digital wallet, must produce and publish a metadata document that:
+
 * supports English and Welsh
+
 * controls how fields should be named in each language, for example `certificateNumber` rendered as "Certificate number"
+
 * highlights key fields visually for the user, for example document name, primary and auxiliary fields
 
 This code example shows a credential metadata JSON file being published by DBS to carry out basic disclosure:
