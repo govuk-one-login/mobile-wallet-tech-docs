@@ -1,0 +1,366 @@
+---
+title: Setting up your service
+weight: 45
+last_reviewed_on: 2024-04-22
+review_in: 1 month
+---
+
+# Setting up your service
+
+## Step 1: Generate a signing key pair and publish the public key
+
+Verifiable credentials stored in the GOV.UK One Login digital wallet need to be cryptographically signed by the credential issuer. 
+
+Signing keys should use the Elliptic Curve Digital Signature Algorithm (ECDSA) with curve P-256. If you are using AWS, you should use an Asymmetric `ECC_NIST_P256` key.
+
+### Publishing public keys
+
+When a government organisation issues a credential to GOV.UK One Login digital wallet, it must publish a decentralised identifier (DID) document. This document must include a public key of the key pairs used to sign credentials. The DID document should be in JSON format, and contain verification methods for all credentials your service will issue. One Login uses public keys as verification methods.
+
+The following example shows a DID document produced by HMRC, allowing users to save their National Insurance number card to the wallet.
+
+```JSON
+{
+  "@context" : [ "https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/ed25519-2020/v1" ],
+  "id" : "did:web:test-www.tax.service.gov.uk/hmrc-govwallet-did",
+  "verificationMethod" : [ {
+    "id" : "did:web:test-www.tax.service.gov.uk/hmrc-govwallet-did#key-0",
+    "type" : "JsonWebKey2020",
+    "controller" : "did:web:test-www.tax.service.gov.uk/hmrc-govwallet-did",
+    "publicKeyJwk" : {
+      "kid" : "key-0",
+      "kty" : "EC",
+      "crv" : "P-256",
+      "x" : "Shc8mJ6fcZikhWM4ofHGSwXTkdqXM8GbPtRzPa7LttA=",
+      "y" : "OIhg/7rhWfmnWQEgAXzU8fCTggGrS3zj5x76a0lrzJM="
+    }
+  } ],
+  "assertionMethod" : [ "did:web:nino.hmrc.gov.uk#3ebc65f7f0ddcbd2cee2b48b8df38" ]
+}
+```
+A did:web document must be published on the well-known path `/.well-known/did.json` on the credential issuer’s DNS hostname.
+
+For example, the HMRC `did:web` file featured in the example is accessible at https://test-www.tax.service.gov.uk/hmrc-govwallet-did/.well-known/did.json.
+
+The fields in the example document are:
+
+* `@context` : This property must be present, and include a URL that defines short-form aliases representing attributes and values in verifiable credentials. In this case "https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/ed25519-2020/v1" is used.
+
+* `id` : This is the decentralised identifier (DID) of your service. Because credential issuers use the `did:web` method, the general format is `"did:web:{URL of your issuer service}"`
+
+* `verificationMethod` : This is an array of the verification methods that the credential issuer has implemented. Any private key used to sign credentials issued to the GOV.UK One Login digital wallet must have a corresponding public key in this array.
+
+* `verificationMethod.id` must follow the format  did:web:{URL of your issuer service}#{unique key identifier}. The {URL of your issuer service} could be, for example, issuer.your-service.gov.uk/wallet/. The {unique key identifier} is a hashed version of the KMS Key ID, for example #3ebc655f7f00ddcbd52cee2b48b8df38.
+
+Using this example, your DID follows the format `did:web:issuer.your-service.gov.uk/wallet/#3ebc655f7f00ddcbd52cee2b48b8df38`, and your DID document must be published at https://issuer.your-service.gov.uk/wallet/.well-known/did.json.
+
+When receiving your credential, the wallet can find, or resolve, your DID document using the kid claim in the JWT header. There is more information about this in [Step 3: Define the content of your credential](/set-up-your-service.html#step-3-define-the-content-of-your-credential).
+
+* `verificationMethod.type` indicates how a verifier can independently verify a proof. In GOV.UK One Login, we use a cryptographic public key as a verification method. Used this way, it verifies that the signer, which in this case is your government service, possesses the associated cryptographic private key. We use the JSON Web Signature 2020 specification, and the "JsonWebKey2020" type.
+
+* `verificationMethod.controller` refers to the entity that is authorised to make changes to the DID document. In the example, this is your service. It is identified by its DID `"did:web:test-www.tax.service.gov.uk/hmrc-govwallet-did"`.
+
+* `verificationMethod.publicKeyJwk` : indicates the type of key, a JSON Web Key, followed by the public key.
+
+#### Key management
+
+The GOV.UK One Login digital wallet, as well as any consumer of verifiable credentials, needs to verify the validity of the credentials your service issues. Credentials issued by your service signed with your private key,  or keys, need to be verified by the public key, or keys, you made available in the did:web document.
+
+Your public keys need to stay available throughout the lifecycle of your credentials. A public key used to sign a group of VCs can not be made inactive until after the VCs have expired. Public keys should be kept in an inactive state, available to be verified.
+
+For their credential issuer service, credential issuers should include specific key management features.
+
+The service needs a key refresh process that creates a new asymmetric public or private key pair for signing new VCs, but that retains trust in the previous versions of the public key for verifying.
+
+This is done by making sure the public part of the historical key is retained, while the private key is destroyed. For example, a VC issued by an internal and external issuer.
+
+The service also needs a key revocation. This needs to include a notice made from the credential issuer explaining that a specific key should be removed from operational use before the key expires. This will generally happen when the key is lost or compromised. If a key is compromised, it can be used by an attacker to decrypt or forge messages, impersonate an identity, or access sensitive information.
+
+The table below describes the possible states of a key pair used for signing credentials:
+
+| Key State | Description |
+|-----------|-------------|
+| Created   | A key pair is generated with an activation date in the future. It is not yet used for signing.|
+| Active    | A key becomes active on the activation date, and enabled for signing and verifying the VC. There must not be multiple keys active at the same time.|
+| Inactive  | A key becomes inactive past its expiration date or time. The public key will still be valid for verifying the VC.|
+| Revoked   | A key is destroyed and removed from the issuer’s auth server, and is not valid for signing and verifying the signatures.|
+
+## Step 2: Publish the metadata of your credentials
+
+To fetch a credential from a credential issuer, GOV.UK digital wallet needs to obtain credential metadata published by the organisation who issues the credential. The metadata is public, so it can tell everyone what credentials that issuer offers.
+
+The metadata file is a JSON file published at the well-known path: `/.well-known/openid-credential-issuer`.
+
+Credential issuers using GOV.UK One Login digital wallet, must produce and publish a metadata document that:
+
+* supports English and Welsh
+
+* controls how fields should be named in each language, for example `certificateNumber` rendered as "Certificate number"
+
+* highlights key fields visually for the user, for example document name, primary and auxiliary fields
+
+This code example shows a credential metadata JSON file being published by DBS to carry out basic disclosure:
+
+```JSON
+{
+  "credential_issuer":"https://issuer.dbs.gov.uk",
+  "authorization_server":"https://sts.account.gov.uk",
+  "credentials_endpoint":"https://issuer.dbs.gov.uk/credential",
+  "credentials_supported": {
+    "basicDisclosure": {
+      "format": "jwt_vc_json",
+      "id": "BasicDisclosure_JWT",
+      "types": [
+        "VerifiableCredential",
+        "basicDisclosureCredential"
+      ],
+      "cryptographic_binding_methods_supported": [
+        "did"
+      ],
+      "cryptographic_suites_supported": [
+        "ES256K"
+      ],
+      "display": [
+        {
+          // Name of the credential always displayed at the top of the card
+          "name": "Basic DBS disclosure certificate",
+          "locale": "en-GB",
+          "logo": {
+            "url": "https://issuer.gov.uk/assets/logo.png",
+            "alt_text": "a square logo of the Disclosure and Barring Service"
+          },
+          "background_color": "#12107c",
+          "text_color": "#FFFFFF"
+        },
+        {
+          "name": "Tystysgrif datgelu DBS Sylfaenol",
+          "locale": "en-CY",
+          "logo": {
+            "url": "https://issuer.gov.uk/assets/logo.png",
+            "alt_text": "logo sgwâr DBS"
+          },
+          "background_color": "#12107c",
+          "text_color": "#FFFFFF"
+        }
+      ],
+      // Biographic information about the subject of the credential
+      "credentialSubject": {
+        "familyName": {
+          "display": [
+            {
+              "field": "Auxiliaryfield1",
+              "name": "Surname",
+              "locale": "en-GB"
+            },
+            {
+              "field": "Auxiliaryfield1",
+              "name": "Cyfenw",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        "givenName": {
+          "display": [
+          {
+            "field": "Auxiliaryfield2",
+            "name": "Forename(s)",
+            "locale": "en-GB"
+          },
+          {
+            "field": "Auxiliaryfield2",
+            "name": "Enw(au)",
+            "locale": "cy-GB"
+          }
+          ]
+        },
+        "birthDate": {
+          "display": [
+            {
+              "field": "Auxiliaryfield3",
+              "name": "Date of birth",
+              "locale": "en-GB"
+            },
+            {
+              "field": "Auxiliaryfield3",
+              "name": "Dyddiad geni",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        "address": {
+          "display": [
+            {
+              "field": "Auxiliaryfield4",
+              "name": "First line of address",
+              "locale": "en-GB"
+            },
+            {
+              "field": "Auxiliaryfield4",
+              "name": "Llinell gyntaf cyfeiriad",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        // Issuer specific data describing the credential
+        "BasicdisclosureRecord": {},
+        "outcome": {
+          "display": [
+            {
+              "field": "PrimaryField",
+              "name": "Outcome",
+              "locale": "en-GB"
+            },
+            {
+              "field": "PrimaryField",
+              "name": "Canlyniad",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        // Date when check against Police National Computer (PNC) was carried out
+        "disclosureDate": {
+          "display": [
+            {
+              "field": "KeyField1",
+              "name": "Disclosure date",
+              "locale": "en-GB"
+            },
+            {
+              "field": "KeyField1",
+              "name": "Dyddiad datgelu",
+              "locale": "cy-GB"
+            }
+          ]
+        },
+        // 9-digit certificate number
+        "certificateNumber": {
+          "display": [
+            {
+              "field": "KeyField2",
+              "name": "Certificate number",
+              "locale": "en-GB"
+            },
+            {
+              "field": "KeyField2",
+              "name": "Rhif y dystysgrif",
+              "locale": "cy-GB"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+## Step 3: Define the content of your credential
+
+The next example shows the structure of a verifiable credential using a JSON Web Token (JWT) to represent a DBS basic disclosure certificate.
+
+The JWT must be signed by the private key generated in **[Step 1](/set-up-your-service.html#step-1-generate-a-signing-key-pair-and-publish-the-public-key)**, and its fields align with your metadata file created in **[Step 2](/set-up-your-service.html#step-2-publish-the-metadata-of-your-credentials)**.
+
+### Header
+
+```
+{
+  "alg": "ES256",
+  "typ": "JWT",
+  "kid": "did:web:[environment.]issuer.dbs.gov.uk#[unique key id]"
+}
+```
+
+Description of the JWT claims in the header:
+
+* `alg` is the algorithm used to sign the JWT
+* `typ` is the format of the payload
+* `kid` is the key ID of the key that can be used to verify the signature of the JWT
+
+The value in `kid` should match the `verificationMethod.id` from the did:web document published by the issuer, that contains the public signing key. `kid` must be in the code’s header to make sure the signature can be verified, and to make sure the JWT can be trusted before reading the payload.
+
+### Payload
+
+This example is a possible template for sharing a DBS basic disclosure certificate. dates are represented in a `YYYY-MM-DD` format for simplification:
+
+```
+{
+  "iss": "https://test.issuer.dbs.gov.uk/",
+  "sub": "did:key:ebfaeb1fd712ebf1c276e12ec21",
+  "nbf": "2023-12-10",
+  "vc": {
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "basicDisclosureCredential"
+    ],
+    "credentialSubject": {
+      "id": "did:key:ebfeb1f712ebc6f1c276e12ec21",
+      "issuanceDate": "2023-12-10",
+      "expirationDate": "2024-12-10",
+      "name": [
+        {
+          "nameParts": [
+            {
+              "value": "Sarah",
+              "type": "GivenName"
+            },
+            {
+              "value": "Elizabeth",
+              "type": "GivenName"
+            },
+            {
+              "value": "Edwards",
+              "type": "FamilyName"
+            }
+          ]
+        }
+      ],
+      "birthDate": [
+        {
+          "value": "1985-10-18"
+        }
+      ],
+      "address": [
+        {
+          "firstLine": "10 Princess Parade"
+        }
+      ],
+      "basicDisclosure": [
+        {
+          "certificateNumber": "009878863",
+          "outcome": "Result clear",
+          "disclosureDate": "2023-12-10"
+        }
+      ],
+      "documentMetadata": [
+        {
+          "multipleCredentialsAllowed": "true"
+        }
+      ]
+    }
+  }
+}
+```
+
+The `@context` property must be present, and include a URL with a definition of short-form aliases representing attributes and values that are in a verifiable credential. The URL https://www.w3.org/2018/credentials/v1 is just an example. 
+
+Here are the explanations of the JWT claims in the example:
+
+* `iss` is "issuer". This is mandatory, and must be the URL of the credential issuer service operated by the organisation sharing the credential.
+
+* `sub` is "subject identifier". This is also mandatory, and is the identifier of the holder of the information in the credential. The subject identifier is a decentralised identifier `did:key` generated by the wallet. In the credential issuance flow, the wallet shares its `did:key` to the issuer who adds it to the credential in the sub claim. This cryptographically binds the credential to the wallet.
+
+* `nbf` is "not before" It is mandatory, and should be represented by a `NumericDate`, which should usually be set to the same as iat if iat is present. It shows the VC is valid from the point of issue.
+
+* `vc` is  the "verifiable credential". This is a mandatory JSON object containing a type property indicating the type of verifiable credential. In the example, this is `BasicDisclosureCredential` and a `credentialSubject` property with values referring to the holder of the basic disclosure certificate.
+
+* `exp` is "expiry", an optional claim indicating the time after which the JWT must not be accepted for processing. It is represented as a NumericDate showing the number of seconds elapsed since midnight on 1 January 1970 (Unix time).
+
+<%= warning_text('You should carefully consider the expiration of the JWT, and of the credential it represents.') %>
+
+The `exp` claim is different from the `expirationDate` parameter in the VC object. As an issuer, you can choose to set `expirationDate` on the VC to reflect the expiration of the entitlement itself. For example, a DBS Basic Disclosure Certificate may last for 12 months, a Veteran Card for 5 years.
+
+As an issuer, you can also choose to set an optional `exp` value that will invalidate the VC at a future date you decide. The Basic Disclosure check example assumes that the JWT itself does not expire, just like a paper certificate will exist forever. However, because the online record of the disclosure in the share code system is deleted after 12 months, the `expirationDate` parameter is used in the VC object to reflect this lifecycle of the credential’s entitlement.
+
+

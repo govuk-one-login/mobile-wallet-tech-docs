@@ -1,26 +1,25 @@
 ---
-title: Before you integrate with GOV.UK walllet
+title: Before you issue a credential
 weight: 20
+last_reviewed_on: 2024-04-22
+review_in: 1 month
 ---
 
-# Before you integrate with GOV.UK walllet
+# Before you issue a credential
 
-**[TO BE WRITTEN]**
+When you are preparing to issue a credential to GOV.UK One Login digital wallet, it is important to think about basic good practice. If you follow this documentation and [its sample reference material](/use-sample-reference-material.html) carefully, you will be able to:
 
-Use this section to take your users through the quickest and easiest way of getting an example response from your API.
+* align with open standards, particularly [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model/) for the credential itself, and [OpenID Connect for Verifiable Credential Issuance](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) (OIDC4VCI) for the issuance flow
 
-You can use a short, numbered list about making a test request and response with sample code. If your API uses authentication and authorisation, include a step on getting a test API key.
+* meet the requirements of the government [Service Standard](https://www.gov.uk/service-manual/service-standard), for example making all information available in Welsh
 
-Do not include every possible request variable or response parameter, or multiple examples. Link to more detailed explanations elsewhere in your documentation if you need to.
+* use findings identified by your user research, for example how credentials will be presented in GOV.UK digital wallet to best meet your users' needs
 
-At the top of your ‘Get started’ section, you should include:
+To help you achieve best practice, we suggest combining:
 
-- the URL of the API, for example `https://catfinder.api.gov.uk/`
-- any HTTP headers your user must include in each request
-- the format of requests and responses, for example JSON
-- how to apply authentication and authorisation if your API uses them
+* a common JWT payload structure for VCs across credential issuers, with a dedicated section for credential-specific attributes
 
-Do not explain the basics of how APIs work, or how authentication and authorisation work. You can link to external explanations by following the [GOV.UK external linking policy](https://www.gov.uk/guidance/content-design/links#linking-policy).
+* a metadata file managed by credential issuers that instructs how given attributes for the digital wallet should be named and rendered, and in which languages
 
-Link to your browser-based [API ‘sandbox’](https://smartbear.com/learn/api-design/what-is-an-api-sandbox/) if you have one, so your users can try out requests and responses.
+We recommend the approach in the [OpenID Connect for Verifiable Credential Issuance](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) standard. The **[Understanding GOV.UK One Login digital wallet’s credential exchange flow](/issuance-flow.html)** section offers examples of a metadata file and JWT payload.
 
