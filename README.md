@@ -53,9 +53,9 @@ rbenv global 3.3.0
 
 ### Fix `ffi` bug on MacOS
 
-There's an incompatibility issue with the latest MacOS and the `ffi` library which stops Middleman from starting on MacOS.
+There is an incompatibility issue with the latest MacOS and the `ffi` library which stops Middleman from starting on MacOS.
 
-To fix the issue you must stop the `ffi` gem using the native `libffi` library by sending this command:
+To fix the issue you must stop the `ffi` gem using the native `libffi` library by running this command:
 
 ```shell script
 bundle config build.ffi --disable-system-libffi
