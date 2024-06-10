@@ -9,7 +9,7 @@ review_in: 1 month
 
 A did:key is a DID (Decentralized Identifier) method. The DID represents the public key of an asymmetric key pair which is generated when the GOV.UK Wallet is installed on a device. The private key never leaves the device, whereas the did:key is shared with credential issuers and verifiers, allowing credentials to be cryptographically bound to a specific GOV.UK Wallet instance.
 
-The GOV.UK Wallet creates a did:key from a Secp256r1 (also known as "P-256") elliptic curve public key.
+The GOV.UK Wallet creates a did:key from a P-256 (also known as Secp256r1) elliptic curve public key.
 
 ## did:key Format
 
@@ -21,22 +21,32 @@ The format of a did:key is `did:key:multibaseValue`. The `multibaseValue` is the
 did-key-format := did:key:MULTIBASE(base58-btc, MULTICODEC(public-key-type, raw-public-key-bytes))
 ````
 
-It is generated as follows:
+In Elliptic Curve Cryptography (ECC), the public key is a pair of x and y coordinates. A compressed public key is the 'x' coordinate, which is 32 bytes in length, with a prefix, of 1 byte in length, that indicates whether the 'y' coordinate is even or odd. The prefix is '02' if the y coordinate is even and '03' if it is odd. The resulting compressed public key is 33 bytes in length:
+
+````
+Public key: 52972572d465d016d4c501887b8df303eee3ed602c056b1eb09260dfa0da0ab288742f4dc97d9edb6fd946babc002fdfb06f26caf117b9405ed79275763fdb1c
+
+Public key (x coordinate): 52972572d465d016d4c501887b8df303eee3ed602c056b1eb09260dfa0da0ab2
+Public key (y coordinate): 88742f4dc97d9edb6fd946babc002fdfb06f26caf117b9405ed79275763fdb1c
+
+Public key (compressed): 0252972572d465d016d4c501887b8df303eee3ed602c056b1eb09260dfa0da0ab2
+````
+
+The `multibaseValue` is generated as follows:
 
 1. Encode the compressed public key as bytes
- - The public key is a pair of x and y coordinates. A compressed public key is the 'x' coordinate (32 bytes in length) with a prefix (1 byte in length) that indicates whether the 'y' coordinate is even or odd. The prefix is '02' if the y coordinate is even and '03' if it is odd. The resulting compressed public key is 33 bytes in length.
-1. Prefix the key bytes with the curve multicodec value, as varint-encoded bytes
- - For a P-256 public key, the multicodec value is 0x1200 (in varint-encoded bytes that is [0x80, 0x24])
-1. Encode the above with base58-btc and prefix it with "z" to indicate the base58-btc encoding - the result is the `multibaseValue`
+1. Prefix the key bytes with the curve multicodec value encoded as unsigned varint
+ - the multicodec hexadecimal value of a P-256 elliptic curve public key is `0x1200`, in varint-encoded bytes that is `[0x80, 0x24]`
+1. Encode the above with base58-btc and then prefix it with "z" to indicate the base58-btc encoding - the result is the `multibaseValue`
 
 
-The following is an example of a did:key derived from a base-58 encoded Secp256r1 public key:
+The following is an example of a did:key derived from a base-58 encoded P-256 public key:
 
 ````
 did:key:zDnaewZMz7MN6xSaAFADkDZJzMLbGSV25uKHAeXaxnPCwZomX
 ````
 
-All DIDs derived from a Secp256r1 public key always start with 'zDn'.
+All DIDs derived from a P-256 public key always start with `zDn`.
 
 
 ## How GOV.UK Wallet uses did:key
@@ -44,6 +54,9 @@ All DIDs derived from a Secp256r1 public key always start with 'zDn'.
 GOV.UK Wallet uses a did:key to cryptographically bind credentials to a wallet instance.
 
 ### Issuing a credential
-To request a credential, the wallet app signs into a token a random value (provided by One Login) with its private key. The token contains the did:key. The token is sent to the issuer when requesting a credential. The issuer verifies the signature of the token using the did:key contained in it.
+When requesting a credential from an issuer, the wallet includes a **cryptographic proof** in the request. This proof is random and unique value (provided by One Login) that has been signed into a token (JWT) with the wallet's private key. The did:key (i.e. the wallet's public key) is delivered in the proof's Header `kid`. Upon receiving the credential request, the issuer tries to verify the proof signature with the did:key embedded in it. A successful verification demonstrates the wallet's legitimate ownership of the public key. The issuer creates the verifiable credential and cryptographically binds it to the wallet by embedding the did:key in it as a claim.
 
 ### Verifying a credential
+To share a verifiable credential with a verifier, the wallet creates a **verifiable presentation** containing the verifiable credential, and signs it with its private key.
+The verifier must be able to confirm that the holder of the credential (wallet) is also the subject of the credential (i.e. the entity presenting the credential is the same entity that the credential was issued to). If the holder is the subject, then the verifier must verify ‘proof of possession’ of the verifiable credential.
+This is done by verifying that the entity which signed the erifiable presentation is the same entity as the subject listed in the enclosed in the verifiable credential. In other words, the did:key in the verifiable credential must be able to verify the signature on the verifiable presentation.
