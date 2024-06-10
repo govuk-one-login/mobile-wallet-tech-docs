@@ -36,7 +36,7 @@ Public key (compressed): 0252972572d465d016d4c501887b8df303eee3ed602c056b1eb0926
 The `multibaseValue` is generated as follows:
 
 1. Encode the compressed public key as bytes
-1. Prefix the key bytes with the **curve multicodec value** encoded as unsigned varint
+1. Prefix the key bytes with the **curve multicodec value** encoded as **unsigned varint** (variable length integers)
  - the multicodec hexadecimal value of a P-256 elliptic curve public key is `0x1200`, in varint-encoded bytes that is `[0x80, 0x24]`
 1. Encode the above with **base58-btc** and then prefix it with `"z"` to indicate the base58-btc encoding - the result is the `multibaseValue`
 
