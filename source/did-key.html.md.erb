@@ -1,8 +1,8 @@
 ---
 title: The did:key Method
 weight: 70
-last_reviewed_on: 2024-06-07
-review_in: 1 month
+last_reviewed_on: 2024-06-11
+review_in: 6 month
 ---
 
 # The did:key Method
@@ -55,11 +55,61 @@ All DIDs derived from a P-256 public key always start with `"zDn"`.
 GOV.UK Wallet uses a did:key to cryptographically bind credentials to a wallet instance.
 
 ### Issuing a credential
-When requesting a credential from an issuer, the wallet includes a **cryptographic proof** in the request. This proof is random and unique value (provided by One Login) that has been signed into a token (JWT) with the wallet's private key. The did:key (i.e. the wallet's public key) is delivered in the proof's Header claim `kid`.
+When requesting a credential from an issuer, the wallet includes a **cryptographic proof** in the request. This proof is random and unique value (provided by One Login) that has been signed into a token (JWT) with the wallet's private key. The did:key (i.e. the wallet's public key) is included in the proof JWT's header claim `kid`.
 
-The issuer, upon receiving the credential request, tries to verify the proof signature with the did:key. A successful verification demonstrates the wallet's legitimate ownership of the public key. The issuer then creates the verifiable credential and cryptographically binds it to the wallet by making the did:key the verifiable credential's subject (i.e. the Payload claim `sub`)
+The issuer, upon receiving the credential request, verifies the proof signature with the did:key. A successful verification demonstrates the wallet's ownership of the private asymmetric pair to that public did:key. The issuer then creates the verifiable credential (VC) and cryptographically binds it to the wallet by writing the did:key as the verifiable credential's subject (the `sub` claim within the VC payload).
+
+Example verifiable credential payload with the did:key as the `sub` claim:
+
+```
+{
+  "sub": "did:key:zDnaewZMz7MN6xSaAFADkDZJzMLbGSV25uKHAeXaxnPCwZomX",
+  "nbf": 1717762828,
+  "iss": "urn:fdc:gov:uk:example-credential-issuer",
+  "context": [
+    "https://www.w3.org/2018/credentials/v1"
+  ],
+  "exp": 1749298828,
+  "iat": 1717762828,
+  "vc": {
+    "type": [
+      "VerifiableCredential",
+      "SocialSecurityCredential"
+    ],
+    "credentialSubject": {
+      "name": [
+        {
+          "nameParts": [
+            {
+              "value": "Mr",
+              "type": "Title"
+            },
+            {
+              "value": "Sarah",
+              "type": "GivenName"
+            },
+            {
+              "value": "Elizabeth",
+              "type": "GivenName"
+            },
+            {
+              "value": "Edwards",
+              "type": "FamilyName"
+            }
+          ]
+        }
+      ],
+      "socialSecurityRecord": [
+        {
+          "personalNumber": "QQ123456C"
+        }
+      ]
+    }
+  }
+}
+```
 
 ### Verifying a credential
 To share a verifiable credential with a verifier, the wallet creates a **verifiable presentation** containing the verifiable credential, and signs it with its private key.
 
-The verifier must be able to confirm that the holder of the credential (i.e. the wallet) is also the credential subject. If the holder and subject are the same, then the verifier must be able to verify **proof of possession** of the verifiable credential. This is done by verifying that the entity which signed the verifiable presentation is the same as the subject of the verifiable credential. In other words, the did:key in the verifiable credential must be able to verify the signature on the verifiable presentation.
+The verifier must be able to confirm that the system presenting the credential (i.e. the wallet) is also the intended holder of that credential. The verifier must confirm **proof of possession** of the verifiable credential. This is done by verifying that the entity which signed the verifiable presentation is the same as the subject of the verifiable credential. In other words, the did:key in the verifiable credential must be able to verify the signature on the verifiable presentation.
