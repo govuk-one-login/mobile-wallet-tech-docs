@@ -1,23 +1,23 @@
 ---
 title: Setting up your service
 weight: 45
-last_reviewed_on: 2024-04-22
-review_in: 1 month
+last_reviewed_on: 2024-07-02
+review_in: 2 month
 ---
 
 # Setting up your service
 
 ## Step 1: Generate a signing key pair and publish the public key
 
-Verifiable credentials stored in the GOV.UK One Login digital wallet need to be cryptographically signed by the credential issuer. 
+Verifiable credentials stored in the GOV.UK Wallet need to be cryptographically signed by the credential issuer. 
 
 Signing keys should use the Elliptic Curve Digital Signature Algorithm (ECDSA) with curve P-256. If you are using AWS, you should use an Asymmetric `ECC_NIST_P256` key.
 
 ### Publishing public keys
 
-When a government organisation issues a credential to GOV.UK One Login digital wallet, it must publish a decentralised identifier (DID) document. This document must include a public key of the key pairs used to sign credentials. The DID document should be in JSON format, and contain verification methods for all credentials your service will issue. One Login uses public keys as verification methods.
+When a government organisation issues a credential to GOV.UK Wallet, it must publish a decentralised identifier (DID) document. This document must include a public key of the key pairs used to sign credentials. The DID document should be in JSON format, and contain verification methods for all credentials your service will issue. One Login uses public keys as verification methods.
 
-The following example shows a DID document produced by HMRC, allowing users to save their National Insurance number card to the wallet.
+The following illustrative example shows a DID document allowing users to save a National Insurance number card to the wallet.
 
 ```JSON
 {
@@ -40,7 +40,7 @@ The following example shows a DID document produced by HMRC, allowing users to s
 ```
 A did:web document must be published on the well-known path `/.well-known/did.json` on the credential issuer’s DNS hostname.
 
-For example, the HMRC `did:web` file featured in the example is accessible at https://test-www.tax.service.gov.uk/hmrc-govwallet-did/.well-known/did.json.
+For example, the HMRC `did:web` file featured in the example would be published at https://test-www.tax.service.gov.uk/hmrc-govwallet-did/.well-known/did.json.
 
 The fields in the example document are:
 
@@ -48,7 +48,7 @@ The fields in the example document are:
 
 * `id` : This is the decentralised identifier (DID) of your service. Because credential issuers use the `did:web` method, the general format is `"did:web:{URL of your issuer service}"`
 
-* `verificationMethod` : This is an array of the verification methods that the credential issuer has implemented. Any private key used to sign credentials issued to the GOV.UK One Login digital wallet must have a corresponding public key in this array.
+* `verificationMethod` : This is an array of the verification methods that the credential issuer has implemented. Any private key used to sign credentials issued to the GOV.UK Wallet must have a corresponding public key in this array.
 
 * `verificationMethod.id` must follow the format  did:web:{URL of your issuer service}#{unique key identifier}. The {URL of your issuer service} could be, for example, issuer.your-service.gov.uk/wallet/. The {unique key identifier} is a hashed version of the KMS Key ID, for example #3ebc655f7f00ddcbd52cee2b48b8df38.
 
@@ -58,13 +58,13 @@ When receiving your credential, the wallet can find, or resolve, your DID docume
 
 * `verificationMethod.type` indicates how a verifier can independently verify a proof. In GOV.UK One Login, we use a cryptographic public key as a verification method. Used this way, it verifies that the signer, which in this case is your government service, possesses the associated cryptographic private key. We use the JSON Web Signature 2020 specification, and the "JsonWebKey2020" type.
 
-* `verificationMethod.controller` refers to the entity that is authorised to make changes to the DID document. In the example, this is your service. It is identified by its DID `"did:web:test-www.tax.service.gov.uk/hmrc-govwallet-did"`.
+* `verificationMethod.controller` refers to the entity that is authorised to make changes to the DID document, your service. In the example, it is identified by the DID `"did:web:test-www.tax.service.gov.uk/hmrc-govwallet-did"`.
 
 * `verificationMethod.publicKeyJwk` : indicates the type of key, a JSON Web Key, followed by the public key.
 
 #### Key management
 
-The GOV.UK One Login digital wallet, as well as any consumer of verifiable credentials, needs to verify the validity of the credentials your service issues. Credentials issued by your service signed with your private key,  or keys, need to be verified by the public key, or keys, you made available in the did:web document.
+The GOV.UK Wallet, as well as any consumer of verifiable credentials, needs to verify the validity of the credentials your service issues. Credentials issued by your service signed with your private key,  or keys, need to be verified by the public key, or keys, you made available in the `did:web` document.
 
 Your public keys need to stay available throughout the lifecycle of your credentials. A public key used to sign a group of VCs can not be made inactive until after the VCs have expired. Public keys should be kept in an inactive state, available to be verified.
 
@@ -74,7 +74,7 @@ The service needs a key refresh process that creates a new asymmetric public or 
 
 This is done by making sure the public part of the historical key is retained, while the private key is destroyed. For example, a VC issued by an internal and external issuer.
 
-The service also needs a key revocation. This needs to include a notice made from the credential issuer explaining that a specific key should be removed from operational use before the key expires. This will generally happen when the key is lost or compromised. If a key is compromised, it can be used by an attacker to decrypt or forge messages, impersonate an identity, or access sensitive information.
+The service also needs key revocation. This needs to include a notice made from the credential issuer explaining that a specific key should be removed from operational use before the key expires. This will generally happen when the key is lost or compromised. If a key is compromised, it can be used by an attacker to decrypt or forge messages, impersonate an identity, or access sensitive information.
 
 The table below describes the possible states of a key pair used for signing credentials:
 
@@ -83,15 +83,15 @@ The table below describes the possible states of a key pair used for signing cre
 | Created   | A key pair is generated with an activation date in the future. It is not yet used for signing.|
 | Active    | A key becomes active on the activation date, and enabled for signing and verifying the VC. There must not be multiple keys active at the same time.|
 | Inactive  | A key becomes inactive past its expiration date or time. The public key will still be valid for verifying the VC.|
-| Revoked   | A key is destroyed and removed from the issuer’s auth server, and is not valid for signing and verifying the signatures.|
+| Revoked   | A key is destroyed and removed from the issuer’s server, and is not valid for signing or verifying the signatures.|
 
 ## Step 2: Publish the metadata of your credentials
 
-To fetch a credential from a credential issuer, GOV.UK digital wallet needs to obtain credential metadata published by the organisation who issues the credential. The metadata is public, so it can tell everyone what credentials that issuer offers.
+To fetch a credential from a credential issuer, GOV.UK Wallet needs to obtain credential metadata published by the organisation who issues the credential. The metadata is public, to indicate to wallets and verifiers what credentials that issuer offers.
 
 The metadata file is a JSON file published at the well-known path: `/.well-known/openid-credential-issuer`.
 
-Credential issuers using GOV.UK One Login digital wallet, must produce and publish a metadata document that:
+Credential issuers using GOV.UK Wallet, must produce and publish a metadata document that:
 
 * supports English and Welsh
 
@@ -99,7 +99,7 @@ Credential issuers using GOV.UK One Login digital wallet, must produce and publi
 
 * highlights key fields visually for the user, for example document name, primary and auxiliary fields
 
-This code example shows a credential metadata JSON file being published by DBS to carry out basic disclosure:
+This illustrative example shows how a credential metadata JSON file would represent a basic DBS disclosure certificate:
 
 ```JSON
 {
@@ -279,7 +279,7 @@ The value in `kid` should match the `verificationMethod.id` from the did:web doc
 
 ### Payload
 
-This example is a possible template for sharing a DBS basic disclosure certificate. dates are represented in a `YYYY-MM-DD` format for simplification:
+This example is a possible template for sharing a DBS basic disclosure certificate. Dates are represented in a `YYYY-MM-DD` format for simplification but should be in Unix time:
 
 ```
 {
@@ -357,10 +357,14 @@ Here are the explanations of the JWT claims in the example:
 
 * `exp` is "expiry", an optional claim indicating the time after which the JWT must not be accepted for processing. It is represented as a NumericDate showing the number of seconds elapsed since midnight on 1 January 1970 (Unix time).
 
-<%= warning_text('You should carefully consider the expiration of the JWT, and of the credential it represents.') %>
+<%= warning_text('When setting the expiration of the JWT, you should consider the expiration of the credential or entitlement it represents.') %>
 
-The `exp` claim is different from the `expirationDate` parameter in the VC object. As an issuer, you can choose to set `expirationDate` on the VC to reflect the expiration of the entitlement itself. For example, a DBS Basic Disclosure Certificate may last for 12 months, a Veteran Card for 5 years.
+The `exp` claim is different from the `expirationDate` parameter in the VC object. As an issuer, you can choose to set `expirationDate` on the VC to reflect the expiration of the entitlement itself. For example, a DBS Basic Disclosure Certificate may last for 12 months, a Veteran Card for 3 years.
 
-As an issuer, you can also choose to set an optional `exp` value that will invalidate the VC at a future date you decide. The Basic Disclosure check example assumes that the JWT itself does not expire, just like a paper certificate will exist forever. However, because the online record of the disclosure in the share code system is deleted after 12 months, the `expirationDate` parameter is used in the VC object to reflect this lifecycle of the credential’s entitlement.
+As an issuer, you can also choose to set an optional `exp` value that will invalidate the VC at a future date you decide. The Basic Disclosure check example assumes that the JWT itself does not expire, just like a paper certificate will continue to exist. However, because the online record of the disclosure in the share code system is deleted after 12 months, the `expirationDate` parameter is used in the VC object to reflect this lifecycle of the credential’s entitlement.
 
+## Step 4: Build your Wallet Credential Issuer
 
+Your service needs to implement the **[Wallet Credential Issuer APIs](/API-reference.html)**.
+
+Please refer to the **[sample reference material](/API-reference.html)** to see an example of a credential issuer service integrated with the GOV.UK Wallet.

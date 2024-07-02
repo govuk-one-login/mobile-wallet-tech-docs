@@ -3,7 +3,7 @@ host:
 
 # Header-related options
 show_govuk_logo: true
-service_name: One Login Wallet
+service_name: Wallet
 service_link: https://www.larry-the-cat.service.gov.uk
 phase: Beta
 
