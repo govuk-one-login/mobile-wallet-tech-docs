@@ -1,14 +1,34 @@
 openapi: "3.0.0"
 info:
   version: 1.0.0
-  title: Wallet Credential Issuer APIs
+  title: Wallet Credential Issuer API
+  description: |-
+    This document describes the four endpoints of your credential issuer that are required to issue a credential to GOV.UK Wallet. Credentials issued by your service should be securely added to the mobile wallet.
+    
+    Implementing this API and following the rest of the rechnical documentation will ensure that only a user logged in the mobile app and your service using the same GOV.UK One Login account, is allowed to obtain the credential you are offering. It will also ensure that the credential is cryptographically bound to a particular wallet so that it cannot be passed on to another wallet.
+
+    For a technical overview of the end-to-end issance flow please refer to <b>[Understanding GOV.UK digital wallet’s credential exchange flow](https://upgraded-barnacle-gqknpev.pages.github.io/issuance-flow.html)</b>. The flow is based on OpenID Connect for Verifiable Credential Issuer ([OpenID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html)).<br><br>Please refer to the <b>[Use sample reference material](https://upgraded-barnacle-gqknpev.pages.github.io/use-sample-reference-material.html)</b> for a reference implementation of this API.
   license:
-    name: MIT
+    name: MIT License
+externalDocs:
+  description: Find out more about GOV.UK Wallet
+  url: https://upgraded-barnacle-gqknpev.pages.github.io/
+tags:
+  - name: credential_offer
+    description: Used to initiate the transaction
+  - name: credential
+    description: Used to request the wallet credential
+  - name: metadata (well-known endpoint)
+    description: Used to share the metadata of your credential
+  - name: did:web (well-known endpoint)
+    description: Used to share your public signing key
 paths:
   /credential_offer:
     get:
+      tags:
+        - credential_offer
       summary: Request a credential offer
-      description: Private API for the CRI to request a credential offer
+      description: <b>What is it?</b> a private endpoint allowing your credential issuer to generate a credential offer.<br><b>When do you need it?</b> The wesbite of your service must display a credential offer to your user as a QR code or a link after they have logged in with One Login and proven - after successfully interacting with your service - that they are eligible to receive the credential.
       parameters:
         - name: documentId
           in: path
@@ -19,7 +39,7 @@ paths:
             format: uuid
         - name: walletSubjectId
           in: path
-          description: Pairwise identifier generated from the CommonSubjectId and rpSectorId
+          description: Pairwise identifier generated from the `CommonSubjectId` and `rpSectorId`
           required: true
           schema:
             type: string
@@ -34,8 +54,10 @@ paths:
                 credential_offer_uri: https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22BasicDisclosure%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiJmZjI3NWI5Mi0wZGVmLTRkZmMtYjBmNi04N2M5NmIyNmM2YzciLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJhdWQiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJjbGllbnRJZCI6ImFiYzEyMyIsImlzcyI6InVybjpmZGM6Z292OnVrOjxITVJDPiIsImNyZWRlbnRpYWxfaWRlbnRpZmllcnMiOlsiM2U0Zjc1ZDMtNzkxMy00ZDE0LWE0YjctY2FlNzFlN2NiYmEwIl0sImV4cCI6MTcxMTAzNTkwNywiaWF0IjoxNzExMDM1NjA3fQ.6hHe0-A3n4GlBph9X4hcxbsflusco2Q7z_07-s85QmYOSCbYm8My_LGEcBD68E5lW5DCJ1yjwtPPr9VbhIlhyg%22%7D%7D%2C%22credentialIssuer%22%3A%22https%3A%2F%2Fcredential-issuer.example.com%22%7D
   /credential:
     post:
+      tags:
+          - credential
       summary: Request a credential
-      description: API for the wallet to request the credential
+      description: <b>What is it?</b> a public endpoint for the wallet to request the credential.<br><b>When do you need it?</b> This endoint is used to send the credential from your Credential Issuer to the GOV.UK Wallet. You must first establish that the wallet that requested it and the user logged in your service with One Login are allowed to receive the credential. For this, the app needs to share with you a credential issuer access token (as Bearer Token) and a proof that the user is in possession of the wallet (as a c-nonce JWT proof signed with then wallet's private did:key).
       security:
         - BearerAuthentication: [ ]
       requestBody:
@@ -88,8 +110,10 @@ paths:
                       - multipleCredentialsAllowed: 'true'
   /.well-known/openid-credential-issuer:
     get:
+      tags:
+          - metadata (well-known endpoint)
       summary: Retrieve credential metadata
-      description: Public API for other systems to retrieve metadata about the credentials issued by this CRI
+      description: <b>What is it?</b> a public endpoint for the wallet to retrieve metadata about the credential(s) issued by your credential issuer.<br><b>When do you need it?</b> You must publish this metadata file once when setting up of your credential issuer service. After that, GOV.UK Wallet will retrieve your metadata at the well-known endpoint each time a user requests a new credential, in case your metadata has changed.
       responses:
         '200':
           description: Credential metadata
@@ -187,8 +211,10 @@ paths:
                               locale: cy-GB
   /.well-known/did.json:
     get:
+      tags:
+          - did:web (well-known endpoint)
       summary: Retrieve did:web document
-      description: Public API for other systems to retrieve the did:web document for this CRI
+      description: <b>What is it?</b> a public endpoint for GOV.UK One Login and Wallet to retrieve the did:web document of your credential issuer.<br><b>When do you need it?</b> The did:web document contains essential information such as the public signing key to verify the validity of the credential issued by your credential issuer. You must publish this did:web file when setting up your credential issuer service. After that, GOV.UK One Login and Wallet will use this endpoint to retrieve your did:web document and validate the signature of your credentials.
       responses:
         '200':
           description: did:web document
