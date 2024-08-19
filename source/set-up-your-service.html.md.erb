@@ -17,7 +17,7 @@ Signing keys should use the Elliptic Curve Digital Signature Algorithm (ECDSA) w
 
 When a government organisation issues a credential to GOV.UK Wallet, it must publish public signing keys so that the wallet and verifiers can verify the validity of the credential. The public signing key for credentials is published in a decentralised identifier (DID) document. This document must include a public key of the key pairs used to sign credentials.
 
-**N.B.** A second key pair in JWKS format is required to secure the pre-authorised code created by the credential issuer (and verified by One Login) see [Step 2](/set-up-your-service.html#step-2-generate-a-credential-signing-key-pair-and-publish-the-public-key).
+**N.B.** A second key pair in JWKS format is required to secure the pre-authorised code created by the credential issuer (and verified by One Login) see [Step 2](set-up-your-service.html#step-2-generate-a-pre-authorised-code-signing-key-pair-and-publish-the-public-key).
 
 The DID document should be in JSON format, and contain
 verification methods for all credentials your service will issue. One Login uses public keys as verification methods.
