@@ -28,7 +28,7 @@ paths:
       tags:
         - credential_offer
       summary: Request a credential offer
-      description: <b>What is it?</b> a private endpoint allowing your credential issuer to generate a credential offer.<br><b>When do you need it?</b> The wesbite of your service must display a credential offer to your user as a QR code or a link after they have logged in with One Login and proven - after successfully interacting with your service - that they are eligible to receive the credential.
+      description: <b>What is it?</b> a private endpoint allowing your credential issuer to generate a credential offer.<br><b>When do you need it?</b> The website of your service must display a credential offer to your user as a QR code or a link after they have logged in with One Login and proven - after successfully interacting with your service - that they are eligible to receive the credential. The credentialType parameter is useful distinguish between multiple credentials your CRI may offer e.g., basic, standard, enhanced DBS certificates.
       parameters:
         - name: documentId
           in: path
@@ -43,6 +43,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: credentialType
+          in: path
+          description: Type of credential to issue for example `BasicCheckCredential`
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: URI encoded credential offer
@@ -51,7 +57,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/CredentialOfferResponse"
               example:
-                credential_offer_uri: https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22BasicDisclosure%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiJmZjI3NWI5Mi0wZGVmLTRkZmMtYjBmNi04N2M5NmIyNmM2YzciLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJhdWQiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJjbGllbnRJZCI6ImFiYzEyMyIsImlzcyI6InVybjpmZGM6Z292OnVrOjxITVJDPiIsImNyZWRlbnRpYWxfaWRlbnRpZmllcnMiOlsiM2U0Zjc1ZDMtNzkxMy00ZDE0LWE0YjctY2FlNzFlN2NiYmEwIl0sImV4cCI6MTcxMTAzNTkwNywiaWF0IjoxNzExMDM1NjA3fQ.6hHe0-A3n4GlBph9X4hcxbsflusco2Q7z_07-s85QmYOSCbYm8My_LGEcBD68E5lW5DCJ1yjwtPPr9VbhIlhyg%22%7D%7D%2C%22credentialIssuer%22%3A%22https%3A%2F%2Fcredential-issuer.example.com%22%7D
+                credential_offer_uri: https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22BasicDisclosure%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiJmZjI3NWI5Mi0wZGVmLTRkZmMtYjBmNi04N2M5NmIyNmM2YzciLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJhdWQiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJjbGllbnRJZCI6ImFiYzEyMyIsImlzcyI6InVybjpmZGM6Z292OnVrOjxITVJDPiIsImNyZWRlbnRpYWxfaWRlbnRpZmllcnMiOlsiM2U0Zjc1ZDMtNzkxMy00ZDE0LWE0YjctY2FlNzFlN2NiYmEwIl0sImV4cCI6MTcxMTAzNTkwNywiaWF0IjoxNzExMDM1NjA3fQ.6hHe0-A3n4GlBph9X4hcxbsflusco2Q7z_07-s85QmYOSCbYm8My_LGEcBD68E5lW5DCJ1yjwtPPr9VbhIlhyg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fcredential-issuer.example.com%22%7D
   /credential:
     post:
       tags:
