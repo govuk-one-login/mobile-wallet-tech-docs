@@ -28,7 +28,7 @@ paths:
       tags:
         - credential_offer
       summary: Request a credential offer
-      description: <b>What is it?</b> a private endpoint allowing your credential issuer to generate a credential offer.<br><b>When do you need it?</b> The website of your service must display a credential offer to your user as a QR code or a link after they have logged in with One Login and proven - after successfully interacting with your service - that they are eligible to receive the credential. The credentialType parameter is useful distinguish between multiple credentials your CRI may offer e.g., basic, standard, enhanced DBS certificates.
+      description: <b>What is it?</b> a private endpoint allowing your credential issuer to generate a credential offer.<br><b>When do you need it?</b> The website of your service must display a credential offer to your user as a QR code or a link after they have logged in with One Login and proven - after successfully interacting with your service - that they are eligible to receive the credential. This endpoint produces the URL that your website will render as a QR code or a deep link so the wallet can consume it. The credentialType parameter is used to distinguish between multiple credentials your CRI may offer e.g., basic, standard or enhanced DBS certificates.
       parameters:
         - name: documentId
           in: path
