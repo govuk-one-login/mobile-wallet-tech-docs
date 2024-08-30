@@ -47,8 +47,8 @@ This diagram shows a simple example of the exchange of a credential between a go
     4b. Validate credential request, which includes:<br>
         - Extract the pairwise wallet identifier walletSubjectId from the access token<br>
         - Compare this pairwise wallet identifier with the other walletSubjectId you received after logging the user in with One Login<br>
-        - Fetch underlying data linked to your unique credential identifier (created in step 2b.)<br>
         - Complete the proof of possession challenge from the wallet and extract its did:key<br>
+        - Fetch underlying data linked to your unique credential identifier (created in step 2b.)<br>
         - Build the credential as a VC-JWT including its did:key to bind the credential to the wallet<br>
         - Sign the credential with your private key<br>
     4c. Return VC-JWT to the wallet
