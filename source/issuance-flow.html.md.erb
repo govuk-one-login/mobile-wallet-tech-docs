@@ -15,13 +15,13 @@ review_in: 2 month
 
 2. The same user is also logged in the GOV.UK Wallet app
 
-3. Your service shows a credential offer as a QR code or a link (if on same device) including a pre-authorised code so GOV.UK Wallet can request the credential
+3. Your service shows a credential offer as a QR code or a deep link as a CTA (if on same device) including a pre-authorized code the GOV.UK Wallet can use to later request the credential
 
-4. GOV.UK Wallet gets an access token from the One Login Token Service that your service needs
+4. The GOV.UK Wallet exchanges the pre-authorized code with the One Login Token Service and retrieves a JWT access token signed by the One Login Token Service
 
 5. GOV.UK Wallet sends the access token to your service to fetch the credential
 
-6. Your service validates the access token with the One Login Token Service and confirm that the credential is issued to the right person
+6. Your service validates the access token, ensures it is signed by the One Login Token Service and confirms the token is bound to the same user as logged into your credential issuer.
 
 7. Your service sends the credential so GOV.UK Wallet can validate it and store it
 
@@ -45,9 +45,10 @@ This diagram shows a simple example of the exchange of a credential between a go
 4. Return the credential to the wallet (POST /credential call)<br>
     4a. Validate the access token with One Login<br>
     4b. Validate credential request, which includes:<br>
-        - Get the unique wallet identifier (did:key proof of possession challenge)<br>
+        - Extract the pairwise wallet identifier walletSubjectId from the access token<br>
+        - Compare this pairwise wallet identifier with the other walletSubjectId you received after logging the user in with One Login<br>
         - Fetch underlying data linked to your unique credential identifier (created in step 2b.)<br>
-        - compare the walletSubjectId you received after logging the user in with One Login<br>
-        - Build the credential as a VC-JWT<br>
+        - Complete the proof of possession challenge from the wallet and extract its did:key<br>
+        - Build the credential as a VC-JWT including its did:key to bind the credential to the wallet<br>
         - Sign the credential with your private key<br>
     4c. Return VC-JWT to the wallet
