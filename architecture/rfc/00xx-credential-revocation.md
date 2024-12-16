@@ -119,7 +119,7 @@ New Status Type must be registered in the [Status Types Registry](https://www.ie
 
 In a [Bitstring Status List](https://www.w3.org/TR/vc-bitstring-status-list/) The status information of a verifiable credential issue by the issuer is represented as items in a list. Each issuer manages a list of all verifiable credentials that it has issued. Each verifiable credential is associated with an item in its list. When a single bit specifies a status, such as "revoked" or "suspended", then that status is expected to be true when the bit is set (1) and false when unset (0).
 
-An individual bit represents a status when the bit is set (1) the status is true for the associated credential. When the bit is unset (0) the status is not false for the credential. A simple example below shows a StatusListCredential with bit at index `94567` representing the `revocation` status for credential at URL "https://example.com/credentials/status/3". Similarly bit at index 23452 represents the "suspension" status of the credential at URL "https://example.com/credentials/status/4".
+An individual bit represents a status when the bit is set (1) the status is true for the associated credential. When the bit is unset (0) the status is not true for the credential. A simple example below shows a StatusListCredential with bit at index `94567` representing the `revocation` status for credential at URL "https://example.com/credentials/status/3". Similarly bit at index 23452 represents the "suspension" status of the credential at URL "https://example.com/credentials/status/4".
 
 ```json
  Example StatusListCredential using simple entries
