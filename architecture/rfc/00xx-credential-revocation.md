@@ -13,7 +13,7 @@ GOV.UK One Login or an issuer may want to revoke credential(s) they have issued.
 
 Some example scenarios are 
 
-- Revoking a driving license as a result of disqualification.
+- Revoking a driving licence as a result of disqualification.
 - Issuance of a new licence to replace a learning licence.
 
 ## Scope
