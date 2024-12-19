@@ -231,25 +231,157 @@ Using different `statusMessage` across issuers can make the implementation compl
 
 ## Solution Design
 
-Privacy
+### Design Considerations
 
-One to one correlation between the status and the holder of credential. The status updates must not result in tracking of the holder of the driving licence for example when they 
+The OAuth Status List and Bitstring Status List provide several security ([1](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-security-considerations), [2](https://www.w3.org/TR/vc-bitstring-status-list/#security-considerations)), privacy ([1](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-privacy-considerations), [2](https://www.w3.org/TR/vc-bitstring-status-list/#privacy-considerations)) and [implementation](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-implementation-consideratio) considerations. Some more are listed below.
+
+- The status update checks must not result in tracking of the holder by the Issuer or the Verifier. 
+- The solution should align to standard that will be supported by OIDC and mDl standards.
 
 ### Proposed Solution
+A Status List is required to provide a efficient and performant mechanism to the issuer, holder and the verifier to ensure all parties are aware of the validity of the credentials. The Status List is a performance enhancement that means the wallet app does not have to re-fetch the credential to ensure its validity, instead it can rely on the Status List to provide that information. This means that the must keep the list up to date and reflect any changes as soon as they are available.
 
-#### Centralised Vs Decentralised List
+Form the options listed in the sections above the OAuth Status List and Bitstring Status List are the two main options being considered for creating a mechanism for credential revocation Status List. Out of the two options OAuth Status list is the preferred option for the following reasons.
 
-### Issuer
+- It has consistent way of storing statuses in a list, that is you have to select 1,2,4 or 8 bits and all statuses in the list must use the same number of bits.
+- The [Status Types Values](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-status-types) are part of the specification and predefined. Additional statuses must be registered in the [registry](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#iana-status-types). This ensures all parties use same Valid, Invalid and Suspended bit combination to represent Status Type values and can use application specific statuses to meet any additional requirements. 
+- It defines a mechanism, data structures and processing rules for representing the status of tokens secured by JSON Object Signing and Encryption (JOSE) or CBOR Object Signing and Encryption (COSE), such as JWT, SD-JWT VC, CBOR Web Token and ISO mdoc.
+- The Reference Token Issuer (credential issuer in this case), Status Issuer and Status Provider roles can be fulfilled by different entities.
+- [SD-Jwt](https://www.ietf.org/archive/id/draft-ietf-oauth-sd-jwt-vc-08.html#name-issuer-holder-verifier-mode) mentions use of a Status Provider and reference Status List  to support revocation of Verifiable Credentials.
+- The new draft for ISO-compliant driving licence — Part 5: Mobile driving licence (mDL) application suggests use of Status List for revocation.
 
-### Holder
+> **Note**
+>
+> At the time of the writing both OAuth Status List and Bitstring Status List are drafts and not standards.
 
-### Verifier
+#### Bits and Status Type Values
+The proposed solution will use OAuth Status List with 2 bits. Initially only two Status Types will be supported.
 
-## Refrences
+- 0x00 - "VALID" - The status of the Referenced Token is valid, correct or legal.
 
-[European Blockchain Credential Status Framework](https://hub.ebsi.eu/vc-framework/credential-status-framework)
+- 0x01 - "INVALID" - The status of the Referenced Token is revoked, annulled, taken back, recalled or cancelled.
+
+A Invalid token cannot be reinstated, changed back to Valid. It must stay revoked for its lifetime. Below is a example list of 8 statuses.
+
+```
+status[0] = 1
+status[1] = 0
+status[2] = 0
+status[3] = 1
+status[4] = 0
+status[5] = 1
+status[6] = 0
+status[7] = 1
+```
+The byte array will be represented in the following order.
+
+```
+byte             0                  1        
+bit       7 6 5 4 3 2 1 0    7 6 5 4 3 2 1 0 
+         +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+
+values   |0|1|0|0|0|0|0|1|  |0|1|0|0|0|1|0|0|
+         +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+
+          \ / \ / \ / \ /    \ / \ / \ / \ / 
+status     1   0   0   1      1   0   1   0  
+index      3   2   1   0      7   6   5   4  
+           \___________/      \___________/  
+                0x41               0x44      
+```
+
+The resulting byte array and compressed/base64url-encoded Status List is below.
+
+```
+byte_array = [0x41, 0x44]
+encoded:
+{
+  "bits": 2,
+  "lst": "eNpzdAEAAMgAhg"
+}
+```
+Below is an example of the Status List JWT.
+```
+{
+  "alg": "ES256",
+  "kid": "12",
+  "typ": "statuslist+jwt"
+}
+.
+{
+  "exp": 2291720170,
+  "iat": 1686920170,
+  "status_list": {
+    "bits": 2,
+    "lst": "eNpzdAEAAMgAhg"
+  },
+  "sub": "https://example.com/statuslists/1",
+  "ttl": 43200
+}
+```
+Below is an example of Referenced Token with a status claim with a status index and a URI for the Status List Token. 
+```
+{
+  "alg": "ES256",
+  "kid": "11"
+}
+.
+{
+  "status": {
+    "status_list": {
+      "idx": 3,
+      "uri": "https://example.com/statuslists/1"
+    }
+  }
+}
+```
+#### Status List Formats
+The OAuth Status List RFC defines two token formats for the Status List.
+- Json Web Token (JWT)
+- CBOR Web Token (CWT)
+
+Both formats will be supported for the implementation.
+
+#### Decentralised Vs Centralised Status List
+The status list can be hosted by each Issuer or Status Provider in a decentralised manner. Alternatively it can be hosted centrally both approaches have their benefits and drawbacks.
+
+##### Decentralised
+An Issuer or a Status Provider for the credentials provided by the Issuer associated with the Issuer can maintain and decentralised status list will be 
+Benefit
+
+Reduced blast radius
+No inter-department replay mechanism should the service go down
+
+Drawback
+Increases the work needed to become an issuer
+Each issuer needs to be competent building such resilient infrastructure
+Anonymity and number of creds issued
+Pre-fill random set of indexes so people can’t see the number off creds issued
+
+##### Centralised
+Benefit
+
+- Build it once (not just prod but also test)
+- One set of people becomes experts
+- Less issuer work
+
+Drawback
+
+- Blast radius
+
+#### Functional and Non Functional requirements
+
+- The solution must scale out with sharded services and preserve anonymity by spreading across the shards.
+- Deployment in different regions and cloud providers must be considered.
+
+#### Interfaces
+
+### Issuer Responsibility
+
+### Holder Responsibility
+
+### Verifier Responsibility
 
 ## Open Questions
 
 - Do we need to support a refresh status for a VC? This is mentioned Bitstring List and VC data model https://www.w3.org/TR/vc-data-model-2.0/#refreshing
-- What happens to credential that have been revoked permanently? Do they stay in the list forever? That will bloat the list over time.
+- What happens to credential that have been revoked permanently? Do they stay in the list forever? That will bloat the list over time. Perhaps the solution should be chunked status list with 
+- Should the default value for the status list byte array be other than Zeros?
