@@ -8,7 +8,7 @@ GOV.UK One Login is developing a government wallet - GOV.UK One Login digital wa
 GOV.UK One Login or an issuer may want to revoke credential(s) they have issued.
 
 - The revocation may be permanent or temporary depending on the scenario.
-- The revocation must support at least 4 statuses, Valid, Invalid, Suspended and Application specific.
+- The revocation must support at least 2 statuses Valid, Invalid.
 - The revocation mechanism must be secure, privacy preserving and scalable to billions of records.
 
 Some example scenarios are 
@@ -96,24 +96,24 @@ Following is an example for a decoded header and payload of a Referenced Token. 
 
 The OAuth Status List also describes the state, mode, condition or stage of each entity represented by each Referenced Token. If the list contains more than one bit per Referenced Token, for example to represent two states VALID and INVALID, then the whole combination must be used to describe one state. A Referenced Token cannot have multiple states in the Status List. The registry in Section [14.5](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-status-types-registry) of the OAuth Status List RFC includes the most common Status Type Values. See some values below.
 
-* 0x00 - "VALID" - The status of the Referenced Token is valid, correct or legal.
-
-* 0x01 - "INVALID" - The status of the Referenced Token is revoked, annulled, taken back, recalled or cancelled.
-
-* 0x02 - "SUSPENDED" - The status of the Referenced Token is temporarily invalid, hanging, debarred from privilege.  This state is reversible.
+- 0x00 - "VALID" - The status of the Referenced Token is valid, correct or legal.
+- 0x01 - "INVALID" - The status of the Referenced Token is revoked, annulled, taken back, recalled or cancelled.
+- 0x02 - "SUSPENDED" - The status of the Referenced Token is temporarily invalid, hanging, debarred from privilege.  This state is reversible.
 
 #### Validation Rules
 
 The processing rules for JWT or CWT precede any evaluation of a Referenced Token's status. This means if "exp" shows that the Token is expired then even a Valid Status will be considered expired.
 
-### Pros
-Compressed using DEFLATE [RFC1951] with the ZLIB [RFC1950] data format.
-Allows caching of status list with ttl.
-Provides examples of JWT, CWT and mdoc representations.
-SD JWT references the user of status list as an option for token status updates.
+#### Pros
+- Compressed using DEFLATE [RFC1951] with the ZLIB [RFC1950] data format.
+- Allows caching of status list with ttl.
+- Provides examples of JWT, CWT and mdoc representations.
+- SD-JWT references the user of status list as an option for token status updates.
+- An issuer is unable to track the holder as verifiers have to process the list to identify the status.
 
-### Cons
-New Status Type must be registered in the [Status Types Registry](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-status-types-registry).
+#### Cons
+- New Status Type must be registered in the [Status Types Registry](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-status-types-registry).
+- At the time of writing the RFC is draft and not a IETF standard.
 
 ### W3C Bitstring Status List
 
@@ -210,24 +210,23 @@ Example BitstringStatusListCredential
 ```
 
 Pros
-data compression - highly compressible using run-length compression techniques such as GZIP [RFC1952](https://www.rfc-editor.org/rfc/rfc1952).
-The status list is expressed inside a verifiable credential in order to enable a holder to provide it directly to a verifier.
-The standard has considerations to align implementation to OAuth Status List to allow interoperability in code.
-`BitstringStatusListEntry` `statusMessage` property can be used to describe the number of statuses indicated by `statusSize` property
+- Highly compressible using run-length compression techniques such as GZIP [RFC1952](https://www.rfc-editor.org/rfc/rfc1952).
+- The status list is expressed inside a verifiable credential in order to enable a holder to provide it directly to a verifier.
+- The standard has considerations to align implementation to OAuth Status List to allow interoperability in code.
+- `BitstringStatusListEntry` `statusMessage` property can be used to describe the number of statuses indicated by `statusSize` property
 
 Cons
-Bitstring Status List is a W3C Candidate Draft and is not a standard yet.
-The working group might change the specification, for example `TTL` conflicts with `validUntil` and it might be removed in the future.
-Using different `statusMessage` across issuers can make the implementation complex.
+- Bitstring Status List is a W3C Candidate Draft and is not a standard yet.
+- The working group might change the specification, for example `TTL` conflicts with `validUntil` and it might be removed in the future.
+- Using different `statusMessage` across issuers can make the implementation complex for a centralised status list.
 
-### Certificate Revocation Lists (CRL)
-[RFC5280](https://www.rfc-editor.org/rfc/rfc5280)
+### Other Options
+The Bitstring Status List provides a good [comparison](https://www.w3.org/TR/vc-bitstring-status-list/#data-model) of the different options available for expressing digital credential status. It can be used as reference for further discussion and is out of scope of this document. 
 
-### Online Certificate Status Protocol
-[OCSP RFC2560](https://datatracker.ietf.org/doc/html/rfc2560)
-
-### Token Introspection Token 
-[rfc7662](https://datatracker.ietf.org/doc/html/rfc7662)
+Below is a list of links for some of the RFCs 
+- Certificate Revocation Lists (CRL) [RFC5280](https://www.rfc-editor.org/rfc/rfc5280)
+- Online Certificate Status Protocol [OCSP RFC2560](https://datatracker.ietf.org/doc/html/rfc2560)
+- Token Introspection Token [rfc7662](https://datatracker.ietf.org/doc/html/rfc7662)
 
 ## Solution Design
 
@@ -261,7 +260,7 @@ The proposed solution will use OAuth Status List with 2 bits. Initially only two
 
 - 0x01 - "INVALID" - The status of the Referenced Token is revoked, annulled, taken back, recalled or cancelled.
 
-A Invalid token cannot be reinstated, changed back to Valid. It must stay revoked for its lifetime. Below is a example list of 8 statuses.
+A Invalid token cannot be reinstated, changed back to Valid. It must stay revoked for its lifetime. Below is a example list of 8 statuses. Future use-cases may include statuses for suspension and credential refresh. These are not part of the initial scope.
 
 ```
 status[0] = 1
@@ -287,9 +286,7 @@ index      3   2   1   0      7   6   5   4
            \___________/      \___________/  
                 0x41               0x44      
 ```
-
 The resulting byte array and compressed/base64url-encoded Status List is below.
-
 ```
 byte_array = [0x41, 0x44]
 encoded:
@@ -344,44 +341,142 @@ Both formats will be supported for the implementation.
 The status list can be hosted by each Issuer or Status Provider in a decentralised manner. Alternatively it can be hosted centrally both approaches have their benefits and drawbacks.
 
 ##### Decentralised
-An Issuer or a Status Provider for the credentials provided by the Issuer associated with the Issuer can maintain and decentralised status list will be 
-Benefit
+An Issuer or a Status Provider for the credentials issued can maintain a decentralised Status List. The Referenced Token will have the index and URI for the verifiers and the wallet to identify and check the Status List. This means each Issuer will need to create and maintain the Status List. The holder and the verifiers will need to access a different Status List for each credential.
 
-Reduced blast radius
-No inter-department replay mechanism should the service go down
+###### Benefit
+- A decentralised solution means that reduces blast radius to a single issuer related status in case of compromise or cyber attack
+- Each Issuer will have the complete ownership of the solution they produce
+- No inter-department replay mechanism should the service go down
 
-Drawback
-Increases the work needed to become an issuer
-Each issuer needs to be competent building such resilient infrastructure
-Anonymity and number of creds issued
-Pre-fill random set of indexes so people can’t see the number off creds issued
+###### Drawback
+- Increases the work needed to become an Issuer
+- Each Issuer needs to be competent building resilient infrastructure to support Status Updates and lookups
+- Decreased anonymity and privacy of credentials issued
+- Harder to get agreement to a single standard for Status List and more chances of deviating from a standard implementation
+- Can result in varying levels of maturity in Issuer implementations
 
 ##### Centralised
-Benefit
+A centralised GOV.UK service will be responsible for maintaining a Status List for all credentials issued by the Issuer. This service will only receive updates for the Status List in the form of an index and the updated Status Value. It will have no knowledge of the credential that references the status at the updated index. It will be the responsibility of the Issuer to maintain a reference to the credential and the status index. In the context of OAuth Status List this service will be the Status Provider. The Status List service must be sharded with multi-region and multi-cloud solution to address security, privacy and resilience.
 
-- Build it once (not just prod but also test)
-- One set of people becomes experts
-- Less issuer work
+###### Benefit
+- This service will be built once and used by many
+- Issuer does not require the expertise of maintaining the list, although the holder and verifiers will require knowledge of processing it correctly
+- The Issuer is unable to track the holder as it is not aware of verifier activity
 
-Drawback
-
-- Blast radius
+###### Drawback
+- A decentralised solution means increased blast radius
+- If the service is compromised or down it can effect all issuers, holders and verifiers
 
 #### Functional and Non Functional requirements
-
-- The solution must scale out with sharded services and preserve anonymity by spreading across the shards.
-- Deployment in different regions and cloud providers must be considered.
+- The should align to OAuth Status List RFC with support for 2 bit statuses
+- Initially on Valid and Invalid statuses will be supported
+- The statuses 
+- The solution must scale out with sharded services and preserve anonymity by spreading indexes across the shards
+- Deployment in different regions and cloud providers must be considered to increase redundancy and resilience
 
 #### Interfaces
+The service will have two issuer facing interfaces. One for issuance of status index and another for revocation. One public interface which handles get requests and responds with the status list.
+More interfaces can be added in the future for other use-cases.
+
+##### Issue
+To get a new index the issuer must post a request including a expiry date for the credential. This date will be used to expire a slot for the index. The response from the service will be an index for the status and a URI of the list 
+
+Example request
+```
+POST /issue HTTP/1.1
+Host: api.status-list.service.gov.uk
+Accept: application/json
+{
+  "expires": "1734709493852"
+}
+```
+Example response
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+  "idx": "3",
+  "URI": "https://api.status-list.service.gov.uk/statuslists/1"
+}
+```
+
+##### Revoke
+To revoke or set a credential `Status Type` to `INVALID` Issuer needs to Post a request to Revoke endpoint. The Issuer must sign the request for audit purpose. The response 
+
+Example request
+```
+POST /revoke HTTP/1.1
+Host: api.status-list.service.gov.uk
+Accept: application/statuslist+jwt
+Content-Type: application/json
+{
+  "idx": "3",
+  "URI": "https://api.status-list.service.gov.uk/statuslists/1"
+}
+```
+Example response with JWT status list.
+```
+HTTP/1.1 200 OK
+Content-Type: application/statuslist+jwt
+
+eyJhbGciOiJIUzI1NiIsImtpZCI6IjEyIiwidHlwIjoic3RhdHVzbGlzdCtqd3QifQ.eyJleHAiOjIyOTE3MjAxNzAsImlhdCI6MTY4NjkyMDE3MCwiaXNzIjoiaHR0cHM6Ly9hcGkuc3RhdHVzLWxpc3Quc2VydmljZS5nb3YudWsiLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoyLCJsc3QiOiJlTnB6ZEFFQUFNZ0FoZyJ9LCJzdWIiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay9zdGF0dXNsaXN0cy8xIiwidHRsIjo0MzIwMH0.8bS1wn1TuHaN-RjDEyaf8cDLHH8m6IxgJT0qiLnxvqI
+```
+Decoded JWT
+```
+{
+  "alg": "HS256",
+  "kid": "12",
+  "typ": "statuslist+jwt"
+}
+.
+{
+  "exp": 2291720170,
+  "iat": 1686920170,
+  "iss": "https://api.status-list.service.gov.uk",
+  "status_list": {
+    "bits": 2,
+    "lst": "eNpzdAEAAMgAhg"
+  },
+  "sub": "https://api.status-list.service.gov.uk/statuslists/1",
+  "ttl": 43200
+}
+```
+
+##### Statuslists
+This is the endpoint that will return the status list in response to a Get request. The response will have the Status List JWT as described by OAuth Status List including a ttl of 1-12 hours to allow caching the status list.
+
+Example request
+```
+GET /statuslists/1 HTTP/1.1
+Host: api.status-list.service.gov.uk
+Accept: application/statuslist+jwt
+```
+Example response
+```
+HTTP/1.1 200 OK
+Content-Type: application/statuslist+jwt
+
+eyJhbGciOiJIUzI1NiIsImtpZCI6IjEyIiwidHlwIjoic3RhdHVzbGlzdCtqd3QifQ.eyJleHAiOjIyOTE3MjAxNzAsImlhdCI6MTY4NjkyMDE3MCwiaXNzIjoiaHR0cHM6Ly9hcGkuc3RhdHVzLWxpc3Quc2VydmljZS5nb3YudWsiLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoyLCJsc3QiOiJlTnB6ZEFFQUFNZ0FoZyJ9LCJzdWIiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay9zdGF0dXNsaXN0cy8xIiwidHRsIjo0MzIwMH0.8bS1wn1TuHaN-RjDEyaf8cDLHH8m6IxgJT0qiLnxvqI
+```
 
 ### Issuer Responsibility
+The credential Issuer is responsible for creation of the credentials and the issuance of the Referenced Token. It will use the GOV.UK One Login Status List service as the Status Provider to get an index and URI to the status list. The Issuer must register with GOV.UK OneLogin so it can authenticate and then get access to the Status List issue and revoke APIs. The Issuer must ensure the correlation of credentials with indexes and lists as the Status Provider will not track this.  
 
 ### Holder Responsibility
+The holder should use the public Status List API to get the status list referenced in the credential Referenced Token. The holder must use the correct URI and index from the credentials Referenced Token to fetch and then process the status list. The holder must perform the correct decoding and parsing of encoded Status List as mentioned in the [OAuth Status List RFC](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-correct-decoding-and-parsin). The holder may cache the status list for the duration of the ttl provided by the Status List provider. Once expired the holder must get the latest Status List.
 
 ### Verifier Responsibility
+The verifier should use the public Status List API to get the status list referenced in the credential Referenced Token. The holder must use the correct URI and index from the credentials Referenced Token to fetch and then process the status list. The verifier must perform the correct decoding and parsing of encoded Status List as mentioned in the [OAuth Status List RFC](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-correct-decoding-and-parsin). The verifier may cache the status list for the duration of the ttl provided by the Status List provider. Once expired the holder must get the latest Status List.
 
 ## Open Questions
 
-- Do we need to support a refresh status for a VC? This is mentioned Bitstring List and VC data model https://www.w3.org/TR/vc-data-model-2.0/#refreshing
 - What happens to credential that have been revoked permanently? Do they stay in the list forever? That will bloat the list over time. Perhaps the solution should be chunked status list with 
+
 - Should the default value for the status list byte array be other than Zeros?
+  Behaviour of the unused slots will be random and someone looking at the bit array should be unable to figure out by looking at the list and identify which bits are allocated and which one are not.
+  Sharded bit arrays of for example 100 million slots to start off.
+  Design consideration 100 shards of a million and so on.
+
+- What mechanism do we use to rebuild the list when needed?
+
+- Should we also record the issuer for every index to support Optional [Status List Aggregation](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-status-list-aggregation) feature?
