@@ -35,12 +35,12 @@ Identifier lists are generally suited to lower volume situations that One Login,
 
 ## Options
 
-### IETF OAuth Status List
+### IETF Token Status List
 
-The [IETF OAuth Status List](https://datatracker.ietf.org/doc/draft-ietf-oauth-status-list/06/) aims to provide a mechanism of communicating semantics about the token or its validity as that may change over time.
+The IETF [Token Status List] aims to provide a mechanism of communicating semantics about the token or its validity as that may change over time.
 It specifically calls out token formats secured by [Javascript Object Signing and Encryption](https://www.iana.org/assignments/jose/jose.xhtml) (JOSE) or [CBOR Object Signing and Encryption (COSE)](https://datatracker.ietf.org/doc/html/rfc8152), such as [JWTs](https://datatracker.ietf.org/doc/html/rfc7519), [SD-JWT VCs](https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/), [CWTs](https://datatracker.ietf.org/doc/html/rfc8392) and [ISO mdoc](https://www.iso.org/obp/ui/en/#iso:std:69084:en) that have application and relevance to GOV.UK One Login.
 
-The OAuth Status List defines a data structure that describes individual statuses of multiple Referenced Tokens.
+The Token Status List defines a data structure that describes individual statuses of multiple Referenced Tokens.
 The statuses of the Referenced Tokens are represented by one or multiple bits in the Status List.
 Each Referenced Token is allocated an index during issuance and the value of the bit(s) at the index in the Status List represents the status of the Referenced Token.
 
@@ -115,10 +115,10 @@ If an issuer wishes to be able to change the status of a credential at any point
 
 #### Status Types
 
-The OAuth Status List also describes the state, mode, condition or stage of each entity represented by each Referenced Token.
+The Token Status List also describes the state, mode, condition or stage of each entity represented by each Referenced Token.
 If the list contains more than one bit per Referenced Token, for example to represent more than just the two states `VALID` and `INVALID`, then the whole combination must be used to describe one state.
 A Referenced Token cannot have multiple states in the Status List.
-The registry in Section [14.5](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-status-types-registry) of the OAuth Status List RFC includes the most common Status Type Values. See some values below.
+The registry in Section [14.5](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-status-types-registry) of the Token Status List RFC includes the most common Status Type Values. See some values below.
 
 - 0x00 - "VALID" - The status of the Referenced Token is valid, correct or legal.
 - 0x01 - "INVALID" - The status of the Referenced Token is revoked, annulled, taken back, recalled or cancelled.
@@ -254,7 +254,7 @@ Example BitstringStatusListCredential:
 
 - Highly compressible using run-length compression techniques such as GZIP [RFC1952](https://www.rfc-editor.org/rfc/rfc1952).
 - The status list is expressed inside a verifiable credential in order to enable a holder to provide it directly to a verifier.
-- The standard has considerations to align implementation to OAuth Status List to allow interoperability in code.
+- The standard has considerations to align implementation to Token Status List to allow interoperability in code.
 - `BitstringStatusListEntry` `statusMessage` property can be used to describe the number of statuses indicated by `statusSize` property
 
 #### Cons
@@ -279,7 +279,7 @@ Below is a list of links for some of the RFCs:
 
 ### Design Considerations
 
-The OAuth Status List and Bitstring Status List provide several security ([1](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-security-considerations), [2](https://www.w3.org/TR/vc-bitstring-status-list/#security-considerations)), privacy ([1](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-privacy-considerations), [2](https://www.w3.org/TR/vc-bitstring-status-list/#privacy-considerations)) and [implementation](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-implementation-consideratio) considerations. Some more are listed below.
+The Token Status List and Bitstring Status List provide several security ([1](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-security-considerations), [2](https://www.w3.org/TR/vc-bitstring-status-list/#security-considerations)), privacy ([1](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-privacy-considerations), [2](https://www.w3.org/TR/vc-bitstring-status-list/#privacy-considerations)) and [implementation](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-implementation-consideratio) considerations. Some more are listed below.
 
 - The status update checks must not result in tracking of the holder by the Issuer or the Verifier.
 - The solution should align to standard that will be supported by OIDC and mDL standards.
@@ -290,23 +290,23 @@ A Status List is required to provide an efficient and performant mechanism to th
 The Status List is a performance enhancement that means the wallet app does not have to re-fetch the credential to ensure its validity, instead it can rely on the Status List to provide that information.
 This means that the status list service must keep the list up to date and reflect any changes as soon as they are available.
 
-From the options listed in the sections above the OAuth Status List and Bitstring Status List are the two main options being considered for creating a mechanism for credential revocation Status List.
-Out of those two options OAuth Status list is the preferred option for the following reasons:
+From the options listed in the sections above the Token Status List and Bitstring Status List are the two main options being considered for creating a mechanism for credential revocation Status List.
+Out of those two options Token Status List is the preferred option for the following reasons:
 
 - It has consistent way of storing statuses in a list, that is you have to select 1,2,4 or 8 bits and all statuses in the list must use the same number of bits.
 - The [Status Types Values](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-status-types) are part of the specification and predefined. Additional statuses must be registered in the [registry](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#iana-status-types). This ensures all parties use same Valid, Invalid and Suspended bit combination to represent Status Type values and can use application specific statuses to meet any additional requirements.
 - It defines a mechanism, data structures and processing rules for representing the status of tokens secured by JSON Object Signing and Encryption (JOSE) or CBOR Object Signing and Encryption (COSE), such as JWT, SD-JWT VC, CBOR Web Token and ISO mdoc.
 - The Reference Token Issuer (credential issuer in this case), Status Issuer and Status Provider roles can be fulfilled by the same or different entities.
 - [SD-Jwt](https://www.ietf.org/archive/id/draft-ietf-oauth-sd-jwt-vc-08.html#name-issuer-holder-verifier-mode) mentions use of a Status Provider and reference Status List to support revocation of Verifiable Credentials.
-- The draft second edition for ISO-compliant driving licence — Part 5: Mobile driving licence (mDL) application proposes the use of OAuth Status List.
+- The draft second edition for ISO-compliant driving licence — Part 5: Mobile driving licence (mDL) application proposes the use of Token Status List.
 
 > Note
 >
-> At the time of the writing both OAuth Status List and Bitstring Status List are drafts and not fully ratified standards.
+> At the time of the writing both Token Status List and Bitstring Status List are drafts and not fully ratified standards.
 
 #### Bits and Status Type Values
 
-The proposed solution will use OAuth Status List with 2 bits.
+The proposed solution will use Token Status List with 2 bits.
 Initially only two Status Types will be supported, however the use of 2 bits protects for a "SUSPENDED" state to be introduced in the future, as well as one other status which can be defined to meet the needs of the One Login programme.
 
 - 0x00 - "VALID" - The status of the Referenced Token is valid, correct or legal.
@@ -396,7 +396,7 @@ In this example the Referenced Token points to index 2 which has status 1, `INVA
 
 #### Status List Formats
 
-The OAuth Status List RFC defines two token formats for the Status List:
+The Token Status List RFC defines two token formats for the Status List:
 
 - Json Web Token (JWT)
 - CBOR Web Token (CWT)
@@ -438,7 +438,7 @@ A centralised GOV.UK service will be responsible for maintaining a Status List f
 This service will only receive updates for the Status List in the form of an index and the updated Status Value.
 It will have no knowledge of the credential that references the status at the updated index.
 It will be the responsibility of the Issuer to maintain a reference to the credential and the status index.
-In the context of OAuth Status List this service will be the Status Provider.
+In the context of Token Status List this service will be the Status Provider.
 The Status List service can be sharded so to limit the payload of any individual status list, with credentials randomly allocated across the available shards.
 Resilience requirements can be addresses through the use of multi-AZ, multi-region and/or multi-cloud solution.
 
@@ -455,7 +455,7 @@ Resilience requirements can be addresses through the use of multi-AZ, multi-regi
 
 #### Functional and Non Functional requirements
 
-- The should align to OAuth Status List RFC with support for 2 bit statuses
+- The should align to Token Status List RFC with support for 2 bit statuses
 - Initially only Valid and Invalid statuses will be supported
 - The solution must scale out with sharded services and preserve anonymity by spreading indexes across the shards
 - Deployment in different regions and cloud providers must be considered to increase redundancy and resilience
@@ -522,7 +522,7 @@ HTTP/1.1 202 Accepted
 
 ##### Statuslists
 
-This is the endpoint that will return the status list in response to a Get request. The response will have the Status List JWT as described by OAuth Status List including a ttl of 1-12 hours to allow caching the status list.
+This is the endpoint that will return the status list in response to a Get request. The response will have the Status List JWT as described by Token Status List including a ttl of 1-12 hours to allow caching the status list.
 
 Example request:
 
@@ -560,7 +560,7 @@ The service must publish each status list URI on high-volume and high-availabili
 
 The holder should use the public Status List API to get the status list referenced in the credential Referenced Token.
 The holder must use the correct URI and index from the credentials Referenced Token to fetch and then process the status list.
-The holder must perform the correct decoding and parsing of encoded Status List as mentioned in the [OAuth Status List RFC](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-correct-decoding-and-parsin).
+The holder must perform the correct decoding and parsing of encoded Status List as mentioned in the [Token Status List].
 The holder may cache the status list for the duration of the ttl provided by the Status List provider.
 Once expired the holder must get the latest Status List.
 
@@ -568,7 +568,7 @@ Once expired the holder must get the latest Status List.
 
 The verifier should use the public Status List API to get the status list referenced in the credential Referenced Token.
 The holder must use the correct URI and index from the credentials Referenced Token to fetch and then process the status list.
-The verifier must perform the correct decoding and parsing of encoded Status List as mentioned in the [OAuth Status List RFC](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-correct-decoding-and-parsin).
+The verifier must perform the correct decoding and parsing of encoded Status List as mentioned in the [Token Status List].
 The verifier may cache the status list for the duration of the ttl provided by the Status List provider.
 Once expired the holder must get the latest Status List.
 
@@ -584,3 +584,5 @@ Once expired the holder must get the latest Status List.
 - What mechanism do we use to rebuild the list when needed?
 
 - Should we also record the issuer for every index to support Optional [Status List Aggregation](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html#name-status-list-aggregation) feature?
+
+[Token Status List]: https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-06.html
