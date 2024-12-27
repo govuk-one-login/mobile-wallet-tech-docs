@@ -284,6 +284,37 @@ The Token Status List and Bitstring Status List provide several security ([1](ht
 - The status update checks must not result in tracking of the holder by the Issuer or the Verifier.
 - The solution should align to standard that will be supported by OIDC and mDL standards.
 
+### Shared Responsibility Model
+
+#### Issuer Responsibility
+
+The credential Issuer is responsible for creation of the credentials and the issuance of the Referenced Token.
+It will use the GOV.UK One Login Status List service as the Status Provider to get an allocated index and URI for the a status list entry.
+The Issuer must register with GOV.UK One Login so it can authenticate and then get access to the Status List issue and revoke APIs.
+The Issuer must ensure the correlation of credentials with indexes and lists as the Status Provider will not track this.
+
+#### Status List Service Responsibility
+
+The Status List Service must maintain a complete list of all status list URIs and indexes that have been issued to issuers.
+The service must ensure the integrity of the credential status represented at each index, and ensure any given index is not reallocated until its current allocation is expired.
+The service must publish each status list URI on high-volume and high-availability endpoints in both JSON and CBOR formats.
+
+#### Holder Responsibility
+
+The holder should use the public Status List API to get the status list referenced in the credential Referenced Token.
+The holder must use the correct URI and index from the credentials Referenced Token to fetch and then process the status list.
+The holder must perform the correct decoding and parsing of encoded Status List as mentioned in the [Token Status List].
+The holder may cache the status list for the duration of the ttl provided by the Status List provider.
+Once expired the holder must get the latest Status List.
+
+#### Verifier Responsibility
+
+The verifier should use the public Status List API to get the status list referenced in the credential Referenced Token.
+The holder must use the correct URI and index from the credentials Referenced Token to fetch and then process the status list.
+The verifier must perform the correct decoding and parsing of encoded Status List as mentioned in the [Token Status List].
+The verifier may cache the status list for the duration of the ttl provided by the Status List provider.
+Once expired the holder must get the latest Status List.
+
 ### Proposed Solution
 
 A Status List is required to provide an efficient and performant mechanism to the issuer, holder and the verifier to ensure all parties are aware of the validity of the credentials.
@@ -541,36 +572,86 @@ Content-Type: application/statuslist+jwt
 eyJhbGciOiJIUzI1NiIsImtpZCI6IjEyIiwidHlwIjoic3RhdHVzbGlzdCtqd3QifQ.eyJleHAiOjIyOTE3MjAxNzAsImlhdCI6MTY4NjkyMDE3MCwiaXNzIjoiaHR0cHM6Ly9hcGkuc3RhdHVzLWxpc3Quc2VydmljZS5nb3YudWsiLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoyLCJsc3QiOiJlTnB6ZEFFQUFNZ0FoZyJ9LCJzdWIiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay9zdGF0dXNsaXN0cy8xIiwidHRsIjo0MzIwMH0.8bS1wn1TuHaN-RjDEyaf8cDLHH8m6IxgJT0qiLnxvqI
 ```
 
-### Shared Responsibility Model
+#### Solution Architecture
 
-#### Issuer Responsibility
+![Solution Architecture](graphics/00xx-status-list-service.drawio.svg)
 
-The credential Issuer is responsible for creation of the credentials and the issuance of the Referenced Token.
-It will use the GOV.UK One Login Status List service as the Status Provider to get an allocated index and URI for the a status list entry.
-The Issuer must register with GOV.UK One Login so it can authenticate and then get access to the Status List issue and revoke APIs.
-The Issuer must ensure the correlation of credentials with indexes and lists as the Status Provider will not track this.
+##### ListConfiguration
 
-#### Status List Service Responsibility
+Contains a single `configuration` object which contains a JSON list of object, each object referencing a published status list URI, e.g.:
 
-The Status List Service must maintain a complete list of all status list URIs and indexes that have been issued to issuers.
-The service must ensure the integrity of the credential status represented at each index, and ensure any given index is not reallocated until its current allocation is expired.
-The service must publish each status list URI on high-volume and high-availability endpoints in both JSON and CBOR formats.
+```json
+[
+  {
+    "uri": "000001",
+    "maxIndices": 100000
+  },
+  {
+    "uri": "000002",
+    "maxIndices": 100000
+  },
+  {
+    "uri": "000002",
+    "maxIndices": 100000
+  }
+]
+```
 
-#### Holder Responsibility
+The above configuration configures the service to expose 3 status list objects, on `https://www.domain.com/000001`, `https://www.domain.com/000002` and `https://www.domain.com/000003`, each one containing a bit array of 100000 status entries.
+In this configuration the service therefore has a max capacity of 300000 entries.
 
-The holder should use the public Status List API to get the status list referenced in the credential Referenced Token.
-The holder must use the correct URI and index from the credentials Referenced Token to fetch and then process the status list.
-The holder must perform the correct decoding and parsing of encoded Status List as mentioned in the [Token Status List].
-The holder may cache the status list for the duration of the ttl provided by the Status List provider.
-Once expired the holder must get the latest Status List.
+##### TokenStatusTable
 
-#### Verifier Responsibility
+The table contains an item for each token status entry that has been issued, but does not contain an item for an unused slot. For example, if the table contains the single entry:
 
-The verifier should use the public Status List API to get the status list referenced in the credential Referenced Token.
-The holder must use the correct URI and index from the credentials Referenced Token to fetch and then process the status list.
-The verifier must perform the correct decoding and parsing of encoded Status List as mentioned in the [Token Status List].
-The verifier may cache the status list for the duration of the ttl provided by the Status List provider.
-Once expired the holder must get the latest Status List.
+```json
+{
+  "uri": "000002",
+  "idx": 123,
+  "clientId": "SOME_CLIENT_ID",
+  "issuedAt": 1655555555,
+  "revokedAt": null,
+  "exp": 1688888888
+}
+```
+
+This status list entry shows that the Referenced Token was issued at XXXXX, and was revoked at YYYYY, hence is now revoked. The Referenced Token's `exp` claim was ZZZZZ hence this status list entry must be preserved until after that time, but its status will never now be anything other than 01 INVALID. 
+
+If this is the only entry in the TokenStatusTable for the example List Configuration shown above, then the remaining 299,999 status list entries are unused and will be published with status 00 ACTIVE, however this will have no effect with Issuers and Verifiers as there are no Referenced Tokens which refer to these status list entries.
+
+##### Issuing a Token
+
+##### Revoking a Token
+
+##### Populating the AvailableSlotsQueue
+
+##### Publishing the Status List
+
+##### Audit Events
+
+##### Status List Backup
+
+#### Scaling Considerations
+
+The suggested size of each status list object is 100000 entries - uncompressed and with base 64 encoding the list itself can be represented in just under 33KiB of data, however in both JWT and CWT formats this is then compressed with the expectation of a significant reduction in overall size.
+Each list of 100000 entries will cover a random cross-section of issuers, hence the S3 access log which stores details of requests served for individual lists will not reveal details of which credentials are being checked, nor details of which issuer's credentials are being checked.
+
+The service can scale out as required by creating more lists, each of 100000 entries.
+Once lists are created they must be retained, the service is not designed to scale-in.
+However status list entries which have expired, because the Referenced Token has expired, do become available to re-issue to a new Referenced Token.
+
+#### Outline Volumetrics
+
+Rough volumetrics once the wallet is fully launched across both the population and the full range of government issuers:
+
+| Volumetric | Value |
+|---|---|
+| No. of wallet users | 30,000,000 |
+| No. of credentials / user | 10 |
+| No. of refreshes per year of each credential | 3 |
+| Lifetime of each individual credential | 10 years |
+| No. of credentials per 10 year period | 9bn |
+| No. of status list URIs at 100000 per URI | 90000 |
 
 ## Open Questions
 
