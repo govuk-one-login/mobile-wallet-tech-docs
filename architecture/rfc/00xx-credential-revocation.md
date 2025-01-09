@@ -615,7 +615,7 @@ The table contains an item for each token status entry that has been issued, but
 }
 ```
 
-This status list entry shows that the Referenced Token was issued at XXXXX, and was revoked at YYYYY, hence is now revoked. The Referenced Token's `exp` claim was ZZZZZ hence this status list entry must be preserved until after that time, but its status will never now be anything other than 01 INVALID. 
+This status list entry shows that the Referenced Token was issued at XXXXX, and was revoked at YYYYY, hence is now revoked. The Referenced Token's `exp` claim was ZZZZZ hence this status list entry must be preserved until after that time, but its status will never now be anything other than 01 INVALID.
 
 If this is the only entry in the TokenStatusTable for the example List Configuration shown above, then the remaining 299,999 status list entries are unused and will be published with status 00 ACTIVE, however this will have no effect with Issuers and Verifiers as there are no Referenced Tokens which refer to these status list entries.
 
