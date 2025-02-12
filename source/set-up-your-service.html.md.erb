@@ -152,9 +152,9 @@ This illustrative example shows how a credential metadata JSON file would repres
 ```JSON
 {
   "credential_issuer":"https://issuer.dbs.gov.uk",
-  "authorization_server":"https://sts.account.gov.uk",
-  "credentials_endpoint":"https://issuer.dbs.gov.uk/credential",
-  "credentials_supported": {
+  "authorization_servers":["https://sts.account.gov.uk"],
+  "credential_endpoint":"https://issuer.dbs.gov.uk/credential",
+  "credential_configurations_supported": {
     "basicDisclosure": {
       "format": "jwt_vc_json",
       "id": "BasicDisclosure_JWT",

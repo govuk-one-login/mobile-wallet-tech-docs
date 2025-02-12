@@ -129,9 +129,10 @@ paths:
                 $ref: "#/components/schemas/CredentialMetadataResponse"
               example:
                 credential_issuer: https://issuer.dbs.gov.uk
-                authorization_server: https://sts.account.gov.uk
-                credentials_endpoint: https://issuer.dbs.gov.uk/credential
-                credentials_supported:
+                authorization_servers:
+                    - https://sts.account.gov.uk
+                credential_endpoint: https://issuer.dbs.gov.uk/credential
+                credential_configurations_supported:
                   basicDisclosure:
                     format: jwt_vc_json
                     id: BasicDisclosure_JWT
@@ -455,20 +456,22 @@ components:
         credential_issuer:
           type: string
           format: uri
-        authorization_server:
+        authorization_servers:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        credential_endpoint:
           type: string
           format: uri
-        credentials_endpoint:
-          type: string
-          format: uri
-        credentials_supported:
-          $ref: "#/components/schemas/CredentialsSupported"
+        credential_configurations_supported:
+          $ref: "#/components/schemas/CredentialConfigurationsSupported"
       required:
-        - authorization_server
+        - authorization_servers
         - credential_issuer
-        - credentials_endpoint
-        - credentials_supported
-    CredentialsSupported:
+        - credential_endpoint
+        - credential_configurations_supported
+    CredentialConfigurationsSupported:
       type: object
       additionalProperties: false
       properties:
