@@ -135,14 +135,19 @@ paths:
                 credential_configurations_supported:
                   basicDisclosure:
                     format: jwt_vc_json
-                    id: BasicDisclosure_JWT
-                    types:
-                      - VerifiableCredential
-                      - BasicDisclosureCredential
+                    credential_definition:
+                      types:
+                        - VerifiableCredential
+                        - BasicDisclosureCredential
                     cryptographic_binding_methods_supported:
                       - did
                     cryptographic_suites_supported:
                       - ES256K
+                    proof_types_supported:
+                      jwt:
+                        proof_signing_alg_values_supported:
+                          - ES256
+                        key_attestations_required:
                     display:
                       - name: Basic DBS disclosure certificate
                         locale: en-GB
@@ -473,7 +478,6 @@ components:
         - credential_configurations_supported
     CredentialConfigurationsSupported:
       type: object
-      additionalProperties: false
       properties:
         basicDisclosure:
           $ref: "#/components/schemas/BasicDisclosure"
@@ -481,17 +485,18 @@ components:
         - basicDisclosure
     BasicDisclosure:
       type: object
-      additionalProperties: false
       properties:
         format:
           type: string
-        id:
-          type: string
-        types:
-          type: array
-          minItems: 1
-          items:
-            type: string
+        credential_definition:
+          type: object
+          additionalProperties: false
+          properties:
+            types:
+              type: array
+              minItems: 2
+              items:
+                type: string
         cryptographic_binding_methods_supported:
           type: array
           minItems: 1
@@ -502,6 +507,19 @@ components:
           minItems: 1
           items:
             type: string
+        proof_types_supported:
+          type: object
+          properties:
+            jwt:
+              type: object
+              properties:
+                proof_signing_alg_values_supported:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                key_attestations_required:
+                  type: object
         display:
           type: array
           minItems: 1
@@ -515,8 +533,6 @@ components:
         - cryptographic_suites_supported
         - display
         - format
-        - id
-        - types
     BasicDisclosureDisplay:
       type: object
       additionalProperties: false
