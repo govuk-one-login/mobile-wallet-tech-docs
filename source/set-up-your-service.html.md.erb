@@ -151,23 +151,33 @@ This illustrative example shows how a credential metadata JSON file would repres
 
 ```JSON
 {
-  "credential_issuer":"https://issuer.dbs.gov.uk",
-  "authorization_servers":["https://sts.account.gov.uk"],
-  "credential_endpoint":"https://issuer.dbs.gov.uk/credential",
+  "credential_issuer": "https://issuer.dbs.gov.uk",
+  "authorization_servers": ["https://sts.account.gov.uk"],
+  "credential_endpoint": "https://issuer.dbs.gov.uk/credential",
   "credential_configurations_supported": {
     "basicDisclosure": {
       "format": "jwt_vc_json",
       "id": "BasicDisclosure_JWT",
+       "credential_definition": {
       "types": [
         "VerifiableCredential",
         "basicDisclosureCredential"
-      ],
+      ]},
       "cryptographic_binding_methods_supported": [
         "did"
       ],
       "cryptographic_suites_supported": [
         "ES256K"
       ],
+      "proof_types_supported": {
+        "jwt": {
+          "proof_signing_alg_values_supported": [
+            "ES256"
+          ],
+          "key_attestations_required": {
+          }
+        }
+      },
       "display": [
         {
           // Name of the credential always displayed at the top of the card
@@ -312,104 +322,124 @@ The JWT must be signed by the private key generated in **[Step 2](/set-up-your-s
 ```
 {
   "alg": "ES256",
-  "typ": "JWT",
+  "typ": "vc+jwt",
+  "cty": "vc",
   "kid": "did:web:[environment.]issuer.dbs.gov.uk#[unique key id]"
 }
 ```
 
-Description of the JWT claims in the header:
+Description of the JWT header parameters:
 
-* `alg` is the algorithm used to sign the JWT
-* `typ` is the format of the payload
-* `kid` is the key ID of the key that can be used to verify the signature of the JWT
+* `alg` is the cryptographic algorithm used to sign the JWT
+* `typ` is the media type of the signed content
+* `cty` is the media type of the secured content (i.e. the payload)
+* `kid` is the key ID of the key (owned by the signer) which should be used to verify the token's signature
 
-The value in `kid` should match the `verificationMethod.id` from the did:web document published by the issuer, that contains the public signing key. `kid` must be in the code’s header to make sure the signature can be verified, and to make sure the JWT can be trusted before reading the payload.
+The value of the `kid` parameter must match the value of the `id` parameter in the DID document published by the issuer and which contain the issuer's public key. `kid` must be included in the header to allow the token's audience to identify a specific key in the DID Document. This key must be able to verify the token's signature, ensuring the integrity of the data contained within the token.
 
 ### Payload
 
-This example is a possible template for sharing a DBS basic disclosure certificate. Dates are represented in a `YYYY-MM-DD` format for simplification but should be in Unix time:
+This example is a possible template for sharing a DBS basic disclosure certificate.
 
 ```
 {
   "iss": "https://test.issuer.dbs.gov.uk/",
   "sub": "did:key:ebfaeb1fd712ebf1c276e12ec21",
-  "nbf": "2023-12-10",
-  "vc": {
-    "@context": [
-      "https://www.w3.org/2018/credentials/v1"
+  "iat": "1712664731",
+  "nbf": "1712664731",
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "<JSON-LD CONTEXT URI FOR ISSUER>"
+  ],
+  "type": [
+    "VerifiableCredential",
+    "basicDisclosureCredential"
+  ],
+  "issuer": "https://test.issuer.dbs.gov.uk/",
+  "name": "Basic DBS check result",
+  "description": "<OPTIONAL CREDENTIAL DESCRIPTION>",
+  "validFrom": "2024-04-09T12:12:11Z",
+  "validUntil": "2034-04-08T22:59:59Z",
+  "credentialSubject": {
+    "id": "did:key:ebfaeb1fd712ebf1c276e12ec21",
+    "issuanceDate": "2023-12-10",
+    "expirationDate": "2024-12-10",
+    "name": [
+      {
+        "nameParts": [
+          {
+            "value": "Sarah",
+            "type": "GivenName"
+          },
+          {
+            "value": "Elizabeth",
+            "type": "GivenName"
+          },
+          {
+            "value": "Edwards",
+            "type": "FamilyName"
+          }
+        ]
+      }
     ],
-    "type": [
-      "VerifiableCredential",
-      "basicDisclosureCredential"
+    "birthDate": [
+      {
+        "value": "1985-10-18"
+      }
     ],
-    "credentialSubject": {
-      "id": "did:key:ebfeb1f712ebc6f1c276e12ec21",
-      "issuanceDate": "2023-12-10",
-      "expirationDate": "2024-12-10",
-      "name": [
-        {
-          "nameParts": [
-            {
-              "value": "Sarah",
-              "type": "GivenName"
-            },
-            {
-              "value": "Elizabeth",
-              "type": "GivenName"
-            },
-            {
-              "value": "Edwards",
-              "type": "FamilyName"
-            }
-          ]
-        }
-      ],
-      "birthDate": [
-        {
-          "value": "1985-10-18"
-        }
-      ],
-      "address": [
-        {
-          "firstLine": "10 Princess Parade"
-        }
-      ],
-      "basicDisclosure": [
-        {
-          "certificateNumber": "009878863",
-          "outcome": "Result clear",
-          "disclosureDate": "2023-12-10"
-        }
-      ],
-      "documentMetadata": [
-        {
-          "multipleCredentialsAllowed": "true"
-        }
-      ]
-    }
+    "address": [
+      {
+        "firstLine": "10 Princess Parade"
+      }
+    ],
+    "basicDisclosure": [
+      {
+        "certificateNumber": "009878863",
+        "outcome": "Result clear",
+        "disclosureDate": "2023-12-10"
+      }
+    ],
+    "documentMetadata": [
+      {
+        "multipleCredentialsAllowed": "true"
+      }
+    ]
   }
 }
 ```
 
-The `@context` property must be present, and include a URL with a definition of short-form aliases representing attributes and values that are in a verifiable credential. The URL https://www.w3.org/2018/credentials/v1 is just an example.
-
 Here are the explanations of the JWT claims in the example:
 
-* `iss` is "issuer". This is mandatory, and must be the URL of the credential issuer service operated by the organisation sharing the credential.
+* `iss` (Issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential.
 
-* `sub` is "subject identifier". This is also mandatory, and is the identifier of the holder of the information in the credential. The subject identifier is a decentralised identifier `did:key` generated by the wallet. In the credential issuance flow, the wallet shares its `did:key` to the issuer who adds it to the credential in the sub claim. This cryptographically binds the credential to the wallet.
+* `sub` (Subject). REQUIRED. The identifier of the holder of the information in the credential. The subject identifier is a decentralised identifier `did:key` generated by the wallet. In the credential issuance flow, the wallet shares its `did:key` with issuer and the issuer makes this the value of the credential's `sub` claim. This cryptographically binds the credential to the wallet.
 
-* `nbf` is "not before" It is mandatory, and should be represented by a `NumericDate`, which should usually be set to the same as iat if iat is present. It shows the VC is valid from the point of issue.
+* `nbf` (Not Before). REQUIRED. The time before which the JWT must not be accepted for processing. Must be expressed in epoch time as per the [IETF RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519).
 
-* `vc` is  the "verifiable credential". This is a mandatory JSON object containing a type property indicating the type of verifiable credential. In the example, this is `BasicDisclosureCredential` and a `credentialSubject` property with values referring to the holder of the basic disclosure certificate.
+* `iat` (Issued At). OPTIONAL. The time at which the JWT was issued. Must be expressed in epoch time as per the [IETF RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519).
 
-* `exp` is "expiry", an optional claim indicating the time after which the JWT must not be accepted for processing. It is represented as a NumericDate showing the number of seconds elapsed since midnight on 1 January 1970 (Unix time).
+* `@context`. REQUIRED. The context of the data exchange. It must be a set of URIs that point to documents that describe the context. The first item in the set must be the URI `"https://www.w3.org/ns/credentials/v2"`.
+
+* `type`. REQUIRED. A set of values indicating the type of verifiable credentials issued by the issuer. The first value in the set must be `VerifiableCredential`
+
+* `issuer`. REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential. Must be the same as the value of the `iss` claim.
+
+* `credentialSubject`. REQUIRED. An object containing claims about the holder of the verifiable credential.
+
+* `name`. OPTIONAL. Issuer-specified credential name.
+
+* `description`. OPTIONAL. Issuer-specified credential description.
+
+* `validFrom`. OPTIONAL. Must be a string in ISO 8601 format as per the [VC data model v2.0](https://www.w3.org/TR/vc-data-model-2.0/). It represents the date and time the credential becomes valid. Must be the same as the value of the `nbf` claim.
+
+* `validUntil`. OPTIONAL.  Must be a string in ISO 8601 format as per the [VC data model v2.0](https://www.w3.org/TR/vc-data-model-2.0/). It represents the date and time the credential stops belong valid. This value specifies the date until which the information within the `credentialSubject` property remains valid. Hence, in the example above, the values of `expirationDate` and `validUntil` are the same.
+
+* `exp` (Expiration Time). OPTIONAL. The time after which the JWT must not be accepted for processing. Must be expressed in epoch time as per the [IETF RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519).
 
 <%= warning_text('When setting the expiration of the JWT, you should consider the expiration of the credential or entitlement it represents.') %>
 
-The `exp` claim is different from the `expirationDate` parameter in the VC object. As an issuer, you can choose to set `expirationDate` on the VC to reflect the expiration of the entitlement itself. For example, a DBS Basic Disclosure Certificate may last for 12 months, a Veteran Card for 3 years.
+The `exp` claim is different from the `expirationDate` in the `credentialSubject`. As an issuer, you can choose to set `expirationDate` on the VC to reflect the expiration of the entitlement itself. For example, a DBS Basic Disclosure Certificate may be valid for 12 months, while a Veteran Card may be valid for three years. You can also choose to set an optional `exp` claim that will invalidate the VC at a future date you decide. In the Basic Disclosure check example above, the JWT does not expire, just like a paper certificate will continue to exist. However, because the online record of the disclosure in the share code system is deleted after 12 months, the `expirationDate` parameter is used in the VC object to reflect this lifecycle of the credential’s entitlement.
 
-As an issuer, you can also choose to set an optional `exp` value that will invalidate the VC at a future date you decide. The Basic Disclosure check example assumes that the JWT itself does not expire, just like a paper certificate will continue to exist. However, because the online record of the disclosure in the share code system is deleted after 12 months, the `expirationDate` parameter is used in the VC object to reflect this lifecycle of the credential’s entitlement.
 
 ## Step 7: Build your Wallet Credential Issuer
 
