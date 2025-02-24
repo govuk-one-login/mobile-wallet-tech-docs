@@ -109,7 +109,7 @@ paths:
                   fishingLicence:
                     format: jwt_vc_json
                     credential_definition:
-                      types:
+                      type:
                         - VerifiableCredential
                         - FishingLicence
                     cryptographic_binding_methods_supported:
@@ -313,12 +313,12 @@ components:
     CredentialDefinition:
       type: object
       properties:
-        types:
+        type:
           type: array
           items:
             type: string
       required:
-        - types
+        - type
     ProofTypesSupported:
       type: object
       properties:
