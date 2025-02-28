@@ -3,32 +3,34 @@ info:
   version: 1.0.0
   title: Wallet Credential Issuer API
   description: |-
-    This document describes the four endpoints of your credential issuer that are required to issue a credential to GOV.UK Wallet. Credentials issued by your service should be securely added to the mobile wallet.
+    This document describes the five endpoints of your credential issuer that are required to issue a credential to GOV.UK Wallet.
     
-    Implementing this API and following the rest of the rechnical documentation will ensure that only a user logged in the mobile app and your service using the same GOV.UK One Login account, is allowed to obtain the credential you are offering. It will also ensure that the credential is cryptographically bound to a particular wallet so that it cannot be passed on to another wallet.
+    Implementing this API and following the rest of the technical documentation will ensure that only a user logged in the mobile app and your service using the same GOV.UK One Login account is allowed to obtain the credential you are offering. It will also ensure that the credential is cryptographically bound to a particular wallet so that it cannot be passed on to another wallet.
 
-    For a technical overview of the end-to-end issance flow please refer to <b>[Understanding GOV.UK digital wallet’s credential exchange flow](https://upgraded-barnacle-gqknpev.pages.github.io/issuance-flow.html)</b>. The flow is based on OpenID Connect for Verifiable Credential Issuer ([OpenID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html)).<br><br>Please refer to the <b>[Use sample reference material](https://upgraded-barnacle-gqknpev.pages.github.io/use-sample-reference-material.html)</b> for a reference implementation of this API.
+    For a technical overview of the end-to-end issuance flow please refer to <b>[Understanding GOV.UK digital wallet’s credential exchange flow](https://upgraded-barnacle-gqknpev.pages.github.io/issuance-flow.html)</b>. The flow is based on OpenID Connect for Verifiable Credential Issuance ([OpenID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html)).<br><br>Please refer to the <b>[Use sample reference material](https://upgraded-barnacle-gqknpev.pages.github.io/use-sample-reference-material.html)</b> for a reference implementation of this API.
   license:
     name: MIT License
 externalDocs:
-  description: Find out more about GOV.UK Wallet
+  description: Find out more about the GOV.UK Wallet
   url: https://upgraded-barnacle-gqknpev.pages.github.io/
 tags:
   - name: credential_offer
     description: Used to initiate the transaction
   - name: credential
     description: Used to request the wallet credential
-  - name: metadata (well-known endpoint)
-    description: Used to share the metadata of your credential
-  - name: did:web (well-known endpoint)
-    description: Used to share your public signing key
+  - name: metadata
+    description: Used to share your metadata (e.g. supported credentials, display information )
+  - name: did
+    description: Used to share your public keys as a DID
+  - name: jwks
+    description: Used to share your public keys as a JWKS
 paths:
   /credential_offer:
     get:
       tags:
         - credential_offer
       summary: Request a credential offer
-      description: <b>What is it?</b> a private endpoint allowing your credential issuer to generate a credential offer.<br><b>When do you need it?</b> The website of your service must display a credential offer to your user as a QR code or a link after they have logged in with One Login and proven - after successfully interacting with your service - that they are eligible to receive the credential. This endpoint produces the URL that your website will render as a QR code or a deep link so the wallet can consume it. The credentialType parameter is used to distinguish between multiple credentials your CRI may offer e.g., basic, standard or enhanced DBS certificates.
+      description: <b>What is it?</b> A private endpoint to generate and return a credential offer.<br><b>When do you need it?</b> The website of your service must display a credential offer to your user as a QR code or a link after they have logged in with One Login and proven - after successfully interacting with your service - that they are eligible to receive the credential. This endpoint produces the URL that your website will render as a QR code or a deep link so the wallet can consume it. The `credentialType` parameter is used to distinguish between multiple credentials your CRI may offer.
       parameters:
         - name: documentId
           in: path
@@ -36,7 +38,6 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
         - name: walletSubjectId
           in: path
           description: Pairwise identifier generated from the `CommonSubjectId` and `rpSectorId`
@@ -45,7 +46,7 @@ paths:
             type: string
         - name: credentialType
           in: path
-          description: Type of credential to issue for example `BasicCheckCredential`
+          description: Type of credential to issue, e.g. `FishingLicence`
           required: true
           schema:
             type: string
@@ -57,15 +58,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/CredentialOfferResponse"
               example:
-                credential_offer_uri: https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22BasicDisclosure%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiJmZjI3NWI5Mi0wZGVmLTRkZmMtYjBmNi04N2M5NmIyNmM2YzciLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJhdWQiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJjbGllbnRJZCI6ImFiYzEyMyIsImlzcyI6InVybjpmZGM6Z292OnVrOjxITVJDPiIsImNyZWRlbnRpYWxfaWRlbnRpZmllcnMiOlsiM2U0Zjc1ZDMtNzkxMy00ZDE0LWE0YjctY2FlNzFlN2NiYmEwIl0sImV4cCI6MTcxMTAzNTkwNywiaWF0IjoxNzExMDM1NjA3fQ.6hHe0-A3n4GlBph9X4hcxbsflusco2Q7z_07-s85QmYOSCbYm8My_LGEcBD68E5lW5DCJ1yjwtPPr9VbhIlhyg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fcredential-issuer.example.com%22%7D
+                credential_offer_uri: https://mobile.build.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiI8WU9VUiBPTkUgTE9HSU4gQ0xJRU5UIElEPiIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5tb2JpbGUuYnVpbGQuYWNjb3VudC5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.aZRv9KBCWRGLsi1Rd96jrzPxpQUkW68up0BYvUiF4RHjbLf6IxWn2PyU_ExOBAtEoj0lGAOOX7efOLMEc-lcIg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.mobile.build.account.gov.uk%22%7D
   /credential:
     post:
       tags:
           - credential
       summary: Request a credential
-      description: <b>What is it?</b> a public endpoint for the wallet to request the credential.<br><b>When do you need it?</b> This endoint is used to send the credential from your Credential Issuer to the GOV.UK Wallet. You must first establish that the wallet that requested it and the user logged in your service with One Login are allowed to receive the credential. For this, the app needs to share with you a credential issuer access token (as Bearer Token) and a proof that the user is in possession of the wallet (as a c-nonce JWT proof signed with then wallet's private did:key).
+      description: <b>What is it?</b> A public endpoint for the wallet to request the credential.<br><b>When do you need it?</b> This endpoint is used to send the credential to the GOV.UK Wallet. You must first establish that the wallet that requested it and the user logged in your service with One Login are allowed to receive the credential. For this, the app needs to share with you a credential issuer access token (as bearer token) and a proof that the user is in possession of the wallet.
       security:
-        - BearerAuthentication: [ ]
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -75,201 +76,137 @@ paths:
             example:
               proof:
                 proof_type: jwt
-                jwt: eyJraWQiOiJkaWQ6ZXhhbXBsZTplYmZlYjFmNzEyZWJjNmYxYzI3NmUxMmVjMjEva2V5cy8xIiwiYWxnIjoiRVMyNTYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJzNkJoZFJrcXQzIiwiYXVkIjoiaHR0cHM6Ly9zZXJ2ZXIuZXhhbXBsZS5jb20iLCJpYXQiOjE1MzY5NTk5NTksIm5vbmNlIjoidFppZ25zbkZicCJ9.ewdkIkPV50iOeBUqMXCC_aZKPxgihac0aW9EkL1nOzM
+                jwt: eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDprZXk6ekRuYWVTR2ZTUU1Zdm5MYkxXRXViaGhHRFBvcTdwQTlNTU52dW12YnNtTUNab3ZVUiJ9.eyJpc3MiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJhdWQiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIubW9iaWxlLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiaWF0IjoxNzM5NDU3NTE3MzU1LCJub25jZSI6ImRiMmRiMzEzLTVjYjktNGJiNC1hYTRkLTlmZTRkYWM0MGJlMSJ9.7Ni5vVvTIf8jWGRsaxpjg7_o5rSGG_sttYKrC4184IUgtdjfsfqptClmO9_x62dyAgcbjeLqb1Q4YIIG8ZKNzA
       responses:
         '200':
-          description: Credential
+          description: Fishing Licence verifiable credential
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CredentialResponse"
               example:
-                iss: https://test.issuer.dbs.gov.uk/
-                sub: did:key:ebfaeb1fd712ebf1c276e12ec21
-                vc:
-                  "@context":
-                    - https://www.w3.org/2018/credentials/v1
-                  type:
-                    - VerifiableCredential
-                    - BasicDisclosureCredential
-                  credentialSubject:
-                    id: did:key:ebfeb1f712ebc6f1c276e12ec21
-                    issuanceDate: '2023-12-10'
-                    expirationDate: '2024-12-10'
-                    name:
-                      - nameParts:
-                          - value: Sarah
-                            type: GivenName
-                          - value: Elizabeth
-                            type: GivenName
-                          - value: Edwards
-                            type: FamilyName
-                    birthDate:
-                      - value: '1985-10-18'
-                    address:
-                      - firstLine: 10 Princess Parade
-                    basicDisclosureRecord:
-                      - certificateNumber: '009878863'
-                        outcome: Result clear
-                        disclosureDate: '2023-12-10'
-                    documentMetadata:
-                      - multipleCredentialsAllowed: 'true'
+                credential: eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwiY3R5IjogInZjIiwidHlwIjogInZjK2p3dCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIubW9iaWxlLmJ1aWxkLmFjY291bnQuZ292LnVrIiwic3ViIjoiZGlkOmtleTplYmZhZWIxZmQ3MTJlYmYxYzI3NmUxMmVjMjEiLCJpYXQiOiIxNzEyNjY0NzMxIiwibmJmIjoiMTcxMjY2NDczMSIsImV4cCI6IjE3NDQyMjE2NTciLCJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvbnMvY3JlZGVudGlhbHMvdjIiLCI8SlNPTi1MRCBDT05URVhUIFVSSSBGT1IgSVNTVUVSPiJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiRmlzaGluZ0xpY2VuY2UiXSwiaXNzdWVyIjoiaHR0cHM6Ly9leGFtcGxlLWNyZWRlbnRpYWwtaXNzdWVyLm1vYmlsZS5idWlsZC5hY2NvdW50Lmdvdi51ayIsIm5hbWUiOiJGaXNoaW5nIGxpY2VuY2UiLCJkZXNjcmlwdGlvbiI6IjxPUFRJT05BTCBDUkVERU5USUFMIERFU0NSSVBUSU9OPiIsInZhbGlkRnJvbSI6IjIwMjQtMDQtMDlUMTI6MTI6MTFaIiwidmFsaWRVbnRpbCI6IjIwMjgtMTItMTBUMjI6NTk6NTlaIiwiY3JlZGVudGlhbFN1YmplY3QiOnsiaWQiOiJkaWQ6a2V5OmViZmFlYjFmZDcxMmViZjFjMjc2ZTEyZWMyMSIsIm5hbWUiOlt7Im5hbWVQYXJ0cyI6W3sidmFsdWUiOiJTYXJhaCIsInR5cGUiOiJHaXZlbk5hbWUifSx7InZhbHVlIjoiRWR3YXJkcyIsInR5cGUiOiJGYW1pbHlOYW1lIn1dfV0sImZpc2hpbmdMaWNlbmNlIjpbeyJsaWNlbmNlTnVtYmVyIjoiMDA5ODc4ODYzIiwiaXNzdWFuY2VEYXRlIjogIjIwMjMtMTItMTAiLCJleHBpcmF0aW9uRGF0ZSI6ICIyMDI4LTEyLTEwIn1dfX0.FhJZpl4g6Vhi5G4hgLV_2ku_XlR9Eo8zX1Yj5hMOfLepwfI3YkD9xdNRUoMfKFwtB56bPQ6Fk6Q_2ePi5_N0aw
   /.well-known/openid-credential-issuer:
     get:
       tags:
-          - metadata (well-known endpoint)
-      summary: Retrieve credential metadata
-      description: <b>What is it?</b> a public endpoint for the wallet to retrieve metadata about the credential(s) issued by your credential issuer.<br><b>When do you need it?</b> You must publish this metadata file once when setting up of your credential issuer service. After that, GOV.UK Wallet will retrieve your metadata at the well-known endpoint each time a user requests a new credential, in case your metadata has changed.
+          - metadata
+      summary: Retrieve the metadata
+      description: <b>What is it?</b> A public endpoint for the wallet to retrieve metadata about the credential(s) issued by your credential issuer.<br><b>When do you need it?</b> You must publish this metadata file once when setting up of your credential issuer service. After that, GOV.UK Wallet will retrieve your metadata at the well-known endpoint each time a user requests a new credential, in case your metadata has changed.
       responses:
         '200':
-          description: Credential metadata
+          description: Credential Issuer metadata
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CredentialMetadataResponse"
+                $ref: "#/components/schemas/MetadataResponse"
               example:
-                credential_issuer: https://issuer.dbs.gov.uk
-                authorization_server: https://sts.account.gov.uk
-                credentials_endpoint: https://issuer.dbs.gov.uk/credential
-                credentials_supported:
-                  basicDisclosure:
+                credential_issuer: https://example-credential-issuer.mobile.build.account.gov.uk
+                authorization_servers:
+                    - https://token.build.account.gov.uk
+                credential_endpoint: https://example-credential-issuer.mobile.build.account.gov.uk/credential
+                notification_endpoint: https://example-credential-issuer.mobile.build.account.gov.uk/notification
+                credential_configurations_supported:
+                  fishingLicence:
                     format: jwt_vc_json
-                    id: BasicDisclosure_JWT
-                    types:
-                      - VerifiableCredential
-                      - BasicDisclosureCredential
+                    credential_definition:
+                      type:
+                        - VerifiableCredential
+                        - FishingLicence
                     cryptographic_binding_methods_supported:
                       - did
                     cryptographic_suites_supported:
                       - ES256K
+                    proof_types_supported:
+                      jwt:
+                        proof_signing_alg_values_supported:
+                          - ES256
+                        key_attestations_required:
                     display:
-                      - name: Basic DBS disclosure certificate
+                      - name: Fishing Licence number
                         locale: en-GB
-                        logo:
-                          url: https://issuer.gov.uk/assets/logo.png
-                          alt_text: a square logo of DBS
-                        background_color: "#12107c"
-                        text_color: "#FFFFFF"
-                      - name: Tystysgrif gwiriad DBS sylfaenol
+                        background_color: '#12107c'
+                        text_color: '#FFFFFF'
+                      - name: Rhif Trwydded Pysgota
                         locale: en-CY
-                        logo:
-                          url: https://issuer.gov.uk/assets/logo.png
-                          alt_text: logo sgwâr o DBS
-                        background_color: "#12107c"
-                        text_color: "#FFFFFF"
+                        background_color: '#12107c'
+                        text_color: '#FFFFFF'
                     credentialSubject:
-                      lastName:
-                        display:
-                          - field: Auxiliaryfield1
-                            name: Surname
-                            locale: en-GB
-                          - field: Auxiliaryfield1
-                            name: Cyfenw
-                            locale: cy-GB
-                      givenName:
-                        display:
-                          - field: Auxiliaryfield2
-                            name: Forename(s)
-                            locale: en-GB
-                          - field: Auxiliaryfield2
-                            name: Enw(au) cyntaf
-                            locale: cy-GB
-                      dateOfBirth:
-                        display:
-                          - field: Auxiliaryfield3
-                            name: Date of birth
-                            locale: en-GB
-                          - field: Auxiliaryfield3
-                            name: Dyddiad Geni
-                            locale: cy-GB
-                      firstLineOfAddress:
-                        display:
-                          - field: Auxiliaryfield4
-                            name: First line of address
-                            locale: en-GB
-                          - field: Auxiliaryfield4
-                            name: Llinell gyntaf y cyfeiriad
-                            locale: cy-GB
-                      basicDisclosureRecord:
-                        outcome:
+                      name:
+                        - nameParts:
+                            - display:
+                                - name: Name
+                                  locale: en-GB
+                                - name: Enw
+                                  locale: cy-GB
+                      fishingLicenceRecord:
+                        licenceNumber:
                           display:
-                            - field: PrimaryField
-                              name: Outcome
+                            - name: Fishing Licence number
                               locale: en-GB
-                            - field: PrimaryField
-                              name: Canlyniad
+                            - name: Rhif Trwydded Pysgota
                               locale: cy-GB
-                        disclosureDate:
+                        expirationDate:
                           display:
-                            - field: KeyField1
-                              name: Disclosure date
+                            - name: Dyddiad dod i ben
                               locale: en-GB
-                            - field: KeyField1
-                              name: Dyddiad datgelu
-                              locale: cy-GB
-                        certificateNumber:
-                          display:
-                            - field: KeyField2
-                              name: Certificate number
-                              locale: en-GB
-                            - field: KeyField2
-                              name: Rhif tystysgrif
+                            - name: Rhif Trwydded Pysgota
                               locale: cy-GB
   /.well-known/did.json:
     get:
       tags:
-          - did:web (well-known endpoint)
-      summary: Retrieve did:web document
-      description: <b>What is it?</b> a public endpoint for GOV.UK One Login and Wallet to retrieve the did:web document of your credential issuer.<br><b>When do you need it?</b> The did:web document contains essential information such as the public signing key to verify the validity of the credential issued by your credential issuer. You must publish this did:web file when setting up your credential issuer service. After that, GOV.UK One Login and Wallet will use this endpoint to retrieve your did:web document and validate the signature of your credentials.
+          - did
+      summary: Retrieve the DID document
+      description: <b>What is it?</b> A public endpoint for GOV.UK One Login and Wallet to retrieve your public keys as a DID document.<br><b>When do you need it?</b> The did:web document contains essential information such as the public signing key to verify the validity of the credential issued by your credential issuer. You must publish this did:web file when setting up your credential issuer service. After that, GOV.UK One Login and Wallet will use this endpoint to retrieve your did:web document and validate the signature of your credentials.
       responses:
         '200':
-          description: did:web document
+          description: Credential Issuer DID document
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DidWebDocumentResponse"
+                $ref: "#/components/schemas/DidResponse"
               example:
-                context:
+                "@context":
                   - https://www.w3.org/ns/did/v1
                   - https://w3id.org/security/suites/jws-2020/v1
-                id: did:web:wallet-api.mobile.staging.account.gov.uk/hmrc-stub
+                id: did:web:example-credential-issuer.mobile.build.account.gov.uk
                 verificationMethod:
-                  - id: did:web:wallet-api.mobile.staging.account.gov.uk/hmrc-stub#xuUZtjUzW2a-FgshCsLawbi08LL3aaHHhKKw3w7O8x0
+                  - id: did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
                     type: JsonWebKey2020
-                    controller: did:web:wallet-api.mobile.staging.account.gov.uk
+                    controller: ddid:web:example-credential-issuer.mobile.build.account.gov.uk
                     publicKeyJwk:
-                      kid: xuUZtjUzW2a-FgshCsLawbi08LL3aaHHhKKw3w7O8x0
                       kty: EC
+                      kid: 5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
                       crv: P-256
-                      x: BY7gXGUvMrwrVuytSWVG4SAYD8dEYtUCdokR5q632xQ
-                      "y": P3Zwqtz3XimgdwLEF-z7akHyiqAfsmfa5JfJlYHouZw
+                      x: 6jCKX_QRrmTeEJi-uiwcYqu8BgMgl70g2pdAst24MPE
+                      y: icPzjbSk6apD_SNvQt8NWOPlPeGG4KYU55GfnARryoY
+                      alg: ES256
                 assertionMethod:
-                  - did:web:mobile.staging.account.gov.uk#xuUZtjUzW2a-FgshCsLawbi08LL3aaHHhKKw3w7O8x0
+                  - did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
   /.well-known/jwks.json:
     get:
       tags:
-          - JWKS (well-known endpoint)
-      summary: Retrieve JWKS public key
-      description: <b>What is it?</b> a public endpoint for GOV.UK One Login to retrieve the JWKS of your credential issuer.<br><b>When do you need it?</b> The key pair associated with the JWKS is used to sign the pre-authorisation code generated by your credential issuer and used by One Login to secure the credential issuance according to OIDC4VCI. You must publish this jwks.json file when setting up your credential issuer service.
+          - JWKS
+      summary: Retrieve the JWKS
+      description: <b>What is it?</b> A public endpoint for GOV.UK One Login to retrieve your public key as a JWKS.<br><b>When do you need it?</b> The key pair associated with the JWKS is used to sign the pre-authorisation code generated by your credential issuer and used by One Login to secure the credential issuance according to OIDC4VCI. You must publish this jwks.json file when setting up your credential issuer service.
       responses:
         '200':
-          description: JWKS pre-authorised code signing key
+          description: Credential Issuer JWKS
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/PublicKeyJwk"
               example:
                 keys:
-                  kty: EC
-                  use: sig
-                  crv: P-256
-                  kid: c204b0f4064243742e544ab87f67701bf2cb672cd6e2c3a39de9a555a2a4bf63
-                  x: Shc8mJ6fcZikhWM4ofHGSwXTkdqXM8GbPtRzPa7LttA=
-                  "y": OIhg/7rhWfmnWQEgAXzU8fCTggGrS3zj5x76a0lrzJM=
-                  alg: ES256
+                  - kty: EC
+                    use: sig
+                    crv: P-256
+                    kid: 5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
+                    x: 6jCKX_QRrmTeEJi-uiwcYqu8BgMgl70g2pdAst24MPE=
+                    y: icPzjbSk6apD_SNvQt8NWOPlPeGG4KYU55GfnARryoY=
+                    alg: ES256
 components:
   securitySchemes:
-    BearerAuthentication:
+    bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
@@ -284,7 +221,6 @@ components:
           format: uri
     CredentialRequestBody:
       type: object
-      additionalProperties: false
       properties:
         proof:
           $ref: "#/components/schemas/Proof"
@@ -305,225 +241,112 @@ components:
         - proof_type
     CredentialResponse:
       type: object
-      additionalProperties: false
       properties:
-        iss:
+        credential:
           type: string
-          format: uri
-        sub:
-          type: string
-        vc:
-          $ref: "#/components/schemas/VerifiableCredential"
+          format: jwt
       required:
-        - iss
-        - sub
-        - vc
-    VerifiableCredential:
+        - credential
+    MetadataResponse:
       type: object
-      additionalProperties: false
-      properties:
-        "@context":
-          type: array
-          minItems: 1
-          items:
-            type: string
-            format: uri
-        type:
-          type: array
-          minItems: 1
-          items:
-            type: string
-        credentialSubject:
-          $ref: "#/components/schemas/CredentialSubject"
-      required:
-        - "@context"
-        - credentialSubject
-        - type
-    CredentialSubject:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        issuanceDate:
-          type: string
-          format: date
-        expirationDate:
-          type: string
-          format: date
-        name:
-          type: array
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/Name"
-        birthDate:
-          type: array
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/BirthDate"
-        address:
-          type: array
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/Address"
-        basicDisclosureRecord:
-          type: array
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/BasicDisclosureRecord"
-        documentMetadata:
-          type: array
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/DocumentMetadata"
-      required:
-        - basicDisclosureRecord
-        - address
-        - birthDate
-        - documentMetadata
-        - expirationDate
-        - id
-        - issuanceDate
-        - name
-    BasicDisclosureRecord:
-      type: object
-      additionalProperties: false
-      properties:
-        certificateNumber:
-          type: string
-        outcome:
-          type: string
-        disclosureDate:
-          type: string
-          format: date
-      required:
-        - certificateNumber
-        - disclosureDate
-        - outcome
-    Address:
-      type: object
-      additionalProperties: false
-      properties:
-        firstLine:
-          type: string
-      required:
-        - firstLine
-    BirthDate:
-      type: object
-      additionalProperties: false
-      properties:
-        value:
-          type: string
-          format: date
-      required:
-        - value
-    DocumentMetadata:
-      type: object
-      additionalProperties: false
-      properties:
-        multipleCredentialsAllowed:
-          type: string
-          format: boolean
-      required:
-        - multipleCredentialsAllowed
-    Name:
-      type: object
-      additionalProperties: false
-      properties:
-        nameParts:
-          type: array
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/NamePart"
-      required:
-        - nameParts
-    NamePart:
-      type: object
-      additionalProperties: false
-      properties:
-        value:
-          type: string
-        type:
-          type: string
-      required:
-        - type
-        - value
-    CredentialMetadataResponse:
-      type: object
-      additionalProperties: false
       properties:
         credential_issuer:
-          type: string
-          format: uri
-        authorization_server:
           type: string
           format: uri
         credentials_endpoint:
           type: string
           format: uri
-        credentials_supported:
-          $ref: "#/components/schemas/CredentialsSupported"
+        credential_endpoint:
+          type: string
+          format: uri
+        authorization_servers:
+          type: array
+          items:
+            type: string
+            format: uri
+        credential_configurations_supported:
+          $ref: '#/components/schemas/CredentialConfigurationsSupported'
       required:
-        - authorization_server
+        - authorization_servers
+        - credential_configurations_supported
+        - credential_endpoint
         - credential_issuer
         - credentials_endpoint
-        - credentials_supported
-    CredentialsSupported:
+    CredentialConfigurationsSupported:
       type: object
-      additionalProperties: false
       properties:
-        basicDisclosure:
-          $ref: "#/components/schemas/BasicDisclosure"
+        fishingLicence:
+          $ref: '#/components/schemas/FishingLicence'
       required:
-        - basicDisclosure
-    BasicDisclosure:
+        - fishingLicence
+    FishingLicence:
       type: object
-      additionalProperties: false
       properties:
         format:
           type: string
-        id:
-          type: string
-        types:
-          type: array
-          minItems: 1
-          items:
-            type: string
+        credential_definition:
+          $ref: '#/components/schemas/CredentialDefinition'
         cryptographic_binding_methods_supported:
           type: array
-          minItems: 1
           items:
             type: string
-        cryptographic_suites_supported:
+        credential_signing_alg_values_supported:
           type: array
-          minItems: 1
           items:
             type: string
+        proof_types_supported:
+          $ref: '#/components/schemas/ProofTypesSupported'
         display:
           type: array
-          minItems: 1
           items:
-            $ref: "#/components/schemas/BasicDisclosureDisplay"
+            $ref: '#/components/schemas/FishingLicenceDisplay'
         credentialSubject:
-          $ref: "#/components/schemas/BasicDisclosureCredentialSubject"
+          $ref: '#/components/schemas/CredentialSubject'
       required:
         - credentialSubject
+        - credential_definition
+        - credential_signing_alg_values_supported
         - cryptographic_binding_methods_supported
-        - cryptographic_suites_supported
         - display
         - format
-        - id
-        - types
-    BasicDisclosureDisplay:
+        - proof_types_supported
+    CredentialDefinition:
       type: object
-      additionalProperties: false
+      properties:
+        type:
+          type: array
+          items:
+            type: string
+      required:
+        - type
+    ProofTypesSupported:
+      type: object
+      properties:
+        jwt:
+          $ref: '#/components/schemas/Jwt'
+      required:
+        - jwt
+    Jwt:
+      type: object
+      properties:
+        proof_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
+        key_attestations_required:
+          type: object
+      required:
+        - key_attestations_required
+        - proof_signing_alg_values_supported
+    KeyAttestationsRequired:
+      type: object
+    FishingLicenceDisplay:
+      type: object
       properties:
         name:
           type: string
         locale:
           type: string
-        logo:
-          $ref: "#/components/schemas/Logo"
         background_color:
           type: string
         text_color:
@@ -531,88 +354,80 @@ components:
       required:
         - background_color
         - locale
-        - logo
         - name
         - text_color
-    BasicDisclosureCredentialSubject:
+    CredentialSubject:
       type: object
-      additionalProperties: false
       properties:
-        lastName:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
-        givenName:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
-        dateOfBirth:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
-        firstLineOfAddress:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
-        basicDisclosureRecord:
-          $ref: "#/components/schemas/CredentialSubjectBasicDisclosureRecord"
+        name:
+          type: array
+          items:
+            $ref: '#/components/schemas/Name'
+        fishingLicenceRecord:
+          $ref: '#/components/schemas/FishingLicenceRecord'
       required:
-        - basicDisclosureRecord
-        - dateOfBirth
-        - firstLineOfAddress
-        - givenName
-        - lastName
-    CredentialSubjectBasicDisclosureRecord:
+        - fishingLicenceRecord
+        - name
+    Name:
       type: object
-      additionalProperties: false
       properties:
-        outcome:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
-        disclosureDate:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
-        certificateNumber:
-          $ref: "#/components/schemas/CredentialSubjectDisplay"
+        nameParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/NameParts'
       required:
-        - outcome
-        - disclosureDate
-        - certificateNumber
-    CredentialSubjectDisplay:
+        - nameParts
+    NameParts:
       type: object
-      additionalProperties: false
       properties:
         display:
           type: array
-          minItems: 1
           items:
-            $ref: "#/components/schemas/Display"
+            $ref: '#/components/schemas/Display'
       required:
         - display
     Display:
       type: object
-      additionalProperties: false
       properties:
-        field:
-          type: string
         name:
           type: string
         locale:
           type: string
-          enum:
-            - en-GB
-            - cy-GB
       required:
-        - field
         - locale
         - name
-    Logo:
+    FishingLicenceRecord:
       type: object
-      additionalProperties: false
       properties:
-        url:
-          type: string
-          format: uri
-        alt_text:
-          type: string
+        licenceNumber:
+          $ref: '#/components/schemas/LicenceNumber'
+        expirationDate:
+          $ref: '#/components/schemas/ExpirationDate'
       required:
-        - alt_text
-        - url
-    DidWebDocumentResponse:
+        - licenceNumber
+        - expirationDate
+    LicenceNumber:
       type: object
-      additionalProperties: false
       properties:
-        context:
+        display:
+          type: array
+          items:
+            $ref: '#/components/schemas/Display'
+      required:
+        - display
+    ExpirationDate:
+      type: object
+      properties:
+        display:
+          type: array
+          items:
+            $ref: '#/components/schemas/Display'
+      required:
+        - display
+    DidResponse:
+      type: object
+      properties:
+        '@context':
           type: array
           minItems: 1
           items:
@@ -631,13 +446,12 @@ components:
           items:
             type: string
       required:
+        - '@context'
         - assertionMethod
-        - context
         - id
         - verificationMethod
     VerificationMethod:
       type: object
-      additionalProperties: false
       properties:
         id:
           type: string
@@ -648,13 +462,12 @@ components:
         publicKeyJwk:
           $ref: "#/components/schemas/PublicKeyJwk"
       required:
-        - controller
         - id
-        - publicKeyJwk
         - type
+        - controller
+        - publicKeyJwk
     PublicKeyJwk:
       type: object
-      additionalProperties: false
       properties:
         kid:
           type: string
@@ -670,5 +483,39 @@ components:
         - crv
         - kid
         - kty
+        - x
+        - y
+    JwksResponse:
+      type: object
+      properties:
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/Key'
+      required:
+        - keys
+    Key:
+      type: object
+      properties:
+        kty:
+          type: string
+        use:
+          type: string
+        crv:
+          type: string
+        kid:
+          type: string
+        x:
+          type: string
+        y:
+          type: string
+        alg:
+          type: string
+      required:
+        - alg
+        - crv
+        - kid
+        - kty
+        - use
         - x
         - y
