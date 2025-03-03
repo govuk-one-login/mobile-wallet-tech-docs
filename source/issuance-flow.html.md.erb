@@ -50,21 +50,21 @@ This diagram shows a simple example of the exchange of a credential between a go
     activate User
     User->>CRI: Access
     activate CRI
-    CRI->>OneLogin: Authenticates user:<br> `GET /authorize`
+    CRI->>OneLogin: Authenticates user:<br> GET /authorize
     activate OneLogin
     OneLogin-->>CRI: Redirects user to CRI's redirect URI<br> with Authorization Code
     deactivate OneLogin
-    CRI->>OneLogin: Exchanges Authorization Code for tokens:<br> `POST /token`
+    CRI->>OneLogin: Exchanges Authorization Code for tokens:<br> POST /token
     activate OneLogin
     OneLogin-->>CRI: Returns tokens (Access Token, ID Token, etc.)
     deactivate OneLogin
-    CRI->>OneLogin: Exchanges Access Token for User Information:<br>`POST /userinfo`
+    CRI->>OneLogin: Exchanges Access Token for User Information:<br>POST /userinfo
     activate OneLogin
     OneLogin-->>CRI: Returns User Information
     deactivate OneLogin
-    CRI->>CRI: Extracts `wallet_subject_id` from<br> User Information
-    CRI->>CRI: Generates `credential_identifier` (UUID)
-    CRI->>CRI: Caches `wallet_subject_id` against<br> `credential_identifier`
+    CRI->>CRI: Extracts wallet_subject_id from<br> User Information
+    CRI->>CRI: Generates credential_identifier (UUID)
+    CRI->>CRI: Caches wallet_subject_id against<br> credential_identifier
     CRI->>CRI: Builds Pre-Authorized Code (JWT)
     note over CRI: { "aud": "https://one-login.gov.uk",<br> "clientId": "TEST_CLIENT_ID",<br> "iss": "https://cri.gov.uk",<br> "credential_identifiers": ["3ffbb01f-43d2-4da6-94d7-c40b73bb19ce"],<br> "exp": 1741012365, <br>"iat": 1741012065 }
     CRI->>CRI: Signs Pre-Authorized Code with<br> CRI's private key
@@ -79,53 +79,53 @@ This diagram shows a simple example of the exchange of a credential between a go
     User->>App: Scans QR code or opens deep-link
     App->>App: Validates Credential Offer
     App->>App: Extracts CRI's URL from<br> Credential Offer
-    App->>CRI: Fetches CRI's Metadata:<br> `GET /.well-known/openid-credential-issuer`
+    App->>CRI: Fetches CRI's Metadata:<br> GET /.well-known/openid-credential-issuer
     activate CRI
     CRI-->>App: Returns CRI's Metadata
     deactivate CRI
     App->>App: Extracts Authorization Server's<br> URL from Metadata
     App->>OneLogin: Exchanges Pre-Authorized Code for<br> Access Token
     activate OneLogin
-    OneLogin->>OneLogin: Uses `clientId` in  Pre-Authorized<br> Code to find CRI's JWKS URL
-    OneLogin->>CRI: Fetches CRI's public keys:<br> `GET /.well-known/jwks.json`
+    OneLogin->>OneLogin: Uses clientId in  Pre-Authorized<br> Code to find CRI's JWKS URL
+    OneLogin->>CRI: Fetches CRI's public keys:<br> GET /.well-known/jwks.json
     activate CRI
     CRI-->>OneLogin: Returns JSON Web Key Set
     deactivate CRI
     OneLogin->>OneLogin: Verifies Pre-Authorized Code<br> content and signature
     OneLogin-->>App: Issues Access Token
     deactivate OneLogin
-    App->>App: Generates `did:key` from app's public key
-    App->>App: Builds Proof (JWT) by signing Access Token<br> `c_nonce` with app's private key
-    note over App: `kid` header property holds `did:key`
-    App->>CRI: Fetches Credential:<br> `POST /credential`
+    App->>App: Generates did:key from app's public key
+    App->>App: Builds Proof (JWT) by signing Access Token<br> c_nonce with app's private key
+    note over App: kid header property holds did:key
+    App->>CRI: Fetches Credential:<br> POST /credential
     Note over App,CRI: Authorization header: Access Token<br>Request body: Proof
     activate CRI
     CRI->>CRI: Validates Access Token header<br> and payload claims
     opt if public key not in cache or invalid
-        CRI->>OneLogin: Fetches One Login's public keys:<br> `GET /.well-known/jwks.json`
+        CRI->>OneLogin: Fetches One Login's public keys:<br> GET /.well-known/jwks.json
         activate OneLogin
         OneLogin-->>CRI: Returns JSON Web Key Set
         deactivate OneLogin
     end
     CRI->>CRI: Verifies Access Token signature
     CRI->>CRI: Validates Proof header and payload claims
-    CRI->>CRI: Extracts `did:key`<br> from Proof header
-    CRI->>CRI: Verifies Proof signature with `did:key`
-    CRI->>CRI: Checks Access Token `c_nonce` claim<br> and Proof `nonce` claim match
-    CRI->>CRI: Extracts `credential_identifiers` claim<br> and looks up cached credential
-    CRI->>CRI: Checks Access Token `sub` claim (`wallet_subject_id`)<br> and cached `wallet_subject_id` match
+    CRI->>CRI: Extracts did:key<br> from Proof header
+    CRI->>CRI: Verifies Proof signature with did:key
+    CRI->>CRI: Checks Access Token c_nonce claim<br> and Proof nonce claim match
+    CRI->>CRI: Extracts credential_identifiers claim<br> and looks up cached credential
+    CRI->>CRI: Checks Access Token sub claim (wallet_subject_id)<br> and cached wallet_subject_id match
     CRI->>CRI: Builds Credential
-    note over CRI: `sub` claim holds `did:key`
+    note over CRI: sub claim holds did:key
     CRI->>CRI: Signs Credential with CRI's private key
     CRI-->>App: Returns Credential
     deactivate CRI
-    App->>CRI: Fetches CRI's public key:<br> `GET /.well-known/did.json`
+    App->>CRI: Fetches CRI's public key:<br> GET /.well-known/did.json
     activate CRI
     CRI-->>App: Returns public key as DID document
     deactivate CRI
     App->>App: Verifies signature and content<br> of Credential
     App->>App: Securely stores Credential
-    App-->>CRI: Notifies of success or failure:<br>`POST /notification`
+    App-->>CRI: Notifies of success or failure:<br>POST /notification
     activate CRI
     CRI-->>CRI: Records notification
     CRI-->>App: Returns empty response
