@@ -56,7 +56,7 @@ This diagram shows a simple example of the exchange of a credential between a go
     deactivate OneLogin
     CRI->>OneLogin: Exchanges Authorization Code for tokens:<br> POST /token
     activate OneLogin
-    OneLogin-->>CRI: Returns tokens (Access Token, ID Token, etc.)
+    OneLogin-->>CRI: Returns tokens (Access Token, etc.)
     deactivate OneLogin
     CRI->>OneLogin: Exchanges Access Token for User Information:<br>POST /userinfo
     activate OneLogin
@@ -137,10 +137,13 @@ This diagram shows a simple example of the exchange of a credential between a go
 
 
 1. Your user accesses your service.<br>
-2. You send a GET request to the One Login /authorize endpoint to authenticate your user. The OIDC sign-in page will open if the user does not have an existing session they’re signed into.
-3. Upon successful authentication, One Login redirects the user to the "redirect_uri" your service specified
-
-If your user does not have an existing session they’re signed in to when your service makes the request to the /authorize endpoint, the OIDC sign-in page will open. Your user can enter their details on this page to authenticate themselves.
+2. You send a request to the One Login GET /authorize endpoint to authenticate your user. The OIDC sign-in page will open if the user does not have an existing session they’re signed into and the user can enter their details to authenticate.
+3. One Login redirects the user with an authorisation code (AUTHORIZATION_CODE) to the redirect URI your service specified when you onboarded.
+4. You send a request to the One Login POST /token endpoint to exchange the authorisation code for tokens
+5. One Login returns as part of the token response an access token (access_token)
+6. You send a request to the One Login GET /userinfo endpoint to exchange the access token for user information
+7. One Login returns the user information which will include the wallet subject ID (wallet_subject_id)
+8-14. Your service builds a credential offer
 
 2. Your service builds a credential offer (GET /credential_offer call)<br>
     2a. The credential offer contains a pre-authorised code signed by your service (see Step 2. Set up JWKS) and displays it as a QR code or button with a link if on a mobile device<br>
