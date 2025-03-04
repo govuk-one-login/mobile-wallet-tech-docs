@@ -48,7 +48,7 @@ This diagram shows a simple example of the exchange of a credential between a go
     participant App as App
     participant OneLogin as OneLogin
     activate User
-    User->>CRI: Access
+    User->>CRI: Accesses
     activate CRI
     CRI->>OneLogin: Authenticates user:<br> GET /authorize
     activate OneLogin
@@ -63,13 +63,12 @@ This diagram shows a simple example of the exchange of a credential between a go
     OneLogin-->>CRI: Returns User Information
     deactivate OneLogin
     CRI->>CRI: Extracts wallet_subject_id from<br> User Information
-    CRI->>CRI: Generates credential_identifier (UUID)
+    CRI->>CRI: Generates credential_identifier
     CRI->>CRI: Caches wallet_subject_id against<br> credential_identifier
-    CRI->>CRI: Builds Pre-Authorized Code (JWT)
-    note over CRI: { "aud": "https://one-login.gov.uk",<br> "clientId": "TEST_CLIENT_ID",<br> "iss": "https://cri.gov.uk",<br> "credential_identifiers": ["3ffbb01f-43d2-4da6-94d7-c40b73bb19ce"],<br> "exp": 1741012365, <br>"iat": 1741012065 }
+    CRI->>CRI: Builds Pre-Authorized Code
     CRI->>CRI: Signs Pre-Authorized Code with<br> CRI's private key
-    CRI->>CRI: Builds Credential Offer object
-    CRI-->>User: Presents Credential Offer URI<br> as QR code or deep-link
+    CRI->>CRI: Builds Credential Offer
+    CRI-->>User: Presents Credential Offer<br> as QR code or deep-link
     User->>App: Opens app
     activate App
     App-->OneLogin: Authenticates user
@@ -95,27 +94,24 @@ This diagram shows a simple example of the exchange of a credential between a go
     OneLogin-->>App: Issues Access Token
     deactivate OneLogin
     App->>App: Generates did:key from app's public key
-    App->>App: Builds Proof (JWT) by signing Access Token<br> c_nonce with app's private key
-    note over App: kid header property holds did:key
+    App->>App: Builds Proof by signing Access Token<br> c_nonce with app's private key
     App->>CRI: Fetches Credential:<br> POST /credential
-    Note over App,CRI: Authorization header: Access Token<br>Request body: Proof
     activate CRI
-    CRI->>CRI: Validates Access Token header<br> and payload claims
-    opt if public key not in cache or invalid
+    CRI->>CRI: Validates Access Token content
+    opt If public key not in cache or invalid
         CRI->>OneLogin: Fetches One Login's public keys:<br> GET /.well-known/jwks.json
         activate OneLogin
         OneLogin-->>CRI: Returns JSON Web Key Set
         deactivate OneLogin
     end
     CRI->>CRI: Verifies Access Token signature
-    CRI->>CRI: Validates Proof header and payload claims
+    CRI->>CRI: Validates Proof content
     CRI->>CRI: Extracts did:key<br> from Proof header
     CRI->>CRI: Verifies Proof signature with did:key
     CRI->>CRI: Checks Access Token c_nonce claim<br> and Proof nonce claim match
     CRI->>CRI: Extracts credential_identifiers claim<br> and looks up cached credential
     CRI->>CRI: Checks Access Token sub claim (wallet_subject_id)<br> and cached wallet_subject_id match
     CRI->>CRI: Builds Credential
-    note over CRI: sub claim holds did:key
     CRI->>CRI: Signs Credential with CRI's private key
     CRI-->>App: Returns Credential
     deactivate CRI
@@ -123,7 +119,7 @@ This diagram shows a simple example of the exchange of a credential between a go
     activate CRI
     CRI-->>App: Returns public key as DID document
     deactivate CRI
-    App->>App: Verifies signature and content<br> of Credential
+    App->>App: Verifies Credential content<br> and signature
     App->>App: Securely stores Credential
     App-->>CRI: Notifies of success or failure:<br>POST /notification
     activate CRI
@@ -140,7 +136,11 @@ This diagram shows a simple example of the exchange of a credential between a go
 </html>
 
 
-1. Your user logs in with One Login<br>
+1. Your user accesses your service.<br>
+2. You send a GET request to the One Login /authorize endpoint to authenticate your user. The OIDC sign-in page will open if the user does not have an existing session they’re signed into.
+3. Upon successful authentication, One Login redirects the user to the "redirect_uri" your service specified
+
+If your user does not have an existing session they’re signed in to when your service makes the request to the /authorize endpoint, the OIDC sign-in page will open. Your user can enter their details on this page to authenticate themselves.
 
 2. Your service builds a credential offer (GET /credential_offer call)<br>
     2a. The credential offer contains a pre-authorised code signed by your service (see Step 2. Set up JWKS) and displays it as a QR code or button with a link if on a mobile device<br>
