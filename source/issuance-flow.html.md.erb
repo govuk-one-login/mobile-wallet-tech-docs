@@ -1,38 +1,15 @@
 ---
 title: Understanding GOV.UK Wallet’s credential exchange flow
 weight: 40
-last_reviewed_on: 2024-07-02
+last_reviewed_on: 2025-03-04
 review_in: 2 month
 ---
 
 # Understanding GOV.UK Wallet’s credential exchange flow
 
-## The wallet logical flow
-
-<img src="/images/wallet-cri-logical-flow.png" width="100" height="200">
-
-1. Your user logs in your service with One Login Identity Provider
-
-2. The same user is also logged in the GOV.UK Wallet app
-
-3. Your service shows a credential offer as a QR code or a deep link as a CTA (if on same device) including a pre-authorized code the GOV.UK Wallet can use to later request the credential
-
-4. The GOV.UK Wallet exchanges the pre-authorized code with the One Login Token Service and retrieves a JWT access token signed by the One Login Token Service
-
-5. GOV.UK Wallet sends the access token to your service to fetch the credential
-
-6. Your service validates the access token, ensures it is signed by the One Login Token Service and confirms the token is bound to the same user as logged into your credential issuer.
-
-7. Your service sends the credential so GOV.UK Wallet can validate it and store it
-
-
-## The wallet technical flow
-
 GOV.UK Wallet helps users store and share digital versions of their government credentials, such as documents, letters, cards and emails in one place that they can trust. Government organisations who already let their users log in to services with GOV.UK One Login can also offer digital verifiable credentials (VCs) users can store in their own wallet.
 
-This diagram shows a simple example of the exchange of a credential between a government service and the GOV.UK Wallet. A user who is logged in the government service with the One Login service starts the exchange through the mobile app. The flow is an exchange of a credential represented as a JSON Web Token (JWT), as well as its metadata, using OAuth protected endpoints.
-
-<img src="/images/wallet-cri-technical-flow.png" width="100" height="200">
+This diagram shows the exchange of a credential between a government service and the GOV.UK Wallet.
 
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
@@ -48,7 +25,7 @@ This diagram shows a simple example of the exchange of a credential between a go
     participant App as App
     participant OneLogin as OneLogin
     activate User
-    User->>CRI: Accesses
+    User->>CRI: Accesses your service
     activate CRI
     CRI->>OneLogin: Authenticates user:<br> GET /authorize
     activate OneLogin
@@ -56,74 +33,55 @@ This diagram shows a simple example of the exchange of a credential between a go
     deactivate OneLogin
     CRI->>OneLogin: Exchanges Authorization Code for tokens:<br> POST /token
     activate OneLogin
-    OneLogin-->>CRI: Returns tokens (Access Token, etc.)
+    OneLogin-->>CRI: Returns tokens (Access Token, ID Token etc.)
     deactivate OneLogin
     CRI->>OneLogin: Exchanges Access Token for User Information:<br>POST /userinfo
     activate OneLogin
     OneLogin-->>CRI: Returns User Information
     deactivate OneLogin
-    CRI->>CRI: Extracts wallet_subject_id from<br> User Information
-    CRI->>CRI: Generates credential_identifier
-    CRI->>CRI: Caches wallet_subject_id against<br> credential_identifier
-    CRI->>CRI: Builds Pre-Authorized Code
-    CRI->>CRI: Signs Pre-Authorized Code with<br> CRI's private key
-    CRI->>CRI: Builds Credential Offer
-    CRI-->>User: Presents Credential Offer<br> as QR code or deep-link
+    CRI->>CRI: Generates Credential Offer
+    CRI-->>User: Renders Credential Offer<br> as QR code or deep-link
+    deactivate CRI
     User->>App: Opens app
     activate App
     App-->OneLogin: Authenticates user
     activate OneLogin
     OneLogin-->>App: User is authenticated
     deactivate OneLogin
-    User->>App: Scans QR code or opens deep-link
-    App->>App: Validates Credential Offer
-    App->>App: Extracts CRI's URL from<br> Credential Offer
+    User->>App: Redeems Credential Offer
     App->>CRI: Fetches CRI's Metadata:<br> GET /.well-known/openid-credential-issuer
     activate CRI
-    CRI-->>App: Returns CRI's Metadata
+    CRI-->>App: Returns Metadata
     deactivate CRI
-    App->>App: Extracts Authorization Server's<br> URL from Metadata
-    App->>OneLogin: Exchanges Pre-Authorized Code for<br> Access Token
+    App->>OneLogin: Exchanges Pre-Authorized Code<br> for Access Token
     activate OneLogin
-    OneLogin->>OneLogin: Uses clientId in  Pre-Authorized<br> Code to find CRI's JWKS URL
     OneLogin->>CRI: Fetches CRI's public keys:<br> GET /.well-known/jwks.json
     activate CRI
-    CRI-->>OneLogin: Returns JSON Web Key Set
+    CRI-->>OneLogin: Returns public keys as JSON Web Key Set
     deactivate CRI
     OneLogin->>OneLogin: Verifies Pre-Authorized Code<br> content and signature
     OneLogin-->>App: Issues Access Token
     deactivate OneLogin
-    App->>App: Generates did:key from app's public key
-    App->>App: Builds Proof by signing Access Token<br> c_nonce with app's private key
+    App->>App: Generates Proof of Possession
     App->>CRI: Fetches Credential:<br> POST /credential
     activate CRI
-    CRI->>CRI: Validates Access Token content
-    opt If public key not in cache or invalid
         CRI->>OneLogin: Fetches One Login's public keys:<br> GET /.well-known/jwks.json
         activate OneLogin
         OneLogin-->>CRI: Returns JSON Web Key Set
         deactivate OneLogin
-    end
-    CRI->>CRI: Verifies Access Token signature
-    CRI->>CRI: Validates Proof content
-    CRI->>CRI: Extracts did:key<br> from Proof header
-    CRI->>CRI: Verifies Proof signature with did:key
-    CRI->>CRI: Checks Access Token c_nonce claim<br> and Proof nonce claim match
-    CRI->>CRI: Extracts credential_identifiers claim<br> and looks up cached credential
-    CRI->>CRI: Checks Access Token sub claim (wallet_subject_id)<br> and cached wallet_subject_id match
-    CRI->>CRI: Builds Credential
-    CRI->>CRI: Signs Credential with CRI's private key
-    CRI-->>App: Returns Credential
+    CRI->>CRI: Verifies Access Token and<br> Proof of Possession content and signature
+    CRI->>CRI: Generates Credential
+    CRI->>App: Returns Credential
     deactivate CRI
     App->>CRI: Fetches CRI's public key:<br> GET /.well-known/did.json
     activate CRI
     CRI-->>App: Returns public key as DID document
     deactivate CRI
-    App->>App: Verifies Credential content<br> and signature
-    App->>App: Securely stores Credential
-    App-->>CRI: Notifies of success or failure:<br>POST /notification
+    App->>App: Verifies Credential<br> content and signature
+    App->>App: Stores Credential
+    App->>CRI: Notifies of success or failure:<br>POST /notification
     activate CRI
-    CRI-->>CRI: Records notification
+    CRI->>CRI: Records notification
     CRI-->>App: Returns empty response
     deactivate CRI
     deactivate App
@@ -135,29 +93,76 @@ This diagram shows a simple example of the exchange of a credential between a go
   </body>
 </html>
 
+#### User Authenticates with One Login to Use Your Service
+1\. Your user accesses your service.
 
-1. Your user accesses your service.<br>
-2. You send a request to the One Login GET /authorize endpoint to authenticate your user. The OIDC sign-in page will open if the user does not have an existing session they’re signed into and the user can enter their details to authenticate.
-3. One Login redirects the user with an authorisation code (AUTHORIZATION_CODE) to the redirect URI your service specified when you onboarded.
-4. You send a request to the One Login POST /token endpoint to exchange the authorisation code for tokens
-5. One Login returns as part of the token response an access token (access_token)
-6. You send a request to the One Login GET /userinfo endpoint to exchange the access token for user information
-7. One Login returns the user information which will include the wallet subject ID (wallet_subject_id)
-8-14. Your service builds a credential offer
+2\. Your service sends a request to the One Login GET /authorize endpoint to authenticate your user. The OIDC sign-in page will open if the user does not have an existing session they’re signed in to and the user can enter their details to authenticate.
 
-2. Your service builds a credential offer (GET /credential_offer call)<br>
-    2a. The credential offer contains a pre-authorised code signed by your service (see Step 2. Set up JWKS) and displays it as a QR code or button with a link if on a mobile device<br>
-    2b. Your service caches the credential to be sent at the end of the exchange<br>
+3\. One Login redirects the user with an Authorisation Code to the redirect URI your service specified when you onboarded.
 
-3. The Wallet consumes your credential offer (using a QR Code or a link)
+4\. Your service sends a request to the One Login POST /token endpoint to exchange the authorisation code for tokens.
 
-4. Return the credential to the wallet (POST /credential call)<br>
-    4a. Validate the access token with One Login<br>
-    4b. Validate credential request, which includes:<br>
-        - Extract the pairwise wallet identifier walletSubjectId from the access token<br>
-        - Compare this pairwise wallet identifier with the other walletSubjectId you received after logging the user in with One Login<br>
-        - Complete the proof of possession challenge from the wallet and extract its did:key<br>
-        - Fetch underlying data linked to your unique credential identifier (created in step 2b.)<br>
-        - Build the credential as a VC-JWT including its did:key to bind the credential to the wallet<br>
-        - Sign the credential with your private key<br>
-    4c. Return VC-JWT to the wallet
+5\. One Login returns an Access Token as part of the response.
+
+6\. Your service sends a request to the One Login GET /userinfo endpoint to exchange the Access Token for User Information.
+
+7\. One Login returns the User Information which includes the Wallet Subject ID.
+
+#### [Your Service Issues a Credential Offer]()
+8\. Your service generates a Credential Offer. Included in this offer is a Pre-Authorized Code which has been signed by your service.
+
+9\. Your service renders the Credential Offer to the user as a QR code or deep-link.
+
+10\. The user opens the app.
+
+11\. The app prompts the user to authenticate with One Login.
+
+12\. The same user authenticated to your service on the browser is now also authenticated with One Login in the app.
+
+13\. The user scans the QR code or opens the deep link to redeem the Credential Offer and communicate it to the GOV.UK Wallet.
+
+14\. The GOV.UK Wallet sends a GET request to your [/.well-known/openid-credential-issuer endpoint to fetch your Metadata]().
+
+15\. Your service returns its Metadata.
+
+16\. The GOV.UK Wallet sends a POST request to the One Login /token endpoint to exchange the Pre-Authorized Code embedded in the Credential Offer for an Access Token.
+
+17\. One Login sends a GET request to your [/.well-known/jwks.json endpoint to fetch your public keys]() to verify the signature on the Pre-Authorized Code signature issued by your service.
+
+18\. Your service returns its public keys as a JSON Web Key Set.
+
+19\. One Login verifies the Pre-Authorized Code content and its signature.
+
+20\. One Login issues an Access Token that will give the GOV.UK Wallet access to your service.
+
+21\. The GOV.UK Wallet generates a Proof of Possession for the key material.
+
+22\. The GOV.UK Wallet sends a POST request to your /credential endpoint to request the credential. This request includes the Access Token issued by One Login (as a Bearer token the Authorization header) and the Proof of Possession generated by the GOV.UK Wallet.
+
+#### [Your Service Issues a Credential](link-to-page)
+
+23\. Your service sends a GET request to the One Login [/.well-known/jwks.json to fetch its public keys]() to verify the signature on the Access Token issued by One Login.
+
+24\. One Login returns its public keys as a JSON Web Key Set.
+
+25\. Your service verifies the content and the signature of the Access Token and the Proof of Possession.
+
+26\. Your service builds and signs the Credential.
+
+27\. Your service returns the Credential to the GOV.UK Wallet.
+
+28\. The GOV.UK Wallet sends a GET request to your [/.well-known/did.json endpoint to fetch your public key represented as a DID document]() to verify the signature on the Credential issued by your service.
+i
+29\. Your service returns its DID document.
+
+30\. The GOV.UK Wallet verifies the content and signature of the Credential.
+
+31\. The GOV.UK Wallet stores the Credential.
+
+32\. The GOV.UK Wallet sends a POST request to your [/notification endpoint]() to notify your service that it successfully stored or failed to store the Credential.
+
+33\. Your service records the notification.
+
+34\. Your service returns an empty response to the GOV.UK Wallet.
+
+
