@@ -2,69 +2,29 @@ openapi: "3.0.0"
 info:
   version: 1.0.0
   title: Wallet Credential Issuer API
-  description: |-
-    This document describes the five endpoints of your credential issuer that are required to issue a credential to GOV.UK Wallet.
-    
-    Implementing this API and following the rest of the technical documentation will ensure that only a user logged in the mobile app and your service using the same GOV.UK One Login account is allowed to obtain the credential you are offering. It will also ensure that the credential is cryptographically bound to a particular wallet so that it cannot be passed on to another wallet.
-
-    For a technical overview of the end-to-end issuance flow please refer to <b>[Understanding GOV.UK digital wallet’s credential exchange flow](https://upgraded-barnacle-gqknpev.pages.github.io/issuance-flow.html)</b>. The flow is based on OpenID Connect for Verifiable Credential Issuance ([OpenID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html)).<br><br>Please refer to the <b>[Use sample reference material](https://upgraded-barnacle-gqknpev.pages.github.io/use-sample-reference-material.html)</b> for a reference implementation of this API.
+  description: This specification describes the six Credential Issuer endpoints required to issue Credential(s) to the GOV.UK Wallet.
   license:
     name: MIT License
-externalDocs:
-  description: Find out more about the GOV.UK Wallet
-  url: https://upgraded-barnacle-gqknpev.pages.github.io/
-tags:
-  - name: credential_offer
-    description: Used to initiate the transaction
-  - name: credential
-    description: Used to request the wallet credential
-  - name: metadata
-    description: Used to share your metadata (e.g. supported credentials, display information )
-  - name: did
-    description: Used to share your public keys as a DID
-  - name: jwks
-    description: Used to share your public keys as a JWKS
 paths:
   /credential_offer:
     get:
-      tags:
-        - credential_offer
-      summary: Request a credential offer
-      description: <b>What is it?</b> A private endpoint to generate and return a credential offer.<br><b>When do you need it?</b> The website of your service must display a credential offer to your user as a QR code or a link after they have logged in with One Login and proven - after successfully interacting with your service - that they are eligible to receive the credential. This endpoint produces the URL that your website will render as a QR code or a deep link so the wallet can consume it. The `credentialType` parameter is used to distinguish between multiple credentials your CRI may offer.
-      parameters:
-        - name: documentId
-          in: path
-          description: ID of the document for which the offer must be issued
-          required: true
-          schema:
-            type: string
-        - name: walletSubjectId
-          in: path
-          description: Pairwise identifier generated from the `CommonSubjectId` and `rpSectorId`
-          required: true
-          schema:
-            type: string
-        - name: credentialType
-          in: path
-          description: Type of credential to issue, e.g. `FishingLicence`
-          required: true
-          schema:
-            type: string
+      description: An endpoint for issuing a Credential Offer.
       responses:
         '200':
-          description: URI encoded credential offer
+          description: |- 
+            Credential Offer URL consisting of the following parts:<br>
+            1. Wallet’s credential offer endpoint.<br>
+            2. A query parameter `credential_offer`.<br>
+            3. URL-encoded Credential Offer.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CredentialOfferResponse"
+                type: string
               example:
-                credential_offer_uri: https://mobile.build.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiI8WU9VUiBPTkUgTE9HSU4gQ0xJRU5UIElEPiIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5tb2JpbGUuYnVpbGQuYWNjb3VudC5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.aZRv9KBCWRGLsi1Rd96jrzPxpQUkW68up0BYvUiF4RHjbLf6IxWn2PyU_ExOBAtEoj0lGAOOX7efOLMEc-lcIg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.mobile.build.account.gov.uk%22%7D
+                https://mobile.build.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiI8WU9VUiBPTkUgTE9HSU4gQ0xJRU5UIElEPiIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5tb2JpbGUuYnVpbGQuYWNjb3VudC5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.aZRv9KBCWRGLsi1Rd96jrzPxpQUkW68up0BYvUiF4RHjbLf6IxWn2PyU_ExOBAtEoj0lGAOOX7efOLMEc-lcIg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.mobile.build.account.gov.uk%22%7D
   /credential:
     post:
-      tags:
-          - credential
-      summary: Request a credential
-      description: <b>What is it?</b> A public endpoint for the wallet to request the credential.<br><b>When do you need it?</b> This endpoint is used to send the credential to the GOV.UK Wallet. You must first establish that the wallet that requested it and the user logged in your service with One Login are allowed to receive the credential. For this, the app needs to share with you a credential issuer access token (as bearer token) and a proof that the user is in possession of the wallet.
+      description: An endpoint used by the GOV.UK Wallet to request a Credential from the Credential Issuer.
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -79,22 +39,36 @@ paths:
                 jwt: eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDprZXk6ekRuYWVTR2ZTUU1Zdm5MYkxXRXViaGhHRFBvcTdwQTlNTU52dW12YnNtTUNab3ZVUiJ9.eyJpc3MiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJhdWQiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIubW9iaWxlLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiaWF0IjoxNzM5NDU3NTE3MzU1LCJub25jZSI6ImRiMmRiMzEzLTVjYjktNGJiNC1hYTRkLTlmZTRkYWM0MGJlMSJ9.7Ni5vVvTIf8jWGRsaxpjg7_o5rSGG_sttYKrC4184IUgtdjfsfqptClmO9_x62dyAgcbjeLqb1Q4YIIG8ZKNzA
       responses:
         '200':
-          description: Fishing Licence verifiable credential
+          description: Credential.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CredentialResponse"
               example:
                 credential: eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwiY3R5IjogInZjIiwidHlwIjogInZjK2p3dCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIubW9iaWxlLmJ1aWxkLmFjY291bnQuZ292LnVrIiwic3ViIjoiZGlkOmtleTplYmZhZWIxZmQ3MTJlYmYxYzI3NmUxMmVjMjEiLCJpYXQiOiIxNzEyNjY0NzMxIiwibmJmIjoiMTcxMjY2NDczMSIsImV4cCI6IjE3NDQyMjE2NTciLCJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvbnMvY3JlZGVudGlhbHMvdjIiLCI8SlNPTi1MRCBDT05URVhUIFVSSSBGT1IgSVNTVUVSPiJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiRmlzaGluZ0xpY2VuY2UiXSwiaXNzdWVyIjoiaHR0cHM6Ly9leGFtcGxlLWNyZWRlbnRpYWwtaXNzdWVyLm1vYmlsZS5idWlsZC5hY2NvdW50Lmdvdi51ayIsIm5hbWUiOiJGaXNoaW5nIGxpY2VuY2UiLCJkZXNjcmlwdGlvbiI6IjxPUFRJT05BTCBDUkVERU5USUFMIERFU0NSSVBUSU9OPiIsInZhbGlkRnJvbSI6IjIwMjQtMDQtMDlUMTI6MTI6MTFaIiwidmFsaWRVbnRpbCI6IjIwMjgtMTItMTBUMjI6NTk6NTlaIiwiY3JlZGVudGlhbFN1YmplY3QiOnsiaWQiOiJkaWQ6a2V5OmViZmFlYjFmZDcxMmViZjFjMjc2ZTEyZWMyMSIsIm5hbWUiOlt7Im5hbWVQYXJ0cyI6W3sidmFsdWUiOiJTYXJhaCIsInR5cGUiOiJHaXZlbk5hbWUifSx7InZhbHVlIjoiRWR3YXJkcyIsInR5cGUiOiJGYW1pbHlOYW1lIn1dfV0sImZpc2hpbmdMaWNlbmNlIjpbeyJsaWNlbmNlTnVtYmVyIjoiMDA5ODc4ODYzIiwiaXNzdWFuY2VEYXRlIjogIjIwMjMtMTItMTAiLCJleHBpcmF0aW9uRGF0ZSI6ICIyMDI4LTEyLTEwIn1dfX0.FhJZpl4g6Vhi5G4hgLV_2ku_XlR9Eo8zX1Yj5hMOfLepwfI3YkD9xdNRUoMfKFwtB56bPQ6Fk6Q_2ePi5_N0aw
+  /notification:
+    post:
+      description: An endpoint used by the GOV.UK Wallet to notify the Credential Issuer of events concerning Credential(s) it has issued.
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequestBody'
+            example:
+              notification_id: 776aefd4-26c6-4a5f-aa7c-b5e294cd87cd
+              event: credential_accepted
+      responses:
+        '204':
+          description: No content.
   /.well-known/openid-credential-issuer:
     get:
-      tags:
-          - metadata
-      summary: Retrieve the metadata
-      description: <b>What is it?</b> A public endpoint for the wallet to retrieve metadata about the credential(s) issued by your credential issuer.<br><b>When do you need it?</b> You must publish this metadata file once when setting up of your credential issuer service. After that, GOV.UK Wallet will retrieve your metadata at the well-known endpoint each time a user requests a new credential, in case your metadata has changed.
+      description: A public endpoint for the GOV.UK Wallet to retrieve Metadata about the Credential Issuer and the Credential(s) it issues.
       responses:
         '200':
-          description: Credential Issuer metadata
+          description: Credential Issuer's Metadata.
           content:
             application/json:
               schema:
@@ -153,13 +127,10 @@ paths:
                               locale: cy-GB
   /.well-known/did.json:
     get:
-      tags:
-          - did
-      summary: Retrieve the DID document
-      description: <b>What is it?</b> A public endpoint for GOV.UK One Login and Wallet to retrieve your public keys as a DID document.<br><b>When do you need it?</b> The did:web document contains essential information such as the public signing key to verify the validity of the credential issued by your credential issuer. You must publish this did:web file when setting up your credential issuer service. After that, GOV.UK One Login and Wallet will use this endpoint to retrieve your did:web document and validate the signature of your credentials.
+      description: A public endpoint for the GOV.UK Wallet to retrieve the Credential Issuer's public key represented as a DID Document.
       responses:
         '200':
-          description: Credential Issuer DID document
+          description: Credential Issuer's DID Document.
           content:
             application/json:
               schema:
@@ -172,7 +143,7 @@ paths:
                 verificationMethod:
                   - id: did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
                     type: JsonWebKey2020
-                    controller: ddid:web:example-credential-issuer.mobile.build.account.gov.uk
+                    controller: did:web:example-credential-issuer.mobile.build.account.gov.uk
                     publicKeyJwk:
                       kty: EC
                       kid: 5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
@@ -184,17 +155,14 @@ paths:
                   - did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
   /.well-known/jwks.json:
     get:
-      tags:
-          - JWKS
-      summary: Retrieve the JWKS
-      description: <b>What is it?</b> A public endpoint for GOV.UK One Login to retrieve your public key as a JWKS.<br><b>When do you need it?</b> The key pair associated with the JWKS is used to sign the pre-authorisation code generated by your credential issuer and used by One Login to secure the credential issuance according to OIDC4VCI. You must publish this jwks.json file when setting up your credential issuer service.
+      description: A public endpoint for GOV.UK One Login to retrieve the Credential Issuer's JSON Web Key Set (JWKS) of public keys.
       responses:
         '200':
-          description: Credential Issuer JWKS
+          description: Credential Issuer's JWKS.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PublicKeyJwk"
+                $ref: "#/components/schemas/JwksResponse"
               example:
                 keys:
                   - kty: EC
@@ -211,14 +179,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    CredentialOfferResponse:
-      type: object
-      required:
-        - credential_offer_uri
-      properties:
-        credential_offer_uri:
-          type: string
-          format: uri
     CredentialRequestBody:
       type: object
       properties:
@@ -243,23 +203,45 @@ components:
       type: object
       properties:
         credential:
+          description: Credential signed as a JWT.
           type: string
           format: jwt
       required:
         - credential
+    NotificationRequestBody:
+      type: object
+      properties:
+        notification_id:
+          type: string
+          format: uuid
+        event:
+          type: string
+          enum:
+            - credential_accepted
+            - credential_failure
+            - credential_deleted
+        event_description:
+          type: string
+      required:
+        - notification_id
+        - event
     MetadataResponse:
       type: object
       properties:
         credential_issuer:
-          type: string
-          format: uri
-        credentials_endpoint:
+          description: URL of the Credential Issuer.
           type: string
           format: uri
         credential_endpoint:
+          description: URL of the Credential Issuer's Credential endpoint.
+          type: string
+          format: uri
+        notification:
+          description: URL of the Credential Issuer's Notification endpoint.
           type: string
           format: uri
         authorization_servers:
+          description: Set containing the URL of the Authorization Server(s) the Credential Issuer relies on for authorization.
           type: array
           items:
             type: string
@@ -271,8 +253,8 @@ components:
         - credential_configurations_supported
         - credential_endpoint
         - credential_issuer
-        - credentials_endpoint
     CredentialConfigurationsSupported:
+      description: Information about the Credential(s) issued by the Credential Issuer.
       type: object
       properties:
         fishingLicence:
@@ -280,23 +262,28 @@ components:
       required:
         - fishingLicence
     FishingLicence:
+      description: A Credential issues by the Credential Issuer.
       type: object
       properties:
         format:
+          description: Format of the Credential, such as `jwt_vc_json`.
           type: string
         credential_definition:
           $ref: '#/components/schemas/CredentialDefinition'
         cryptographic_binding_methods_supported:
+          description: Set of methods available for cryptographically binding the issued Credential, such as `did:key`;
           type: array
           items:
             type: string
         credential_signing_alg_values_supported:
+          description: Set of algorithms that the Credential Issuer uses to sign the Credential.
           type: array
           items:
             type: string
         proof_types_supported:
           $ref: '#/components/schemas/ProofTypesSupported'
         display:
+          description: Display properties of the Credential, such as the display name, logo, background colour, etc.
           type: array
           items:
             $ref: '#/components/schemas/FishingLicenceDisplay'
@@ -311,6 +298,7 @@ components:
         - format
         - proof_types_supported
     CredentialDefinition:
+      description: Description of the Credential type.
       type: object
       properties:
         type:
@@ -320,6 +308,7 @@ components:
       required:
         - type
     ProofTypesSupported:
+      description: Key proof(s) supported by the Credential Issuer.
       type: object
       properties:
         jwt:
@@ -357,6 +346,7 @@ components:
         - name
         - text_color
     CredentialSubject:
+      description: Display properties of the subject of the Credential.
       type: object
       properties:
         name:
@@ -428,19 +418,23 @@ components:
       type: object
       properties:
         '@context':
+          description: Set of URL contexts which define the terms used in the DID Document.
           type: array
           minItems: 1
           items:
             type: string
             format: uri
         id:
+          description: Unique identifier of the DID Document itself.
           type: string
         verificationMethod:
+          description: Set of verification methods, such as cryptographic public keys.
           type: array
           minItems: 1
           items:
             $ref: "#/components/schemas/VerificationMethod"
         assertionMethod:
+          description: Set of DID URLs where each URL uniquely identifies a specific key within the DID Document.
           type: array
           minItems: 1
           items:
@@ -469,53 +463,56 @@ components:
     PublicKeyJwk:
       type: object
       properties:
-        kid:
-          type: string
         kty:
+          description: Key Type. The family of cryptographic algorithms used with the key.
+          type: string
+          enum:
+            - EC
+        kid:
+          description: Key ID. Unique identifier sed to match a specific key.
           type: string
         crv:
+          description: Curve. Cryptographic curve used with the key.
           type: string
+          enum:
+            - P-256
         x:
+          description: The "x" coordinate for the elliptic curve point.
           type: string
         y:
+          description: The "y" coordinate for the elliptic curve point.
           type: string
+        alg:
+          description: Algorithm. The cryptographic algorithm used with the key.
+          type: string
+          enum:
+            - P-256
       required:
-        - crv
-        - kid
         - kty
+        - kid
+        - crv
         - x
         - y
+        - alg
     JwksResponse:
       type: object
       properties:
         keys:
+          description: Set of public keys in JWK format.
           type: array
           items:
             $ref: '#/components/schemas/Key'
       required:
         - keys
     Key:
-      type: object
-      properties:
-        kty:
-          type: string
-        use:
-          type: string
-        crv:
-          type: string
-        kid:
-          type: string
-        x:
-          type: string
-        y:
-          type: string
-        alg:
-          type: string
-      required:
-        - alg
-        - crv
-        - kid
-        - kty
-        - use
-        - x
-        - y
+      allOf:
+        - $ref: "#/components/schemas/PublicKeyJwk"
+        - type: object
+          properties:
+            use:
+              description: The intended use of the key.
+              type: string
+              enum:
+                - sig
+          required:
+            - use
