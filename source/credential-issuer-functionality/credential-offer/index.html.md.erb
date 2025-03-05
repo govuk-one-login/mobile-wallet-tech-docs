@@ -1,0 +1,10 @@
+---
+title: Credential Offer
+weight: 1
+last_reviewed_on: 2025-03-05
+review_in: 2 months
+---
+
+# Credential Offer
+
+<b>What is it?</b> A private endpoint to generate and return a credential offer.<br><b>When do you need it?</b> The website of your service must display a credential offer to your user as a QR code or a link after they have logged in with One Login and proven - after successfully interacting with your service - that they are eligible to receive the credential. This endpoint produces the URL that your website will render as a QR code or a deep link so the wallet can consume it. The `credentialType` parameter is used to distinguish between multiple credentials your CRI may offer.
