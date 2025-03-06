@@ -7,4 +7,18 @@ review_in: 6 months
 
 # Authenticating users with One Login
 
-Work in progress.
+Services that wish to issue credentials need to use One Login to authenticate their users. This prerequiste will allow you to make sure that any credential you issue is issued to a verified user, logged in simultaneously in your service and GOV.UK Wallet and to no one else.
+
+As part of the onboarding process to One Login, you will be given a `client_id` which identifies you as a relying party of One Login.
+
+Your client_id must be included in the pre-authorised code generated when a new credential is issued (see step 2b. under "[Issuing credentials](issuing-credentials.html)" for more details).
+
+
+
+
+
+
+Your service must be migrated to One Login and credentials can only be offered to authenticated users. The user is simultaneously logged in your service and the wallet to ensure only the right credential is going to the right wallet.
+
+A `walletSubjectID` is included with the personal information of the user you obtain when they log in. This `walletSubjectID` is a pairwise identifier that will be used to prove the user logged in your service and in the wallet are the same. It is later referred to as 'rightful holder check'.
+
