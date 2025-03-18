@@ -7,12 +7,12 @@ review_in: 2 months
 
 # Notification
 
-The Credential Issuer can implement the `notification_endpoint`, an optional endpoint defined in the [OID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata) specification where the wallet can send notifications to the Credential Issuer about the Credentials it has issued.
+The Credential Issuer can implement the `notification_endpoint`, an optional endpoint defined in the [OID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata) specification where the GOV.UK Wallet can send notifications to the Credential Issuer about the Credentials it has issued.
 
-The Wallet can send notifications to the Credential Issuer's notification endpoint about events such as:
+The GOV.UK Wallet can send notifications to the Credential Issuer's notification endpoint about events such as:
 
-- the Credential issued by the Credential Issuer has been successfully stored in the Wallet
-- the Credential issued by the Credential Issuer could not be stored in the Wallet because it is invalid
+- the Credential issued by the Credential Issuer has been successfully stored in the GOV.UK Wallet
+- the Credential issued by the Credential Issuer could not be stored in the GOV.UK Wallet because it is invalid
 - the user has taken specific actions related to the offered Credential
 
-The notification endpoint URL is typically provided by the Credential Issuer in its Metadata, and the Wallet uses this URL to send HTTP POST requests with notification payloads.
+The notification endpoint URL is typically provided by the Credential Issuer in its Metadata, and the GOV.UK Wallet uses this URL to send HTTP POST requests with notification payloads.
