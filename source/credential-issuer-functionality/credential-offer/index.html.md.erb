@@ -105,7 +105,7 @@ The credential offer is a JSON object containing the following parameters:
 
 ### Step 2b. Prepare for credential issuance
 
-Your service must now cache the credential to be sent at the end of the exchange. For this you may which to use an existing identifier used to match the record that will be issued as a signed credential at the end of the exchange.
+Your service must now cache the credential to be sent at the end of the exchange. For this you may wish to use an existing identifier used to match the record that will be issued as a signed credential at the end of the exchange.
 
 The reference implementation of the credential issuer uses DynamoDB as an issuance cache to keep track of the credential to be issued at the end, when the flow is successful.
 
