@@ -47,7 +47,7 @@ The following is illustrative example of a DID document:
 
 * `verificationMethod` is a set of verification methods that the credential issuer has implemented. Any private key used to sign credentials issued to the GOV.UK Wallet must have a corresponding public key in this array.
 
-* `verificationMethod.id` must follow the format `"did:web:<URL OF YOUR SERVICE>#<HASHED KEY ID>"`. The value of this parameter should match the value of the `kid` parameter in the verifiable credential header so that the GOV.UK Wallet can find the key with which to verify the credential's signature. There is more information about this in [Step 6: Define the content of your credential](/set-up-your-service.html#step-6-define-the-content-of-your-credential).
+* `verificationMethod.id` must follow the format `"did:web:<URL OF YOUR SERVICE>#<HASHED KEY ID>"`. The value of this parameter should match the value of the `kid` parameter in the verifiable credential header so that the wallet can find the key with which to verify the credential's signature. There is more guidance on [defining the content of your credential](/credential-issuer-functionality/credential/#credential-content).
 
 * `verificationMethod.type` indicates how a verifier can independently verify a proof. In GOV.UK One Login, we use a cryptographic public key as a verification method. Used this way, it verifies that the signer, which in this case is your government service, possesses the associated cryptographic private key. We use the JSON Web Signature 2020 specification, and the "JsonWebKey2020" type.
 
