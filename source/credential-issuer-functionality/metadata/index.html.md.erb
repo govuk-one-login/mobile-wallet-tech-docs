@@ -1,0 +1,103 @@
+---
+title: Metadata
+weight: 3
+last_reviewed_on: 2025-03-05
+review_in: 2 months
+---
+
+# Metadata
+
+To fetch a credential from a credential issuer, GOV.UK Wallet needs to obtain credential metadata published by the organisation who issues the credential. The metadata is public, to indicate to the wallet and verifiers what credentials that issuer offers.
+
+The metadata file is a JSON file published at the well-known path: `/.well-known/openid-credential-issuer`.
+
+Credential issuers using GOV.UK Wallet, must produce and publish a metadata document that:
+
+* supports English and Welsh
+
+* controls how fields should be named in each language, for example `licenceNumber` rendered as "Fishing Licence number"
+
+* highlights key fields visually for the user, for example document name, primary and auxiliary fields
+
+This illustrative example shows how a credential metadata JSON file would represent a fishing licence:
+
+```JSON
+{
+  "credential_issuer": "https://example-credential-issuer.mobile.build.account.gov.uk",
+  "authorization_servers": ["https://token.build.account.gov.uk"],
+  "credential_endpoint": "https://example-credential-issuer.mobile.build.account.gov.uk/credential",
+  "credential_configurations_supported": {
+    "fishingLicence": {
+      "format": "jwt_vc_json",
+      "credential_definition": {
+        "type": [
+          "VerifiableCredential",
+          "FishingLicence"
+      ]},
+      "cryptographic_binding_methods_supported": [
+        "did"
+      ],
+      "cryptographic_suites_supported": [
+        "ES256K"
+      ],
+      "proof_types_supported": {
+        "jwt": {
+          "proof_signing_alg_values_supported": [
+            "ES256"
+          ],
+          "key_attestations_required": {
+          }
+        }
+      },
+     "display": [
+        {
+          "name": "Fishing Licence number",
+          "locale": "en-GB",
+          "background_color": "#12107c",
+          "text_color": "#FFFFFF"
+        },
+        {
+          "name": "Rhif Trwydded Pysgota",
+          "locale": "en-CY",
+          "background_color": "#12107c",
+          "text_color": "#FFFFFF"
+        }
+      ],
+      "credentialSubject": {
+        "name": [
+          {
+            "nameParts": [
+              {
+                "display": [
+                  {
+                    "name": "Name",
+                    "locale": "en-GB"
+                  },
+                  {
+                    "name": "Enw",
+                    "locale": "cy-GB"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "fishingLicenceRecord": {
+          "licenceNumber": {
+            "display": [
+              {
+                "name": "Fishing Licence number",
+                "locale": "en-GB"
+              },
+              {
+                "name": "Rhif Trwydded Pysgota",
+                "locale": "cy-GB"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+```
