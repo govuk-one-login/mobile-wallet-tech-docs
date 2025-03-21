@@ -266,12 +266,12 @@ components:
       type: object
       properties:
         format:
-          description: Format of the credential, such as `jwt_vc_json`.
+          description: Format of the credential.
           type: string
         credential_definition:
           $ref: '#/components/schemas/CredentialDefinition'
         cryptographic_binding_methods_supported:
-          description: Set of methods available for cryptographically binding the issued credential, such as `did:key`;
+          description: Set of methods available for cryptographically binding the issued credential.
           type: array
           items:
             type: string
