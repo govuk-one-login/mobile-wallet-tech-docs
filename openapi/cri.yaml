@@ -65,10 +65,10 @@ paths:
           description: No content.
   /.well-known/openid-credential-issuer:
     get:
-      description: A public endpoint for the GOV.UK Wallet to retrieve Metadata about the Credential Issuer and the Credential(s) it issues.
+      description: A public endpoint for the GOV.UK Wallet to retrieve metadata about the credential issuer.
       responses:
         '200':
-          description: Credential Issuer's Metadata.
+          description: Credential issuer's metadata.
           content:
             application/json:
               schema:
