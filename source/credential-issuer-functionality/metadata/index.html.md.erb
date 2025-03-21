@@ -29,7 +29,7 @@ If your credential issuer implements the optional [notification endpoint](/crede
 
 ### Credential information
 
-The `credential_configurations_supported` object contains a list of key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is configuration of that verifiable credential.
+The `credential_configurations_supported` object contains a list of key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
 
 Each credential object in `credential_configurations_supported` must include the following parameters:
 
@@ -41,10 +41,10 @@ Each credential object in `credential_configurations_supported` must include the
 - `display`
 - `credential_subject`
 
-The GOV.UK Wallet also requires credential issuer's metadata to:
+The GOV.UK Wallet also requires the credential issuer's metadata to:
 
 - Provide English and Welsh support.
-- Specify display attributes. The issuer's metadata must provide visual styling instructions and specify how fields should be named in each language. For example, when English is the selected language, the credential property `licenceNumber` must be rendered as "Fishing Licence number".
+- Specify display attributes. The issuer's metadata must provide visual styling instructions and specify how fields should be named in each language. For example, when English is the selected language, the credential property `licenceNumber` must be rendered as "Fishing Licence number" [in the example below](/credential-issuer-functionality/metadata/#metadata-example).
 
 You can read more about the content of `credential_configurations_supported` [here](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.3).
 
