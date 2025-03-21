@@ -7,13 +7,15 @@ review_in: 2 months
 
 # Metadata
 
-The [metadata endpoint in the OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata) is a required endpoint that provides essential configuration information about the credential issuer. This endpoint enables the GOV.UK Wallet and verifiers to dynamically learn information about the credential issuer, such as the issuer's capabilities, supported credential types, and issuance parameters.
+The [metadata endpoint in the OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata) is a required endpoint that provides essential configuration information about the credential issuer. This endpoint enables the GOV.UK Wallet and verifiers to dynamically learn information about the credential issuer, such as the endpoints used in the issuance flow and the supported credential types.
 
 ## Technical Details
 
 ### Endpoint location
 
-The metadata must be made publicly available by the credential issuer at the well-known URI `/.well-known/openid-credential-issuer`, which is a standardized location defined in the OID4VCI specification. The data published is non-sensitive metadata about the service. The response returned by the endpoint must be formatted as a JSON document.
+The metadata must be made publicly available by the credential issuer at the well-known URI `/.well-known/openid-credential-issuer`, which is a standardized location defined in the OID4VCI specification. The data published is non-sensitive metadata about the service.
+
+The response returned by the endpoint must be formatted as a JSON document.
 
 ### Parameters
 The metadata must include the following parameters:
@@ -27,22 +29,22 @@ If your credential issuer implements the optional [notification endpoint](/crede
 
 ### Credential information
 
-The `credential_configurations_supported` object contains a list of name/value pairs, where each name is a unique identifier of the credential being described. This unique identifier is used in the credential offer to communicate to the GOV.UK Wallet the credential being offered.
+The `credential_configurations_supported` object contains a list of key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is configuration of that verifiable credential.
 
-Each credential object in `credential_configurations_supported` must include the following parameters includes:
+Each credential object in `credential_configurations_supported` must include the following parameters:
 
-- format
-- credential_definition
-- cryptographic_binding_methods_supported
-- cryptographic_suites_supported
-- proof_types_supported
-- display
-- credential_subject
+- `format`
+- `credential_definition`
+- `cryptographic_binding_methods_supported`
+- `cryptographic_suites_supported`
+- `proof_types_supported`
+- `display`
+- `credential_subject`
 
 The GOV.UK Wallet also requires credential issuer's metadata to:
 
 - Provide English and Welsh support.
-- Specify display attributes. The issuer's metadata must provide visual styling instructions and control how fields should be named in each language. For example, when English in the selected language, the credential property `licenceNumber` must be rendered as "Fishing Licence number".
+- Specify display attributes. The issuer's metadata must provide visual styling instructions and specify how fields should be named in each language. For example, when English is the selected language, the credential property `licenceNumber` must be rendered as "Fishing Licence number".
 
 You can read more about the content of `credential_configurations_supported` [here](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.3).
 
