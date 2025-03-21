@@ -1,156 +1,61 @@
 ---
 title: Metadata
 weight: 3
-last_reviewed_on: 2025-03-05
+last_reviewed_on: 2025-03-21
 review_in: 2 months
 ---
 
 # Metadata
 
-The [metadata endpoint in the OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata) is a required endpoint that provides essential configuration information about a credential issuer. This endpoint enables wallet applications to discover an issuer's capabilities, supported credential types, and issuance parameters without prior configuration.
+The [metadata endpoint in the OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata) is a required endpoint that provides essential configuration information about the credential issuer. This endpoint enables the GOV.UK Wallet and verifiers to dynamically learn information about the credential issuer, such as the issuer's capabilities, supported credential types, and issuance parameters.
 
-The metadata must be made publicly available by the credential issuer at the well-known URI `/.well-known/openid-credential-issuer`, which is a standardized location defined in the specification.
+## Technical Details
 
-
-
-
-To fetch a creden---
-title: Metadata
-weight: 3
-last_reviewed_on: 2025-03-05
-review_in: 2 months
----
-
-# Metadata
-
-The [metadata endpoint in the OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata) is a required endpoint that provides essential configuration information about a credential issuer. This endpoint enables the GOV.UK Wallet and verifiers to dynamically learn information about the credential issuer, such as the issuer's capabilities, supported credential types, and issuance parameters.
+### Endpoint location
 
 The metadata must be made publicly available by the credential issuer at the well-known URI `/.well-known/openid-credential-issuer`, which is a standardized location defined in the OID4VCI specification. The data published is non-sensitive metadata about the service. The response returned by the endpoint must be formatted as a JSON document.
 
-
-### Required parameters
+### Parameters
 The metadata must include the following parameters:
 
-- `credential_issuer`: The URL of the Credential Issuer
-- `authorization_servers`: Array of URLs for the authorization servers the credential issuer relies on for authorization.
-- `credential_endpoint`: URL where credentials can be obtained
-- `credential_configurations_supported`: Array describing the credentials offered by the credential issuer
+- `credential_issuer`: The URL of the credential issuer.
+- `authorization_servers`: An array of URLs for the authorization servers the credential issuer relies on for authorization.
+- `credential_endpoint`: The URL of the credential issuer's [credential endpoint](/credential-issuer-functionality/credential/#credential), where credentials can be obtained.
+- `credential_configurations_supported`: An object describing the credentials offered by the credential issuer.
 
+If your credential issuer implements the optional [notification endpoint](/credential-issuer-functionality/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
 
+### Credential information
 
+The `credential_configurations_supported` object contains a list of name/value pairs, where each name is a unique identifier of the credential being described. This unique identifier is used in the credential offer to communicate to the GOV.UK Wallet the credential being offered.
 
+Each credential object in `credential_configurations_supported` must include the following parameters includes:
 
+- format
+- credential_definition
+- cryptographic_binding_methods_supported
+- cryptographic_suites_supported
+- proof_types_supported
+- display
+- credential_subject
 
+The GOV.UK Wallet also requires credential issuer's metadata to:
 
-Credential issuers using GOV.UK Wallet, must produce and publish a metadata document that:
+- Provide English and Welsh support.
+- Specify display attributes. The issuer's metadata must provide visual styling instructions and control how fields should be named in each language. For example, when English in the selected language, the credential property `licenceNumber` must be rendered as "Fishing Licence number".
 
-* supports English and Welsh
+You can read more about the content of `credential_configurations_supported` [here](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.3).
 
-* controls how fields should be named in each language, for example `licenceNumber` rendered as "Fishing Licence number"
+## Metadata example
 
-* highlights key fields visually for the user, for example document name, primary and auxiliary fields
-
-This illustrative example shows how a credential metadata JSON file would represent a fishing licence:
-
-```JSON
-{
-  "credential_issuer": "https://example-credential-issuer.mobile.build.account.gov.uk",
-  "authorization_servers": ["https://token.build.account.gov.uk"],
-  "credential_endpoint": "https://example-credential-issuer.mobile.build.account.gov.uk/credential",
-  "credential_configurations_supported": {
-    "fishingLicence": {
-      "format": "jwt_vc_json",
-      "credential_definition": {
-        "type": [
-          "VerifiableCredential",
-          "FishingLicence"
-      ]},
-      "cryptographic_binding_methods_supported": [
-        "did"
-      ],
-      "cryptographic_suites_supported": [
-        "ES256K"
-      ],
-      "proof_types_supported": {
-        "jwt": {
-          "proof_signing_alg_values_supported": [
-            "ES256"
-          ],
-          "key_attestations_required": {
-          }
-        }
-      },
-     "display": [
-        {
-          "name": "Fishing Licence number",
-          "locale": "en-GB",
-          "background_color": "#12107c",
-          "text_color": "#FFFFFF"
-        },
-        {
-          "name": "Rhif Trwydded Pysgota",
-          "locale": "en-CY",
-          "background_color": "#12107c",
-          "text_color": "#FFFFFF"
-        }
-      ],
-      "credentialSubject": {
-        "name": [
-          {
-            "nameParts": [
-              {
-                "display": [
-                  {
-                    "name": "Name",
-                    "locale": "en-GB"
-                  },
-                  {
-                    "name": "Enw",
-                    "locale": "cy-GB"
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "fishingLicenceRecord": {
-          "licenceNumber": {
-            "display": [
-              {
-                "name": "Fishing Licence number",
-                "locale": "en-GB"
-              },
-              {
-                "name": "Rhif Trwydded Pysgota",
-                "locale": "cy-GB"
-              }
-            ]
-          }
-        }
-      }
-    }
-  }
-}
-```tial from a credential issuer, the GOV.UK Wallet needs to obtain credential metadata published by the organisation who issues the credential. The metadata is public, to indicate to the wallet and verifiers what credentials that issuer offers.
-
-
-
-
-Credential issuers using GOV.UK Wallet, must produce and publish a metadata document that:
-
-* supports English and Welsh
-
-* controls how fields should be named in each language, for example `licenceNumber` rendered as "Fishing Licence number"
-
-* highlights key fields visually for the user, for example document name, primary and auxiliary fields
-
-This illustrative example shows how a credential metadata JSON file would represent a fishing licence:
+This illustrative example shows how a credential metadata JSON document would represent a Fishing Licence credential:
 
 ```JSON
 {
   "credential_issuer": "https://example-credential-issuer.mobile.build.account.gov.uk",
   "authorization_servers": ["https://token.build.account.gov.uk"],
   "credential_endpoint": "https://example-credential-issuer.mobile.build.account.gov.uk/credential",
+  "notification_endpoint": "https://example-credential-issuer.mobile.build.account.gov.uk/notification",
   "credential_configurations_supported": {
     "fishingLicence": {
       "format": "jwt_vc_json",
