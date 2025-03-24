@@ -2,20 +2,20 @@ openapi: "3.0.0"
 info:
   version: 1.0.0
   title: Wallet Credential Issuer API
-  description: This specification describes the six Credential Issuer endpoints required to issue Credential(s) to the GOV.UK Wallet.
+  description: This specification describes the six credential issuer endpoints required to issue credential(s) to the GOV.UK Wallet.
   license:
     name: MIT License
 paths:
   /credential_offer:
     get:
-      description: An endpoint for issuing a Credential Offer.
+      description: An endpoint for issuing a credential offer.
       responses:
         '200':
           description: |- 
-            Credential Offer URL consisting of the following parts:<br>
+            credential offer URL consisting of the following parts:<br>
             1. Wallet’s credential offer endpoint.<br>
             2. A query parameter `credential_offer`.<br>
-            3. URL-encoded Credential Offer.
+            3. URL-encoded credential offer.
           content:
             application/json:
               schema:
