@@ -65,10 +65,10 @@ paths:
           description: No content.
   /.well-known/openid-credential-issuer:
     get:
-      description: A public endpoint for the GOV.UK Wallet to retrieve Metadata about the Credential Issuer and the Credential(s) it issues.
+      description: A public endpoint for the GOV.UK Wallet to retrieve metadata about the credential issuer.
       responses:
         '200':
-          description: Credential Issuer's Metadata.
+          description: Credential issuer's metadata.
           content:
             application/json:
               schema:
@@ -229,19 +229,19 @@ components:
       type: object
       properties:
         credential_issuer:
-          description: URL of the Credential Issuer.
+          description: URL of the credential issuer.
           type: string
           format: uri
         credential_endpoint:
-          description: URL of the Credential Issuer's Credential endpoint.
+          description: URL of the credential issuer's credential endpoint.
           type: string
           format: uri
         notification:
-          description: URL of the Credential Issuer's Notification endpoint.
+          description: URL of the credential issuer's notification endpoint.
           type: string
           format: uri
         authorization_servers:
-          description: Set containing the URL of the Authorization Server(s) the Credential Issuer relies on for authorization.
+          description: Set containing the URL of the authorization server(s) the credential issuer relies on for authorization.
           type: array
           items:
             type: string
@@ -254,7 +254,7 @@ components:
         - credential_endpoint
         - credential_issuer
     CredentialConfigurationsSupported:
-      description: Information about the Credential(s) issued by the Credential Issuer.
+      description: Information about the credential(s) issued by the credential issuer.
       type: object
       properties:
         fishingLicence:
@@ -262,28 +262,28 @@ components:
       required:
         - fishingLicence
     FishingLicence:
-      description: A Credential issues by the Credential Issuer.
+      description: A credential issued by the credential issuer.
       type: object
       properties:
         format:
-          description: Format of the Credential, such as `jwt_vc_json`.
+          description: Format of the credential.
           type: string
         credential_definition:
           $ref: '#/components/schemas/CredentialDefinition'
         cryptographic_binding_methods_supported:
-          description: Set of methods available for cryptographically binding the issued Credential, such as `did:key`;
+          description: Set of methods available for cryptographically binding the issued credential.
           type: array
           items:
             type: string
         credential_signing_alg_values_supported:
-          description: Set of algorithms that the Credential Issuer uses to sign the Credential.
+          description: Set of algorithms that the credential issuer uses to sign the credential.
           type: array
           items:
             type: string
         proof_types_supported:
           $ref: '#/components/schemas/ProofTypesSupported'
         display:
-          description: Display properties of the Credential, such as the display name, logo, background colour, etc.
+          description: Display properties of the credential, such as the display name, logo, background colour, etc.
           type: array
           items:
             $ref: '#/components/schemas/FishingLicenceDisplay'
@@ -298,7 +298,7 @@ components:
         - format
         - proof_types_supported
     CredentialDefinition:
-      description: Description of the Credential type.
+      description: Description of the credential type.
       type: object
       properties:
         type:
@@ -308,7 +308,7 @@ components:
       required:
         - type
     ProofTypesSupported:
-      description: Key proof(s) supported by the Credential Issuer.
+      description: Key proof(s) supported by the credential issuer.
       type: object
       properties:
         jwt:
@@ -346,7 +346,7 @@ components:
         - name
         - text_color
     CredentialSubject:
-      description: Display properties of the subject of the Credential.
+      description: Display properties of the subject of the credential.
       type: object
       properties:
         name:
