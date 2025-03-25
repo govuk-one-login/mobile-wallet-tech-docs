@@ -11,26 +11,28 @@ The [credential offer endpoint in the OID4VCI specification](https://openid.net/
 
 To begin the credential issuance process, your service must:
 
-1. Generate a credential offer through your credential issuer
+1. Generate a credential offer through your credential issuer.
 2. Display the credential offer on the web page of your service as a deep link into the GOV.UK Wallet. The deep link is presented as a QR code or as a link.
 
 ## Technical details
 
 ### Endpoint location
 
-Unlike the credential issuer metadata endpoint, the credential offer endpoint does not have a strictly predefined structure. The credential issuer has flexibility to set its URL and request. However, the endpoint must generate and return a valid credential offer according to the OID4VCI specification.
+Unlike the credential issuer [metadata endpoint](/credential-issuer-functionality/metadata/), the credential offer endpoint does not have a strictly predefined structure. The credential issuer has flexibility to set its URL and request. However, the endpoint must generate and return a [valid credential offer according to the specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-4.1).
 
-In our example implementation of a credential issuer, the credential offer endpoint path is `/credential_offer`.
+In the reference implementation of the credential issuer, the credential offer endpoint path is `/credential_offer`.
 
 ### The credential offer object
 
 The credential offer is a JSON object containing the following parameters:
 
-- `credential_issuer`: The URL of the credential issuer.
-- `credentials`: An array of strings, where each item is a type of credential that can be obtained from the credential issuer.
-- `grants`: The URL of the credential issuer's [credential endpoint](/credential-issuer-functionality/credential/#credential), where credentials can be obtained.
-- `grants.urn:ietf:params:oauth:grant-type:pre-authorized_code`: The grant type required for the pre-authorized code flow.
-- `grants.urn:ietf:params:oauth:grant-type:pre-authorized_code.pre-authorized_code`: The pre-authorized code generated and signed by the credential issuer and which gives the GOV.UK Wallet authorization to obtain an access token from the authorization server.
+| Parameter                                                                          | Description                                                                                                                                                                    |
+|------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `credentials`                                                                      | An array of strings, where each item is a type of credential that can be obtained from the credential issuer.                                                                  |
+| `grants`                                                                           | The URL of the credential issuer's [credential endpoint](/credential-issuer-functionality/credential/#credential), where credentials can be obtained.                          |
+| `grants.urn:ietf:params:oauth:grant-type:pre-authorized_code`                      | The grant type required for the pre-authorized code flow.                                                                                                                      |                                                                                                           |
+| `grants.urn:ietf:params:oauth:grant-type:pre-authorized_code.pre-authorized_code`  | The pre-authorized code generated and signed by the credential issuer and which gives the GOV.UK Wallet authorization to obtain an access token from the authorization server. |
+| `credential_issuer`                                                                | The URL of the credential issuer.                                                                                                                                              |
 
 This is an example of a credential offer JSON object:
 
@@ -68,7 +70,7 @@ The JWT header must contain the following parameters:
 }
 ```
 
-* `kid` matches a `kid` in the JSON Web Key Set (JWKS) published to your [`/.well-known/jwks.json`](/credential-issuer-functionality/jwks) endpoint.
+* `kid` matches a `kid` in the JWKS (JSON Web Key Set) published to your [`/.well-known/jwks.json`](/credential-issuer-functionality/jwks) endpoint.
 
 * `typ` must be "JWT". This is the media type of the complete JWT.
 
