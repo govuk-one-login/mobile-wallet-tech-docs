@@ -29,11 +29,10 @@ The credential offer is a JSON object containing the following parameters:
 - `credential_issuer`: The URL of the credential issuer.
 - `credentials`: An array of strings, where each item is a type of credential that can be obtained from the credential issuer.
 - `grants`: The URL of the credential issuer's [credential endpoint](/credential-issuer-functionality/credential/#credential), where credentials can be obtained.
-- `credential_configurations_supported`: A JSON object containing the grant types the credential issuer's authorization server accepts for this credential offer.
 - `grants.urn:ietf:params:oauth:grant-type:pre-authorized_code`: The grant type required for the pre-authorized code flow.
 - `grants.urn:ietf:params:oauth:grant-type:pre-authorized_code.pre-authorized_code`: The pre-authorized code generated and signed by the credential issuer and which gives the GOV.UK Wallet authorization to obtain an access token from the authorization server.
 
-Below is an example of a credential offer JSON object:
+This is an example of a credential offer JSON object:
 
 ```JSON
 {
@@ -51,20 +50,13 @@ Below is an example of a credential offer JSON object:
 
 ### The pre-authorized code flow and the pre-authorized code
 
-The GOV.UK Wallet needs an access token issues by an authorization server to obtain a verifiable credential from the credential issuer.
+The GOV.UK Wallet needs an access token issued by an authorization server to obtain a verifiable credential from the credential issuer. One of the methods defined in the OID4VCI specification for issuing access tokens is the [pre-authorized code flow](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-3.5) and this is the method accepted by the GOV.UK Wallet.
 
-One of the methods defined in the OID4VCI specification for issuing access tokens is the pre-authorized code flow, and this is the only method accepted by the GOV.UK Wallet. There is more information about this flow.
+The pre-authorized code flow simplifies obtaining verifiable credentials. This is because it allows the GOV.UK Wallet to directly exchange a pre-authorized code for an access token, bypassing the standard authorization code flow.
 
+The pre-authorized code is a JWT generated and signed by your credential issuer and included in the credential offer.
 
-The pre-authorized code flow simplifies obtaining verifiable credentials. This is because it allows the OV.UK Wallet to directly exchange a pre-authorized code for access and refresh tokens, bypassing the standard authorization code flow.
-
-
-There is more information available about the pre-authorized code flow.
-
-
-
-The **pre-authorized code** in the credential offer is a JWT signed by your service with your private signing key.
-
+#### Header
 The JWT header must contain the following parameters:
 
 ```JSON
@@ -77,10 +69,11 @@ The JWT header must contain the following parameters:
 
 * `kid` matches a `kid` in the JSON Web Key Set (JWKS) published to your [`/.well-known/jwks.json`](/credential-issuer-functionality/jwks) endpoint.
 
-* `typ` must be "JWT".
+* `typ` must be "JWT". This is the media type of the complete JWT.
 
-* `alg` must be "ES256".
+* `alg` must be "ES256". This is the algorithm used to sign the JWT.
 
+#### Payload
 The JWT payload must contain the following claims:
 
 ```JSON
@@ -98,37 +91,51 @@ The JWT payload must contain the following claims:
 
 * `clientId` is the client ID you received when you registered your service to use GOV.UK One Login.
 
-* `credential_identifiers` is the unique identifier of the credential offer. The GOV.UK Wallet only supports one identifier/credential per pre-authorized code.
+* `credential_identifiers` is the unique identifier of the credential offer. The GOV.UK Wallet only supports one identifier per pre-authorized code.
 
-* `exp` is the expiration date of the pre-authorised code. We recommend using **15min** for this, allowing the user to complete the credential issuance within that timeframe without having to start again.
+* `exp` is the expiration date of the pre-authorised code. We recommend using 15 minutes for this, allowing the user to complete the credential issuance within that timeframe without having to start again.
 
 * `iat` is the time at which the pre-authorized code was issued.
 
-* `iss` is the URI of your credential issuer.
+* `iss` is the URL of your credential issuer.
 
-* `aud` is the URI of the Authorization Server your credential issuer relies on for authorization.
+* `aud` is the URL of the authorization server your credential issuer relies on for authorization.
 
-## Cache the credential information
+#### Signature
 
-Your service must now cache the credential to be sent at the end of the exchange. For this you may wish to use an existing identifier used to match the record that will be issued as a signed credential at the end of the exchange.
+The pre-authorized code must be signed with an ECDSA (Elliptic Curve Digital Signature Algorithm) private key for signing. The corresponding public key, which forms a pair with the private key used for signing, must be made publicly accessible at your [`/.well-known/jwks.json`](/credential-issuer-functionality/jwks) endpoint. This is because the authorization server will need access to the public key to verify the signature on the pre-authorized code.
+
+The signing algorithm must be ECDSA with the P-256 curve and the SHA-256 hash function.
+
+### Caching the credential information
+
+Your credential issuer must cache information about the credential to be issued at the end of the issuance flow. For this, you may wish to use an existing identifier used to match the record that will be issued as a signed credential at the end of the exchange.
+
+The following parameters must be cached:
+
+- **GOV.UK wallet subject identifier**: This was included in the user information your service received when the user authenticated with GOV.UK One Login.
+- **unique credential identifier**: This is the `credential_identifiers` in the pre-authorized code payload described above.
 
 The reference implementation of the credential issuer uses DynamoDB as an issuance cache to keep track of the credential to be issued at the end, when the flow is successful.
 
-## GOV.UK Wallet consumes your credential offer
+### The credential offer URL
 
 Your credential issuer must pass the credential offer to the GOV.UK Wallet **by value** with a URL.
 
 The URL for passing a credential offer by value follows the following format:
 
 1. The GOV.UK Wallet "credential offer endpoint"
-2. A query parameter `credential_offer` that contains the Base64Url-encoded credential offer
+2. A query parameter `credential_offer` that contains the Base64Url-encoded credential offer object
 
-### Example of a credential offer URL
+This is an example of a credential offer URL:
 
 ```
 https://mobile.build.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL2V4YW1wbGUtYXV0aG9yaXphdGlvbi1zZXJ2ZXIubW9iaWxlLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiJURVNUX0NMSUVOVF9JRCIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5tb2JpbGUuYnVpbGQuYWNjb3VudC5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.aZRv9KBCWRGLsi1Rd96jrzPxpQUkW68up0BYvUiF4RHjbLf6IxWn2PyU_ExOBAtEoj0lGAOOX7efOLMEc-lcIg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.mobile.build.account.gov.uk%22%7D
 ```
 
-For an omnichannel experience, the web page of your service must display the credential offer URL as a QR code (if the user is on a non-mobile browser) or as CTA with a deep link (on the same device).
+To ensure a smooth experience across devices, your service's webpage should present the credential offer URL in two ways:
 
-The user will communicate the credential offer to the GOV.UK Wallet either by scanning the QR Code you displayed on the web page (different device) or by opening a link from the mobile browser (same device).
+- **QR Code**: Ideal for users accessing your service on a separate device. They can quickly scan the code to communicate the credential offer to their GOV.UK Wallet.
+- **Call-to-Action (CTA) Link**: Convenient for users already on their mobile device. Tapping the CTA link directly opens the credential offer in their GOV.UK Wallet.
+
+This approach provides a user-friendly way to deliver the credential offer to the GOV.UK Wallet, regardless of whether the user is on the same device or a different one.
