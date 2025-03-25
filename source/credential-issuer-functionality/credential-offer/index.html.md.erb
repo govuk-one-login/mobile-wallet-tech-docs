@@ -28,7 +28,7 @@ The credential offer is a JSON object containing the following parameters:
 
 | Parameter                                                                          | Description                                                                                                                                                                    |
 |------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `credentials`                                                                      | An array of strings, where each item is a type of credential that can be obtained from the credential issuer.                                                                  |
+| `credential_configuration_ids`                                                                      | An array of strings, where each item is a type of credential that can be obtained from the credential issuer.                                                                  |
 | `grants`                                                                           | The URL of the credential issuer's [credential endpoint](/credential-issuer-functionality/credential/#credential), where credentials can be obtained.                          |
 | `grants.urn:ietf:params:oauth:grant-type:pre-authorized_code`                      | The grant type required for the pre-authorized code flow.                                                                                                                      |                                                                                                           |
 | `grants.urn:ietf:params:oauth:grant-type:pre-authorized_code.pre-authorized_code`  | The pre-authorized code generated and signed by the credential issuer and which gives the GOV.UK Wallet authorization to obtain an access token from the authorization server. |
@@ -38,7 +38,7 @@ This is an example of a credential offer JSON object:
 
 ```JSON
 {
-  "credentials": [
+  "credential_configuration_ids": [
     "FishingLicence"
   ],
   "grants": {
@@ -142,7 +142,7 @@ The URL for passing a credential offer by value follows the following format:
 For example:
 
 ```
-https://mobile.build.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL2V4YW1wbGUtYXV0aG9yaXphdGlvbi1zZXJ2ZXIubW9iaWxlLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiJURVNUX0NMSUVOVF9JRCIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5tb2JpbGUuYnVpbGQuYWNjb3VudC5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.aZRv9KBCWRGLsi1Rd96jrzPxpQUkW68up0BYvUiF4RHjbLf6IxWn2PyU_ExOBAtEoj0lGAOOX7efOLMEc-lcIg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.mobile.build.account.gov.uk%22%7D
+https://mobile.build.account.gov.uk/wallet/add?credential_offer=%7B%22credential_configuration_ids%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL2V4YW1wbGUtYXV0aG9yaXphdGlvbi1zZXJ2ZXIubW9iaWxlLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiJURVNUX0NMSUVOVF9JRCIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5tb2JpbGUuYnVpbGQuYWNjb3VudC5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.aZRv9KBCWRGLsi1Rd96jrzPxpQUkW68up0BYvUiF4RHjbLf6IxWn2PyU_ExOBAtEoj0lGAOOX7efOLMEc-lcIg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.mobile.build.account.gov.uk%22%7D
 ```
 
 ### Displaying the credential offer URL
