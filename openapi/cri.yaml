@@ -2,7 +2,7 @@ openapi: "3.0.0"
 info:
   version: 1.0.0
   title: Wallet Credential Issuer API
-  description: This specification describes the six credential issuer endpoints required to issue credential(s) to the GOV.UK Wallet.
+  description: This specification describes the 6 credential issuer endpoints required to issue credentials to the GOV.UK Wallet.
   license:
     name: MIT License
 paths:
