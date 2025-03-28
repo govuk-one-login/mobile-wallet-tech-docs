@@ -7,21 +7,19 @@ review_in: 2 months
 
 # Credential Offer
 
-The [credential offer endpoint in the OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-4) is the first step in the credential issuance process. It lets your credential issuer begin the issuance flow by creating a credential offer to be shared with the GOV.UK Wallet.
+The credential offer is the first step in the credential issuance process. It lets you begin the issuance flow by creating a credential offer to be shared with the GOV.UK Wallet.
 
-To begin the credential issuance process, your service must:
+You must generate a credential offer that adheres to the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-credential-offer). You have flexibility in how you generate this credential offer, as the specific mechanism can be tailored to your implementation.
 
-1. Generate a credential offer through your credential issuer.
-2. Display the credential offer on the web page of your service as a deep link into GOV.UK Wallet. The deep link is presented as a QR code or as a link.
+For example:
+
+- Dedicated credential issuer API endpoint: You could create a dedicated endpoint in your credential issuer, such as the [credential offer endpoint](http://localhost:4567/credential-issuer-functionality/credential-offer/api.html#credential_offer) in our reference implementation, to generate credential offers.
+- Directly from your service: Alternatively, your service could generate the credential offer directly.
+
+Regardless of the chosen method, the resulting credential offer must be valid according to the specification.
+
 
 ## Technical details
-
-### Endpoint location
-
-Unlike the credential issuer [metadata endpoint](/credential-issuer-functionality/metadata/), the credential offer endpoint does not have a strictly predefined structure. The credential issuer has flexibility to set its URL and request. However, the endpoint must generate and return a [valid credential offer according to the specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-4.1).
-
-In the reference implementation of the credential issuer, the credential offer endpoint path is `/credential_offer`.
-
 ### The credential offer object
 
 The credential offer is a JSON object containing the following parameters:
