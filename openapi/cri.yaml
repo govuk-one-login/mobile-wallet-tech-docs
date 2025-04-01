@@ -469,7 +469,7 @@ components:
           enum:
             - EC
         kid:
-          description: Key ID. Unique identifier sed to match a specific key.
+          description: Key ID. Unique identifier to match a specific key.
           type: string
         crv:
           description: Curve. Cryptographic curve used with the key.
