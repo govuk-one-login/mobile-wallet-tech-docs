@@ -6,8 +6,10 @@ review_in: 6 months
 ---
 
 #  JSON Web Key Set (JWKS)
+The JWKS endpoint is a required endpoint that exposes the credential issuer's public cryptographic keys in JSON Web Key Set (JWKS) format. This endpoint enables the GOV.UK One Login token service to retrieve credential issuer's public key and use it to verify the signature of the [pre-authorised code](/credential-issuer-functionality/credential-offer/#the-pre-authorised-code). This process confirms:
 
-The JWKS endpoint is a required endpoint that exposes the credential issuer's public cryptographic keys in JSON Web Key Set (JWKS) format. This endpoint ensures the integrity and authenticity of [pre-authorised codes issued by the credential issuer](/credential-issuer-functionality/credential-offer/#the-pre-authorised-code) because is allows the GOV.UK One Login token service to...
+Authenticity: The pre-authorise code was indeed issued by the expected credential issuer.
+Integrity: The authorise code hasn't been tampered with during transmission.
 
 ## Technical details
 
@@ -17,11 +19,9 @@ The JSON Web Key Set (JWKS) must be made publicly available by the credential is
 
 ### Response format
 
-The endpoint must return a valid JSON response adhering to the JSON Web Key Set (JWKS) specification (RFC 7517). The response must contain at least one key.
+The endpoint must return a valid JSON response adhering to the JSON Web Key Set (JWKS) defined in [RFC 7517](https://datatracker.ietf.org/doc/html/rfc7517). The response must contain at least one key.
 
 ### Parameters
-
-A JWKS (JSON Web Key Set) EC (Elliptic Curve) example showcases a set of keys, specifically one using an Elliptic Curve algorithm
 
 Each key within the JWKS must be a JSON Web Key (JWK) object.
 
