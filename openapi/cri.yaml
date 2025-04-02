@@ -498,7 +498,7 @@ components:
       type: object
       properties:
         keys:
-          description: Set of public keys in JWK format.
+          description: A set of public keys, each in JSON Web Key (JWK) format.
           type: array
           items:
             $ref: '#/components/schemas/Key'
