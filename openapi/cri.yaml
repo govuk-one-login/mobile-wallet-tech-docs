@@ -155,10 +155,10 @@ paths:
                   - did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
   /.well-known/jwks.json:
     get:
-      description: A public endpoint for GOV.UK One Login to retrieve the Credential Issuer's JSON Web Key Set (JWKS) of public keys.
+      description: A public endpoint for GOV.UK One Login to retrieve the credential issuer's JSON Web Key Set (JWKS) of public keys.
       responses:
         '200':
-          description: Credential Issuer's JWKS.
+          description: Credential issuer's JWKS.
           content:
             application/json:
               schema:
@@ -505,14 +505,42 @@ components:
       required:
         - keys
     Key:
-      allOf:
-        - $ref: "#/components/schemas/PublicKeyJwk"
-        - type: object
-          properties:
-            use:
-              description: The intended use of the key.
-              type: string
-              enum:
-                - sig
-          required:
-            - use
+      type: object
+      properties:
+        kty:
+          description: Key Type. The family of cryptographic algorithms used with the key.
+          type: string
+          enum:
+            - EC
+        kid:
+          description: Key ID. Unique identifier to match a specific key.
+          type: string
+        crv:
+          description: Curve. Cryptographic curve used with the key.
+          type: string
+          enum:
+            - P-256
+        x:
+          description: The "x" coordinate for the elliptic curve point.
+          type: string
+        y:
+          description: The "y" coordinate for the elliptic curve point.
+          type: string
+        alg:
+          description: Algorithm. The cryptographic algorithm used with the key.
+          type: string
+          enum:
+            - P-256
+        use:
+          description: The intended use of the key.
+          type: string
+          enum:
+            - sig
+      required:
+        - kty
+        - kid
+        - crv
+        - x
+        - y
+        - alg
+        - use
