@@ -15,10 +15,11 @@ The [metadata endpoint in the OID4VCI specification](https://openid.net/specs/op
 
 The metadata must be made publicly available by the credential issuer at the well-known URI `/.well-known/openid-credential-issuer`, which is a standardized location defined in the OID4VCI specification. The data published is non-sensitive metadata about the service.
 
+### Response format
+
 The response returned by the endpoint must be formatted as a JSON document.
 
-### Parameters
-The metadata must include the following parameters:
+The following parameters must be part of the metadata:
 
 - `credential_issuer`: The URL of the credential issuer.
 - `authorization_servers`: An array of URLs for the authorization servers the credential issuer relies on for authorization. This must be set to the GOV.UK One Login token service URL.
