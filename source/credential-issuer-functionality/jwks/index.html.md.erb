@@ -6,10 +6,7 @@ review_in: 6 months
 ---
 
 #  JSON Web Key Set (JWKS)
-The JWKS endpoint is a required endpoint that exposes the credential issuer's public cryptographic keys in JSON Web Key Set (JWKS) format. This endpoint enables the GOV.UK One Login token service to retrieve credential issuer's public key and use it to verify the signature of the [pre-authorised code](/credential-issuer-functionality/credential-offer/#the-pre-authorised-code). This process confirms:
-
-Authenticity: The pre-authorise code was indeed issued by the expected credential issuer.
-Integrity: The authorise code hasn't been tampered with during transmission.
+The JWKS endpoint is a required endpoint that exposes the credential issuer's public cryptographic keys in JSON Web Key Set (JWKS) format. This endpoint enables the GOV.UK One Login token service to retrieve the credential issuer's public keys and then verify the [pre-authorised code](/credential-issuer-functionality/credential-offer/#the-pre-authorised-code) signature. This process is important because it confirms that the pre-authorise code was issued by the expected credential issuer and that it has not been tampered with during transmission.
 
 ## Technical details
 
@@ -21,11 +18,9 @@ The JSON Web Key Set (JWKS) must be made publicly available by the credential is
 
 The endpoint must return a valid JSON response adhering to the JSON Web Key Set (JWKS) defined in [RFC 7517](https://datatracker.ietf.org/doc/html/rfc7517). The response must contain at least one key.
 
-### Parameters
-
 Each key within the JWKS must be a JSON Web Key (JWK) object.
 
-The JWK for an Elliptic Curve key that is used with the P-256 Elliptic Curve must contain the following parameters:
+The JWK for an elliptic curve key based on the P-256 curve must contain the following parameters:
 
 - `kty`: The family of cryptographic algorithms used with the key - must be 'EC'
 - `kid`: An unique identifier to match a specific key within a set - this value will be referenced in the header of pre-authorised issued by you
@@ -37,8 +32,7 @@ The JWK for an Elliptic Curve key that is used with the P-256 Elliptic Curve mus
 
 ## JWKS example
 
-The following is an example of a JWKS containing one Elliptic Curve key that is used with
-the P-256 Elliptic Curve. The key's x and y coordinates are the base64url-encoded values shown.
+The following is an example of a JWKS containing one elliptic curve key based on the P-256 curve. The key's `x` and `y` coordinates are the base64url-encoded values shown.
 
 ```JSON
 {
