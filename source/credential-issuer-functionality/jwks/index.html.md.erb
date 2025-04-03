@@ -24,9 +24,6 @@ The JWK for an elliptic curve key based on the P-256 curve must include the foll
 
 - `kty`: The family of cryptographic algorithms used with the key - must be "EC".
 - `kid`: A unique identifier for a specific key within the set - this value will be referenced in the pre-authorised code header to show which key was used for signing and which key must be used for verification. This parameter is important for associating the correct public key with the pre-authorised code being verified.
-
-The `kid` parameter plays an important role in associating the correct public key with the pre-authorized code being verified.
-
 - `crv`: Cryptographic curve used with the key - must be "P-256".
 - `x`: The "x" coordinate for the elliptic curve point.
 - `y`: The "y" coordinate for the elliptic curve point.
