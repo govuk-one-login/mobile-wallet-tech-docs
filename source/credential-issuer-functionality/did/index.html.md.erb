@@ -6,7 +6,8 @@ review_in: 6 months
 ---
 
 # DID document
-The `/.well-known/did.json` endpoint is an important component for credential issuers implementing [OID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) with DIDs.
+
+The DID document endpoint is an essential component for credential issuers using DIDs, as it enables the GOV.UK Wallet to verify the credentials they receive.
 
 This endpoint exposes the credential issuer's decentralised identifier (DID) document, which contains the public cryptographic keys used to verify signatures on credentials issued by the credential issuer, ensuring the credentials' authenticity and integrity.
 
@@ -18,7 +19,7 @@ The DID document must be publicly accessible at the standardised location `/.wel
 
 ### Response format
 
-The endpoint must return a valid JSON response that adheres to the [W3C Decentralized Identifiers (DIDs) v1.0 specification](https://www.w3.org/TR/did-1.0/).
+The endpoint must return a valid JSON response that complies to the [W3C Decentralized Identifiers (DIDs) v1.0 specification](https://www.w3.org/TR/did-1.0/).
 
 The DID document must include the following parameters:
 
