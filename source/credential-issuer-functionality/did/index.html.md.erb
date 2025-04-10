@@ -39,7 +39,7 @@ Each object in the array must contain:
 
 * `controller`: The entity (i.e. this is the credential issuer) that has the authority to use the private key associated with the verification method - it must be in the format `"did:web:<REDENTIAL-ISSUER-DOMAIN>>"`
 
-* `publicKeyJwk`: The credential issuer's public key represented as a JSON Web Key (JWK) and containing parameters specific to the cryptographic algorithm used
+* `publicKeyJwk`: The credential issuer's public key - this is represented as a JSON Web Key (JWK) and contains parameters specific to the cryptographic algorithm used
 
 Each object in the `verificationMethod` array represents a public key, which is the counterpart to the private key held securely by the credential issuer. These private keys are used to sign credentials.
 
