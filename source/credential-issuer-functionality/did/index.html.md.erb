@@ -35,7 +35,7 @@ Each object in the array must contain:
 
 * `id`: A unique identifier for the verification method in the format `"did:web:<CREDENTIAL-ISSUER-DOMAIN>#<KEY-ID>"` - this corresponds to the `kid` (key ID) parameter in the header of issued credentials
 
-* `type`: The cryptographic suite used for verification - it must be `JsonWebKey2020` indicating the use of the [JSON Web Signature 2020 specification](https://www.w3.org/community/reports/credentials/CG-FINAL-lds-jws2020-20220721/)
+* `type`: The cryptographic suite used for verification - this must be `JsonWebKey2020` as the [JSON Web Signature 2020 specification](https://www.w3.org/community/reports/credentials/CG-FINAL-lds-jws2020-20220721/) is used
 
 * `controller`: The entity (the credential issuer in this case) that has the authority to use the private key associated with the verification method - this must be in the format `"did:web:<CREDENTIAL-ISSUER-DOMAIN>>"`
 
