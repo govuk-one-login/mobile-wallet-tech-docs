@@ -424,7 +424,7 @@ components:
             type: string
             format: uri
         id:
-          description: The unique identifier of the DID document itself.
+          description: The unique identifier of the DID document.
           type: string
         verificationMethod:
           description: An array of verification methods (cryptographic public keys).
