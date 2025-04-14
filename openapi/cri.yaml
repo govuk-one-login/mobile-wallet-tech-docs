@@ -127,10 +127,10 @@ paths:
                               locale: cy-GB
   /.well-known/did.json:
     get:
-      description: A public endpoint for the GOV.UK Wallet to retrieve the Credential Issuer's public key represented as a DID Document.
+      description: A public endpoint for GOV.UK Wallet and credential verifiers to retrieve the credential issuer's public keys for verifying credentials
       responses:
         '200':
-          description: Credential Issuer's DID Document.
+          description: Credential issuer's DID document.
           content:
             application/json:
               schema:
@@ -138,10 +138,9 @@ paths:
               example:
                 "@context":
                   - https://www.w3.org/ns/did/v1
-                  - https://w3id.org/security/suites/jws-2020/v1
-                id: did:web:example-credential-issuer.mobile.build.account.gov.uk
+                id: did:web:example-credential-issuer.gov.uk
                 verificationMethod:
-                  - id: did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
+                  - id: did:web:example-credential-issuer.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
                     type: JsonWebKey2020
                     controller: did:web:example-credential-issuer.mobile.build.account.gov.uk
                     publicKeyJwk:
@@ -418,32 +417,32 @@ components:
       type: object
       properties:
         '@context':
-          description: Set of URL contexts which define the terms used in the DID Document.
+          description: An array of URL contexts which define the terms used in the DID document.
           type: array
           minItems: 1
           items:
             type: string
             format: uri
         id:
-          description: Unique identifier of the DID Document itself.
+          description: The unique identifier of the DID document.
           type: string
         verificationMethod:
-          description: Set of verification methods, such as cryptographic public keys.
+          description: An array of verification methods (cryptographic public keys).
           type: array
           minItems: 1
           items:
             $ref: "#/components/schemas/VerificationMethod"
         assertionMethod:
-          description: Set of DID URLs where each URL uniquely identifies a specific key within the DID Document.
+          description: Array of DID URLs where each URL uniquely identifies a verification method within the DID document.
           type: array
           minItems: 1
           items:
             type: string
       required:
         - '@context'
-        - assertionMethod
         - id
         - verificationMethod
+        - assertionMethod
     VerificationMethod:
       type: object
       properties:

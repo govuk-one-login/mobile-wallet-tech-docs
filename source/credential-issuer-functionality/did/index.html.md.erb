@@ -1,58 +1,79 @@
 ---
 title: DID Document
 weight: 6
-last_reviewed_on: 2025-03-05
+last_reviewed_on: 2025-04-03
 review_in: 6 months
 ---
 
-# DID Document
+# DID document
 
-When a government organisation issues a credential to GOV.UK Wallet, it must publish public signing keys so that the wallet and verifiers can verify the validity of the credential. The public signing key for credentials is published in a decentralised identifier (DID) document. This document must include a public key of the key pairs used to sign credentials.
+The DID document endpoint lets GOV.UK Wallet verify the credentials it receives from credential issuers, who must use decentralised identifiers (DIDs).
 
-The DID document should be in JSON format, and contains verification methods for all credentials your service will issue. One Login uses public keys as verification methods.
+This endpoint exposes the credential issuer's DID document, which contains the public cryptographic keys used to verify signatures on credentials issued by the credential issuer. This process checks the credentials' authenticity and integrity.
 
-The following is illustrative example of a DID document:
+## Technical details
+
+### Endpoint location
+
+The DID document must be publicly accessible at the standardised location `/.well-known/did.json` on the credential issuer's domain.
+
+### Response format
+
+The endpoint must return a valid JSON response that follows the [W3C Decentralized Identifiers (DIDs) v1.0 specification](https://www.w3.org/TR/did-1.0/).
+
+The DID document must include the following parameters:
+
+* `@context`: A set of URI references that define the meaning of the terms used in the DID document, allowing its properties to be correctly interpreted
+
+* `id`: The decentralised identifier of the credential issuer in the format `"did:web:<CREDENTIAL-ISSUER-DOMAIN>"`
+
+* `verificationMethod`: An array of verification methods containing the credential issuer's public keys
+
+* `assertionMethod`: An array listing which verification methods can be used for making assertions - in the context of the credential issuer, this means issuing credentials
+
+Each object in the array must contain:
+
+* `id`: A unique identifier for the verification method in the format `"did:web:<CREDENTIAL-ISSUER-DOMAIN>#<KEY-ID>"` - this corresponds to the `kid` (key ID) parameter in the header of issued credentials
+
+* `type`: The cryptographic suite used for verification - this must be `JsonWebKey2020` as the [JSON Web Signature 2020 specification](https://www.w3.org/community/reports/credentials/CG-FINAL-lds-jws2020-20220721/) is used
+
+* `controller`: The entity (the credential issuer in this case) that has the authority to use the private key associated with the verification method - this must be in the format `"did:web:<CREDENTIAL-ISSUER-DOMAIN>>"`
+
+* `publicKeyJwk`: The credential issuer's public key - this is represented as a JSON Web Key (JWK) and contains parameters specific to the elliptic curve algorithm used (P-256)
+
+Each object in the `verificationMethod` array represents a public key, which is the counterpart to the private key held securely by the credential issuer. These private keys are used to sign credentials. GOV.UK Wallet only accepts credentials signed using an elliptic curve key based on the P-256 curve.
+
+Not all public keys listed in the `verificationMethod` are authorised for credential issuance. The `assertionMethod` array acts as a whitelist, specifying which of those keys are trusted for credential issuance. Each item in `assertionMethod` directly references a public key in the `verificationMethod` array using its unique ID.
+
+When GOV.UK Wallet receives a credential issued by the credential issuer, it uses the `kid` (key ID) in the credential's header to find the matching public key in the `verificationMethod` array. Then, it checks if the same verification method ID is present in the `assertionMethod` array. This process confirms that the key used to sign the credential was authorised for credential issuance by the DID controller (the credential issuer).
+
+## DID document example
+
+Below is an example of a DID document containing an elliptic curve key based on the P-256 curve in the verification method:
 
 ```JSON
 {
-  "@context": [
-    "https://www.w3.org/ns/did/v1",
-    "https://w3id.org/security/suites/jws-2020/v1"
-  ],
-  "id": "did:web:example-credential-issuer.mobile.build.account.gov.uk",
-  "verificationMethod": [
-    {
-      "id": "did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f",
-      "type": "JsonWebKey2020",
-      "controller": "did:web:example-credential-issuer.mobile.build.account.gov.uk",
-      "publicKeyJwk": {
-        "kty": "EC",
-        "kid": "5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f",
-        "crv": "P-256",
-        "x": "6jCKX_QRrmTeEJi-uiwcYqu8BgMgl70g2pdAst24MPE",
-        "y": "icPzjbSk6apD_SNvQt8NWOPlPeGG4KYU55GfnARryoY",
-        "alg": "ES256"
+   "@context":[
+      "https://www.w3.org/ns/did/v1"
+   ],
+   "id":"did:web:example-credential-issuer.mobile.build.account.gov.uk",
+   "verificationMethod":[
+      {
+         "id":"did:web:example-credential-issuer.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f",
+         "type":"JsonWebKey2020",
+         "controller":"did:web:example-credential-issuer.gov.uk",
+         "publicKeyJwk":{
+            "kty":"EC",
+            "kid":"5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f",
+            "crv":"P-256",
+            "x":"6jCKX_QRrmTeEJi-uiwcYqu8BgMgl70g2pdAst24MPE",
+            "y":"icPzjbSk6apD_SNvQt8NWOPlPeGG4KYU55GfnARryoY",
+            "alg":"ES256"
+         }
       }
-    }
-  ],
-  "assertionMethod": [
-    "did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f"
-  ]
+   ],
+   "assertionMethod":[
+      "did:web:example-credential-issuer.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f"
+   ]
 }
 ```
-
-* `@context` is a set of URIs that defines short-form aliases representing attributes and values in verifiable credentials.
-
-* `id` is the decentralised identifier (DID) of your service. Because credential issuers use the `did:web` method, the general format is `"did:web:<URL OF YOUR SERVICE>"`
-
-* `verificationMethod` is a set of verification methods that the credential issuer has implemented. Any private key used to sign credentials issued to the GOV.UK Wallet must have a corresponding public key in this array.
-
-* `verificationMethod.id` must follow the format `"did:web:<URL OF YOUR SERVICE>#<HASHED KEY ID>"`. The value of this parameter should match the value of the `kid` parameter in the verifiable credential header so that the wallet can find the key with which to verify the credential's signature. There is more guidance on [defining the content of your credential](/credential-issuer-functionality/credential/#credential-content).
-
-* `verificationMethod.type` indicates how a verifier can independently verify a proof. In GOV.UK One Login, we use a cryptographic public key as a verification method. Used this way, it verifies that the signer, which in this case is your government service, possesses the associated cryptographic private key. We use the JSON Web Signature 2020 specification, and the "JsonWebKey2020" type.
-
-* `verificationMethod.controller` refers to the entity that is authorised to make changes to the DID document, i.e. your service.
-
-* `verificationMethod.publicKeyJwk` contains your public key represented as a JWK (JSON Web Key).
-
-A did:web document must be published on the well-known path `/.well-known/did.json` on the credential issuer’s DNS hostname. The DID document above, for example, would be published at https://example-credential-issuer.mobile.build.account.gov.uk/.well-known/did.json.
