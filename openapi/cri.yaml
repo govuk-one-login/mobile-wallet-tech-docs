@@ -127,7 +127,7 @@ paths:
                               locale: cy-GB
   /.well-known/did.json:
     get:
-      description: A public endpoint for GOV.UK Wallet and verifies to retrieve the credential issuer's public keys for verifying credentials
+      description: A public endpoint for GOV.UK Wallet and credential verifiers to retrieve the credential issuer's public keys for verifying credentials
       responses:
         '200':
           description: Credential issuer's DID document.
