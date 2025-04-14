@@ -41,7 +41,7 @@ Each object in the array must contain:
 
 * `publicKeyJwk`: The credential issuer's public key - this is represented as a JSON Web Key (JWK) and contains parameters specific to the cryptographic algorithm used
 
-Each object in the `verificationMethod` array represents a public key, which is the counterpart to the private key held securely by the credential issuer. These private keys are used to sign credentials.
+Each object in the `verificationMethod` array represents a public key, which is the counterpart to the private key held securely by the credential issuer. These private keys are used to sign credentials. GOV.UK Wallet only accepts credentials signed using an elliptic curve key based on the P-256 curve.
 
 Not all public keys listed in the `verificationMethod` are authorised for credential issuance. The `assertionMethod` array acts as a whitelist, specifying which of those keys are trusted for credential issuance. Each item in `assertionMethod` directly references a public key in the `verificationMethod` array using its unique ID.
 
