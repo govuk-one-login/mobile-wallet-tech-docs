@@ -1,23 +1,26 @@
 ---
 title: Metadata
 weight: 3
-last_reviewed_on: 2025-03-21
+last_reviewed_on: 2025-04-03
 review_in: 6 months
 ---
 
 # Metadata
 
-The [metadata endpoint in the OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata) is a required endpoint that provides essential configuration information about the credential issuer. This endpoint enables the GOV.UK Wallet and verifiers to dynamically learn information about the credential issuer, such as the endpoints used in the issuance flow, the supported credential types, and how credentials should be displayed in the wallet.
+The metadata endpoint is a required endpoint that provides essential configuration information about the credential issuer.
+
+This endpoint lets GOV.UK Wallet and verifiers dynamically learn information about the credential issuer, such as the endpoints used in the issuance flow, the supported credential types, and how credentials should be displayed in the wallet.
 
 ## Technical details
 
 ### Endpoint location
 
-The metadata must be made publicly available by the credential issuer at the well-known URI `/.well-known/openid-credential-issuer`, which is a standardized location defined in the OID4VCI specification. The data published is non-sensitive metadata about the service.
+The metadata must be publicly accessible at the standardised location `/.well-known/openid-credential-issuer` on the credential issuer's domain. The data published is non-sensitive metadata about the service.
 
-The response returned by the endpoint must be formatted as a JSON document.
+### Response format
 
-### Parameters
+The endpoint must return a valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata).
+
 The metadata must include the following parameters:
 
 - `credential_issuer`: The URL of the credential issuer.
@@ -27,9 +30,9 @@ The metadata must include the following parameters:
 
 If your credential issuer implements the optional [notification endpoint](/credential-issuer-functionality/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
 
-### Credential information
+#### Credential information
 
-The `credential_configurations_supported` object contains a list of key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
+The `credential_configurations_supported` object contains key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
 
 Each credential object in `credential_configurations_supported` must include the following parameters:
 
@@ -50,7 +53,7 @@ There is more information about [the `credential_configurations_supported` param
 
 ## Metadata example
 
-This illustrative example shows how a credential metadata JSON document would represent a Fishing Licence credential:
+Below is an example of how a credential issuer metadata document would represent a Fishing Licence credential:
 
 ```JSON
 {
