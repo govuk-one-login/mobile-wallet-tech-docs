@@ -140,7 +140,7 @@ paths:
                   - https://www.w3.org/ns/did/v1
                 id: did:web:example-credential-issuer.gov.uk
                 verificationMethod:
-                  - id: did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
+                  - id: did:web:example-credential-issuer.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
                     type: JsonWebKey2020
                     controller: did:web:example-credential-issuer.mobile.build.account.gov.uk
                     publicKeyJwk:
