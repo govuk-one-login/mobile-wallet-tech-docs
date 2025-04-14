@@ -155,7 +155,7 @@ paths:
                   - did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
   /.well-known/jwks.json:
     get:
-      description: A public endpoint for GOV.UK One Login to retrieve the credential issuer's JSON Web Key Set (JWKS) of public keys.
+      description: A public endpoint for GOV.UK One Login to retrieve the credential issuer's JSON Web Key Set (JWKS) of public keys which can be used to verify the the pre-authorised code.
       responses:
         '200':
           description: Credential issuer's JWKS.
