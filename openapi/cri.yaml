@@ -21,7 +21,7 @@ paths:
               schema:
                 type: string
               example:
-                https://mobile.build.account.gov.uk/wallet/add?credential_offer=%7B%22credential_configuration_ids%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiI8WU9VUiBPTkUgTE9HSU4gQ0xJRU5UIElEPiIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5tb2JpbGUuYnVpbGQuYWNjb3VudC5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.aZRv9KBCWRGLsi1Rd96jrzPxpQUkW68up0BYvUiF4RHjbLf6IxWn2PyU_ExOBAtEoj0lGAOOX7efOLMEc-lcIg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.mobile.build.account.gov.uk%22%7D
+                https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credential_configuration_ids%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiI8WU9VUiBPTkUgTE9HSU4gQ0xJRU5UIElEPiIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5tb2JpbGUuYnVpbGQuYWNjb3VudC5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.aZRv9KBCWRGLsi1Rd96jrzPxpQUkW68up0BYvUiF4RHjbLf6IxWn2PyU_ExOBAtEoj0lGAOOX7efOLMEc-lcIg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.gov.uk%22%7D
   /credential:
     post:
       description: An endpoint used by the GOV.UK Wallet to request a Credential from the Credential Issuer.
@@ -74,11 +74,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/MetadataResponse"
               example:
-                credential_issuer: https://example-credential-issuer.mobile.build.account.gov.uk
+                credential_issuer: https://example-credential-issuer.gov.uk
                 authorization_servers:
-                    - https://token.build.account.gov.uk
-                credential_endpoint: https://example-credential-issuer.mobile.build.account.gov.uk/credential
-                notification_endpoint: https://example-credential-issuer.mobile.build.account.gov.uk/notification
+                    - https://token.account.gov.uk
+                credential_endpoint: https://example-credential-issuer.gov.uk/credential
+                notification_endpoint: https://example-credential-issuer.gov.uk/notification
                 credential_configurations_supported:
                   fishingLicence:
                     format: jwt_vc_json
@@ -142,7 +142,7 @@ paths:
                 verificationMethod:
                   - id: did:web:example-credential-issuer.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
                     type: JsonWebKey2020
-                    controller: did:web:example-credential-issuer.mobile.build.account.gov.uk
+                    controller: did:web:example-credential-issuer.gov.uk
                     publicKeyJwk:
                       kty: EC
                       kid: 5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
@@ -151,7 +151,7 @@ paths:
                       y: icPzjbSk6apD_SNvQt8NWOPlPeGG4KYU55GfnARryoY
                       alg: ES256
                 assertionMethod:
-                  - did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
+                  - did:web:example-credential-issuer.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
   /.well-known/jwks.json:
     get:
       description: A public endpoint for GOV.UK One Login to retrieve the credential issuer's JSON Web Key Set (JWKS) of public keys which can be used to verify the the pre-authorised code.
