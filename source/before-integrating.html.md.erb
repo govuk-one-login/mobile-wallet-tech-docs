@@ -1,25 +1,52 @@
 ---
 title: Before you issue a credential
 weight: 3
-last_reviewed_on: 2024-07-02
+last_reviewed_on: 2025-04-15
 review_in: 6 months
 ---
 
 # Before you issue a credential
 
-When you are preparing to issue a credential to GOV.UK Wallet, it is important to think about basic good practice. If you follow this documentation and [its sample reference material](/use-sample-reference-material.html) carefully, you will be able to:
+Before you can issue a credential, you should do the following.
 
-* align with open standards, particularly [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model/) for the credential itself, and [OpenID Connect for Verifiable Credential Issuance](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) (OIDC4VCI) for the issuance flow
+## Onboard with GOV.UK One Login
 
-* meet the requirements of the government [Service Standard](https://www.gov.uk/service-manual/service-standard), for example making all information available in Welsh
+GOV.UK Wallet uses GOV.UK One Login to authenticate users. This process makes sure that credentials are issued to a verified user who is logged in to both your service and GOV.UK Wallet at the same time.
 
-* use findings identified by your user research, for example how credentials will be presented in GOV.UK Wallet to best meet your users' needs
+You must complete the onboarding process for GOV.UK One Login before you can issue credentials to GOV.UK Wallet. There is [guidance on the GOV.UK One Login onboarding process in their technical documentation](https://docs.sign-in.service.gov.uk/).
 
-To help you achieve best practice, we suggest combining:
+When you complete the GOV.UK One Login onboarding process, make sure that you have:
+
+* your unique client identifier - this identifier must be included as a claim (`client_id`) in the pre-authorised code your service generates as part of issuing a credential offer
+* requested that  the `walletSubjectId` be activated - this is a pairwise identifier that will be used to prove that the user logged in to your service and GOV.UK Wallet are the same user
+
+## Agree a credential template
+
+Before you can issue a credential, you must confirm with the GOV.UK Wallet onboarding team:
+
+* the credential type - this can be [mDoc](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) or [JWT VC](https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/)
+* which attributes are to be included in the digital credential and its schema
+* the colour of the digital card
+* whether users can have multiple instances of this credential, or only one at a time
+
+You must send the GOV.UK Wallet team:
+
+* your issuer URL (both integration and production)
+* your issuer logo in English and Welsh
+
+## Follow relevant standards
+
+When you are preparing to issue a credential to GOV.UK Wallet, you should:
+
+* align with open standards, especially [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model/) for the credential itself, and [OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) for the issuance flow
+* follow the government [Service Standard](https://www.gov.uk/service-manual/service-standard), for example making all information available in Welsh
+* use findings identified by your user research to meet your users’ needs
+
+To help you achieve best practice, you could use:
 
 * a common JWT payload structure for VCs across credential issuers, with a dedicated section for credential-specific attributes
-
 * a metadata file managed by credential issuers that instructs how given attributes for the digital wallet should be named and rendered, and in which languages
 
-We recommend the approach in the [OpenID Connect for Verifiable Credential Issuance](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) standard. The **[Understanding GOV.UK Wallet’s credential exchange flow](/issuance-flow.html)** section offers examples of a metadata file and JWT payload.
+There are examples of a metadata file and JWT payload in the [understanding GOV.UK Wallet’s credential exchange flow](issuance-flow) section.
 
+To get started, you need to [authenticate users with One Login](credential-issuer-functionality/authenticating-users).
