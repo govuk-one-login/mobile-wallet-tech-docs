@@ -33,7 +33,7 @@ The request must include an access token issued by the GOV.UK One Login Token Se
 
 The request body must be in JSON format and contain the following parameters:
 
-- `notification_id`: A string received in the credential response, uniquely identifying a credential issuance flow
+- `notification_id`: A string (this could be a UUID) received in the credential response, uniquely identifying a credential issuance flow
 - `event`: A case-sensitive string indicating the credential's status - `credential_accepted` (GOV.UK Wallet accepted the credential), `credential_failure` (GOV.UK Wallet rejected the credential), or `credential_deleted` (user declined or deleted the credential)
 
 GOV.UK Wallet may include additional parameters in the request body, such as `event_description` for extra context. The credential issuer must validate the contents of the request body and should ignore any unrecognised parameters.
@@ -42,8 +42,9 @@ Below is an example of a notification request when a credential was successfully
 
 ```
 {
-  "notification_id": "3fwe98js",
-  "event": "credential_accepted"
+  "notification_id": "cb7db1d8-5efc-45ec-ac9e-6610c2ea599f",
+  "event": "credential_accepted",
+  "event_description": "Credential has been successfully stored"
 }
 ```
 
