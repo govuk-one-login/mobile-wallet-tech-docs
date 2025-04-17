@@ -39,7 +39,7 @@ The request must include an access token issued by the GOV.UK One Login Token Se
 Retrieve the GOV.UK One Login Token Service JSON Web Key Set (JWKS) from their JWKS endpoint and verify the access token signature using the corresponding public key.
 
 Validate the header parameters by making sure that:
-  - Ensure the `alg` (Algorithm) parameter is `"ES256"`
+- the `alg` (Algorithm) parameter is `"ES256"`
 - the `typ` (Type) parameter is `"at+jwt"`
 
 - Validate the payload claims
