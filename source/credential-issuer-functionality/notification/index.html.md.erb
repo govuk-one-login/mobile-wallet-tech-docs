@@ -33,17 +33,17 @@ The notification endpoint must accept HTTP POST requests.
 
 The request must include an access token issued by the GOV.UK One Login Token Service as a bearer token in the Authorization header. The credential issuer must validate this access token to make sure that it was issued by the GOV.UK One Login Token Service and it is valid.
 
-##### Validate the access token
-
 To validate the access token, you should complete the following steps.
 
 Retrieve the GOV.UK One Login Token Service JSON Web Key Set (JWKS) from their JWKS endpoint and verify the access token signature using the corresponding public key.
 
 Validate the header parameters by making sure that:
+
 - the `alg` (Algorithm) parameter is `"ES256"`
 - the `typ` (Type) parameter is `"at+jwt"`
 
 Validate the payload claims by verifying that:
+
 - the `iss` (Issuer) claim matches the GOV.UK One Login Token Service URL
 - the `aud` (Audience) claim matches the credential issuer's URL
 - the `exp` (Expiry) claim is a valid timestamp in the future
