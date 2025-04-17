@@ -40,7 +40,7 @@ Retrieve the GOV.UK One Login Token Service JSON Web Key Set (JWKS) from their J
 
 Validate the header parameters by making sure that:
   - Ensure the `alg` (Algorithm) parameter is `"ES256"`
-  - Ensure the `typ` (Type) parameter is `"at+jwt"`
+- the `typ` (Type) parameter is `"at+jwt"`
 
 - Validate the payload claims
   - Verify the `iss` (Issuer) claim matches the GOV.UK One Login Token Service URL
