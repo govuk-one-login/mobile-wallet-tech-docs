@@ -31,23 +31,33 @@ The notification endpoint must accept HTTP POST requests.
 
 #### Authorization header
 
-The request must include an access token issued by the GOV.UK One Login Token Service as a bearer token in the Authorization header. The credential issuer must validate this access token to make sure that it was issued by the GOV.UK One Login Token Service and it is valid.
+The request must include an access token issued by GOV.UK One Login as a bearer token in the Authorization header. The credential issuer must validate this access token to make sure that:
+
+- the access token was issued by GOV.UK One Login
+- the request is from the expected user
+- the token being used is within the valid period
 
 To validate the access token, you should complete the following steps.
 
-Retrieve the GOV.UK One Login Token Service JSON Web Key Set (JWKS) from their JWKS endpoint and verify the access token signature using the corresponding public key.
+Verify the access token signature:
+
+- retrieve the GOV.UK One Login JSON Web Key Set (JWKS) from their JWKS endpoint
+- compare the `kid` (key ID) parameter in the access token header with the `kid` values in the retrieved JWKS
+- ensure the `alg` (algorithm) parameter in the access token header corresponds to the algorithm specified for the matching public key found in the JWKS
+- using the matching public key from the JWKS and the specified algorithm to cryptographically verify the signature on the access token
 
 Validate the header parameters by making sure that:
 
-- the `alg` (Algorithm) parameter is `"ES256"`
 - the `typ` (Type) parameter is `"at+jwt"`
 
 Validate the payload claims by verifying that:
 
-- the `iss` (Issuer) claim matches the GOV.UK One Login Token Service URL
-- the `aud` (Audience) claim matches the credential issuer's URL
-- the `exp` (Expiry) claim is a valid timestamp in the future
-- both `credential_identifiers` and `sub` (Subject) claims match the values stored in the credential issuer's cache for this specific credential issuance flow to prevent unauthorised access
+- the value of the `iss` (issuer) claim matches GOV.UK One Login URL
+- the value of the `aud` (audience) claim is the same client ID you received when you registered your service to use GOV.UK One Login
+- the value of the `iat` (issued at) claim is a valid timestamp in the past
+- the value of the `exp` (expiration time) claim is a valid timestamp in the future
+- the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
+- the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
 
 #### Request body
 
