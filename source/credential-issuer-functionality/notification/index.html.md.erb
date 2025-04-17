@@ -43,7 +43,7 @@ Below is an example of a notification when a credential is successfully stored i
 
 ```
 {
-  "notification_id": "cb7db1d8-5efc-45ec-ac9e-6610c2ea599f",
+  "notification_id": "776aefd4-26c6-4a5f-aa7c-b5e294cd87cd",
   "event": "credential_accepted",
   "event_description": "Credential has been successfully stored"
 }
@@ -52,13 +52,13 @@ Below is an example of a notification when a credential is successfully stored i
 More information about the notification request can be found in the [OID4VCI specification] (https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.1).
 
 ### Response format
-Upon successful processing of a notification, the credential issuer should return the HTTP status code 204 (No Content).
+Upon successful processing of a notification, the credential issuer should return a 204 No Content HTTP status code.
 
-If the notification could not be processed successfully, the credential issuer must return an appropriate HTTP error code.
+If the notification could not be processed successfully, the credential issuer must return an appropriate HTTP error status code.
 
 When the notification request does not include an access token or the access token is invalid, the notification endpoint must return an [error response as defined in RFC6750](https://datatracker.ietf.org/doc/html/rfc6750#section-3).
 
-When the `notification_id` value is invalid, the notification endpoint must return the HTTP status code 400 (Bad Request) and a response body in JSON format containing the following parameter:
+When the `notification_id` value is invalid, the notification endpoint must return a 400 Bad Request HTTP status code and a response body in JSON format containing the following parameter:
 
 - `error`: A case-sensitive string indicating the error - `invalid_notification_id` (the request's `notification_id` was invalid), or `invalid_notification_request` (the request was invalid)
 
