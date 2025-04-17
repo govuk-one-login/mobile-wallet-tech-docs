@@ -35,7 +35,8 @@ The request must include an access token issued by the GOV.UK One Login Token Se
 
 ##### Validate the access token
 
-- Verify the access token signature
+To validate the access token, you should complete the following steps.
+
 Retrieve the GOV.UK One Login Token Service JSON Web Key Set (JWKS) from their JWKS endpoint and verify the access token signature using the corresponding public key.
 
 Validate the header parameters by making sure that:
