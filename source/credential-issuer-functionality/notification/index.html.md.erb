@@ -35,8 +35,9 @@ The request body must be in JSON format and contain the following parameters:
 
 - `notification_id`: A string (this could be a UUID) received in the credential response, uniquely identifying a credential issuance flow
 - `event`: A case-sensitive string indicating the credential's status - `credential_accepted` (GOV.UK Wallet accepted the credential), `credential_failure` (GOV.UK Wallet rejected the credential), or `credential_deleted` (user declined or deleted the credential)
+- `event_description`: An optional parameters that GOV.UK Wallet may include to provide additional information about the event.
 
-GOV.UK Wallet may include additional parameters in the request body, such as `event_description` for extra context. The credential issuer must validate the contents of the request body and should ignore any unrecognised parameters.
+The credential issuer must validate the contents of the request body and should ignore any unrecognised parameters.
 
 Below is an example of a notification request when a credential was successfully stored in the GOV.UK Wallet:
 
