@@ -42,7 +42,7 @@ Validate the header parameters by making sure that:
 - the `alg` (Algorithm) parameter is `"ES256"`
 - the `typ` (Type) parameter is `"at+jwt"`
 
-- Validate the payload claims
+Validate the payload claims by verifying that:
   - Verify the `iss` (Issuer) claim matches the GOV.UK One Login Token Service URL
 - the `aud` (Audience) claim matches the credential issuer's URL
 - the `exp` (Expiry) claim is a valid timestamp in the future
