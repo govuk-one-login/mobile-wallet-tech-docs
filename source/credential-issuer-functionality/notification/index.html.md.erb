@@ -45,7 +45,7 @@ Validate the header parameters by making sure that:
 - Validate the payload claims
   - Verify the `iss` (Issuer) claim matches the GOV.UK One Login Token Service URL
 - the `aud` (Audience) claim matches the credential issuer's URL
-  - Verify the `exp` (Expiry) claim is a valid timestamp in the future
+- the `exp` (Expiry) claim is a valid timestamp in the future
   - Verify both `credential_identifiers` and `sub` (Subject) claims match the values stored in the credential issuer's cache for this specific credential issuance flow to prevent unauthorized access
 
 #### Request body
