@@ -29,7 +29,26 @@ The credential issuer must publish the location of their notification endpoint i
 
 The notification endpoint must accept HTTP POST requests.
 
+#### Authorization header
+
 The request must include an access token issued by the GOV.UK One Login Token Service as a bearer token in the Authorization header. The credential issuer must validate this access token to make sure that it was issued by the GOV.UK One Login Token Service and it is valid.
+
+To validate the access token:
+
+- Verify the access token signature
+  - Retrieve the GOV.UK One Login Token Service JSON Web Key Set (JWKS) from their JWKS endpoint and verify the access token signature using the corresponding public key
+
+- Validate the header parameters
+  - Ensure the `alg` (Algorithm) parameter is `"ES256"`
+  - Ensure the `typ` (Type) parameter is `"at+jwt"`
+
+- Validate the payload claims
+  - Verify the `iss` (Issuer) claim matches the GOV.UK One Login Token Service URL
+  - Verify the `aud` (Audience) claim matches the credential issuer's URL
+  - Verify the `exp` (Expiry) claim is a valid timestamp in the future
+  - Verify both `credential_identifiers` and `sub` (Subject) claims match the values stored in the credential issuer's cache for this specific credential issuance flow to prevent unauthorized access
+
+#### Request body
 
 The request body must be in JSON format and contain the following parameters:
 
@@ -52,6 +71,7 @@ Below is an example of a notification when a credential is successfully stored i
 More information about the notification request can be found in the [OID4VCI specification] (https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.1).
 
 ### Response format
+
 When a notification is processed successfully, the credential issuer should return a 204 No Content HTTP status code.
 
 If the notification could not be processed successfully, the credential issuer must return an appropriate HTTP error status code.
