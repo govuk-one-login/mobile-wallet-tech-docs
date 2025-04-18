@@ -58,16 +58,17 @@ Validate the payload claims by verifying that:
 - the value of the `exp` (expiration time) claim is a valid timestamp in the future
 - the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
 - the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
+- this API has not received another access token with the same `jti` (JWT ID)
 
 #### Request body
 
 The request body must be in JSON format and contain the following parameters:
 
-| Parameter            | Description                                                                                                                                                                                                                                                 |
-|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `notification_id`    | A string (this could be a UUID) received in the credential response, uniquely identifying an individual credential issuance occurrence.                                                                                                                                       |
-| `event`              | A case-sensitive string indicating the credential's status - `credential_accepted` (GOV.UK Wallet accepted the credential), `credential_failure` (GOV.UK Wallet rejected the credential), or `credential_deleted` (user declined or deleted the credential. |
-| `event_description`  | An optional parameter that GOV.UK Wallet may include to provide additional information about the event.                                                                                                                                                     |
+| Parameter            | Description                                                                                                                             | Value(s)                                                                                                                                                                                                                       |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `notification_id`    | A string (this could be a UUID) received in the credential response, uniquely identifying an individual credential issuance occurrence. |
+| `event`              | A case-sensitive string indicating the credential's status.                                                                             | One of the following enums:<br>`credential_accepted` (GOV.UK Wallet accepted the credential)<br>`credential_failure` (GOV.UK Wallet rejected the credential)<br>`credential_deleted` (user declined or deleted the credential) |
+| `event_description`  | An optional parameter that GOV.UK Wallet may include to provide additional information about the event.                                 |
 
 The credential issuer must validate the contents of the request body and should ignore any unrecognised parameters.
 
