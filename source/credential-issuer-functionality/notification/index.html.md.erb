@@ -63,9 +63,12 @@ Validate the payload claims by verifying that:
 
 The request body must be in JSON format and contain the following parameters:
 
-- `notification_id`: A string (this could be a UUID) received in the credential response, uniquely identifying an individual credential issuance occurrence 
-- `event`: A case-sensitive string indicating the credential's status - `credential_accepted` (GOV.UK Wallet accepted the credential), `credential_failure` (GOV.UK Wallet rejected the credential), or `credential_deleted` (user declined or deleted the credential)
-- `event_description`: An optional parameter that GOV.UK Wallet may include to provide additional information about the event.
+| Parameter            | Description                                                                                                                                                                                                                                                 |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `notification_id`    | A string (this could be a UUID) received in the credential response, uniquely identifying an individual credential issuance occurrence.                                                                                                                                       |
+| `event`              | A case-sensitive string indicating the credential's status - `credential_accepted` (GOV.UK Wallet accepted the credential), `credential_failure` (GOV.UK Wallet rejected the credential), or `credential_deleted` (user declined or deleted the credential. |
+| `event_description`  | An optional parameter that GOV.UK Wallet may include to provide additional information about the event.                                                                                                                                                     |
+
 
 The credential issuer must validate the contents of the request body and should ignore any unrecognised parameters.
 
