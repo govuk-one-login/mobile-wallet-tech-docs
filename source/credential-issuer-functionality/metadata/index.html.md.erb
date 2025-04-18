@@ -1,31 +1,66 @@
 ---
 title: Metadata
 weight: 3
-last_reviewed_on: 2025-03-05
-review_in: 2 months
+last_reviewed_on: 2025-04-03
+review_in: 6 months
 ---
 
 # Metadata
 
-To fetch a credential from a credential issuer, GOV.UK Wallet needs to obtain credential metadata published by the organisation who issues the credential. The metadata is public, to indicate to the wallet and verifiers what credentials that issuer offers.
+The metadata endpoint is a required endpoint that provides essential configuration information about the credential issuer.
 
-The metadata file is a JSON file published at the well-known path: `/.well-known/openid-credential-issuer`.
+This endpoint lets GOV.UK Wallet and verifiers dynamically learn information about the credential issuer, such as the endpoints used in the issuance flow, the supported credential types, and how credentials should be displayed in the wallet.
 
-Credential issuers using GOV.UK Wallet, must produce and publish a metadata document that:
+## Technical details
 
-* supports English and Welsh
+### Endpoint location
 
-* controls how fields should be named in each language, for example `licenceNumber` rendered as "Fishing Licence number"
+The metadata must be publicly accessible at the standardised location `/.well-known/openid-credential-issuer` on the credential issuer's domain. The data published is non-sensitive metadata about the service.
 
-* highlights key fields visually for the user, for example document name, primary and auxiliary fields
+### Response format
 
-This illustrative example shows how a credential metadata JSON file would represent a fishing licence:
+The endpoint must return a valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata).
+
+The metadata must include the following parameters:
+
+- `credential_issuer`: The URL of the credential issuer.
+- `authorization_servers`: An array of URLs for the authorization servers the credential issuer relies on for authorization. This must be set to the GOV.UK One Login token service URL.
+- `credential_endpoint`: The URL of the credential issuer's [credential endpoint](/credential-issuer-functionality/credential/#credential), where credentials can be obtained.
+- `credential_configurations_supported`: An object describing the credentials offered by the credential issuer.
+
+If your credential issuer implements the optional [notification endpoint](/credential-issuer-functionality/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
+
+#### Credential information
+
+The `credential_configurations_supported` object contains key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
+
+Each credential object in `credential_configurations_supported` must include the following parameters:
+
+- `format`
+- `credential_definition`
+- `cryptographic_binding_methods_supported`
+- `cryptographic_suites_supported`
+- `proof_types_supported`
+- `display`
+- `credential_subject`
+
+The GOV.UK Wallet also requires the credential issuer's metadata to:
+
+- Provide English and Welsh support.
+- Specify display attributes. The issuer's metadata must provide visual styling instructions and specify how fields should be named in each language. For example, when English is the selected language, the credential property `licenceNumber` must be rendered as "Fishing Licence number" [in the example below](/credential-issuer-functionality/metadata/#metadata-example).
+
+There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.3).
+
+## Metadata example
+
+Below is an example of how a credential issuer metadata document would represent a Fishing Licence credential:
 
 ```JSON
 {
-  "credential_issuer": "https://example-credential-issuer.mobile.build.account.gov.uk",
-  "authorization_servers": ["https://token.build.account.gov.uk"],
-  "credential_endpoint": "https://example-credential-issuer.mobile.build.account.gov.uk/credential",
+  "credential_issuer": "https://example-credential-issuer.gov.uk",
+  "authorization_servers": ["https://token.account.gov.uk"],
+  "credential_endpoint": "https://example-credential-issuer.gov.uk/credential",
+  "notification_endpoint": "https://example-credential-issuer.gov.uk/notification",
   "credential_configurations_supported": {
     "fishingLicence": {
       "format": "jwt_vc_json",

@@ -2,26 +2,26 @@ openapi: "3.0.0"
 info:
   version: 1.0.0
   title: Wallet Credential Issuer API
-  description: This specification describes the six Credential Issuer endpoints required to issue Credential(s) to the GOV.UK Wallet.
+  description: This specification describes the 6 credential issuer endpoints required to issue credentials to the GOV.UK Wallet.
   license:
     name: MIT License
 paths:
   /credential_offer:
     get:
-      description: An endpoint for issuing a Credential Offer.
+      description: An endpoint for issuing a credential offer.
       responses:
         '200':
           description: |- 
-            Credential Offer URL consisting of the following parts:<br>
+            Credential offer URL consisting of the following parts:<br>
             1. Wallet’s credential offer endpoint.<br>
             2. A query parameter `credential_offer`.<br>
-            3. URL-encoded Credential Offer.
+            3. URL-encoded credential offer.
           content:
             application/json:
               schema:
                 type: string
               example:
-                https://mobile.build.account.gov.uk/wallet/add?credential_offer=%7B%22credentials%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiI8WU9VUiBPTkUgTE9HSU4gQ0xJRU5UIElEPiIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5tb2JpbGUuYnVpbGQuYWNjb3VudC5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.aZRv9KBCWRGLsi1Rd96jrzPxpQUkW68up0BYvUiF4RHjbLf6IxWn2PyU_ExOBAtEoj0lGAOOX7efOLMEc-lcIg%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.mobile.build.account.gov.uk%22%7D
+                https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credential_configuration_ids%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiJURVNUX0NMSUVOVF9JRCIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.ImEbm6m4IoxW9UD-sPNi4ez26F7qiv5t-g7RFzEtbPegp5jNqulYvlPmRKj-QNBIifgXtrYID9-dHNWOQTybjQ%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.gov.uk%22%7D
   /credential:
     post:
       description: An endpoint used by the GOV.UK Wallet to request a Credential from the Credential Issuer.
@@ -36,7 +36,7 @@ paths:
             example:
               proof:
                 proof_type: jwt
-                jwt: eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDprZXk6ekRuYWVTR2ZTUU1Zdm5MYkxXRXViaGhHRFBvcTdwQTlNTU52dW12YnNtTUNab3ZVUiJ9.eyJpc3MiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJhdWQiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIubW9iaWxlLmJ1aWxkLmFjY291bnQuZ292LnVrIiwiaWF0IjoxNzM5NDU3NTE3MzU1LCJub25jZSI6ImRiMmRiMzEzLTVjYjktNGJiNC1hYTRkLTlmZTRkYWM0MGJlMSJ9.7Ni5vVvTIf8jWGRsaxpjg7_o5rSGG_sttYKrC4184IUgtdjfsfqptClmO9_x62dyAgcbjeLqb1Q4YIIG8ZKNzA
+                jwt: eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDprZXk6ekRuYWVTR2ZTUU1Zdm5MYkxXRXViaGhHRFBvcTdwQTlNTU52dW12YnNtTUNab3ZVUiJ9.eyJpc3MiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJhdWQiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIiwiaWF0IjoxNzM5NDU3NTE3MzU1LCJub25jZSI6ImRiMmRiMzEzLTVjYjktNGJiNC1hYTRkLTlmZTRkYWM0MGJlMSJ9.V_EDG7NNVOLixqScs6CKU99uEL0Rt47GoYW9Kp3UZPoP6COcXKDusvNwZMSdWTb44LoK5QvTMGbrB71y-4lRow
       responses:
         '200':
           description: Credential.
@@ -45,7 +45,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/CredentialResponse"
               example:
-                credential: eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwiY3R5IjogInZjIiwidHlwIjogInZjK2p3dCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIubW9iaWxlLmJ1aWxkLmFjY291bnQuZ292LnVrIiwic3ViIjoiZGlkOmtleTplYmZhZWIxZmQ3MTJlYmYxYzI3NmUxMmVjMjEiLCJpYXQiOiIxNzEyNjY0NzMxIiwibmJmIjoiMTcxMjY2NDczMSIsImV4cCI6IjE3NDQyMjE2NTciLCJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvbnMvY3JlZGVudGlhbHMvdjIiLCI8SlNPTi1MRCBDT05URVhUIFVSSSBGT1IgSVNTVUVSPiJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiRmlzaGluZ0xpY2VuY2UiXSwiaXNzdWVyIjoiaHR0cHM6Ly9leGFtcGxlLWNyZWRlbnRpYWwtaXNzdWVyLm1vYmlsZS5idWlsZC5hY2NvdW50Lmdvdi51ayIsIm5hbWUiOiJGaXNoaW5nIGxpY2VuY2UiLCJkZXNjcmlwdGlvbiI6IjxPUFRJT05BTCBDUkVERU5USUFMIERFU0NSSVBUSU9OPiIsInZhbGlkRnJvbSI6IjIwMjQtMDQtMDlUMTI6MTI6MTFaIiwidmFsaWRVbnRpbCI6IjIwMjgtMTItMTBUMjI6NTk6NTlaIiwiY3JlZGVudGlhbFN1YmplY3QiOnsiaWQiOiJkaWQ6a2V5OmViZmFlYjFmZDcxMmViZjFjMjc2ZTEyZWMyMSIsIm5hbWUiOlt7Im5hbWVQYXJ0cyI6W3sidmFsdWUiOiJTYXJhaCIsInR5cGUiOiJHaXZlbk5hbWUifSx7InZhbHVlIjoiRWR3YXJkcyIsInR5cGUiOiJGYW1pbHlOYW1lIn1dfV0sImZpc2hpbmdMaWNlbmNlIjpbeyJsaWNlbmNlTnVtYmVyIjoiMDA5ODc4ODYzIiwiaXNzdWFuY2VEYXRlIjogIjIwMjMtMTItMTAiLCJleHBpcmF0aW9uRGF0ZSI6ICIyMDI4LTEyLTEwIn1dfX0.FhJZpl4g6Vhi5G4hgLV_2ku_XlR9Eo8zX1Yj5hMOfLepwfI3YkD9xdNRUoMfKFwtB56bPQ6Fk6Q_2ePi5_N0aw
+                credential: eyJraWQiOiJkaWQ6d2ViOmV4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIzVkY2JlZTg2M2I1ZDdjYzMwYzliYTFmNzM5M2RhY2M2YzE2NjEwNzgyZTRiNmExOTFmOTRhN2U4YjFlMTUxMGYiLCJjdHkiOiJ2YyIsInR5cCI6InZjK2p3dCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIiwic3ViIjoiZGlkOmtleTp6RG5hZVNHZlNRTVl2bkxiTFdFdWJoaEdEUG9xN3BBOU1NTnZ1bXZic21NQ1pvdlVSIiwiaWF0IjoiMTcxMjY2NDczMSIsIm5iZiI6IjE3MTI2NjQ3MzEiLCJleHAiOiIxNzQ0MjIxNjU3IiwiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnL25zL2NyZWRlbnRpYWxzL3YyIiwiPEpTT04tTEQgQ09OVEVYVCBVUkkgRk9SIElTU1VFUj4iXSwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIkZpc2hpbmdMaWNlbmNlIl0sImlzc3VlciI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5nb3YudWsiLCJuYW1lIjoiRmlzaGluZyBsaWNlbmNlIiwiZGVzY3JpcHRpb24iOiI8T1BUSU9OQUwgQ1JFREVOVElBTCBERVNDUklQVElPTj4iLCJ2YWxpZEZyb20iOiIyMDI0LTA0LTA5VDEyOjEyOjExWiIsInZhbGlkVW50aWwiOiIyMDI4LTEyLTEwVDIyOjU5OjU5WiIsImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImlkIjoiZGlkOmtleTp6RG5hZVNHZlNRTVl2bkxiTFdFdWJoaEdEUG9xN3BBOU1NTnZ1bXZic21NQ1pvdlVSIiwibmFtZSI6W3sibmFtZVBhcnRzIjpbeyJ2YWx1ZSI6IlNhcmFoIiwidHlwZSI6IkdpdmVuTmFtZSJ9LHsidmFsdWUiOiJFZHdhcmRzIiwidHlwZSI6IkZhbWlseU5hbWUifV19XSwiZmlzaGluZ0xpY2VuY2UiOlt7ImxpY2VuY2VOdW1iZXIiOiIwMDk4Nzg4NjMiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTEyLTEwIiwiZXhwaXJhdGlvbkRhdGUiOiIyMDI4LTEyLTEwIn1dfX0.UXGyl9ihcMNn-RlqBe_8rTxvtPDqdaGLKMJs3pk9QL4zgEZbF4LZmeZt-k2p04MSlW8IX8uWKgtxFDOGu9j2rQ
   /notification:
     post:
       description: An endpoint used by the GOV.UK Wallet to notify the Credential Issuer of events concerning Credential(s) it has issued.
@@ -65,20 +65,20 @@ paths:
           description: No content.
   /.well-known/openid-credential-issuer:
     get:
-      description: A public endpoint for the GOV.UK Wallet to retrieve Metadata about the Credential Issuer and the Credential(s) it issues.
+      description: A public endpoint for the GOV.UK Wallet to retrieve metadata about the credential issuer.
       responses:
         '200':
-          description: Credential Issuer's Metadata.
+          description: Credential issuer's metadata.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/MetadataResponse"
               example:
-                credential_issuer: https://example-credential-issuer.mobile.build.account.gov.uk
+                credential_issuer: https://example-credential-issuer.gov.uk
                 authorization_servers:
-                    - https://token.build.account.gov.uk
-                credential_endpoint: https://example-credential-issuer.mobile.build.account.gov.uk/credential
-                notification_endpoint: https://example-credential-issuer.mobile.build.account.gov.uk/notification
+                    - https://token.account.gov.uk
+                credential_endpoint: https://example-credential-issuer.gov.uk/credential
+                notification_endpoint: https://example-credential-issuer.gov.uk/notification
                 credential_configurations_supported:
                   fishingLicence:
                     format: jwt_vc_json
@@ -127,10 +127,10 @@ paths:
                               locale: cy-GB
   /.well-known/did.json:
     get:
-      description: A public endpoint for the GOV.UK Wallet to retrieve the Credential Issuer's public key represented as a DID Document.
+      description: A public endpoint for GOV.UK Wallet and credential verifiers to retrieve the credential issuer's public keys for verifying credentials
       responses:
         '200':
-          description: Credential Issuer's DID Document.
+          description: Credential issuer's DID document.
           content:
             application/json:
               schema:
@@ -138,12 +138,11 @@ paths:
               example:
                 "@context":
                   - https://www.w3.org/ns/did/v1
-                  - https://w3id.org/security/suites/jws-2020/v1
-                id: did:web:example-credential-issuer.mobile.build.account.gov.uk
+                id: did:web:example-credential-issuer.gov.uk
                 verificationMethod:
-                  - id: did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
+                  - id: did:web:example-credential-issuer.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
                     type: JsonWebKey2020
-                    controller: did:web:example-credential-issuer.mobile.build.account.gov.uk
+                    controller: did:web:example-credential-issuer.gov.uk
                     publicKeyJwk:
                       kty: EC
                       kid: 5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
@@ -152,13 +151,13 @@ paths:
                       y: icPzjbSk6apD_SNvQt8NWOPlPeGG4KYU55GfnARryoY
                       alg: ES256
                 assertionMethod:
-                  - did:web:example-credential-issuer.mobile.build.account.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
+                  - did:web:example-credential-issuer.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
   /.well-known/jwks.json:
     get:
-      description: A public endpoint for GOV.UK One Login to retrieve the Credential Issuer's JSON Web Key Set (JWKS) of public keys.
+      description: A public endpoint for GOV.UK One Login to retrieve the credential issuer's JSON Web Key Set (JWKS) of public keys which can be used to verify the the pre-authorised code.
       responses:
         '200':
-          description: Credential Issuer's JWKS.
+          description: Credential issuer's JWKS.
           content:
             application/json:
               schema:
@@ -229,19 +228,19 @@ components:
       type: object
       properties:
         credential_issuer:
-          description: URL of the Credential Issuer.
+          description: URL of the credential issuer.
           type: string
           format: uri
         credential_endpoint:
-          description: URL of the Credential Issuer's Credential endpoint.
+          description: URL of the credential issuer's credential endpoint.
           type: string
           format: uri
         notification:
-          description: URL of the Credential Issuer's Notification endpoint.
+          description: URL of the credential issuer's notification endpoint.
           type: string
           format: uri
         authorization_servers:
-          description: Set containing the URL of the Authorization Server(s) the Credential Issuer relies on for authorization.
+          description: Set containing the URL of the authorization server(s) the credential issuer relies on for authorization.
           type: array
           items:
             type: string
@@ -254,7 +253,7 @@ components:
         - credential_endpoint
         - credential_issuer
     CredentialConfigurationsSupported:
-      description: Information about the Credential(s) issued by the Credential Issuer.
+      description: Information about the credential(s) issued by the credential issuer.
       type: object
       properties:
         fishingLicence:
@@ -262,28 +261,28 @@ components:
       required:
         - fishingLicence
     FishingLicence:
-      description: A Credential issues by the Credential Issuer.
+      description: A credential issued by the credential issuer.
       type: object
       properties:
         format:
-          description: Format of the Credential, such as `jwt_vc_json`.
+          description: Format of the credential.
           type: string
         credential_definition:
           $ref: '#/components/schemas/CredentialDefinition'
         cryptographic_binding_methods_supported:
-          description: Set of methods available for cryptographically binding the issued Credential, such as `did:key`;
+          description: Set of methods available for cryptographically binding the issued credential.
           type: array
           items:
             type: string
         credential_signing_alg_values_supported:
-          description: Set of algorithms that the Credential Issuer uses to sign the Credential.
+          description: Set of algorithms that the credential issuer uses to sign the credential.
           type: array
           items:
             type: string
         proof_types_supported:
           $ref: '#/components/schemas/ProofTypesSupported'
         display:
-          description: Display properties of the Credential, such as the display name, logo, background colour, etc.
+          description: Display properties of the credential, such as the display name, logo, background colour, etc.
           type: array
           items:
             $ref: '#/components/schemas/FishingLicenceDisplay'
@@ -298,7 +297,7 @@ components:
         - format
         - proof_types_supported
     CredentialDefinition:
-      description: Description of the Credential type.
+      description: Description of the credential type.
       type: object
       properties:
         type:
@@ -308,7 +307,7 @@ components:
       required:
         - type
     ProofTypesSupported:
-      description: Key proof(s) supported by the Credential Issuer.
+      description: Key proof(s) supported by the credential issuer.
       type: object
       properties:
         jwt:
@@ -346,7 +345,7 @@ components:
         - name
         - text_color
     CredentialSubject:
-      description: Display properties of the subject of the Credential.
+      description: Display properties of the subject of the credential.
       type: object
       properties:
         name:
@@ -418,32 +417,32 @@ components:
       type: object
       properties:
         '@context':
-          description: Set of URL contexts which define the terms used in the DID Document.
+          description: An array of URL contexts which define the terms used in the DID document.
           type: array
           minItems: 1
           items:
             type: string
             format: uri
         id:
-          description: Unique identifier of the DID Document itself.
+          description: The unique identifier of the DID document.
           type: string
         verificationMethod:
-          description: Set of verification methods, such as cryptographic public keys.
+          description: An array of verification methods (cryptographic public keys).
           type: array
           minItems: 1
           items:
             $ref: "#/components/schemas/VerificationMethod"
         assertionMethod:
-          description: Set of DID URLs where each URL uniquely identifies a specific key within the DID Document.
+          description: Array of DID URLs where each URL uniquely identifies a verification method within the DID document.
           type: array
           minItems: 1
           items:
             type: string
       required:
         - '@context'
-        - assertionMethod
         - id
         - verificationMethod
+        - assertionMethod
     VerificationMethod:
       type: object
       properties:
@@ -469,7 +468,7 @@ components:
           enum:
             - EC
         kid:
-          description: Key ID. Unique identifier sed to match a specific key.
+          description: Key ID. Unique identifier to match a specific key.
           type: string
         crv:
           description: Curve. Cryptographic curve used with the key.
@@ -498,21 +497,49 @@ components:
       type: object
       properties:
         keys:
-          description: Set of public keys in JWK format.
+          description: A set of public keys, each in JSON Web Key (JWK) format.
           type: array
           items:
             $ref: '#/components/schemas/Key'
       required:
         - keys
     Key:
-      allOf:
-        - $ref: "#/components/schemas/PublicKeyJwk"
-        - type: object
-          properties:
-            use:
-              description: The intended use of the key.
-              type: string
-              enum:
-                - sig
-          required:
-            - use
+      type: object
+      properties:
+        kty:
+          description: Key Type. The family of cryptographic algorithms used with the key.
+          type: string
+          enum:
+            - EC
+        kid:
+          description: Key ID. Unique identifier to match a specific key.
+          type: string
+        crv:
+          description: Curve. Cryptographic curve used with the key.
+          type: string
+          enum:
+            - P-256
+        x:
+          description: The "x" coordinate for the elliptic curve point.
+          type: string
+        y:
+          description: The "y" coordinate for the elliptic curve point.
+          type: string
+        alg:
+          description: Algorithm. The cryptographic algorithm used with the key.
+          type: string
+          enum:
+            - P-256
+        use:
+          description: The intended use of the key.
+          type: string
+          enum:
+            - sig
+      required:
+        - kty
+        - kid
+        - crv
+        - x
+        - y
+        - alg
+        - use
