@@ -1,7 +1,7 @@
 ---
 title: Notification
 weight: 7
-last_reviewed_on: 2025-04-16
+last_reviewed_on: 2025-04-18
 review_in: 6 months
 ---
 
@@ -103,10 +103,8 @@ Below is an example of a notification error response when the notification reque
 }
 ```
 
-
 More information about the error notification responses can be found in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.3).
 
 ### Idempotency
 
 The notification endpoint must be implemented idempotently. Identical requests with the same `notification_id` should always return the same response.
-
