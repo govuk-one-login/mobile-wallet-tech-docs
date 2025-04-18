@@ -52,7 +52,7 @@ Validate the header parameters by making sure that:
 
 Validate the payload claims by verifying that:
 
-- the value of the `iss` (issuer) claim matches GOV.UK One Login URL
+- the value of the `iss` (issuer) claim matches GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
 - the value of the `aud` (audience) claim is the same client ID you received when you registered your service to use GOV.UK One Login
 - the value of the `iat` (issued at) claim is a valid timestamp in the past
 - the value of the `exp` (expiration time) claim is a valid timestamp in the future
