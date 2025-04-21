@@ -43,7 +43,7 @@ Verify the access token signature:
 - retrieve the GOV.UK One Login JSON Web Key Set (JWKS) from their JWKS endpoint
 - compare the `kid` (key ID) parameter in the access token header with the `kid` values in the retrieved JWKS
 - ensure the `alg` (algorithm) parameter in the access token header corresponds to the algorithm specified for the matching public key found in the JWKS
-- using the matching public key from the JWKS and the specified algorithm to cryptographically verify the signature on the access token
+- cryptographically verify the signature on the access token using the matching public key from the JWKS and the specified algorithm
 
 Validate the header parameters by making sure that:
 
