@@ -31,11 +31,10 @@ The notification endpoint must accept HTTP POST requests.
 
 #### Authorization header
 
-The request must include an access token issued by GOV.UK One Login as a bearer token in the Authorization header. The credential issuer must validate this access token to make sure that:
+The request must include an access token issued by GOV.UK One Login as a bearer token in the Authorization header. This is the same as the access token used for authorizing the issuance of a verifiable credential. The credential issuer must validate this access token to make sure that:
 
 - the access token was issued by GOV.UK One Login
 - the request is from the expected user
-- the token being used is within the valid period
 
 To validate the access token, you should complete the following steps.
 
@@ -54,8 +53,6 @@ Validate the payload claims by verifying that:
 
 - the value of the `iss` (issuer) claim matches GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
 - the value of the `aud` (audience) claim is the same client ID you received when you registered your service to use GOV.UK One Login
-- the value of the `iat` (issued at) claim is a valid timestamp in the past
-- the value of the `exp` (expiration time) claim is a valid timestamp in the future
 - the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
 - the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
 - this API has not received another access token with the same `jti` (JWT ID) that is still within its validity period
