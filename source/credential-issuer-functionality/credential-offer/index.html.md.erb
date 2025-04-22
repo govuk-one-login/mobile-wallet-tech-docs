@@ -50,7 +50,7 @@ This is an example of a credential offer JSON object:
 
 ### The pre-authorised code
 
- GOV.UK Wallet needs an access token issued by the GOV.UK One Login token service (i.e. the authorization server) to obtain a credential from the credential issuer. One of the methods defined in the OID4VCI specification for issuing access tokens is the [pre-authorized code flow](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-3.5). This is the only method accepted by GOV.UK Wallet.
+ GOV.UK Wallet needs an access token issued by GOV.UK One Login (i.e. the authorization server) to obtain a credential from the credential issuer. One of the methods defined in the OID4VCI specification for issuing access tokens is the [pre-authorized code flow](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-3.5). This is the only method accepted by GOV.UK Wallet.
 
 The pre-authorized code flow simplifies obtaining credentials. This is because it allows GOV.UK Wallet to directly exchange a pre-authorised code for an access token, bypassing the standard authorisation code flow.
 
@@ -105,7 +105,7 @@ The JWT payload must contain the following claims:
 
 #### Signature
 
-The pre-authorised code must be signed with an Elliptic Curve Digital Signature Algorithm (ECDSA) private key for signing. The corresponding public key, which forms a pair with the private key used for signing, must be made publicly accessible at your [`/.well-known/jwks.json`](/credential-issuer-functionality/jwks) endpoint. This is because the GOV.UK One Login token service will need access to the public key to verify the signature on the pre-authorised code.
+The pre-authorised code must be signed with an Elliptic Curve Digital Signature Algorithm (ECDSA) private key for signing. The corresponding public key, which forms a pair with the private key used for signing, must be made publicly accessible at your [`/.well-known/jwks.json`](/credential-issuer-functionality/jwks) endpoint. This is because GOV.UK One Login will need access to the public key to verify the signature on the pre-authorised code.
 
 The signing algorithm must be ECDSA with the P-256 curve and the SHA-256 hash function.
 
