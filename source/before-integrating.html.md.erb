@@ -36,17 +36,14 @@ To integrate with GOV.UK Wallet you must send the GOV.UK Wallet team:
 
 ## Follow relevant standards
 
-When you are preparing to issue a credential to GOV.UK Wallet, you should:
+When you are preparing to issue a credential to GOV.UK Wallet you must align with open standards, especially:
 
-* align with open standards, especially [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model/) for the credential itself, and [OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) for the issuance flow
+* [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model/) or [mDoc](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) for the credential itself
+* [OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) for the issuance flow
+
+You should also:
+
 * follow the government [Service Standard](https://www.gov.uk/service-manual/service-standard), for example making all information available in Welsh
 * use findings identified by your user research to meet your users’ needs
-
-To help you achieve best practice, you could use:
-
-* a common JWT payload structure for VCs across credential issuers, with a dedicated section for credential-specific attributes
-* a metadata file managed by credential issuers that instructs how given attributes for the digital wallet should be named and rendered, and in which languages
-
-There are examples of a metadata file and JWT payload in the [understanding GOV.UK Wallet’s credential exchange flow](issuance-flow) section.
 
 To get started, you need to [authenticate users with One Login](credential-issuer-functionality/authenticating-users).
