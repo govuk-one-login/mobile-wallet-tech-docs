@@ -1,0 +1,19 @@
+name: Check Pull Request
+
+on:
+  pull_request:
+
+jobs:
+  check-pull-request:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+        with:
+          bundler-cache: true
+      - name: Build Middleman
+        run: bundle exec middleman build --verbose
