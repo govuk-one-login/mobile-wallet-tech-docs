@@ -27,29 +27,34 @@ The credential issuer must publish the location of their notification endpoint i
 
 ### Request format
 
-The notification endpoint must accept HTTP POST requests.
+The notification endpoint must accept HTTP POST requests. The request must include the following:
+
+- Authorization header: A bearer access token (JWT) issued by GOV.UK One Login
+- Request body (JSON): The notification details
+
+### Request validation
 
 #### Authorization header
 
-The request must include an access token issued by GOV.UK One Login as a bearer token in the Authorization header. This is the same as the access token used for authorizing the issuance of a verifiable credential. The credential issuer must validate this access token to make sure that:
+The request must include an access token issued by GOV.UK One Login as a bearer token in the Authorization header. This is the same as the access token used for authorizing the issuance of a verifiable credential.
 
-- the access token was issued by GOV.UK One Login
-- the request is from the expected user
+The credential issuer must validate the access token to ensure that it was issued by GOV.UK One Login and the request originates from the expected user.
 
 To validate the access token, you should complete the following steps.
 
-Verify the access token signature:
+#### 1. Verify the token signature:
 
-- retrieve the GOV.UK One Login JSON Web Key Set (JWKS) from their JWKS endpoint
-- compare the `kid` (key ID) parameter in the access token header with the `kid` values in the retrieved JWKS
-- ensure the `alg` (algorithm) parameter in the access token header corresponds to the algorithm specified for the matching public key found in the JWKS
-- cryptographically verify the signature on the access token using the matching public key from the JWKS and the specified algorithm
+- retrieve the GOV.UK One Login JSON Web Key Set (JWKS) from their published JWKS endpoint
+- extract the `kid` (key ID) parameter from the access token header
+- find the matching public key in the JWKS by comparing `kid` values
+- confirm the `alg` (algorithm) parameter in the token header matches the algorithm of the identified public key
+- use the matching public key to cryptographically verify the token signature
 
-Validate the header parameters by making sure that:
+#### 2. Validate the header parameters by ensuring that:
 
-- the `typ` (Type) parameter is `"at+jwt"`
+- the value of the `typ` (Type) parameter is `"at+jwt"`
 
-Validate the payload claims by verifying that:
+#### 3. Validate the payload claims by ensuring that:
 
 - the value of the `iss` (issuer) claim matches GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
 - the value of the `aud` (audience) claim is the same client ID you received when you registered your service to use GOV.UK One Login
