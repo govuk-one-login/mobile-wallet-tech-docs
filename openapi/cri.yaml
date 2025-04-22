@@ -50,7 +50,7 @@ paths:
                 notification_id: 776aefd4-26c6-4a5f-aa7c-b5e294cd87cd
   /notification:
     post:
-      description: An endpoint used by the GOV.UK Wallet to notify the Credential Issuer of events concerning Credential(s) it has issued.
+      description: An endpoint used by GOV.UK Wallet to notify the credential issuer of events concerning issued credentials.
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -62,9 +62,27 @@ paths:
             example:
               notification_id: 776aefd4-26c6-4a5f-aa7c-b5e294cd87cd
               event: credential_accepted
+              event_description: Credential has been successfully stored
       responses:
         '204':
-          description: No content.
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification400ErrorResponse"
+              example:
+                error: invalid_notification_id
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification401ErrorResponse"
+              example:
+                error: invalid_token
+                error_description: "The access token expired"
   /.well-known/openid-credential-issuer:
     get:
       description: A public endpoint for the GOV.UK Wallet to retrieve metadata about the credential issuer.
@@ -236,10 +254,39 @@ components:
             - credential_failure
             - credential_deleted
         event_description:
+          description: A human-readable explanation of the event.
           type: string
       required:
         - notification_id
         - event
+    Notification400ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be `invalid_notification_request`, `invalid_notification_id`, or `invalid_request`.
+          type: string
+          enum:
+            - invalid_notification_request
+            - invalid_notification_id
+            - invalid_request
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    Notification401ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be `invalid_token`.
+          type: string
+          enum:
+            - invalid_token
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
     MetadataResponse:
       type: object
       properties:
@@ -251,7 +298,7 @@ components:
           description: URL of the credential issuer's credential endpoint.
           type: string
           format: uri
-        notification:
+        notification_endpoint:
           description: URL of the credential issuer's notification endpoint.
           type: string
           format: uri
