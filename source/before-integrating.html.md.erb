@@ -36,10 +36,14 @@ To integrate with GOV.UK Wallet you must send the GOV.UK Wallet team:
 
 ## Follow relevant standards
 
-When you are preparing to issue a credential to GOV.UK Wallet you must align with open standards, especially:
+When you are preparing to issue a credential to GOV.UK Wallet you must align with open standards
 
-* [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model/) or [mDoc](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) for the credential itself
-* [OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) for the issuance flow
+GOV.UK Wallet follows the [W3C verifiable credentials specification](https://www.w3.org/TR/vc-data-model-2.0/) to accept digital documents in the form of verifiable credentials. These documents can be: 
+
+* [mDoc credentials](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)
+* [VC based credentials](https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/)
+
+GOV.UK Wallet supports [OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) for its issuance flow.
 
 You should also:
 
