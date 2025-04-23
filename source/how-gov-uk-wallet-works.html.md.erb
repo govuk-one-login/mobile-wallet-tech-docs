@@ -132,7 +132,7 @@ There is detailed guidance on [how GOV.UK One Login works](https://docs.sign-in.
 
 13\. Your service returns its metadata.
 
-14\. GOV.UK Wallet calls One Login to exchange the pre-authorized code in the credential offer for an access token.
+14\. GOV.UK Wallet calls GOV.UK One Login to exchange the pre-authorized code in the credential offer for an access token.
 
 15\. GOV.UK One Login sends a GET request to your /.well-known/jwks.json endpoint to fetch your public keys, which verify the signature on the pre-authorized code issued by your service.
 
