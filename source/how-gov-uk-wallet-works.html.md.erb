@@ -136,7 +136,7 @@ There is detailed guidance on [how GOV.UK One Login works](https://docs.sign-in.
 
 15\. GOV.UK One Login sends a GET request to your /.well-known/jwks.json endpoint to fetch your public keys, which verify the signature on the pre-authorized code issued by your service.
 
-16\. Your service returns its public keys as a JSON Web Key Set (JWKS).
+16\. Your service returns its public keys as a [JSON Web Key Set (JWKS)](credential-issuer-functionality/jwks).
 
 17\. GOV.UK One Login verifies the pre-authorized code content and its signature.
 
@@ -158,7 +158,7 @@ There is detailed guidance on [how GOV.UK One Login works](https://docs.sign-in.
 
 25\. Your service returns the credential to GOV.UK Wallet.
 
-26\. GOV.UK Wallet sends a GET request to your /.well-known/did.json endpoint to fetch your DID document. The DID document contains your public key which is required to verify the signature on the credential issued by your service.
+26\. GOV.UK Wallet sends a GET request to your /.well-known/did.json endpoint to fetch your [DID document](credential-issuer-functionality/did). The DID document contains your public key which is required to verify the signature on the credential issued by your service.
 
 27\. Your service returns its DID document.
 
