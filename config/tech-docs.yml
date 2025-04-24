@@ -35,7 +35,7 @@ max_toc_heading_level: 2
 prevent_indexing: true
 
 show_contribution_banner: true
-github_repo: alphagov/mobile-wallet-tech-docs
+github_repo: govuk-one-login/mobile-wallet-tech-docs
 github_branch: main
 
 # API description
