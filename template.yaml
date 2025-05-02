@@ -40,25 +40,25 @@ Mappings:
       AccountId: 652711504416
 
 Resources:
-  TeamManualDnsRecord:
+
+  DocsWalletServiceDnsRecord:
     Type: AWS::Route53::RecordSet
     Properties:
-      Name: "wallet.tech-docs.account.gov.uk"
+      Name: "docs.wallet.service.gov.uk"
       Type: A
-      HostedZoneId: !ImportValue WalletTechDocsPublicHostedZoneId
+      HostedZoneId: !ImportValue DocsWalletServicePublicHostedZoneId
       AliasTarget:
         DNSName: !GetAtt ApplicationLoadBalancer.DNSName
         HostedZoneId: !GetAtt ApplicationLoadBalancer.CanonicalHostedZoneID
 
-  TeamManualCertificate:
+  DocsWalletServiceCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: "wallet.tech-docs.account.gov.uk"
+      DomainName: "docs.wallet.service.gov.uk"
       DomainValidationOptions:
-        - DomainName: "wallet.tech-docs.account.gov.uk"
-          HostedZoneId: !ImportValue WalletTechDocsPublicHostedZoneId
+        - DomainName: "docs.wallet.service.gov.uk"
+          HostedZoneId: !ImportValue DocsWalletServicePublicHostedZoneId
       ValidationMethod: DNS
-
   #
   # Fargate cluster
   #
@@ -378,7 +378,7 @@ Resources:
       Protocol: HTTPS
       SslPolicy: ELBSecurityPolicy-TLS13-1-2-2021-06
       Certificates:
-        - CertificateArn: !Ref TeamManualCertificate
+        - CertificateArn: !Ref DocsWalletServiceCertificate
 
   ApplicationLoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
