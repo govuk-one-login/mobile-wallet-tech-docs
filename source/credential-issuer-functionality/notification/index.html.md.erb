@@ -27,16 +27,16 @@ The credential issuer must publish the location of their notification endpoint i
 
 ### Request format
 
-The notification endpoint must accept HTTP POST requests. The request must include the following:
+The notification endpoint must accept HTTP POST requests. The request must include the:
 
-- Authorization header: A bearer access token (JWT) issued by GOV.UK One Login
-- Request body (JSON): The notification details
+- authorization header: A bearer access token (JWT) issued by GOV.UK One Login
+- request body (JSON): The notification details
 
 ### Request validation
 
 #### Authorization header
 
-The request must include an access token issued by GOV.UK One Login as a bearer token in the Authorization header. This is the same as the access token used for authorizing the issuance of a verifiable credential.
+The request must include an access token issued by GOV.UK One Login as a bearer token in the Authorization header. This is the same as the access token used for authorising the issuance of a verifiable credential.
 
 The credential issuer must validate the access token to ensure that it was issued by GOV.UK One Login and the request originates from the expected user.
 
@@ -56,7 +56,7 @@ To validate the access token, you should complete the following steps.
 
 #### 3. Validate the payload claims by ensuring that:
 
-- the value of the `iss` (issuer) claim matches GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
+- the value of the `iss` (issuer) claim matches the GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
 - the value of the `aud` (audience) claim is credential issuer URL
 - the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
 - the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
@@ -92,7 +92,7 @@ When a notification is processed successfully, the credential issuer should retu
 
 If the notification could not be processed successfully, the credential issuer must return an appropriate HTTP error status code.
 
-When the notification request does not include an access token or the access token is invalid, the notification endpoint must return an [error response as defined in RFC6750](https://datatracker.ietf.org/doc/html/rfc6750#section-3).
+When the notification request does not include an access token or the access token is invalid, the notification endpoint must return a 401 Unauthorized status code and a WWW-Authenticate header as defined in [RFC6750](https://datatracker.ietf.org/doc/html/rfc6750#section-3).
 
 When the `notification_id` value is invalid, the notification endpoint must return a 400 Bad Request HTTP status code and a response body in JSON format containing the following parameter:
 
