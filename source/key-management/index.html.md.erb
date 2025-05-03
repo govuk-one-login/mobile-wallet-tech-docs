@@ -7,9 +7,9 @@ review_in: 6 months
 
 # Key Management
 
-The GOV.UK Wallet, as well as any consumer of verifiable credentials, needs to verify the validity of the credentials your service issues. Credentials issued by your service signed with your private key,  or keys, need to be verified by the public key, or keys, you made available in the `did:web` document.
+GOV.UK Wallet needs to verify the validity of the credentials your service issues. Credentials issued by your service and signed with your private keys need to be verified by the public keys you made available in the did:web document.
 
-Your public keys need to stay available throughout the lifecycle of your credentials. A public key used to sign a group of VCs can not be made inactive until after the VCs have expired. Public keys should be kept in an inactive state, available to be verified.
+Your public keys need to stay available through the lifecycle of your credentials. A public key used to sign a group of verifiable credentials (VCs) can not be made inactive until after the VCs have expired. Public keys should be kept in an inactive state, available to be verified.
 
 For their credential issuer service, credential issuers should include specific key management features.
 
