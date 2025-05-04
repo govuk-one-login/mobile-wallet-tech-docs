@@ -38,11 +38,7 @@ This diagram shows the exchange of a credential between a government service and
     activate CRI
     CRI->>OneLogin: Authenticates user
     activate OneLogin
-    OneLogin-->>CRI: User is authenticated
-    deactivate OneLogin
-    CRI->>OneLogin: Fetches user information:<br>POST /userinfo
-    activate OneLogin
-    OneLogin-->>CRI: Returns user information
+    OneLogin-->>CRI: Fetches user's walletSubjectID:<br>GET /userinfo
     deactivate OneLogin
     CRI->>CRI: Generates credential offer
     CRI-->>User: Renders credential offer<br> as QR code or deep-link
