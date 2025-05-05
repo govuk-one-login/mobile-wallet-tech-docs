@@ -71,6 +71,7 @@ This diagram shows the exchange of a credential between a government service and
         OneLogin-->>CRI: Returns JWKS
         deactivate OneLogin
     CRI->>CRI: Verifies access token and<br> proof of possession content and signature
+    CRI->>CRI: Compares walletSubjectId values
     CRI->>CRI: Generates credential
     CRI->>App: Returns credential
     deactivate CRI
@@ -146,7 +147,7 @@ There is detailed guidance on [how GOV.UK One Login works](https://docs.sign-in.
 
 21\. Your service verifies the content and signature of the access token and the proof of possession.
 
-22\. Your service must compare the `walletSubjectId` in the access token’s `sub` claim with the `walletSubjectId` retrieved in step 3. If they are the same, this provides assurance that you are issuing the credential to a digital wallet that is logged in as the rightful holder.
+22\. Your service compares the `walletSubjectId` in the access token’s `sub` claim with the `walletSubjectId` retrieved in step 3. If they are the same, this provides assurance that you are issuing the credential to a digital wallet that is logged in as the rightful holder.
 
 23\. Your service builds and signs the credential, and binds it to the did:key provided in the proof of possession to make sure the credential can only be used by the device it is issued to.
 
