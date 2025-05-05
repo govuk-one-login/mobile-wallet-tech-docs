@@ -146,27 +146,29 @@ There is detailed guidance on [how GOV.UK One Login works](https://docs.sign-in.
 
 21\. Your service verifies the content and signature of the access token and the proof of possession.
 
-22\. Your service builds and signs the credential, and binds it to the did:key provided in the proof of possession to make sure the credential can only be used by the device it is issued to.
+22\. Your service must compare the `walletSubjectId` in the access token’s `sub` claim with the `walletSubjectId` retrieved in step 3. If they are the same, this provides assurance that you are issuing the credential to a digital wallet that is logged in as the rightful holder.
 
-23\. Your service returns the device-bound credential to GOV.UK Wallet.
+23\. Your service builds and signs the credential, and binds it to the did:key provided in the proof of possession to make sure the credential can only be used by the device it is issued to.
 
-24\. GOV.UK Wallet sends a GET request to your /.well-known/did.json endpoint to fetch your [DID document](credential-issuer-functionality/did). The DID document contains your public key which is required to verify the signature on the credential issued by your service.
+24\. Your service returns the device-bound credential to GOV.UK Wallet.
 
-25\. Your service returns its DID document.
+25\. GOV.UK Wallet sends a GET request to your /.well-known/did.json endpoint to fetch your [DID document](credential-issuer-functionality/did). The DID document contains your public key which is required to verify the signature on the credential issued by your service.
 
-26\. GOV.UK Wallet verifies the content and signature of the credential.
+26\. Your service returns its DID document.
 
-27\. GOV.UK Wallet stores the credential.
+27\. GOV.UK Wallet verifies the content and signature of the credential.
+
+28\. GOV.UK Wallet stores the credential.
 
 ### [GOV.UK Wallet notifies your service](/credential-issuer-functionality/notification/)
 
 The following steps are optional. If you do not offer a `/notification` endpoint then GOV.UK Wallet will not send a notification.
 
-28\. GOV.UK Wallet sends a POST request to your /notification endpoint to notify your service. This notification will confirm whether GOV.UK Wallet successfully stored the credential, or failed to store it.
+29\. GOV.UK Wallet sends a POST request to your /notification endpoint to notify your service. This notification will confirm whether GOV.UK Wallet successfully stored the credential, or failed to store it.
 
-29\. Your service records the notification.
+30\. Your service records the notification.
 
-30\. Your service returns an empty response to GOV.UK Wallet.
+31\. Your service returns an empty response to GOV.UK Wallet.
 
 ## Sample code and reference implementations
 
