@@ -155,3 +155,12 @@ To provide a consistent experience across devices, your service's webpage should
 - as a call-to-action (CTA) link: this is best for users already on their mobile device - tapping the CTA link directly opens the credential offer in their GOV.UK Wallet
 
 This approach provides a user-friendly way to deliver the credential offer to GOV.UK Wallet, regardless of which device the user is on.
+
+### GOV.UK Wallet credential offer endpoints
+
+The GOV.UK Wallet credential offer endpoint varies depending on the environment:
+
+| Environment | Credential offer endpoint URL                                            |
+|-------------|--------------------------------------------------------------------------|
+| integration | `https://mobile.integration.account.gov.uk/wallet/add?credential_offer=` |
+| production  | `https://mobile.account.gov.uk/wallet/add?credential_offer=`             |
