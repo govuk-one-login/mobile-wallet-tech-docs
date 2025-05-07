@@ -45,13 +45,9 @@ Each credential object in `credential_configurations_supported` must include the
 - `cryptographic_binding_methods_supported`
 - `cryptographic_suites_supported`
 - `proof_types_supported`
-- `display`
 - `credential_subject`
 
-GOV.UK Wallet also requires the credential issuer's metadata to:
-
-- provide English and Welsh support
-- specify display attributes. The issuer's metadata must provide visual styling instructions and specify how fields should be named in each language. For example, when English is the selected language, the credential property `licenceNumber` must be rendered as "Fishing Licence number" [in the example below](/credential-issuer-functionality/metadata/#metadata-example).
+GOV.UK Wallet also requires the credential issuer's metadata to provide English and Welsh support.
 
 There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.3).
 
@@ -88,20 +84,6 @@ Below is an example of how a credential issuer metadata document would represent
           }
         }
       },
-     "display": [
-        {
-          "name": "Fishing Licence number",
-          "locale": "en-GB",
-          "background_color": "#12107c",
-          "text_color": "#FFFFFF"
-        },
-        {
-          "name": "Rhif Trwydded Pysgota",
-          "locale": "en-CY",
-          "background_color": "#12107c",
-          "text_color": "#FFFFFF"
-        }
-      ],
       "credentialSubject": {
         "name": [
           {
