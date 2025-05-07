@@ -36,7 +36,7 @@ The notification endpoint must accept HTTP POST requests. The request must inclu
 
 #### Authorization header
 
-The request must include an access token issued by GOV.UK One Login as a bearer token in the Authorization header. This is the same as the access token used for authorising the issuance of a verifiable credential.
+The request must include an access token issued by the GOV.UK One Login token service as a bearer token in the Authorization header. This is the same as the access token used for authorising the issuance of a verifiable credential.
 
 The credential issuer must validate the access token to ensure that it was issued by GOV.UK One Login and the request originates from the expected user.
 
@@ -44,7 +44,7 @@ To validate the access token, you should complete the following steps.
 
 #### 1. Verify the signature:
 
-- retrieve the GOV.UK One Login JSON Web Key Set (JWKS) from their published JWKS endpoint
+- retrieve the GOV.UK One Login token service's JSON Web Key Set (JWKS) from their published JWKS endpoint
 - extract the `kid` (key ID) parameter from the access token header
 - find the matching public key in the JWKS by comparing `kid` values
 - confirm the `alg` (algorithm) parameter in the token header matches the algorithm of the identified public key
