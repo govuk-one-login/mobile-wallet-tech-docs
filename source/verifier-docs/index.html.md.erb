@@ -79,29 +79,29 @@ The data flow for this interaction is as follows.
 
 In this example, a user is purchasing an age-restricted product online using an app or the browser on their phone. This is the same phone where their credentials are held in GOV.UK Wallet. The user holds a credential that would prove their age (for example, a digital driving license) in GOV.UK Wallet.
 
-The website selling the product (the verifier website) must get proof of the user’s age before completing the transaction. The verifier website is using a DVS on the DIATF framework.
+The website selling the product (the relying party website) must get proof of the user’s age before completing the transaction. The relying party website is using a DVS on the DIATF framework.
 
 <%= image_tag "OID4VP-same-device.png", { :alt => '' } %>
 
 The data flow for this interaction is as follows.
 
 1. During their purchase, the user goes to a screen that asks them to connect with GOV.UK Wallet to prove their age.
-1. The digital verification service (DVS) used by the verifier’s website is configured to generate a specific credential request. In this example, the credential request would include a photograph of the user and a confirmation that they are above the age needed to complete the transaction.
-1. The verifier’s website displays the credential request to the user as a deep link.
+1. The digital verification service (DVS) used by the relying party’s website is configured to generate a specific credential request. In this example, the credential request would include a photograph of the user and a confirmation that they are above the age needed to complete the transaction.
+1. The relying party’s website displays the credential request to the user as a deep link.
 1. The user taps the link, which opens the GOV.UK One Login app.
 1. To open GOV.UK Wallet, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (FaceID, fingerprint, PIN or pattern).
-1. The verifier website passes the request to the DVS.
+1. The relying party website passes the request to the DVS.
 1. The DVS requests the data it needs from GOV.UK Wallet. In this example, the data would be a photograph of the user and a confirmation that they are above the age needed to complete the transaction.
 1. GOV.UK Wallet checks that the DVS provider is DIATF certified.
-1. The user reviews the data that was requested, consents to share it, and allows it to be shared with the DVS and the verifier.
+1. The user reviews the data that was requested, consents to share it, and allows it to be shared with the DVS and the relying party.
 1. The DVS checks the data’s authenticity, origin and validity.
-1. The verifier website shows a visual confirmation of the credential verification. If the verification was successful and the user has proven their age, they can continue with the transaction.
+1. The relying party website shows a visual confirmation of the credential verification. If the verification was successful and the user has proven their age, they can continue with the transaction.
 
 #### OID4VP cross device flow
 
 In this example, the user holds a credential that would prove their age (for example, a digital driving license) in GOV.UK Wallet on their phone. The user is purchasing an age-restricted product online using a separate device (for example, a laptop).
 
-The website selling the product (the verifier website) must get proof of the user’s age before completing the transaction. The verifier website is using a DVS on the DIATF framework.
+The website selling the product (the relying party website) must get proof of the user’s age before completing the transaction. The relying party website is using a DVS on the DIATF framework.
 
 <%= image_tag "OID4VP-cross-device.png", { :alt => '' } %>
 
@@ -109,12 +109,12 @@ The data flow for this interaction is as follows.
 
 1. During the purchase on their laptop, the user goes to a screen that asks them to connect with GOV.UK Wallet to prove their age.
 1. To open GOV.UK Wallet on their phone, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (FaceID, fingerprint, PIN or pattern).
-1. The digital verification service (DVS) used by the verifier’s website is configured to generate a specific credential request. In this example, the request would include a photograph of the user and a confirmation that they are above the age needed to complete the transaction.
-1. The verifier’s website displays the credential request to the user as a QR code.
+1. The digital verification service (DVS) used by the relying party’s website is configured to generate a specific credential request. In this example, the request would include a photograph of the user and a confirmation that they are above the age needed to complete the transaction.
+1. The relying party’s website displays the credential request to the user as a QR code.
 1. The user scans the QR code using GOV.UK Wallet on their phone.
-1. The verifier website passes the request to the DVS.
+1. The relying party website passes the request to the DVS.
 1. The DVS requests the data it needs from GOV.UK Wallet. In this example, the data would be a photograph of the user and a confirmation that they are above the age needed to complete the transaction.
 1. GOV.UK Wallet checks that the DVS provider is one of the DIATF certified providers.
-1. The user reviews the data that was requested, consents to share it, and allows it to be shared with the DVS and the verifier.
+1. The user reviews the data that was requested, consents to share it, and allows it to be shared with the DVS and the relying party.
 1. The DVS checks the data’s authenticity, origin and validity.
-1. The verifier website shows a visual confirmation of the credential verification. If verification was successful and the user has proven their age, they can continue with their purchase.
+1. The relying party website shows a visual confirmation of the credential verification. If verification was successful and the user has proven their age, they can continue with their purchase.
