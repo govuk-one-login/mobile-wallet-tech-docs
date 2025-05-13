@@ -1,0 +1,113 @@
+---
+title: Notification
+weight: 7
+last_reviewed_on: 2025-04-18
+review_in: 6 months
+---
+
+# Notification
+
+The credential issuer notification endpoint is an optional endpoint defined in the [OID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-notification-endpoint) specification. GOV.UK Wallet uses this endpoint to notify the credential issuer of events relating to issued credentials.
+
+Notifications can be sent about events such as:
+
+- the credential has been successfully stored in the GOV.UK Wallet
+- the credential could not be stored in the GOV.UK Wallet because it is invalid
+- the user has taken specific actions related to the offered credential, such as declining to save it
+
+In order for GOV.UK Wallet to send notifications, the credential issuer must include a unique `notification_id` parameter in each [credential response](/credential-issuer-functionality/credential/#credential-response).
+
+## Technical details
+
+### Endpoint location
+
+The notification endpoint's location is implementation-specific within the OID4VCI specification.
+
+The credential issuer must publish the location of their notification endpoint in their [metadata](/credential-issuer-functionality/metadata/api.html#well-known-openid-credential-issuer) using the `notification_endpoint` parameter.
+
+### Request format
+
+The notification endpoint must accept HTTP POST requests. The request must include the:
+
+- authorization header: A bearer access token (JWT) issued by GOV.UK One Login
+- request body (JSON): The notification details
+
+### Request validation
+
+#### Authorization header
+
+The request must include an access token issued by the GOV.UK One Login token service as a bearer token in the Authorization header. This is the same as the access token used for authorising the issuance of a verifiable credential.
+
+The credential issuer must validate the access token to ensure that it was issued by GOV.UK One Login and the request originates from the expected user.
+
+To validate the access token, you should complete the following steps.
+
+#### 1. Verify the signature:
+
+- retrieve the GOV.UK One Login token service's JSON Web Key Set (JWKS) from their published JWKS endpoint
+- extract the `kid` (key ID) parameter from the access token header
+- find the matching public key in the JWKS by comparing `kid` values
+- confirm the `alg` (algorithm) parameter in the token header matches the algorithm of the identified public key
+- use the matching public key to cryptographically verify the token signature using the specified algorithm
+
+#### 2. Validate the header parameters by ensuring that:
+
+- the value of the `typ` (Type) parameter is `"at+jwt"`
+
+#### 3. Validate the payload claims by ensuring that:
+
+- the value of the `iss` (issuer) claim matches the GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
+- the value of the `aud` (audience) claim is credential issuer URL
+- the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
+- the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
+- this API has not received another access token with the same `jti` (JWT ID) that is still within its validity period
+
+#### Request body
+
+The request body must be in JSON format and contain the following parameters:
+
+| Parameter            | Description                                                                                                                             | Value(s)                                                                                                                                                                                                                       |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `notification_id`    | A string (this could be a UUID) received in the credential response, uniquely identifying an individual credential issuance occurrence. |
+| `event`              | A case-sensitive string indicating the credential's status.                                                                             | One of the following enums:<br>`credential_accepted` (GOV.UK Wallet accepted the credential)<br>`credential_failure` (GOV.UK Wallet rejected the credential)<br>`credential_deleted` (user declined or deleted the credential) |
+| `event_description`  | An optional parameter that GOV.UK Wallet may include to provide additional information about the event.                                 |
+
+The credential issuer must validate the contents of the request body and should ignore any unrecognised parameters.
+
+Below is an example of a notification when a credential is successfully stored in the GOV.UK Wallet:
+
+```
+{
+  "notification_id": "776aefd4-26c6-4a5f-aa7c-b5e294cd87cd",
+  "event": "credential_accepted",
+  "event_description": "Credential has been successfully stored"
+}
+```
+
+More information about the notification request can be found in the [OID4VCI specification] (https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.1).
+
+### Response format
+
+When a notification is processed successfully, the credential issuer should return a 204 No Content HTTP status code.
+
+If the notification could not be processed successfully, the credential issuer must return an appropriate HTTP error status code.
+
+When the notification request does not include an access token or the access token is invalid, the notification endpoint must return a 401 Unauthorized status code and a WWW-Authenticate header as defined in [RFC6750](https://datatracker.ietf.org/doc/html/rfc6750#section-3).
+
+When the `notification_id` value is invalid, the notification endpoint must return a 400 Bad Request HTTP status code and a response body in JSON format containing the following parameter:
+
+- `error`: A case-sensitive string indicating the error - `invalid_notification_id` (the request's `notification_id` was invalid), or `invalid_notification_request` (the request was invalid)
+
+Below is an example of a notification error response when the notification request included an invalid `notification_id`:
+
+```
+{
+  "error": "invalid_notification_id"
+}
+```
+
+More information about the error notification responses can be found in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.3).
+
+### Idempotency
+
+The notification endpoint must be implemented idempotently. Identical requests with the same `notification_id` should always return the same response.

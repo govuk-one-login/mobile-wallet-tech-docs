@@ -1,0 +1,124 @@
+---
+title: Metadata
+weight: 3
+last_reviewed_on: 2025-04-03
+review_in: 6 months
+---
+
+# Metadata
+
+The metadata endpoint is a required endpoint that provides essential configuration information about the credential issuer.
+
+This endpoint lets GOV.UK Wallet and verifiers dynamically learn information about the credential issuer, such as:
+
+* the endpoints used in the issuance flow
+* the supported credential types
+* how credentials should be displayed in the wallet
+
+## Technical details
+
+### Endpoint location
+
+The metadata must be publicly accessible at the standardised location `/.well-known/openid-credential-issuer` on the credential issuer's domain. The data published is non-sensitive metadata about the service.
+
+### Response format
+
+The endpoint must return a 200 OK HTTP status code and valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata).
+
+The metadata must include the following parameters:
+
+- `credential_issuer`: The URL of the credential issuer.
+- `authorization_servers`: An array of URLs for the authorisation servers the credential issuer relies on for authorisation. This must be set to the GOV.UK One Login URL.
+- `credential_endpoint`: The URL of the credential issuer's [credential endpoint](/credential-issuer-functionality/credential/#credential), where credentials can be obtained.
+- `credential_configurations_supported`: An object describing the credentials offered by the credential issuer.
+
+If your credential issuer implements the optional [notification endpoint](/credential-issuer-functionality/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
+
+#### Credential information
+
+The `credential_configurations_supported` object contains key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
+
+Each credential object in `credential_configurations_supported` must include the following parameters:
+
+- `format`
+- `credential_definition`
+- `cryptographic_binding_methods_supported`
+- `cryptographic_suites_supported`
+- `proof_types_supported`
+- `credential_subject`
+
+GOV.UK Wallet also requires the credential issuer's metadata to provide English and Welsh support.
+
+There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.3).
+
+## Metadata example
+
+Below is an example of how a credential issuer metadata document would represent a Fishing Licence credential:
+
+```JSON
+{
+  "credential_issuer": "https://example-credential-issuer.gov.uk",
+  "authorization_servers": ["https://token.account.gov.uk"],
+  "credential_endpoint": "https://example-credential-issuer.gov.uk/credential",
+  "notification_endpoint": "https://example-credential-issuer.gov.uk/notification",
+  "credential_configurations_supported": {
+    "fishingLicence": {
+      "format": "jwt_vc_json",
+      "credential_definition": {
+        "type": [
+          "VerifiableCredential",
+          "FishingLicence"
+      ]},
+      "cryptographic_binding_methods_supported": [
+        "did"
+      ],
+      "cryptographic_suites_supported": [
+        "ES256K"
+      ],
+      "proof_types_supported": {
+        "jwt": {
+          "proof_signing_alg_values_supported": [
+            "ES256"
+          ],
+          "key_attestations_required": {
+          }
+        }
+      },
+      "credentialSubject": {
+        "name": [
+          {
+            "nameParts": [
+              {
+                "display": [
+                  {
+                    "name": "Name",
+                    "locale": "en-GB"
+                  },
+                  {
+                    "name": "Enw",
+                    "locale": "cy-GB"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "fishingLicenceRecord": {
+          "licenceNumber": {
+            "display": [
+              {
+                "name": "Fishing Licence number",
+                "locale": "en-GB"
+              },
+              {
+                "name": "Rhif Trwydded Pysgota",
+                "locale": "cy-GB"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+```

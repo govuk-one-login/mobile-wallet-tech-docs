@@ -1,0 +1,42 @@
+name: AWS build and deploy
+
+on:
+  #schedule:
+  #  - cron: '00 6 * * *' # deploy at 6am to get updated readmes - @todo as not working without different commit sha
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin @v4
+      - name: Install Ruby
+        uses: ruby/setup-ruby@e34163cd15f4bb403dcd72d98e295997e6a55798 # pin@v1.238.0
+        with:
+          bundler-cache: true
+      - name: Install Gems
+        run: bundle install
+
+      - name: Build
+        run: bundle exec middleman build --verbose
+      - name: Upload to ECR and tag
+        uses: govuk-one-login/devplatform-upload-action-ecr@5431bcea6158b6c12776a96e067b1e02bf91b13d # pin@1.3.0
+        with:
+          role-to-assume-arn: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          container-sign-kms-key-arn: ${{ secrets.CONTAINER_SIGN_KMS_KEY }}
+          ecr-repo-name: ${{ secrets.ECR_REPOSITORY }}
+          artifact-bucket-name: ${{ secrets.ARTIFACT_BUCKET }}
+          dockerfile: './DockerfileAWS'
+          checkout-repo: false
