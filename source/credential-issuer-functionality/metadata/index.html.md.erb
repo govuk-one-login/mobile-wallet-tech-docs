@@ -9,7 +9,11 @@ review_in: 6 months
 
 The metadata endpoint is a required endpoint that provides essential configuration information about the credential issuer.
 
-This endpoint lets GOV.UK Wallet and verifiers dynamically learn information about the credential issuer, such as the endpoints used in the issuance flow, the supported credential types, and how credentials should be displayed in the wallet.
+This endpoint lets GOV.UK Wallet and verifiers dynamically learn information about the credential issuer, such as:
+
+* the endpoints used in the issuance flow
+* the supported credential types
+* how credentials should be displayed in the wallet
 
 ## Technical details
 
@@ -19,12 +23,12 @@ The metadata must be publicly accessible at the standardised location `/.well-kn
 
 ### Response format
 
-The endpoint must return a valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata).
+The endpoint must return a 200 OK HTTP status code and valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata).
 
 The metadata must include the following parameters:
 
 - `credential_issuer`: The URL of the credential issuer.
-- `authorization_servers`: An array of URLs for the authorization servers the credential issuer relies on for authorization. This must be set to the GOV.UK One Login token service URL.
+- `authorization_servers`: An array of URLs for the authorisation servers the credential issuer relies on for authorisation. This must be set to the GOV.UK One Login URL.
 - `credential_endpoint`: The URL of the credential issuer's [credential endpoint](/credential-issuer-functionality/credential/#credential), where credentials can be obtained.
 - `credential_configurations_supported`: An object describing the credentials offered by the credential issuer.
 
@@ -41,13 +45,9 @@ Each credential object in `credential_configurations_supported` must include the
 - `cryptographic_binding_methods_supported`
 - `cryptographic_suites_supported`
 - `proof_types_supported`
-- `display`
 - `credential_subject`
 
-The GOV.UK Wallet also requires the credential issuer's metadata to:
-
-- Provide English and Welsh support.
-- Specify display attributes. The issuer's metadata must provide visual styling instructions and specify how fields should be named in each language. For example, when English is the selected language, the credential property `licenceNumber` must be rendered as "Fishing Licence number" [in the example below](/credential-issuer-functionality/metadata/#metadata-example).
+GOV.UK Wallet also requires the credential issuer's metadata to provide English and Welsh support.
 
 There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.3).
 
@@ -84,20 +84,6 @@ Below is an example of how a credential issuer metadata document would represent
           }
         }
       },
-     "display": [
-        {
-          "name": "Fishing Licence number",
-          "locale": "en-GB",
-          "background_color": "#12107c",
-          "text_color": "#FFFFFF"
-        },
-        {
-          "name": "Rhif Trwydded Pysgota",
-          "locale": "en-CY",
-          "background_color": "#12107c",
-          "text_color": "#FFFFFF"
-        }
-      ],
       "credentialSubject": {
         "name": [
           {
