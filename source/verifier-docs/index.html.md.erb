@@ -64,7 +64,7 @@ The data flow for this interaction is as follows.
 
 1. The verifier asks the user to show proof of their age.
 1. The user opens the GOV.UK One Login app.
-1. To open GOV.UK Wallet, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (FaceID, fingerprint, PIN or pattern).
+1. To open GOV.UK Wallet, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (face, fingerprint, PIN or pattern).
 1. The verifier app on the verifier’s device is configured to request data from the user’s digital driving licence. For this transaction, the data requested is a proof of age and a photograph.
 1. GOV.UK Wallet generates a QR code on the user’s device, which the user shows to the verifier to begin the verification process.
 1. The verifier scans the QR code using the verifier app.
@@ -89,7 +89,7 @@ The data flow for this interaction is as follows.
 1. The digital verification service (DVS) used by the relying party’s website is configured to generate a specific credential request. In this example, the credential request would include a photograph of the user and a confirmation that they are above the age needed to complete the transaction.
 1. The relying party’s website displays the credential request to the user as a deep link.
 1. The user taps the link, which opens the GOV.UK One Login app.
-1. To open GOV.UK Wallet, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (FaceID, fingerprint, PIN or pattern).
+1. To open GOV.UK Wallet, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (face, fingerprint, PIN or pattern).
 1. The relying party website passes the request to the DVS.
 1. The DVS requests the data it needs from GOV.UK Wallet. In this example, the data would be a photograph of the user and a confirmation that they are above the age needed to complete the transaction.
 1. GOV.UK Wallet checks that the DVS provider is DIATF certified.
@@ -108,7 +108,7 @@ The website selling the product (the relying party website) must get proof of th
 The data flow for this interaction is as follows.
 
 1. During the purchase on their laptop, the user goes to a screen that asks them to connect with GOV.UK Wallet to prove their age.
-1. To open GOV.UK Wallet on their phone, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (FaceID, fingerprint, PIN or pattern).
+1. To open GOV.UK Wallet on their phone, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (face, fingerprint, PIN or pattern).
 1. The digital verification service (DVS) used by the relying party’s website is configured to generate a specific credential request. In this example, the request would include a photograph of the user and a confirmation that they are above the age needed to complete the transaction.
 1. The relying party’s website displays the credential request to the user as a QR code.
 1. The user scans the QR code using GOV.UK Wallet on their phone.
