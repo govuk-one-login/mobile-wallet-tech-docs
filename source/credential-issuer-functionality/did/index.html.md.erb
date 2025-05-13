@@ -43,7 +43,7 @@ Each object in the array must contain:
 
 Each object in the `verificationMethod` array represents a public key, which is the counterpart to the private key held securely by the credential issuer. These private keys are used to sign credentials. GOV.UK Wallet only accepts credentials signed using an elliptic curve key based on the P-256 curve.
 
-Not all public keys listed in the `verificationMethod` are authorised for credential issuance. The `assertionMethod` array acts as a whitelist, specifying which of those keys are trusted for credential issuance. Each item in `assertionMethod` directly references a public key in the `verificationMethod` array using its unique ID.
+Not all public keys listed in the `verificationMethod` are authorised for credential issuance. The `assertionMethod` array acts as an allow list, specifying which of those keys are trusted for credential issuance. Each item in `assertionMethod` directly references a public key in the `verificationMethod` array using its unique ID.
 
 When GOV.UK Wallet receives a credential issued by the credential issuer, it uses the `kid` (key ID) in the credential's header to find the matching public key in the `verificationMethod` array. Then, it checks if the same verification method ID is present in the `assertionMethod` array. This process confirms that the key used to sign the credential was authorised for credential issuance by the DID controller (the credential issuer).
 
