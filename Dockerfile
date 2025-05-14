@@ -1,4 +1,4 @@
-FROM ruby:3.2.3-bullseye
+FROM ruby:3.4.3-bullseye
 
 EXPOSE 4567:4567
 EXPOSE 35729:35729
@@ -6,6 +6,8 @@ EXPOSE 35729:35729
 WORKDIR /usr/src/gems
 
 COPY ./Gemfile /usr/src/gems
+COPY ./Gemfile.lock /usr/src/gems
+COPY ./.ruby-version /usr/src/gems
 
 RUN apt-get update && apt-get install -y nodejs
 
