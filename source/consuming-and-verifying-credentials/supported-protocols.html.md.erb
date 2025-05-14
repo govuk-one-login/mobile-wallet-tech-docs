@@ -1,0 +1,20 @@
+---
+title: Supported formats and protocols
+weight: 2
+last_reviewed_on: 2025-05-07
+review_in: 6 months
+---
+
+# Supported formats and protocols
+
+GOV.UK Wallet will support multiple credential formats to represent government documents. These documents can be: 
+
+* [mdoc based credentials for the digital driving licence ](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)
+* other Verifiable Credentials (VCs), including [W3C Verifiable Credential Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/) and [other formats allowing selective disclosure of attributes](https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/)
+
+ It will also support multiple protocols for users to share credentials and attributes:
+
+* [OpenID for Verifiable Presentation (OID4VP)](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html) for online sharing, using remote flows to verify mdoc and VC based credentials
+* [ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) for in-person interactions, using proximity flows to verify mdoc based credentials
+
+GOV.UK Wallet will first enable supervised proximity flow for verification in line with ISO/IEC 18013-5. Remote flows, and more details about OID4VP profiles, will be added in the future.
