@@ -1,0 +1,66 @@
+---
+title: Revoke Credential
+weight: 2
+last_reviewed_on: 2025-05-19
+review_in: 6 months
+---
+
+
+# Revoke Credential
+The revoke credential endpoint is used for revoking existing credentials. Issuers may call this endpoint to revoke credentials previously issued by themselves (not other parties). All calls to the revoke endpoint are validated, to ensure that the calling party has the correct rights to revoke the credential they are requesting to become invalid. Once the revoke endpoint has been called on an existing and valid credential, the credential will be marked internally as invalid and will be marked as such in its respective status list entry within a given known timeframe (more details in the statuslist endpoint).
+
+## Technical details
+
+### Endpoint URI
+The issuing endpoints URI path is /revoke
+The credential issuer must be registered, and access will be given to the internal API. The issuer must also sign the request with its private key and share public keys on its "/.well-known/jwks.json" so that can be used to verify the jwt.
+Issuers may only call the revoke endpoint on a credential that they previously issued, as this operation is strictly refused on all other credentials.
+
+### Request format
+The revoke endpoint must accept HTTP POST requests.
+The request must include:
+- the header: Authorization header which includes a kid, alg and type (JWT) which is signed and encoded
+- the request body (JSON): contains a signed jwt containing the specific of the target index under "idx" and the credential issuer uri under “iss”
+
+
+### Request Example
+
+#### Header
+
+The JWT header must contain the following parameters:
+
+```JSON
+{
+  "typ": "JWT",
+  "alg": "ES256",
+  "kid": "499b46712489a805510bdf3e61e1f93d"
+}
+```
+* `typ` must be "JWT" - this is the media type of the complete JWT
+* `alg` (algorithm). REQUIRED. must be "ES256" - this is the algorithm used to sign the JWT
+* `kid` (key ID). REQUIRED. This key ID must match the key ID used when registering as a credential issuer for the status list. This is used as part of the verification process.
+
+#### Payload
+
+The JWT payload must contain the following parameters:
+
+```JSON
+{
+  "iss": "asKWnsjeEJEWjjwSHsIksIksIhBe",
+  "idx": 3,
+  "uri": "https://api.status-list.service.gov.uk/t/3B0F3BD087A7"
+}
+```
+* `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential.
+* `idx` (index). REQUIRED. The index of the credential looking to be revoked.
+* `uri` (status list). REQUIRED. The specific status list shard this particular credential belongs to.
+
+And below is a example of the post request signed and encrypted as a jwt
+POST /revoke HTTP/1.1
+Host: api.status-list.service.gov.uk
+Content-Type: application/json
+eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWR4IjozLCJ1cmkiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay90LzNCMEYzQkQwODdBNyJ9.BYHtcw-ao-wB9FK-vOkRIr2c683sWS46Y3gpJ489GAS35zLs7AkPEq6Br-KrWbhzTUOZcjB4QO7aP6t0WRqzvw
+
+### Example Response
+
+HTTP/1.1 202 ACCEPTED
