@@ -49,7 +49,7 @@ The JWT payload must contain the following parameters:
   "expires": "1734709493"
 }
 ```
-* `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential.
+* `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential
 * `expires` (expiration time). REQUIRED. The expiry date for the credential i.e how long the credential should be allocated for and after that time is up the credential will expire
 
 And below is a example of the post request signed and encrypted as a jwt
@@ -67,7 +67,7 @@ Content-Type: application/json
   "idx": 3,
   "uri": "https://api.status-list.service.gov.uk/b/A671FED3E9AD"
 }
-* `idx` (Index). The index at which the credential will be stored in the status list found on the uri.
-* `uri` The uri to the status list endpoint in which the new credential has been stored.
+* `idx` (index). The index at which the credential will be stored in the status list found on the uri
+* `uri` (status list). The uri to the status list endpoint in which the new credential has been stored
 
 
