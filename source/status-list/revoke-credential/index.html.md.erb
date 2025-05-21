@@ -1,6 +1,6 @@
 ---
 title: Revoke Credential
-weight: 2
+weight: 10
 last_reviewed_on: 2025-05-19
 review_in: 6 months
 ---
@@ -9,14 +9,14 @@ review_in: 6 months
 # Revoke Credential
 The revoke credential endpoint is used for revoking existing credentials. Issuers may call this endpoint to revoke credentials previously issued by themselves (not other parties). All calls to the revoke endpoint are validated, to ensure that the calling party has the correct rights to revoke the credential they are requesting to become invalid. Once the revoke endpoint has been called on an existing and valid credential, the credential will be marked internally as invalid and will be marked as such in its respective status list entry within a given known timeframe (more details in the statuslist endpoint).
 
-## Technical details
+### Technical details
 
-### Endpoint URI
+#### Endpoint URI
 The revoke endpoints URI path is /revoke
 The credential issuer must be registered, and access will be given to the internal API. The issuer must also sign the request with its private key and share public keys on its "/.well-known/jwks.json" so that can be used to verify the jwt.
 Issuers may only call the revoke endpoint on a credential that they previously issued, as this operation is strictly refused on all other credentials.
 
-### Request format
+#### Request format
 The revoke endpoint must accept HTTP POST requests.
 The request must include:
 - the header: Authorization header which includes a kid, alg and type (JWT) which is signed and encoded
