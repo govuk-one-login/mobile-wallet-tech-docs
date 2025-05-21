@@ -1,6 +1,6 @@
 ---
 title: Issue Status List Entry
-weight: 2
+weight: 10
 last_reviewed_on: 2025-05-19
 review_in: 6 months
 ---
@@ -9,13 +9,13 @@ review_in: 6 months
 # Issue Status List Entry
 The issue status list entry endpoint is used for issuing new credentials. Once an issuer has requested to issue a new credential this request will get validated, if successful a new credential will be issued and an index and uri to where this this credentials status is stored will be returned. All new issuers will need to be registered and send the request as a signed JWT.
 
-## Technical details
+### Technical details
 
-### Endpoint URI
+#### Endpoint URI
 The issuing endpoints URI path is /issue
 The credential issuer must be registered, and access will be given to the internal API. The issuer must also sign the request with its private key and share public keys on its "/.well-known/jwks.json" so that can be used to verify the jwt.
 
-### Request format
+#### Request format
 The issue endpoint must accept HTTP POST requests.
 The request must include:
 - the header: Authorization header which includes a kid, alg and type (JWT) which is signed and encoded
