@@ -160,6 +160,15 @@ paths:
               example:
                 error: UNAUTHORISED
                 error_description: "No matching client found with ID: "
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Issue500ErrorResponse"
+              example:
+                error: INTERNAL_SERVER_ERROR
+                error_description: "No jwksUri found on client ID: "
   /revoke:
     post:
       description: An endpoint used by credential issuers to revoke an existing credential that they previously issued.
@@ -178,6 +187,53 @@ paths:
       responses:
         '202':
           description: "HTTP/1.1 202 Accepted"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revoke400ErrorResponse"
+              example:
+                error: BAD_REQUEST
+                error_description: "No Issuer in Payload"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revoke401ErrorResponse"
+              example:
+                error: UNAUTHORISED
+                error_description: "No matching client found with ID: "
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revoke500ErrorResponse"
+              example:
+                error: INTERNAL_SERVER_ERROR
+                error_description: "No jwksUri found on client ID: "
+
+  /statuslist/{endpoint}:
+    get:
+      description: Returns a specific status list
+      parameters:
+        - in: path
+          name: endpoint
+          schema:
+            type: string
+            example: "A671FED3E9AD"
+          required: true
+          description: "The specific endpoint to return"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusListResponse'
+
   /.well-known/openid-credential-issuer:
     get:
       description: A public endpoint for the GOV.UK Wallet to retrieve metadata about the credential issuer.
@@ -407,12 +463,64 @@ components:
           type: string
       required:
         - error
+    Issue500ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    Revoke400ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be 'BAD_REQUEST'.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    Revoke401ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be 'UNAUTHORISED'.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    Revoke500ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
     RevokeCredentialRequest:
       type: object
       properties:
         jwt:
           type: string
           example: "_u-_SUiaJX_AGymGQTyO1FNe9PcnuWgD7SYMIiuxysX8gmVjESFPtaVgeyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImt-pZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTMifQNXOgtDaErMGh1McajjH9Jo2K5b18R"
+      xml:
+        name: issuerequest
+    StatusListResponse:
+      type: object
+      properties:
+        jwt:
+          type: string
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjVjNjhjNjZjNWRkZTMwMzhjMmNiNzM5MGY4YTk5MzYyIn0eyJleHAiOjIyOTE3MjAxNzAsImlhdCI6MTY4NjkyMDE3MCwiaXNzIjoiaHR0cHM6Ly9hcGkuc3RhdHVzLWxpc3Quc2VydmljZS5nb3YudWsiLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoyLCJsc3QiOiJlTnB6ZEFFQUFNZ0FoZyJ9LCJzdWIiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay9iLzNCMEYzQkQwODdBNyIsInR0bCI6NDMyMDB9iq3Hen7iVSNijEzrSNVmqupLxitYS-okhrCrTf_j9ZpUhz4CKIogaNKCN8HHzj3Ewus0Np307hjdzTXnT0u_6w"
       xml:
         name: issuerequest
     StatusListResponse:
