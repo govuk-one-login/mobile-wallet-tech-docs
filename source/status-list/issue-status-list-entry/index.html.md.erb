@@ -16,18 +16,18 @@ All new issuers will need to be registered and send the request as a signed JWT.
 ### Technical details
 
 #### Endpoint URI
-The issuing endpoints URI path is ``/issue``.
+The issuing endpoints URI path is `/issue`.
 
-The credential issuer must be registered, and access will be given to the internal API. The issuer must also sign the request with its private key and share public keys on its ``/.well-known/jwks.json`` so that can be used to verify the jwt.
+The credential issuer must be registered, and access will be given to the internal API. The issuer must also sign the request with its private key and share public keys on its `/.well-known/jwks.json` so that can be used to verify the jwt.
 
 #### Request format
 The issue endpoint must accept HTTP POST requests.
 
 The request must include:
 
-* the header: Authorization header which includes a kid, alg and type (JWT) which is signed and encoded
+* `header`: Authorization header which includes a kid, alg and type (JWT) which is signed and encoded
 
-* the request body (JSON): contains a signed jwt containing a expiry date under "expires" for the how long the credential status will be allocated for, and the credential issuer uri under “iss”
+* `request body (JSON)`: contains a signed jwt containing a expiry date under "expires" for the how long the credential status will be allocated for, and the credential issuer uri under “iss”
 
 
 ### Request Example
