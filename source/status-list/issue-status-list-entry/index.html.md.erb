@@ -7,19 +7,27 @@ review_in: 6 months
 
 
 # Issue Status List Entry
-The issue status list entry endpoint is used for issuing new credentials. Once an issuer has requested to issue a new credential this request will get validated, if successful a new credential will be issued and an index and uri to where this this credentials status is stored will be returned. All new issuers will need to be registered and send the request as a signed JWT.
+The issue status list entry endpoint is used for issuing new credentials into the status list.
+
+Once an issuer has requested to issue a new credential this request will get validated, if successful a new credential will be issued on the status list and an index and uri to where this this credentials status is stored will be returned.
+
+All new issuers will need to be registered and send the request as a signed JWT.
 
 ### Technical details
 
 #### Endpoint URI
-The issuing endpoints URI path is /issue
-The credential issuer must be registered, and access will be given to the internal API. The issuer must also sign the request with its private key and share public keys on its "/.well-known/jwks.json" so that can be used to verify the jwt.
+The issuing endpoints URI path is ``/issue``.
+
+The credential issuer must be registered, and access will be given to the internal API. The issuer must also sign the request with its private key and share public keys on its ``/.well-known/jwks.json`` so that can be used to verify the jwt.
 
 #### Request format
 The issue endpoint must accept HTTP POST requests.
+
 The request must include:
-- the header: Authorization header which includes a kid, alg and type (JWT) which is signed and encoded
-- the request body (JSON): contains a signed jwt containing a expiry date for the how long the credential status will be allocated for and the credential issuer uri under “iss”
+
+* the header: Authorization header which includes a kid, alg and type (JWT) which is signed and encoded
+
+* the request body (JSON): contains a signed jwt containing a expiry date under "expires" for the how long the credential status will be allocated for, and the credential issuer uri under “iss”
 
 
 ### Request Example
@@ -54,11 +62,13 @@ The JWT payload must contain the following parameters:
 * `expires` (expiration time). REQUIRED. The expiry date for the credential i.e how long the credential should be allocated for and after that time is up the credential will expire
 
 And below is a example of the post request signed and encrypted as a jwt
+
+```
 POST /issue HTTP/1.1
 Host: api.status-list.service.gov.uk
 Accept: application/json
 eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJodHRwczovL2lzc3Vlci5kb21haW4uY29tIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTM4NTIifQ.rLdMvfxoVUhfEmJsRfJw1Nfzy0Kq88CG4IhpFKpeo8rJ_1zDzAp4-812herMHaWxoT4r-3v0l7t1RdM96h9GIg
-
+```
 
 ### Example Response
 
