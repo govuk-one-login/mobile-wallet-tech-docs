@@ -1,40 +1,51 @@
 ---
 title: Status List
-weight: 10
+weight: 2
 last_reviewed_on: 2025-05-19
 review_in: 6 months
 ---
 
+
 # Status List
-The status List endpoint provides wallet holders and verifiers access to shards of the Credential Status List. Each shard holds a subset of issued credentials across the entire Status List. Each status may contain one of the following values:
+The Status List endpoint provides wallet holders and verifiers access to shards of the Credential Status List. Each shard holds a subset of issued credentials across the entire Status List. 
+
+Each status may contain one of the following values:
+
 * `0x00` (VALID). Represents a valid credential
 * `0x01` (INVALID). Represents a credential that has been revoked (marked as invalid)
 * `0x10` (NOT USED). Currently not used.
 * `0x11` (NOT USED). Currently not used.
 
-### Technical details
+## Technical details
 
-#### Endpoint URI
-The statuslist endpoints URI path is /statuslist
-The statuslist endpoint is open to any wallet holder or verifier
+### Endpoint URI
+The statuslist endpoints URI path is `/{type}/{endpoint}`.
 
-#### Request format
+Where:
+* `type` represents the type of status list this particular shard is (`bitstring` or `token status`)
+* `endpoint` represents the hashed ID of the particular shard
+
+The statuslist endpoint is open to any wallet holder or verifier.
+
+### Request format
 The statuslist endpoint must accept HTTP GET requests.
+
 The request must include:
-- the request body (JSON): contains a JSON object containing the subject credentials index "idx" as well as the uri of the list that it belongs to "uri"
+
+* `request body (JSON)`: contains a JSON object containing the subject credentials index `idx` as well as the uri of the list that it belongs to `uri`
 
 
 ### Request Example
 
 #### Header
 
-The JSON object present in the /statuslist HTTP request:
+The JSON object present in the `/{type}/{endpoint}` HTTP request:
 
 ```JSON
 {
   "vct": "https://credentials.example.com/identity_credential",
   …
-  …
+  …  
   "status": {
      "status_list": {
        "idx": 3,
@@ -61,22 +72,21 @@ The JWT payload must contain the following parameters:
 * `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential
 * `expires` (expiration time). REQUIRED. The expiry date for the credential i.e how long the credential should be allocated for and after that time is up the credential will expire
 
-And below is a example of the get
-GET /statuslists/A671FED3E9AD HTTP/1.1
+And below is a example of the get:
+
+```TEXT
+GET /b/A671FED3E9AD HTTP/1.1
 Host: api.status-list.service.gov.uk
 Accept: application/statuslist+jwt
-
-
-
-### Example Response
 
 HTTP/1.1 200 OK
 Content-Type: application/statuslist+jwt
 eyJhbGciOiJIUzI1NiIsImtpZCI6IjEyIiwidHlwIjoic3RhdHVzbGlzdCtqd3QifQ.eyJleHAiOjIyOTE3MjAxNzAsImlhdCI6MTY4NjkyMDE3MCwiaXNzIjoiaHR0cHM6Ly9hcGkuc3RhdHVzLWxpc3Quc2VydmljZS5nb3YudWsiLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoyLCJsc3QiOiJlTnB6ZEFFQUFNZ0FoZyJ9LCJzdWIiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay9zdGF0dXNsaXN0cy8xIiwidHRsIjo0MzIwMH0.8bS1wn1TuHaN-RjDEyaf8cDLHH8m6IxgJT0qiLnxvqI
-
-#### JWT Response Header
+```
+# JWT Response Header
 
 Where the JWT response header will contain the following:
+
 ```JSON
 {
   "alg": "HS256",
@@ -84,6 +94,7 @@ Where the JWT response header will contain the following:
   "typ": "statuslist+jwt"
 }
 ```
+
 * `alg` (algorithm). Will be "HS256" - this is the algorithm used to encode the JWT
 * `kid` (expiration time). The expiry date for the credential i.e how long the credential should be allocated for and after that time is up the credential will expire
 * `type` (status list type). The type of the status list (token status list or bitstring status list)
@@ -91,6 +102,7 @@ Where the JWT response header will contain the following:
 #### Payload
 
 The JWT response payload will contain the following:
+
 ```JSON
 {
   "exp": 2291720170,
@@ -100,10 +112,11 @@ The JWT response payload will contain the following:
     "bits": 2,
     "lst": "eNpzdAEAAMgAhg"
   },
-  "sub": "https://api.status-list.service.gov.uk/statuslists/A671FED3E9AD",
+  "sub": "https://api.status-list.service.gov.uk/b/A671FED3E9AD",
   "ttl": 43200
 }
 ```
+
 * `exp` (expiry). The natural expiry of the subject credneital
 * `iat` (issued at). The timestamp the subject credential was originally issued at
 * `iss` (issuer). The URL of the credential issuer service operated by the organisation sharing the credential

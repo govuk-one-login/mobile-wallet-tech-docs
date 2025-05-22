@@ -179,10 +179,17 @@ paths:
                 error: INTERNAL_SERVER_ERROR
                 error_description: "No jwksUri found on client ID: "
 
-  /statuslist/{endpoint}:
+  /{type}/{endpoint}:
     get:
       description: Returns a specific status list
       parameters:
+        - in: path
+          name: type
+          schema:
+            type: string
+            example: "b"
+          required: true
+          description: "The type of list thats being returned"
         - in: path
           name: endpoint
           schema:
@@ -197,6 +204,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusListResponse'
+        '403':
+          description: Invalid Method
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusList403ErrorResponse"
+              example:
+                error: INTERNAL_SERVER_ERROR
+                error_description: "No endpoint uri specified in request"
+        '404':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusList404ErrorResponse"
+              example:
+                error: INTERNAL_SERVER_ERROR
+                error_description: "Status List not found for endpoint uri: "
 
   /.well-known/openid-credential-issuer:
     get:
@@ -489,6 +514,28 @@ components:
       properties:
         error:
           description: An error code - must be 'INTERNAL_SERVER_ERROR'.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    StatusList403ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be 'INVALID_METHOD'.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    StatusList404ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be 'NOT_FOUND'.
           type: string
         error_description:
           description: A human-readable explanation of the error.
