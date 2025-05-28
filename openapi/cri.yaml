@@ -76,13 +76,20 @@ paths:
                 error: invalid_notification_id
         '401':
           description: Unauthorized
+          headers:
+            WWW-Authenticate:
+              description: Indicates the authentication scheme that should be used to access the resource.
+              schema:
+                type: string
+                example: Bearer error="invalid_token"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Notification401ErrorResponse"
-              example:
-                error: invalid_token
-                error_description: "The access token expired"
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
   /.well-known/openid-credential-issuer:
     get:
       description: A public endpoint for the GOV.UK Wallet to retrieve metadata about the credential issuer.
