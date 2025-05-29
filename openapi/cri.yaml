@@ -82,14 +82,6 @@ paths:
               schema:
                 type: string
                 example: Bearer error="invalid_token"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Unauthorized
   /.well-known/openid-credential-issuer:
     get:
       description: A public endpoint for the GOV.UK Wallet to retrieve metadata about the credential issuer.
@@ -276,19 +268,6 @@ components:
             - invalid_notification_request
             - invalid_notification_id
             - invalid_request
-        error_description:
-          description: A human-readable explanation of the error.
-          type: string
-      required:
-        - error
-    Notification401ErrorResponse:
-      type: object
-      properties:
-        error:
-          description: An error code - must be `invalid_token`.
-          type: string
-          enum:
-            - invalid_token
         error_description:
           description: A human-readable explanation of the error.
           type: string
