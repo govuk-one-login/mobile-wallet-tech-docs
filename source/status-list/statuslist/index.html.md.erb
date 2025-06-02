@@ -7,7 +7,7 @@ review_in: 6 months
 
 
 # Status List
-The Status List endpoint provides wallet holders and verifiers access to shards of the Credential Status List. Each shard holds a subset of issued credentials across the entire Status List. 
+The status list endpoint gives GOV.UK Wallet holders and verifiers access to shards of the credential status list. Each shard holds part of the issued credentials across the entire Status List. 
 
 Each status may contain one of the following values:
 
@@ -19,21 +19,21 @@ Each status may contain one of the following values:
 ## Technical details
 
 ### Endpoint URI
-The statuslist endpoints URI path is `/{type}/{endpoint}`.
+The URI path for the statuslist endpoint is `/{type}/{endpoint}`.
 
 Where:
 
-* `type` represents the type of status list this particular shard is (`bitstring` or `token status`)
-* `endpoint` represents the hashed ID of the particular shard
+* `type` represents the type of status list for this shard (`bitstring` or `token status`)
+* `endpoint` represents the hashed ID of this shard
 
-The statuslist endpoint is open to any wallet holder or verifier.
+The statuslist endpoint is open to any GOV.UK Wallet holder or verifier.
 
 ### Request format
 The statuslist endpoint must accept HTTP GET requests.
 
 The request must include:
 
-* `request body (JSON)`: contains a JSON object containing the subject credentials index `idx` as well as the uri of the list that it belongs to `uri`
+* `request body (JSON)`: contains a JSON object including `idx`(the subject credentials index) and `uri` ( the uri of the list that the credential belongs to)
 
 
 ### Request Example
@@ -71,9 +71,9 @@ The JWT payload must contain the following parameters:
 }
 ```
 * `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential
-* `expires` (expiration time). REQUIRED. The expiry date for the credential i.e how long the credential should be allocated for and after that time is up the credential will expire
+* `expires` (expiration time). REQUIRED. The expiry date for the credential - after this date the credential will expire
 
-And below is a example of the get:
+This is an example of the GET:
 
 ```TEXT
 GET /b/A671FED3E9AD HTTP/1.1
@@ -97,7 +97,7 @@ Where the JWT response header will contain the following:
 ```
 
 * `alg` (algorithm). Will be "HS256" - this is the algorithm used to encode the JWT
-* `kid` (expiration time). The expiry date for the credential i.e how long the credential should be allocated for and after that time is up the credential will expire
+* `kid` (key ID). REQUIRED. This key ID must match the key ID used when registering as a credential issuer for the status list. This is used as part of the verification process
 * `type` (status list type). The type of the status list (token status list or bitstring status list)
 
 #### Payload
@@ -118,10 +118,10 @@ The JWT response payload will contain the following:
 }
 ```
 
-* `exp` (expiry). The natural expiry of the subject credneital
+* `exp` (expiry). The expiry of the subject credential
 * `iat` (issued at). The timestamp the subject credential was originally issued at
 * `iss` (issuer). The URL of the credential issuer service operated by the organisation sharing the credential
 * `status_list.bits` (bits). The number of bits that represent a status
-* `status_list.lst` (list). An encoded version of this particular shard of the status list
+* `status_list.lst` (list). An encoded version of this shard of the status list
 * `sub` (algorithm). The URI of the shard present in the original HTTP request
-* `ttl` (time-to-live). The lifetime of the cached version of this particular shard. Shards are updated at frequent and set intervals
+* `ttl` (time-to-live). The lifetime of the cached version of this shard. Shards are updated at regular and set intervals
