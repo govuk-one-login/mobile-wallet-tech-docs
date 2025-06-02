@@ -134,7 +134,7 @@ paths:
                 jwt: eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDprZXk6ekRuYWVTR2ZTUU1Zdm5MYkxXRXViaGhHRFBvcTdwQTlNTU52dW12YnNtTUNab3ZVUiJ9.eyJpc3MiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJhdWQiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIiwiaWF0IjoxNzM5NDU3NTE3MzU1LCJub25jZSI6ImRiMmRiMzEzLTVjYjktNGJiNC1hYTRkLTlmZTRkYWM0MGJlMSJ9.V_EDG7NNVOLixqScs6CKU99uEL0Rt47GoYW9Kp3UZPoP6COcXKDusvNwZMSdWTb44LoK5QvTMGbrB71y-4lRow
       responses:
         '200':
-          description: A response that contains a index and uri to where the credential is stored.
+          description: A response that contains an index and a uri to where the credential is stored.
           content:
             application/json:
               schema:
@@ -225,7 +225,7 @@ paths:
             type: string
             example: "b"
           required: true
-          description: "The type of list thats being returned"
+          description: "The type of list that is being returned"
         - in: path
           name: endpoint
           schema:

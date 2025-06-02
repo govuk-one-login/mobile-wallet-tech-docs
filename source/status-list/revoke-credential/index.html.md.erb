@@ -7,22 +7,22 @@ review_in: 6 months
 
 
 # Revoke Credential
-The revoke credential endpoint is used for revoking existing credentials. 
-Issuers may call this endpoint to revoke credentials previously issued by themselves (not other parties). 
-All calls to the revoke endpoint are validated, to ensure that the calling party has the correct rights to revoke the credential they are requesting to become invalid. 
+You can use the revoke credential endpoint to revoke existing credentials. 
+Issuers can call this endpoint to revoke credentials they have previously issued. They cannot use it to revoke credentials issued by other parties.
+All calls to the revoke credential endpoint are validated to make sure that the calling party has the correct rights to revoke the credential.  
 
-Once the revoke endpoint has been called on an existing and valid credential, the credential will be marked internally as invalid and will be marked as such in its respective status list entry within a given known timeframe (more details in the statuslist endpoint).
+When the revoke endpoint is called on an existing and valid credential, that credential is marked internally as invalid. It will be marked as invalid in its status list entry within a known timeframe. There is [more guidance on this in the statuslist endpoint page](statuslist/).
 
 ### Technical details
 
 #### Endpoint URI
-The revoke endpoints URI path is `/revoke`.
+The URI path for the revoke credential endpoint is `/revoke`.
 
 
-The credential issuer must be registered, and access will be given to the internal API. The issuer must also sign the request with its private key and share public keys on its `/.well-known/jwks.json` so that can be used to verify the jwt.
+When a credential issuer is registered, they are given access to the internal API. The issuer must sign the request with its private key and share public keys on its `/.well-known/jwks.json`. This is used to verify the jwt.
 
 
-Issuers may only call the revoke endpoint on a credential that they previously issued, as this operation is strictly refused on all other credentials.
+Issuers can only call the revoke endpoint on a credential that they previously issued. This operation is refused on all other credentials.
 
 #### Request format
 The revoke endpoint must accept HTTP POST requests.
@@ -30,8 +30,8 @@ The revoke endpoint must accept HTTP POST requests.
 
 The request must include:
 
-* `header`: Authorization header which includes a kid, alg and type (JWT) which is signed and encoded
-* `request body`: contains a signed jwt containing the specific of the target index under `idx` and the credential issuer uri under `iss`
+* `header`: Authorization header including a kid, alg and type (JWT), which is signed and encoded
+* `request body`: contains a signed jwt including `idx` (the index of the credential to revoke) and `iss`(the credential issuer uri)
 
 
 ### Request Example
@@ -63,10 +63,10 @@ The JWT payload must contain the following parameters:
 }
 ```
 * `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential
-* `idx` (index). REQUIRED. The index of the credential looking to be revoked
-* `uri` (status list). REQUIRED. The specific status list shard this particular credential belongs to
+* `idx` (index). REQUIRED. The index of the credential to be revoked
+* `uri` (status list). REQUIRED. The status list shard this credential belongs to
 
-And below is a example of the post request signed and encrypted as a jwt
+This is an example of the post request signed and encrypted as a jwt:
 
 ```TEXT
 POST /revoke HTTP/1.1
