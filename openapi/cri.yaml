@@ -48,6 +48,14 @@ paths:
                 credentials:
                   - credential: eyJraWQiOiJkaWQ6d2ViOmV4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIzVkY2JlZTg2M2I1ZDdjYzMwYzliYTFmNzM5M2RhY2M2YzE2NjEwNzgyZTRiNmExOTFmOTRhN2U4YjFlMTUxMGYiLCJjdHkiOiJ2YyIsInR5cCI6InZjK2p3dCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIiwic3ViIjoiZGlkOmtleTp6RG5hZVNHZlNRTVl2bkxiTFdFdWJoaEdEUG9xN3BBOU1NTnZ1bXZic21NQ1pvdlVSIiwiaWF0IjoiMTcxMjY2NDczMSIsIm5iZiI6IjE3MTI2NjQ3MzEiLCJleHAiOiIxNzQ0MjIxNjU3IiwiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnL25zL2NyZWRlbnRpYWxzL3YyIiwiPEpTT04tTEQgQ09OVEVYVCBVUkkgRk9SIElTU1VFUj4iXSwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIkZpc2hpbmdMaWNlbmNlIl0sImlzc3VlciI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5nb3YudWsiLCJuYW1lIjoiRmlzaGluZyBsaWNlbmNlIiwiZGVzY3JpcHRpb24iOiI8T1BUSU9OQUwgQ1JFREVOVElBTCBERVNDUklQVElPTj4iLCJ2YWxpZEZyb20iOiIyMDI0LTA0LTA5VDEyOjEyOjExWiIsInZhbGlkVW50aWwiOiIyMDI4LTEyLTEwVDIyOjU5OjU5WiIsImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImlkIjoiZGlkOmtleTp6RG5hZVNHZlNRTVl2bkxiTFdFdWJoaEdEUG9xN3BBOU1NTnZ1bXZic21NQ1pvdlVSIiwibmFtZSI6W3sibmFtZVBhcnRzIjpbeyJ2YWx1ZSI6IlNhcmFoIiwidHlwZSI6IkdpdmVuTmFtZSJ9LHsidmFsdWUiOiJFZHdhcmRzIiwidHlwZSI6IkZhbWlseU5hbWUifV19XSwiZmlzaGluZ0xpY2VuY2UiOlt7ImxpY2VuY2VOdW1iZXIiOiIwMDk4Nzg4NjMiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTEyLTEwIiwiZXhwaXJhdGlvbkRhdGUiOiIyMDI4LTEyLTEwIn1dfX0.UXGyl9ihcMNn-RlqBe_8rTxvtPDqdaGLKMJs3pk9QL4zgEZbF4LZmeZt-k2p04MSlW8IX8uWKgtxFDOGu9j2rQ
                 notification_id: 776aefd4-26c6-4a5f-aa7c-b5e294cd87cd
+        '401':
+          description: Unauthorized
+          headers:
+            WWW-Authenticate:
+              description: Indicates the authentication scheme that should be used to access the resource.
+              schema:
+                type: string
+                example: Bearer error="invalid_token"
   /notification:
     post:
       description: An endpoint used by GOV.UK Wallet to notify the credential issuer of events concerning issued credentials.
@@ -221,7 +229,7 @@ components:
       type: object
       properties:
         credentials:
-          description: An array of one or more issued credentials.
+          description: An array containing one issued credential.
           type: array
           items:
             $ref: "#/components/schemas/Credential"
