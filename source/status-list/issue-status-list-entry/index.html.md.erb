@@ -1,0 +1,87 @@
+---
+title: Issue Status List Entry
+weight: 10
+last_reviewed_on: 2025-05-19
+review_in: 6 months
+---
+
+
+# Issuing a status list entry
+You can use the issue status list entry endpoint to issue new credentials into the status list.
+
+When you request to issue a new credential, the request is validated. If the validation is successful, a new credential will be issued on the status list. An index and uri to where this this credential's status is stored is also returned.
+
+All new issuers must be registered, and must send the request as a signed JWT.
+
+### Technical details
+
+#### Endpoint URI
+The URI path for the issuing endpoint is `/issue`.
+
+When a credential issuer is registered, they are given access to the internal API. The issuer must sign the request with its private key and share public keys on its `/.well-known/jwks.json`. This is used to verify the jwt.
+
+#### Request format
+The issue endpoint must accept HTTP POST requests.
+
+The request must include:
+
+* `header`: Authorization header including a kid, alg and type (JWT), which is signed and encoded
+
+* `request body (JSON)`: contains a signed jwt including "expires" (the expiry date) and “iss” (the credential issuer uri)
+
+
+### Request Example
+
+#### Header
+
+The JWT header must contain the following parameters:
+
+```JSON
+{
+  "typ": "JWT",
+  "alg": "ES256",
+  "kid": "1fb2c0f07f643b45cafeb53fb9d9eb34"
+}
+```
+* `typ` must be "JWT" - this is the media type of the complete JWT
+* `alg` (algorithm). REQUIRED. must be "ES256" - this is the algorithm used to sign the JWT
+* `kid` (key ID). REQUIRED. This key ID must match the key ID used when registering as a credential issuer for the status list. This is used as part of the verification process.
+
+#### Payload
+
+The JWT payload must contain the following parameters:
+
+```JSON
+{
+  "iss": "https://issuer.domain.com",
+  "expires": "1734709493"
+}
+```
+
+* `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential
+* `expires` (expiration time). REQUIRED. The expiry date for the credential - after this date the credential will expire
+
+This is an example of the post request signed and encrypted as a jwt:
+
+```
+POST /issue HTTP/1.1
+Host: api.status-list.service.gov.uk
+Accept: application/json
+eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJodHRwczovL2lzc3Vlci5kb21haW4uY29tIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTM4NTIifQ.rLdMvfxoVUhfEmJsRfJw1Nfzy0Kq88CG4IhpFKpeo8rJ_1zDzAp4-812herMHaWxoT4r-3v0l7t1RdM96h9GIg
+```
+
+### Example Response
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+  "idx": 3,
+  "uri": "https://api.status-list.service.gov.uk/b/A671FED3E9AD"
+}
+```
+
+* `idx` (index). The index at which the credential will be stored in the status list found on the uri
+* `uri` (status list). The uri to the status list endpoint in which the new credential has been stored
+
+
