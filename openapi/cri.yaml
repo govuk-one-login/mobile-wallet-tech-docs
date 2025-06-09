@@ -121,7 +121,7 @@ paths:
                       jwt:
                         proof_signing_alg_values_supported:
                           - ES256
-                        key_attestations_required:
+                        key_attestations_required: {}
                     display:
                       - name: Fishing Licence number
                         locale: en-GB
