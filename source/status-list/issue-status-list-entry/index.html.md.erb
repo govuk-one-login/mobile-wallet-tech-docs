@@ -7,9 +7,9 @@ review_in: 6 months
 
 
 # Issuing a status list entry
-You can use the issue status list entry endpoint to issue new credentials into the status list.
+You can use the issue status list entry endpoint (`/issue`) to retrieve a new `idx`/`uri` combination, which will represent a unique crednetial being issued to a users wallet.
 
-When you request to issue a new credential, the request is validated. If the validation is successful, a new credential will be issued on the status list. An index and uri to where this this credential's status is stored is also returned.
+When you request a new `idx`/`uri` pair for a credential on the status list, the request is validated. If the validation is successful, a new `idx`/`uri` pair will be issued on the status list. An index and uri to where this this credential's status is stored is also returned.
 
 All new issuers must be registered, and must send the request as a signed JWT.
 
