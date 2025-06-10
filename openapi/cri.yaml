@@ -107,12 +107,12 @@ paths:
                 credential_endpoint: https://example-credential-issuer.gov.uk/credential
                 notification_endpoint: https://example-credential-issuer.gov.uk/notification
                 credential_configurations_supported:
-                  fishingLicence:
+                  FishingLicenceCredential:
                     format: jwt_vc_json
                     credential_definition:
                       type:
                         - VerifiableCredential
-                        - FishingLicence
+                        - FishingLicenceCredential
                     cryptographic_binding_methods_supported:
                       - did
                     cryptographic_suites_supported:
