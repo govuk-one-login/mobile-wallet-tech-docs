@@ -38,7 +38,7 @@ max_toc_heading_level: 2
 # Prevent robots from indexing (e.g. whilst in development)
 prevent_indexing: false
 
-show_contribution_banner: true
+show_contribution_banner: false
 github_repo: govuk-one-login/mobile-wallet-tech-docs
 github_branch: main
 
