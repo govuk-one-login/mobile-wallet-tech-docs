@@ -1,3 +1,5 @@
+# This file contains API definitions for both the Credential Issuer (CRI) and Credential Status List (CRS) services.
+# Where appropriate, endpoints will be marked as either `cri` or crs` to reflect which service they belong to.
 openapi: "3.0.0"
 info:
   version: 1.0.0
@@ -6,6 +8,7 @@ info:
   license:
     name: MIT License
 paths:
+  # `cri`
   /credential_offer:
     get:
       description: An endpoint for issuing a credential offer.
@@ -22,6 +25,7 @@ paths:
                 type: string
               example:
                 https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credential_configuration_ids%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiJURVNUX0NMSUVOVF9JRCIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.ImEbm6m4IoxW9UD-sPNi4ez26F7qiv5t-g7RFzEtbPegp5jNqulYvlPmRKj-QNBIifgXtrYID9-dHNWOQTybjQ%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.gov.uk%22%7D
+  # `cri`
   /credential:
     post:
       description: An endpoint used by the GOV.UK Wallet to request a Credential from the Credential Issuer.
@@ -48,6 +52,7 @@ paths:
                 credentials:
                   - credential: eyJraWQiOiJkaWQ6d2ViOmV4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIzVkY2JlZTg2M2I1ZDdjYzMwYzliYTFmNzM5M2RhY2M2YzE2NjEwNzgyZTRiNmExOTFmOTRhN2U4YjFlMTUxMGYiLCJjdHkiOiJ2YyIsInR5cCI6InZjK2p3dCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIiwic3ViIjoiZGlkOmtleTp6RG5hZVNHZlNRTVl2bkxiTFdFdWJoaEdEUG9xN3BBOU1NTnZ1bXZic21NQ1pvdlVSIiwiaWF0IjoiMTcxMjY2NDczMSIsIm5iZiI6IjE3MTI2NjQ3MzEiLCJleHAiOiIxNzQ0MjIxNjU3IiwiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnL25zL2NyZWRlbnRpYWxzL3YyIiwiPEpTT04tTEQgQ09OVEVYVCBVUkkgRk9SIElTU1VFUj4iXSwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIkZpc2hpbmdMaWNlbmNlIl0sImlzc3VlciI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5nb3YudWsiLCJuYW1lIjoiRmlzaGluZyBsaWNlbmNlIiwiZGVzY3JpcHRpb24iOiI8T1BUSU9OQUwgQ1JFREVOVElBTCBERVNDUklQVElPTj4iLCJ2YWxpZEZyb20iOiIyMDI0LTA0LTA5VDEyOjEyOjExWiIsInZhbGlkVW50aWwiOiIyMDI4LTEyLTEwVDIyOjU5OjU5WiIsImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImlkIjoiZGlkOmtleTp6RG5hZVNHZlNRTVl2bkxiTFdFdWJoaEdEUG9xN3BBOU1NTnZ1bXZic21NQ1pvdlVSIiwibmFtZSI6W3sibmFtZVBhcnRzIjpbeyJ2YWx1ZSI6IlNhcmFoIiwidHlwZSI6IkdpdmVuTmFtZSJ9LHsidmFsdWUiOiJFZHdhcmRzIiwidHlwZSI6IkZhbWlseU5hbWUifV19XSwiZmlzaGluZ0xpY2VuY2UiOlt7ImxpY2VuY2VOdW1iZXIiOiIwMDk4Nzg4NjMiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTEyLTEwIiwiZXhwaXJhdGlvbkRhdGUiOiIyMDI4LTEyLTEwIn1dfX0.UXGyl9ihcMNn-RlqBe_8rTxvtPDqdaGLKMJs3pk9QL4zgEZbF4LZmeZt-k2p04MSlW8IX8uWKgtxFDOGu9j2rQ
                 notification_id: 776aefd4-26c6-4a5f-aa7c-b5e294cd87cd
+  # `cri`
   /notification:
     post:
       description: An endpoint used by GOV.UK Wallet to notify the credential issuer of events concerning issued credentials.
@@ -83,22 +88,23 @@ paths:
               example:
                 error: invalid_token
                 error_description: "The access token expired"
+  # `crs`
   /issue:
     post:
-      description: An endpoint used by credential issuers to request a new credential be issued.
+      description: An endpoint to request a new status index for a GOV.UK wallet credential. The wallet Credential Issuer must provide their registered status list `client id` and the `expiry date` of the credential they are about to issue in a signed JWT. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs. This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature.
       security:
         - bearerAuth: [ ]
       requestBody:
         required: true
         content:
-          application/json:
+          application/jwt:
             schema:
               $ref: '#/components/schemas/IssueRequestBody'
             example:
-                jwt: eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDprZXk6ekRuYWVTR2ZTUU1Zdm5MYkxXRXViaGhHRFBvcTdwQTlNTU52dW12YnNtTUNab3ZVUiJ9.eyJpc3MiOiJ1cm46ZmRjOmdvdjp1azp3YWxsZXQiLCJhdWQiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIiwiaWF0IjoxNzM5NDU3NTE3MzU1LCJub25jZSI6ImRiMmRiMzEzLTVjYjktNGJiNC1hYTRkLTlmZTRkYWM0MGJlMSJ9.V_EDG7NNVOLixqScs6CKU99uEL0Rt47GoYW9Kp3UZPoP6COcXKDusvNwZMSdWTb44LoK5QvTMGbrB71y-4lRow
+                jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTMifQ.NXOgtDaErMGh1McajjH9Jo2K5b18R-_u-_SUiaJX_AGymGQTyO1FNe9PcnuWgD7SYMIiuxysX8gmVjESFPtaVg
       responses:
         '200':
-          description: A response that contains an index and a uri to where the credential is stored.
+          description: A response that contains a status index and a uri to the status list where this newly issued `VALID` (binary 00) status index value can be found.
           content:
             application/json:
               schema:
@@ -114,7 +120,7 @@ paths:
                 $ref: "#/components/schemas/Issue400ErrorResponse"
               example:
                 error: BAD_REQUEST
-                error_description: "No Issuer in Payload"
+                error_description: "JWT payload missing `iss` claim"
         '401':
           description: Unauthorized
           content:
@@ -123,25 +129,26 @@ paths:
                 $ref: "#/components/schemas/Issue401ErrorResponse"
               example:
                 error: UNAUTHORISED
-                error_description: "No matching client found with ID: "
-        '500':
-          description: Internal Server Error
+                error_description: "Unregistered Issuer client ID <Client ID>"
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Issue500ErrorResponse"
+                $ref: "#/components/schemas/Issue403ErrorResponse"
               example:
                 error: INTERNAL_SERVER_ERROR
                 error_description: "No jwksUri found on client ID: "
+  # `crs`
   /revoke:
     post:
-      description: An endpoint used by credential issuers to revoke an existing credential that they previously issued.
+      description: An endpoint used by GOV.UK One Login Wallet Credential Issuers to revoke a status list index associated with a wallet credential that the wallet credential issuer has issued. The wallet Credential Issuer must provide their registered status list client id in the `iss` claim. The index in the `idx` claim and the URI of the index in the `uri` claim. The `idx` and `uri` claims in the request JWT should match exactly what was issued by the status list service at the time of issuance. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs. This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature. The status list service will only keep associations between credential issuers and indexes issued to the credential issuers. It is the issuers responsibility to keep correlation between credentials and index issued to those credentials.
       security:
         - bearerAuth: [ ]
       requestBody:
         required: true
         content:
-          application/json:
+          application/jwt:
             schema:
               $ref: '#/components/schemas/RevokeCredentialRequest'
             example:
@@ -159,7 +166,7 @@ paths:
                 $ref: "#/components/schemas/Revoke400ErrorResponse"
               example:
                 error: BAD_REQUEST
-                error_description: "No Issuer in Payload"
+                error_description: "JWT payload missing `iss` claim"
         '401':
           description: Unauthorized
           content:
@@ -169,19 +176,20 @@ paths:
               example:
                 error: UNAUTHORISED
                 error_description: "No matching client found with ID: "
-        '500':
-          description: Internal Server Error
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Revoke500ErrorResponse"
+                $ref: "#/components/schemas/Revoke403ErrorResponse"
               example:
                 error: INTERNAL_SERVER_ERROR
-                error_description: "No jwksUri found on client ID: "
+                error_description: "Unregistered Issuer client ID <Client ID>"
 
+  # `crs`
   /{type}/{endpoint}:
     get:
-      description: Returns a specific status list
+      description: A public endpoint that returns either a W3C Bitstring Status List credential or an IETF Token Status List JWT. The list that is returned depends on list type for the wallet Credential Issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
       parameters:
         - in: path
           name: type
@@ -201,15 +209,15 @@ paths:
         '200':
           description: "OK"
           content:
-            application/json:
+            application/jwt:
               schema:
                 $ref: '#/components/schemas/StatusListResponse'
-        '403':
+        '500':
           description: Invalid Method
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/StatusList403ErrorResponse"
+                $ref: "#/components/schemas/StatusList500ErrorResponse"
               example:
                 error: INTERNAL_SERVER_ERROR
                 error_description: "No endpoint uri specified in request"
@@ -223,6 +231,7 @@ paths:
                 error: INTERNAL_SERVER_ERROR
                 error_description: "Status List not found for endpoint uri: "
 
+  # `cri`
   /.well-known/openid-credential-issuer:
     get:
       description: A public endpoint for the GOV.UK Wallet to retrieve metadata about the credential issuer.
@@ -285,6 +294,7 @@ paths:
                               locale: en-GB
                             - name: Rhif Trwydded Pysgota
                               locale: cy-GB
+  # `cri`
   /.well-known/did.json:
     get:
       description: A public endpoint for GOV.UK Wallet and credential verifiers to retrieve the credential issuer's public keys for verifying credentials
@@ -312,6 +322,7 @@ paths:
                       alg: ES256
                 assertionMethod:
                   - did:web:example-credential-issuer.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
+  # `cri`
   /.well-known/jwks.json:
     get:
       description: A public endpoint for GOV.UK One Login to retrieve the credential issuer's JSON Web Key Set (JWKS) of public keys which can be used to verify the the pre-authorised code.
@@ -439,14 +450,14 @@ components:
       type: object
       properties:
         credential:
-          description: The jwt that contains the information needed to issue a credential.
+          description: The request JWT that contains the `iss` and `expires` claims needed to issue a status index.
           type: string
           format: jwt
     IssueResponse:
       type: object
       properties:
         uri:
-          description: The uri to the status list in which the credential is stored.
+          description: The uri to the status list in which the credential status is stored.
           type: string
         index:
           description: The index at which the specific credential status value is stored.
@@ -476,11 +487,11 @@ components:
           type: string
       required:
         - error
-    Issue500ErrorResponse:
+    Issue403ErrorResponse:
       type: object
       properties:
         error:
-          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
+          description: An error code - must be 'FORBIDDEN'.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -509,22 +520,22 @@ components:
           type: string
       required:
         - error
-    Revoke500ErrorResponse:
+    Revoke403ErrorResponse:
       type: object
       properties:
         error:
-          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
+          description: An error code - must be 'FORBIDDEN'.
           type: string
         error_description:
           description: A human-readable explanation of the error.
           type: string
       required:
         - error
-    StatusList403ErrorResponse:
+    StatusList500ErrorResponse:
       type: object
       properties:
         error:
-          description: An error code - must be 'INVALID_METHOD'.
+          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -547,7 +558,7 @@ components:
       properties:
         jwt:
           type: string
-          example: "_u-_SUiaJX_AGymGQTyO1FNe9PcnuWgD7SYMIiuxysX8gmVjESFPtaVgeyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImt-pZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTMifQNXOgtDaErMGh1McajjH9Jo2K5b18R"
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWR4IjozLCJ1cmkiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay90LzNCMEYzQkQwODdBNyJ9.BYHtcw-ao-wB9FK-vOkRIr2c683sWS46Y3gpJ489GAS35zLs7AkPEq6Br-KrWbhzTUOZcjB4QO7aP6t0WRqzvw"
       xml:
         name: issuerequest
     StatusListResponse:
@@ -563,7 +574,7 @@ components:
       properties:
         jwt:
           type: string
-          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjVjNjhjNjZjNWRkZTMwMzhjMmNiNzM5MGY4YTk5MzYyIn0eyJleHAiOjIyOTE3MjAxNzAsImlhdCI6MTY4NjkyMDE3MCwiaXNzIjoiaHR0cHM6Ly9hcGkuc3RhdHVzLWxpc3Quc2VydmljZS5nb3YudWsiLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoyLCJsc3QiOiJlTnB6ZEFFQUFNZ0FoZyJ9LCJzdWIiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay9iLzNCMEYzQkQwODdBNyIsInR0bCI6NDMyMDB9iq3Hen7iVSNijEzrSNVmqupLxitYS-okhrCrTf_j9ZpUhz4CKIogaNKCN8HHzj3Ewus0Np307hjdzTXnT0u_6w"
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjhmNjY3NmUxYTQ3Njg2MmYwNTZhODA2MDY0ZjhkNGY5In0.eyJleHAiOjE2ODc1MjQ5NzAsImlhdCI6MTY4NjkyMDE3MCwiaXNzIjoiaHR0cHM6Ly9hcGkuc3RhdHVzLWxpc3Quc2VydmljZS5nb3YudWsiLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoyLCJsc3QiOiJlTnB6ZEFFQUFNZ0FoZyJ9LCJzdWIiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay9iLzNCMEYzQkQwODdBNyIsInR0bCI6NDMyMDB9.TnB-o9WQaiS-j-APmCy2iLXiC-eNccAAUnM_nuUVCPG-FBtzSqufVIJJSGZN5aOXQMiPC6whxzmBnYeTbjigKg"
       xml:
         name: issuerequest
     MetadataResponse:
