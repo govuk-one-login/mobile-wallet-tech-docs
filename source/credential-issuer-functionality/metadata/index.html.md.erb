@@ -45,7 +45,6 @@ Each credential object in `credential_configurations_supported` must include the
 - `cryptographic_binding_methods_supported`
 - `cryptographic_suites_supported`
 - `proof_types_supported`
-- `credential_subject`
 
 GOV.UK Wallet also requires the credential issuer's metadata to provide English and Welsh support.
 
@@ -81,40 +80,6 @@ Below is an example of how a credential issuer metadata document would represent
             "ES256"
           ],
           "key_attestations_required": {
-          }
-        }
-      },
-      "credentialSubject": {
-        "name": [
-          {
-            "nameParts": [
-              {
-                "display": [
-                  {
-                    "name": "Name",
-                    "locale": "en-GB"
-                  },
-                  {
-                    "name": "Enw",
-                    "locale": "cy-GB"
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "fishingLicenceRecord": {
-          "licenceNumber": {
-            "display": [
-              {
-                "name": "Fishing Licence number",
-                "locale": "en-GB"
-              },
-              {
-                "name": "Rhif Trwydded Pysgota",
-                "locale": "cy-GB"
-              }
-            ]
           }
         }
       }
