@@ -146,43 +146,13 @@ paths:
                         - FishingLicenceCredential
                     cryptographic_binding_methods_supported:
                       - did
-                    cryptographic_suites_supported:
-                      - ES256K
+                    credential_signing_alg_values_supported:
+                      - ES256
                     proof_types_supported:
                       jwt:
                         proof_signing_alg_values_supported:
                           - ES256
                         key_attestations_required: {}
-                    display:
-                      - name: Fishing Licence number
-                        locale: en-GB
-                        background_color: '#12107c'
-                        text_color: '#FFFFFF'
-                      - name: Rhif Trwydded Pysgota
-                        locale: en-CY
-                        background_color: '#12107c'
-                        text_color: '#FFFFFF'
-                    credentialSubject:
-                      name:
-                        - nameParts:
-                            - display:
-                                - name: Name
-                                  locale: en-GB
-                                - name: Enw
-                                  locale: cy-GB
-                      fishingLicenceRecord:
-                        licenceNumber:
-                          display:
-                            - name: Fishing Licence number
-                              locale: en-GB
-                            - name: Rhif Trwydded Pysgota
-                              locale: cy-GB
-                        expirationDate:
-                          display:
-                            - name: Dyddiad dod i ben
-                              locale: en-GB
-                            - name: Rhif Trwydded Pysgota
-                              locale: cy-GB
   /.well-known/did.json:
     get:
       description: A public endpoint for GOV.UK Wallet and credential verifiers to retrieve the credential issuer's public keys for verifying credentials
@@ -375,19 +345,10 @@ components:
             type: string
         proof_types_supported:
           $ref: '#/components/schemas/ProofTypesSupported'
-        display:
-          description: Display properties of the credential, such as the display name, logo, background colour, etc.
-          type: array
-          items:
-            $ref: '#/components/schemas/FishingLicenceDisplay'
-        credentialSubject:
-          $ref: '#/components/schemas/CredentialSubject'
       required:
-        - credentialSubject
         - credential_definition
         - credential_signing_alg_values_supported
         - cryptographic_binding_methods_supported
-        - display
         - format
         - proof_types_supported
     CredentialDefinition:
@@ -422,91 +383,6 @@ components:
         - proof_signing_alg_values_supported
     KeyAttestationsRequired:
       type: object
-    FishingLicenceDisplay:
-      type: object
-      properties:
-        name:
-          type: string
-        locale:
-          type: string
-        background_color:
-          type: string
-        text_color:
-          type: string
-      required:
-        - background_color
-        - locale
-        - name
-        - text_color
-    CredentialSubject:
-      description: Display properties of the subject of the credential.
-      type: object
-      properties:
-        name:
-          type: array
-          items:
-            $ref: '#/components/schemas/Name'
-        fishingLicenceRecord:
-          $ref: '#/components/schemas/FishingLicenceRecord'
-      required:
-        - fishingLicenceRecord
-        - name
-    Name:
-      type: object
-      properties:
-        nameParts:
-          type: array
-          items:
-            $ref: '#/components/schemas/NameParts'
-      required:
-        - nameParts
-    NameParts:
-      type: object
-      properties:
-        display:
-          type: array
-          items:
-            $ref: '#/components/schemas/Display'
-      required:
-        - display
-    Display:
-      type: object
-      properties:
-        name:
-          type: string
-        locale:
-          type: string
-      required:
-        - locale
-        - name
-    FishingLicenceRecord:
-      type: object
-      properties:
-        licenceNumber:
-          $ref: '#/components/schemas/LicenceNumber'
-        expirationDate:
-          $ref: '#/components/schemas/ExpirationDate'
-      required:
-        - licenceNumber
-        - expirationDate
-    LicenceNumber:
-      type: object
-      properties:
-        display:
-          type: array
-          items:
-            $ref: '#/components/schemas/Display'
-      required:
-        - display
-    ExpirationDate:
-      type: object
-      properties:
-        display:
-          type: array
-          items:
-            $ref: '#/components/schemas/Display'
-      required:
-        - display
     DidResponse:
       type: object
       properties:

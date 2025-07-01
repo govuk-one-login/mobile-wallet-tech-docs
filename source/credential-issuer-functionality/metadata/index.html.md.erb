@@ -43,16 +43,16 @@ Each credential object in `credential_configurations_supported` must include the
 - `format`
 - `credential_definition`
 - `cryptographic_binding_methods_supported`
-- `cryptographic_suites_supported`
+- `credential_signing_alg_values_supported`
 - `proof_types_supported`
 
-GOV.UK Wallet also requires the credential issuer's metadata to provide English and Welsh support.
+Additional Credential Issuer metadata parameters MAY be defined and used.
 
 There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.3).
 
 ## Metadata example
 
-Below is an example of how a credential issuer metadata document would represent a Fishing Licence credential:
+Below is an example of a credential issuer metadata:
 
 ```JSON
 {
@@ -71,8 +71,8 @@ Below is an example of how a credential issuer metadata document would represent
       "cryptographic_binding_methods_supported": [
         "did"
       ],
-      "cryptographic_suites_supported": [
-        "ES256K"
+      "credential_signing_alg_values_supported": [
+        "ES256"
       ],
       "proof_types_supported": {
         "jwt": {
