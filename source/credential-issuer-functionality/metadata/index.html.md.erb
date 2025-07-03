@@ -34,6 +34,8 @@ The metadata must include the following parameters:
 
 If your credential issuer implements the optional [notification endpoint](/credential-issuer-functionality/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
 
+You can define and use additional metadata parameters.
+
 #### Credential information
 
 The `credential_configurations_supported` object contains key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
@@ -46,7 +48,7 @@ Each credential object in `credential_configurations_supported` must include the
 - `credential_signing_alg_values_supported`
 - `proof_types_supported`
 
-You can define and use additional metadata parameters. There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.4).
+There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.4).
 
 ## Metadata example
 
