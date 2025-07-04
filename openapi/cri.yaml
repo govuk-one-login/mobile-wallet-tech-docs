@@ -152,7 +152,6 @@ paths:
                       jwt:
                         proof_signing_alg_values_supported:
                           - ES256
-                        key_attestations_required: {}
   /.well-known/did.json:
     get:
       description: A public endpoint for GOV.UK Wallet and credential verifiers to retrieve the credential issuer's public keys for verifying credentials
@@ -377,10 +376,7 @@ components:
           type: array
           items:
             type: string
-        key_attestations_required:
-          type: object
       required:
-        - key_attestations_required
         - proof_signing_alg_values_supported
     KeyAttestationsRequired:
       type: object
