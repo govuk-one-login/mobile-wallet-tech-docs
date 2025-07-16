@@ -1,4 +1,4 @@
-FROM ruby:3.3.6-bookworm
+FROM ruby:3.4-bookworm
 
 EXPOSE 4567:4567
 EXPOSE 35729:35729
