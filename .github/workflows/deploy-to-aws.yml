@@ -23,7 +23,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin @v4
       - name: Install Ruby
-        uses: ruby/setup-ruby@a4f838919020b587bb8dd4493e8881bb113d3be7 # pin@v1.246.0
+        uses: ruby/setup-ruby@472790540115ce5bd69d399a020189a8c87d641f # pin@v1.247.0
         with:
           bundler-cache: true
       - name: Install Gems
