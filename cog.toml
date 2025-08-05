@@ -1,0 +1,8 @@
+# Allow semver bumps only on the main branch
+branch_whitelist = [ "main" ]
+# Don't create a commit solely to increment the version number
+disable_bump_commit = true
+# Ignore merge commits from conventional commit checks
+ignore_merge_commits = true
+# Release tags will have a "v" prefix (e.g., v1.2.3)
+tag_prefix = "v"
