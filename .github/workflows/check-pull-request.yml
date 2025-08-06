@@ -4,6 +4,23 @@ on:
   pull_request:
 
 jobs:
+  check-conventional-commits:
+    name: Check conventional commits
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          # Pick the PR HEAD instead of the merge commit
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Verify conventional commit standards
+        uses: cocogitto/cocogitto-action@c7a74f5406bab86da17da0f0e460a69f8219a68c # v3.11
+        with:
+          # Perform check only since the latest tagged version
+          check-latest-tag-only: true
+
   check-pull-request:
     runs-on: ubuntu-24.04
     steps:
