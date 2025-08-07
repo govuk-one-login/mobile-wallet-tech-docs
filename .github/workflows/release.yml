@@ -54,7 +54,7 @@ jobs:
 
       - name: Create GitHub release
         if: steps.created.outputs.bump == 'true'
-        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2.3.2
         with:
           tag_name: ${{ steps.release.outputs.version }}
           draft: false
