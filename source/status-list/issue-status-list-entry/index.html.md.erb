@@ -7,25 +7,27 @@ review_in: 6 months
 
 
 # Issuing a status list entry
-You can use the issue status list entry endpoint (`/issue`) to retrieve a new `idx`/`uri` combination, which will represent a unique crednetial being issued to a users wallet.
+You can use the issue status list entry endpoint (`/issue`) to retrieve a new `idx`/`uri` combination, which will represent a unique credential being issued to a user's wallet.
 
-When you request a new `idx`/`uri` pair for a credential on the status list, the request is validated. If the validation is successful, a new `idx`/`uri` pair will be issued on the status list. An index and uri to where this this credential's status is stored is also returned.
+When you request a new `idx`/`uri` pair for a credential on the status list, GOV.UK Wallet validates the request. If the validation is successful, GOV.UK Wallet will issue a new `idx`/`uri` pair on the status list. GOV.UK Wallet will also return an index and uri to where this this credential's status can be retrieved.
 
-All new issuers must be registered, and must send the request as a signed JWT.
+
+You must register as a credential issuer, and you must send the request as a signed JWT.
+
 
 ### Technical details
 
 #### Endpoint URI
 The URI path for the issuing endpoint is `/issue`.
 
-When a credential issuer is registered, they are given access to the internal API. The issuer must sign the request with its private key and share public keys on its `/.well-known/jwks.json`. This is used to verify the jwt.
+When you register as a credential issuer, you are given access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json` endpoint. This is used to verify the jwt.
 
 #### Request format
 The issue endpoint must accept HTTP POST requests.
 
 The request must include:
 
-* `header`: Authorization header including a kid, alg and type (JWT), which is signed and encoded
+* `header`: Authorization header including a kid, alg and typ (JWT), which is signed and encoded
 
 * `request body (JSON)`: contains a signed jwt including "expires" (the expiry date) and “iss” (the credential issuer uri)
 
@@ -65,8 +67,9 @@ This is an example of the post request signed and encrypted as a jwt:
 
 ```
 POST /issue HTTP/1.1
-Host: api.status-list.service.gov.uk
+Host: crs.account.gov.uk
 Accept: application/json
+
 eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJodHRwczovL2lzc3Vlci5kb21haW4uY29tIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTM4NTIifQ.rLdMvfxoVUhfEmJsRfJw1Nfzy0Kq88CG4IhpFKpeo8rJ_1zDzAp4-812herMHaWxoT4r-3v0l7t1RdM96h9GIg
 ```
 
@@ -75,13 +78,12 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5
 ```
 HTTP/1.1 200 OK
 Content-Type: application/json
+
 {
   "idx": 3,
-  "uri": "https://api.status-list.service.gov.uk/b/A671FED3E9AD"
+  "uri": "https://crs.account.gov.uk/b/A671FED3E9AD"
 }
 ```
 
 * `idx` (index). The index at which the credential will be stored in the status list found on the uri
 * `uri` (status list). The uri to the status list endpoint in which the new credential has been stored
-
-

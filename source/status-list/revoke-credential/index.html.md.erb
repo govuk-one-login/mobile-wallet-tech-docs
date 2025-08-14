@@ -7,9 +7,10 @@ review_in: 6 months
 
 
 # Revoke Credential
-You can use the revoke credential endpoint to revoke existing credentials. 
-Issuers can call this endpoint to revoke credentials they have previously issued. They cannot use it to revoke credentials issued by other parties.
-All calls to the revoke credential endpoint are validated to make sure that the calling party has the correct rights to revoke the credential.  
+You can use the revoke credential endpoint to revoke existing credentials.
+As an issuer, you can call this endpoint to revoke credentials you have previously issued. You cannot use it to revoke credentials issued by other parties.
+
+GOV.UK Wallet will validate all calls to the revoke credential endpoint, to make sure that the calling party has the correct rights to revoke the credential.
 
 When the revoke endpoint is called on an existing and valid credential, that credential is marked internally as invalid. It will be marked as invalid in its status list entry within a known timeframe. There is [more guidance on this in the statuslist endpoint page](statuslist/).
 
@@ -18,15 +19,10 @@ When the revoke endpoint is called on an existing and valid credential, that cre
 #### Endpoint URI
 The URI path for the revoke credential endpoint is `/revoke`.
 
-
-When a credential issuer is registered, they are given access to the internal API. The issuer must sign the request with its private key and share public keys on its `/.well-known/jwks.json`. This is used to verify the jwt.
-
-
-Issuers can only call the revoke endpoint on a credential that they previously issued. This operation is refused on all other credentials.
+When you register as a credential issuer, you are given access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json`. This is used to verify the jwt.
 
 #### Request format
 The revoke endpoint must accept HTTP POST requests.
-
 
 The request must include:
 
@@ -59,20 +55,25 @@ The JWT payload must contain the following parameters:
 {
   "iss": "asKWnsjeEJEWjjwSHsIksIksIhBe",
   "idx": 3,
-  "uri": "https://api.status-list.service.gov.uk/t/3B0F3BD087A7"
+  "uri": "https://crs.account.gov.uk/t/3B0F3BD087A7"
 }
 ```
 * `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential
 * `idx` (index). REQUIRED. The index of the credential to be revoked
 * `uri` (status list). REQUIRED. The status list shard this credential belongs to
 
-This is an example of the post request signed and encrypted as a jwt:
+### Example Request
 
 ```TEXT
 POST /revoke HTTP/1.1
-Host: api.status-list.service.gov.uk
+Host: crs.account.gov.uk
 Content-Type: application/json
-eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWR4IjozLCJ1cmkiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay90LzNCMEYzQkQwODdBNyJ9.BYHtcw-ao-wB9FK-vOkRIr2c683sWS46Y3gpJ489GAS35zLs7AkPEq6Br-KrWbhzTUOZcjB4QO7aP6t0WRqzvw
 
+eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWR4IjozLCJ1cmkiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay90LzNCMEYzQkQwODdBNyJ9.BYHtcw-ao-wB9FK-vOkRIr2c683sWS46Y3gpJ489GAS35zLs7AkPEq6Br-KrWbhzTUOZcjB4QO7aP6t0WRqzvw
+```
+
+### Example Response
+
+```
 HTTP/1.1 202 ACCEPTED
 ```
