@@ -14,7 +14,7 @@ paths:
       description: An endpoint for issuing a credential offer.
       responses:
         '200':
-          description: |- 
+          description: |-
             Credential offer URL consisting of the following parts:<br>
             1. Wallet’s credential offer endpoint.<br>
             2. A query parameter `credential_offer`.<br>
@@ -23,14 +23,13 @@ paths:
             application/json:
               schema:
                 type: string
-              example:
-                https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credential_configuration_ids%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiJURVNUX0NMSUVOVF9JRCIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.ImEbm6m4IoxW9UD-sPNi4ez26F7qiv5t-g7RFzEtbPegp5jNqulYvlPmRKj-QNBIifgXtrYID9-dHNWOQTybjQ%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.gov.uk%22%7D
+              example: https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credential_configuration_ids%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiJURVNUX0NMSUVOVF9JRCIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.ImEbm6m4IoxW9UD-sPNi4ez26F7qiv5t-g7RFzEtbPegp5jNqulYvlPmRKj-QNBIifgXtrYID9-dHNWOQTybjQ%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.gov.uk%22%7D
   # `cri`
   /credential:
     post:
       description: An endpoint used by the GOV.UK Wallet to request a Credential from the Credential Issuer.
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -57,7 +56,7 @@ paths:
     post:
       description: An endpoint used by GOV.UK Wallet to notify the credential issuer of events concerning issued credentials.
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -92,8 +91,6 @@ paths:
   /issue:
     post:
       description: An endpoint to request a new status index for a GOV.UK wallet credential. The wallet Credential Issuer must provide their registered status list `client id` and the `expiry date` of the credential they are about to issue in a signed JWT. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs. This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature.
-      security:
-        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -101,7 +98,7 @@ paths:
             schema:
               $ref: '#/components/schemas/IssueRequestBody'
             example:
-                jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTMifQ.NXOgtDaErMGh1McajjH9Jo2K5b18R-_u-_SUiaJX_AGymGQTyO1FNe9PcnuWgD7SYMIiuxysX8gmVjESFPtaVg
+              jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTMifQ.NXOgtDaErMGh1McajjH9Jo2K5b18R-_u-_SUiaJX_AGymGQTyO1FNe9PcnuWgD7SYMIiuxysX8gmVjESFPtaVg
       responses:
         '200':
           description: A response that contains a status index and a uri to the status list where this newly issued `VALID` (binary 00) status index value can be found.
@@ -111,7 +108,7 @@ paths:
                 $ref: "#/components/schemas/IssueResponse"
               example:
                 index: 3
-                uri: "https://api.status-list.service.gov.uk/b/A671FED3E9AD"
+                uri: "https://crs.account.gov.uk/b/A671FED3E9AD"
         '400':
           description: Bad Request
           content:
@@ -137,14 +134,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/Issue403ErrorResponse"
               example:
+                error: FORBIDDEN
+                error_description: "Unable to access JWKs endpoint"
+        '500':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Issue500ErrorResponse"
+              example:
                 error: INTERNAL_SERVER_ERROR
-                error_description: "No jwksUri found on client ID: "
+                error_description: "Internal server error"
   # `crs`
   /revoke:
     post:
       description: An endpoint used by GOV.UK One Login Wallet Credential Issuers to revoke a status list index associated with a wallet credential that the wallet credential issuer has issued. The wallet Credential Issuer must provide their registered status list client id in the `iss` claim. The index in the `idx` claim and the URI of the index in the `uri` claim. The `idx` and `uri` claims in the request JWT should match exactly what was issued by the status list service at the time of issuance. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs. This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature. The status list service will only keep associations between credential issuers and indexes issued to the credential issuers. It is the issuers responsibility to keep correlation between credentials and index issued to those credentials.
-      security:
-        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -152,9 +156,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RevokeCredentialRequest'
             example:
-              proof:
-                proof_type: jwt
-                jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWR4IjozLCJ1cmkiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay90LzNCMEYzQkQwODdBNyJ9.BYHtcw-ao-wB9FK-vOkRIr2c683sWS46Y3gpJ489GAS35zLs7AkPEq6Br-KrWbhzTUOZcjB4QO7aP6t0WRqzvw
+              jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWR4IjozLCJ1cmkiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay90LzNCMEYzQkQwODdBNyJ9.BYHtcw-ao-wB9FK-vOkRIr2c683sWS46Y3gpJ489GAS35zLs7AkPEq6Br-KrWbhzTUOZcjB4QO7aP6t0WRqzvw
       responses:
         '202':
           description: "HTTP/1.1 202 Accepted"
@@ -175,7 +177,7 @@ paths:
                 $ref: "#/components/schemas/Revoke401ErrorResponse"
               example:
                 error: UNAUTHORISED
-                error_description: "No matching client found with ID: "
+                error_description: "Unregistered Issuer client ID <Client ID>"
         '403':
           description: Forbidden
           content:
@@ -245,7 +247,7 @@ paths:
               example:
                 credential_issuer: https://example-credential-issuer.gov.uk
                 authorization_servers:
-                    - https://token.account.gov.uk
+                  - https://token.account.gov.uk
                 credential_endpoint: https://example-credential-issuer.gov.uk/credential
                 notification_endpoint: https://example-credential-issuer.gov.uk/notification
                 credential_configurations_supported:
@@ -362,7 +364,7 @@ components:
       properties:
         proof_type:
           type: string
-          enum: [ jwt ]
+          enum: [jwt]
         jwt:
           type: string
           format: jwt
@@ -492,6 +494,17 @@ components:
       properties:
         error:
           description: An error code - must be 'FORBIDDEN'.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    Issue500ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
           type: string
         error_description:
           description: A human-readable explanation of the error.
