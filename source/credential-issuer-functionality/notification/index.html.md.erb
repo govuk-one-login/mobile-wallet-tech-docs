@@ -1,7 +1,7 @@
 ---
 title: Notification
 weight: 7
-last_reviewed_on: 2025-06-19
+last_reviewed_on: 2025-08-25
 review_in: 6 months
 ---
 
@@ -59,6 +59,7 @@ To validate the access token, you should complete the following steps.
 - the value of the `iss` (issuer) claim matches the GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
 - the value of the `aud` (audience) claim is credential issuer URL
 - the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
+- the value of the `exp` (expiration time) claim is in the future
 - the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
 - this API has not received another access token with the same `jti` (JWT ID) that is still within its validity period
 
