@@ -7,7 +7,8 @@ review_in: 6 months
 
 
 # Status List
-The status list endpoint is a public facing API, which can be used by anyone to access Status Lists
+
+The status list endpoint is a public facing API, which can be used by anyone to retrieve shards from the status list.
 Each shard holds a number of indexes that have been allocated to credentials by issuers.
 
 Each status may contain one of the following values:
@@ -20,15 +21,10 @@ Each status may contain one of the following values:
 ## Technical details
 
 ### Endpoint URI
-The URI path for the statuslist endpoint is `/{type}/{endpoint}` and is presented as  GET request.
-
-Where:
+The URI path for the statuslist endpoint is `/{type}/{endpoint}`. It is presented as a GET request, where:
 
 * `type` represents the type of status list for this shard (`b` for `BitstringStatusList` or `t` for `TokenStatusList`)
 * `endpoint` represents the hashed ID of a shard
-
-The statuslist endpoint is a public facing API, which can be used by any GOV.UK Wallet holder or verifier, or any other body that have a particular shard they wish to retrieve
-
 
 ### Request Example
 The following is an example of the `/{type}/{endpoint}` request:
