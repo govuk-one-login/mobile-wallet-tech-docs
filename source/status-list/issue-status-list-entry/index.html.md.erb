@@ -87,3 +87,5 @@ Content-Type: application/json
 
 * `idx` (index). The index at which the credential will be stored in the status list found on the uri
 * `uri` (status list). The uri to the status list endpoint in which the new credential has been stored
+
+You should store `idx` and `uri`, as they must be included in requests to the [`revoke` API](/status-list/revoke-credential). 
