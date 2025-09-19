@@ -63,7 +63,7 @@ The JWT payload must contain the following parameters:
 * `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential
 * `expires` (expiration time). REQUIRED. The expiry date for the credential - after this date the credential will expire
 
-This is an example of the post request signed and encrypted as a jwt:
+This is an example of the post request signed and encoded as a base64 jwt:
 
 ```
 POST /issue HTTP/1.1
