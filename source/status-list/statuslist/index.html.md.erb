@@ -9,7 +9,8 @@ review_in: 6 months
 # Status List
 
 The status list endpoint is a public facing API, which can be used by anyone to retrieve shards from the status list.
-Each shard holds a number of indexes that have been allocated to credentials by issuers.
+
+Shards are used to break down the status list into multiple lists to save space. Each shard holds a number of indexes that have been allocated to credentials by issuers. To preserve privacy, the status list randomly selects which shard an index is issued from.
 
 Each status may contain one of the following values:
 
