@@ -1,14 +1,14 @@
 ---
-title: Status List
+title: Check a credential's status
 weight: 10
 last_reviewed_on: 2025-05-19
 review_in: 6 months
 ---
 
 
-# Status List
+# Check a credential's status
 
-The status list endpoint is a public facing API, which can be used by anyone to retrieve shards from the status list.
+You can use the status list endpoint to check the status of an issued credential. It is a public facing API that can be used by anyone to retrieve shards from the status list.
 
 Shards are used to break down the status list into multiple lists to save space. Each shard holds a number of indexes that have been allocated to credentials by issuers. To preserve privacy, the status list randomly selects which shard an index is issued from.
 
@@ -22,7 +22,8 @@ Each status may contain one of the following values:
 ## Technical details
 
 ### Endpoint URI
-The URI path for the statuslist endpoint is `/{type}/{endpoint}`. It is presented as a GET request, where:
+
+The URI path for the status list endpoint is `/{type}/{endpoint}`. It is presented as a GET request, where:
 
 * `type` represents the type of status list for this shard (`b` for `BitstringStatusList` or `t` for `TokenStatusList`)
 * `endpoint` represents the hashed ID of a shard
