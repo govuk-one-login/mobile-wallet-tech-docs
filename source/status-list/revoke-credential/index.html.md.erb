@@ -1,5 +1,5 @@
 ---
-title: Revoke Credential
+title: Revoke a credential
 weight: 6
 last_reviewed_on: 2025-05-19
 review_in: 6 months
@@ -7,21 +7,23 @@ review_in: 6 months
 
 
 # Revoke Credential
-You can use the revoke credential endpoint to revoke existing credentials.
-As an issuer, you can call this endpoint to revoke credentials you have previously issued. You cannot use it to revoke credentials issued by other parties.
 
-GOV.UK Wallet will validate all calls to the revoke credential endpoint, to make sure that the calling party has the correct rights to revoke the credential.
+As a credential issuer, you can call the `/revoke` endpoint to revoke credentials you have previously issued. You cannot use it to revoke credentials issued by anyone else.
 
-When the revoke endpoint is called on an existing and valid credential, that credential is marked internally as invalid. It will be marked as invalid in its status list entry within a known timeframe. There is [more guidance on this in the statuslist endpoint page](statuslist/).
+GOV.UK Wallet validates all calls to the `/revoke` endpoint to make sure that the caller has the correct rights to revoke the credential.
+
+When you call the `/revoke` endpoint on an existing and valid credential, that credential is marked internally as invalid. It will be marked as invalid in its status list entry within a known timeframe. There is [more guidance on this in the statuslist endpoint page](statuslist/).
 
 ### Technical details
 
 #### Endpoint URI
+
 The URI path for the revoke credential endpoint is `/revoke`.
 
-When you register as a credential issuer, you are given access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json`. This is used to verify the jwt.
+When you register as a credential issuer, you get access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json`. This is used to verify the jwt.
 
 #### Request format
+
 The revoke endpoint must accept HTTP POST requests.
 
 The request must include:
