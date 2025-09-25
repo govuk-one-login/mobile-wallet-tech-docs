@@ -14,9 +14,9 @@ The credential status list service provides:
 * an issuer-facing API that credential issuers can use to change a credential's status 
 * a public-facing credential status API that anyone can use to check a credential's status
 
-As a credential issuer, you can use the issuer-facing API to request a unique `index` and `uri` which can be embedded into a new credential when you issue it to GOV.UK Wallet. You can then set the status of this issued status list slot as `revoked` if you need to revoke a credential in future. 
+As a credential issuer, you can use [the issuer-facing API](issue-status-list-entry) to request a unique `index` and `uri` which can be embedded into a new credential when you issue it to GOV.UK Wallet. You can then [set the status of this issued status list slot as `revoked`](revoke-credential) if you need to revoke a credential in future. 
 
-Anyone, including credential verifiers and holders, can use the public-facing credential status API to get a complete status list and check a credential's status.
+Anyone, including credential verifiers and holders, can use [the public-facing credential status API](statuslist) to get a complete status list and check a credential's status.
 
 In this section you can find information about:
 
