@@ -15,7 +15,7 @@ Notifications can be sent about events such as:
 - the credential could not be stored in the GOV.UK Wallet because it is invalid
 - the user has taken specific actions related to the offered credential, such as declining to save it
 
-In order for GOV.UK Wallet to send notifications, the credential issuer must include a unique `notification_id` parameter in each [credential response](/credential-issuer-functionality/credential/#credential-response).
+In order for GOV.UK Wallet to send notifications, the credential issuer must include a unique `notification_id` parameter in each [credential response](/issue-a-credential/credential/#credential-response).
 
 ## Technical details
 
@@ -23,7 +23,7 @@ In order for GOV.UK Wallet to send notifications, the credential issuer must inc
 
 The notification endpoint's location is implementation-specific within the OID4VCI specification.
 
-The credential issuer must publish the location of their notification endpoint in their [metadata](/credential-issuer-functionality/metadata/api.html#well-known-openid-credential-issuer) using the `notification_endpoint` parameter.
+The credential issuer must publish the location of their notification endpoint in their [metadata](/issue-a-credential/metadata/api.html#well-known-openid-credential-issuer) using the `notification_endpoint` parameter.
 
 ### Request format
 
