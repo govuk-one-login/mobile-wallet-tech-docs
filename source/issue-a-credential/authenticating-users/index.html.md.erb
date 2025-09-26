@@ -9,6 +9,6 @@ review_in: 6 months
 
 Services that wish to issue credentials must use GOV.UK One Login to authenticate their users. This process makes sure that credentials are issued into a wallet that is logged in as the same user the credential is for.
 
-When you register your service with GOV.UK One Login, you get a unique client identifier. This identifier must be included as a claim (`client_id`) in the pre-authorised code your service generates as part of issuing a credential offer. There is more guidance on [issuing a credential offer](/credential-issuer-functionality/credential-offer).
+When you register your service with GOV.UK One Login, you get a unique client identifier. This identifier must be included as a claim (`client_id`) in the pre-authorised code your service generates as part of issuing a credential offer. There is more guidance on [issuing a credential offer](/issue-a-credential/credential-offer).
 
 When your user authenticates with GOV.UK One Login, you obtain their user information, which includes their GOV.UK Wallet subject identifier (`walletSubjectId`). This subject identifier is a pairwise identifier you can use at the point where you finally issue the digital credential to assure that the user logged in to your service and GOV.UK Wallet are the same user. This is referred to as the 'rightful holder check'.

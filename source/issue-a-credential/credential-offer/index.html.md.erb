@@ -63,7 +63,7 @@ The JWT header must contain the following parameters:
 }
 ```
 
-* `kid` matches a `kid` in the JSON Web Key Set (JWKS) published to your [`/.well-known/jwks.json`](/credential-issuer-functionality/jwks) endpoint
+* `kid` matches a `kid` in the JSON Web Key Set (JWKS) published to your [`/.well-known/jwks.json`](/issue-a-credential/jwks) endpoint
 
 * `typ` must be "JWT" - this is the media type of the complete JWT
 
@@ -100,7 +100,7 @@ The JWT payload must contain the following claims:
 
 #### Signature
 
-The pre-authorised code must be signed with an Elliptic Curve Digital Signature Algorithm (ECDSA) private key for signing. The corresponding public key, which forms a pair with the private key used for signing, must be made publicly accessible at your [`/.well-known/jwks.json`](/credential-issuer-functionality/jwks) endpoint. This is because GOV.UK One Login will need access to the public key to verify the signature on the pre-authorised code.
+The pre-authorised code must be signed with an Elliptic Curve Digital Signature Algorithm (ECDSA) private key for signing. The corresponding public key, which forms a pair with the private key used for signing, must be made publicly accessible at your [`/.well-known/jwks.json`](/issue-a-credential/jwks) endpoint. This is because GOV.UK One Login will need access to the public key to verify the signature on the pre-authorised code.
 
 The signing algorithm must be ECDSA with the P-256 curve and the SHA-256 hash function.
 
