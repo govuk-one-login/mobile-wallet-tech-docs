@@ -1,26 +1,27 @@
 ---
-title: Issue Status List Entry
+title: Issue a status list entry
 weight: 2
 last_reviewed_on: 2025-05-19
 review_in: 6 months
 ---
 
 
-# Issuing a status list entry
-You can use the issue status list entry endpoint (`/issue`) to retrieve a new `idx`/`uri` combination, which will represent a unique credential being issued to a user's wallet.
+# Issue a status list entry
 
-When you request a new `idx`/`uri` pair for a credential on the status list, GOV.UK Wallet validates the request. If the validation is successful, GOV.UK Wallet will issue a new `idx`/`uri` pair on the status list. GOV.UK Wallet will also return an index and uri to where this this credential's status can be retrieved.
+You can use the `/issue` endpoint to request a status list slot for a credential you want to issue. This endpoint lets you retrieve a new `idx`/`uri` pair from the status list, which represents a unique credential being issued to a user's wallet.
 
+To use the `/issue` endpoint you must register as a credential issuer, and you must send your request as a signed JWT.
 
-You must register as a credential issuer, and you must send the request as a signed JWT.
+When you request a new `idx`/`uri` pair for a credential on the status list, GOV.UK Wallet validates your request. If this validation is successful, GOV.UK Wallet will issue a new `idx`/`uri` pair on the status list.
 
+GOV.UK Wallet will also return an index and uri to where you can retrieve this credential's status. You should include this response in your issued credential.
 
 ### Technical details
 
 #### Endpoint URI
 The URI path for the issuing endpoint is `/issue`.
 
-When you register as a credential issuer, you are given access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json` endpoint. This is used to verify the jwt.
+When you register as a credential issuer, you are given access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json` endpoint. This is used to verify the JWT.
 
 #### Request format
 The issue endpoint must accept HTTP POST requests.
@@ -29,7 +30,7 @@ The request must include:
 
 * `header`: Authorization header including a kid, alg and typ (JWT), which is signed and encoded
 
-* `request body (JSON)`: contains a signed jwt including "expires" (the expiry date) and “iss” (the credential issuer uri)
+* `request body (JSON)`: contains a signed JWT including "expires" (the expiry date) and “iss” (the credential issuer uri)
 
 
 ### Request Example
@@ -45,8 +46,8 @@ The JWT header must contain the following parameters:
   "kid": "1fb2c0f07f643b45cafeb53fb9d9eb34"
 }
 ```
-* `typ` must be "JWT" - this is the media type of the complete JWT
-* `alg` (algorithm). REQUIRED. must be "ES256" - this is the algorithm used to sign the JWT
+* `typ` must be "JWT" - this is the media type of the complete JWT.
+* `alg` (algorithm). REQUIRED. must be "ES256" - this is the algorithm used to sign the JWT.
 * `kid` (key ID). REQUIRED. This key ID must match the key ID used when registering as a credential issuer for the status list. This is used as part of the verification process.
 
 #### Payload
@@ -60,8 +61,8 @@ The JWT payload must contain the following parameters:
 }
 ```
 
-* `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential
-* `expires` (expiration time). REQUIRED. The expiry date for the credential - after this date the credential will expire
+* `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential.
+* `expires` (expiration time). REQUIRED. The expiry date for the credential - after this date the credential will expire.
 
 This is an example of the post request signed and encoded as a base64 jwt:
 
