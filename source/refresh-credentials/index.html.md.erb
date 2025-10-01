@@ -1,0 +1,109 @@
+---
+title: Refresh credentials
+weight: 10
+last_reviewed_on: 2025-09-30
+review_in: 6 months
+---
+
+# Refresh credentials
+
+When a credential expires, you can prompt the user to click a refresh button in the app to get a new credential.
+
+If the new credential is added successfully, the user will only see the new credential in their documents. The old credential will be removed.
+
+## Update metadata
+
+To allow credentials to be refreshed manually by the user, you must add the [`credential_refresh_web_journey_url` parameter]() to your metadata. This parameter lets GOV.UK Wallet show the user a refresh button that starts a new credential issuance process.
+
+## Understand GOV.UK Wallet's manual credential refresh flow
+
+This diagram shows the exchange between a government service (the 'credential issuer') and GOV.UK Wallet when the user performs a credential refresh. This diagram, and the descriptions below it, are an explanation of each step in the process.
+
+<div aria-hidden="true">
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+</script>
+
+<html lang="en">
+  <body>
+    <pre class="mermaid">
+  sequenceDiagram
+
+  autonumber
+  actor user
+  participant ecri as Credential Issuer
+  participant app as App
+  participant ol as GOV.UK One Login
+
+  note over app,ol: On or near <br> credential expiry
+  user->>app: Opens GOV.UK One Login App <br> and goes to the credential
+  activate app
+    alt if credential issuer metadata is in cache
+        app->>app: Gets credential issuer metadata from cache
+    else if credential issuer metadata is not in cache
+        app->>ecri: Gets credential issuer metadata <br>`/.well-known/openid-credential-issuer`
+        activate ecri
+        ecri-->>app: Returns credential issuer metadata
+        deactivate ecri
+        app->>app: Adds credential issuer metadata to cache
+    end
+    app->>app: Finds `credential_refresh_web_journey_url` in metadata
+    app->>app: Validates `credential_refresh_web_journey_url`
+    app->>app: Shows refresh button to the user
+  deactivate app
+  user->>app: Clicks refresh button
+  app->>ecri: Accesses your service
+  activate ecri
+    ecri->>ol: Authenticates user
+    ol-->>ecri: Fetches user's walletSubjectID
+    ecri->>ecri: Generates credential offer
+    ecri-->>ecri: Renders credential offer<br>deep link
+    user->>ecri: Clicks deep link
+    ecri->>app: Launches app
+    activate app
+        app->>ecri: Redeems credential offer
+    deactivate app
+  deactivate ecri
+  </pre>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    </script>
+  </body>
+</html>
+</div>
+
+1. Your user opens the app and finds the credential they need to refresh.
+
+1. If the [credential issuer metadata](../credential-issuer-functionality/metadata) is already in the app's cache, the app gets the metadata from the cache.
+
+1. If the credential issuer metadata is not in the app's cache, GOV.UK Wallet sends a GET request to your `/.well-known/openid-credential-issuer` endpoint to fetch your metadata.
+
+1. Your service returns its metadata.
+    
+1. The app adds the metadata to its cache.
+
+1. The app finds the [`credential_refresh_web_journey_url`]() value in the cached metadata.
+
+1. The app validates the `credential_refresh_web_journey_url`.
+
+1. If the validation is successful, the app shows the user a refresh button.
+
+1. The user clicks the refresh button in the app.
+
+1. The app accesses your service.
+
+1. Your service authenticates the user with GOV.UK One Login.
+
+1. Your service fetches the user’s `walletSubjectId` from the GOV.UK One Login [`/userinfo` API](https://docs.sign-in.service.gov.uk/integrate-with-integration-environment/authenticate-your-user/#retrieve-user-information).
+
+1. Your service generates a credential offer. Included in this offer is a [pre-authorised code](/credential-issuer-functionality/credential-offer/#the-pre-authorised-code) signed by your service.
+
+1. Your service renders the credential offer to the user as a deep link.
+
+1. The user clicks the deep link.
+
+1. Your service launches the app.
+
+1. The app redeems the credential offer.
+
+When the app has redeemed the credential offer, the standard [GOV.UK Wallet credential process](/issuing-credentials-to-wallet.html#your-service-publishes-metadata-about-the-credentials-it-publishes) continues.
