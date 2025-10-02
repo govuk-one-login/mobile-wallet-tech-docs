@@ -1,7 +1,7 @@
 ---
 title: Issue a status list entry
 weight: 2
-last_reviewed_on: 2025-05-19
+last_reviewed_on: 2025-10-02
 review_in: 6 months
 ---
 
@@ -10,11 +10,11 @@ review_in: 6 months
 
 You can use the `/issue` endpoint to request a status list slot for a credential you want to issue. This endpoint lets you retrieve a new `uri`/`idx` pair from the status list, which represents a unique credential being issued to a user's wallet.
 
-To use the `/issue` endpoint you must register as a credential issuer, and you must send your request as a signed JWT.
+To use the `/issue` endpoint you must [register as a credential issuer with the Status List service](/status-list/before-issuing-status-record), and you must send your request as a signed JWT.
 
-When you request a new `uri`/`idx` pair for a credential on the status list, GOV.UK Wallet validates your request. If this validation is successful, GOV.UK Wallet will issue a new `uri`/`idx` pair on the status list.
+When you request a new `uri`/`idx` pair for a credential on the status list, the Status List service validates your request. If this validation is successful, the Status List service will issue a new `uri`/`idx` pair on the status list.
 
-GOV.UK Wallet will also return a uri and an index to where you can retrieve this credential's status. You must include this response in your issued credential.
+The Status List service will also return a uri and an index to where you can retrieve this credential's status. You must include this response in your issued credential.
 
 For guidance on how to include the status list response in your credentials, see:
 
@@ -24,9 +24,10 @@ For guidance on how to include the status list response in your credentials, see
 ### Technical details
 
 #### Endpoint URI
-The URI path for the issuing endpoint is `/issue`.
 
-When you register as a credential issuer, you are given access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json` endpoint. This is used to verify the JWT.
+The URI path for the issue endpoint is `/issue`.
+
+When you register as a credential issuer with the Status List service, you get access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json` endpoint. This is used to verify the JWT.
 
 #### Request format
 The issue endpoint must accept HTTP POST requests.
@@ -34,8 +35,7 @@ The issue endpoint must accept HTTP POST requests.
 The request must include:
 
 * `header`: Authorization header including a kid, alg and typ (JWT), which is signed and encoded
-
-* `request body (JWT)`: contains a signed JWT based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), but must follow the requirements below.
+* `request body (JWT)`: contains a signed JWT based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), which must follow the requirements below
 
 
 ### Status list JWT definition `/issue`
@@ -51,8 +51,8 @@ The JOSE header must contain the following header parameters:
   "kid": "1fb2c0f07f643b45cafeb53fb9d9eb34"
 }
 ```
-* `typ` must be "JWT". REQUIRED. This is the media type of the complete JWT.
-* `alg` (algorithm). REQUIRED. must be "ES256" - this is the algorithm used to sign the JWT.
+* `typ`. REQUIRED. Must be "JWT". This is the media type of the complete JWT.
+* `alg` (algorithm). REQUIRED. Must be "ES256". This is the algorithm used to sign the JWT.
 * `kid` (key ID). REQUIRED. This key ID must be present in the JWKS hosted by the client. This is used to validate the JSON web signature (JWS).
 
 #### Payload
@@ -63,15 +63,17 @@ The JWT payload must contain the following claims:
 {
   "iss": "exampleclientIDabcd123",
   "iat": 1686920170,
-  "jti": "62b45850-4c5c-4696-983a-af66450301d4"
+  "jti": "62b45850-4c5c-4696-983a-af66450301d4",
   "statusExpiry": 1734709493
 }
 ```
 
 * `iss` (issuer). REQUIRED. The [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.
 * `iat` (issued at). REQUIRED. The UNIX timestamp when the request JWT was issued.
-* `jti` (JWT ID). REQUIRED. We will validate the format provided to make sure it is a lowercase UUID.
-* `statusExpiry` (expiration time). REQUIRED. The point after which the status expires - after this date the credential will be removed from the status list. This should match the issued credential's expiry date. We do not support credentials lasting over 10 years. This must be a number formatted as a UNIX timestamp.  
+* `jti` (JWT ID). REQUIRED. Provides a unique identifier for the JWT. The Status List service will validate the format provided to make sure it is a lowercase UUID.
+* `statusExpiry` (expiration time). REQUIRED. The point after which the status expires - after this date the credential will be removed from the status list. This should match the issued credential's expiry date and must be a number formatted as a UNIX timestamp. The Status List service does not support credentials lasting over 10 years. 
+
+### Example Request
 
 This is an example of the post request signed and encoded as a JWT:
 

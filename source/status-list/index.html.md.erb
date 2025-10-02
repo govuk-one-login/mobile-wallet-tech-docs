@@ -1,22 +1,22 @@
 ---
 title: Use status list to change credential status
 weight: 8
-last_reviewed_on: 2025-05-19
+last_reviewed_on: 2025-10-02
 review_in: 6 months
 ---
 
 # Use status list to change credential status
 
-The status list keeps a record of the status of all credentials issued to GOV.UK Wallet that include status list functionality. You can use the credential status list service to interact with the status list and set the status of credentials you issue.
+The status list keeps a record of the status of all credentials issued to GOV.UK Wallet that include status list functionality. You can use the Status List service to interact with the status list and set the status of credentials you issue.
 
-The credential status list service provides:
+The Status List service provides:
 
 * an issuer-facing API that credential issuers can use to change a credential's status 
-* a public-facing credential status API that anyone can use to check a credential's status
+* a public-facing credential status list that anyone can use to check a credential's status
 
-As a credential issuer, you can use [the issuer-facing API](issue-status-list-entry) to request a unique `index` and `uri` which can be embedded into a new credential when you issue it to GOV.UK Wallet. You can then [set the status of this issued status list slot as `revoked`](revoke-credential) if you need to revoke a credential in future. 
+As a credential issuer, you can use [the issuer-facing API](issue-status-list-entry) to request a unique `uri` and `index` which can be embedded into a new credential when you issue it to GOV.UK Wallet. You can then [set the status of this issued status list slot as `revoked`](revoke-credential) if you need to revoke a credential in future. 
 
-Anyone, including credential verifiers and holders, can use [the public-facing credential status API](statuslist) to get a complete status list and check a credential's status.
+Anyone, including credential verifiers and holders, can use [the public-facing credential status list](statuslist) to get a complete status list and check a credential's status.
 
 In this section you can find information about:
 

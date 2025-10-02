@@ -1,24 +1,20 @@
 ---
 title: Check a credential's status
 weight: 10
-last_reviewed_on: 2025-05-19
+last_reviewed_on: 2025-10-02
 review_in: 6 months
 ---
 
 
 # Check a credential's status
 
-The status list service hosts all status lists publicly. Each list is a signed JWT, and you can verify its signature by accessing the status list's JWKS hosted at `https://crs.account.gov.uk/.well-known/jwks.json`.
+The Status List service hosts all status lists publicly. Each list is a signed JWT. You can verify the JWT's signature by accessing the Status List service's JWKS hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
 
-<!---
-!! add integration url https://crs.integration.account.gov.uk/.well-known/jwks.json
---->
-
-You can use the status list uri in the credential to check a credential's status.
+You can use the status list `uri` in the credential to check a credential's status.
 
 The JWT payload is in 2 formats:
 
-* status lists beginning with `/b/` are [BitString status lists](https://www.w3.org/TR/vc-bitstring-status-list/)
+* status lists beginning with `/b/` are [Bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/)
 * status lists beginning with `/t/` are [Token status lists](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-12.html)
 
 Each status may contain one of the following values:
@@ -65,7 +61,7 @@ The JWT response header will contain the following:
 
 #### Payload
 
-The JWT response payload for a token status list will contain the following:
+The JWT response payload for a Token status list will contain the following:
 
 ```JSON
 {
@@ -89,7 +85,7 @@ The JWT response payload for a token status list will contain the following:
 * `sub` (path). The URI of the shard present in the original HTTP request
 * `ttl` (time-to-live). The lifetime of the cached version of this shard. Shards are updated at regular and set intervals
 
-The JWT response payload for a bitstring status list will contain the following:
+The JWT response payload for a Bitstring status list will contain the following:
 
 ```
 {
