@@ -1,7 +1,7 @@
 ---
 title: Before you issue a status record
 weight: 1
-last_reviewed_on: 2025-05-19
+last_reviewed_on: 2025-10-02
 review_in: 6 months
 ---
 
@@ -11,9 +11,6 @@ To issue credentials with a status, you must register with the Status List servi
 
 When you register with the Status List service, you get a unique `clientId`. You must include this `clientId` identifier as [the `iss` claim](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1) in the JWTs you send to the [`/issue`](../issue-status-list-entry) and [`/revoke`](../revoke-credential) endpoints.
 
-<!---
-clientId determines which type of status list your status is assigned to, bitstring or token
-If you need both formats you'll get 2 clientIds because the association is direct
-Regardless of type, requests and responses are same format
-Your responsibility to make sure they're included in your credentials in the right way
---->
+Your `clientId` determines whether your status is assigned to a Token or Bitstring status list. If you need to use both status list formats, you will get 2 `clientId`s because the association between this and the status list is direct.
+
+The requests to and responses from the status list are the same, regardless of the status list type. You must make sure the status list responses are included in your credential correctly.
