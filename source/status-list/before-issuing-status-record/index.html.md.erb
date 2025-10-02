@@ -9,10 +9,11 @@ review_in: 6 months
 
 To issue credentials with a status, you must register with the Status List service. To do this, speak with your GOV.UK Wallet engagement manager or [contact us](contact-us).
 
-When you register with the Status List service, you get a unique `clientId`. You must include this `clientId` identifier as a claim in the JWTs you send to the [`/issue`](../issue-status-list-entry) and [`/revoke`](../revoke-credential) endpoints.
+When you register with the Status List service, you get a unique `clientId`. You must include this `clientId` identifier as [the `iss` claim](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1) in the JWTs you send to the [`/issue`](../issue-status-list-entry) and [`/revoke`](../revoke-credential) endpoints.
 
 <!---
-## AWS
-
-Add information about need to be on AWS, specific config etc.
+clientId determines which type of status list your status is assigned to, bitstring or token
+If you need both formats you'll get 2 clientIds because the association is direct
+Regardless of type, requests and responses are same format
+Your responsibility to make sure they're included in your credentials in the right way
 --->
