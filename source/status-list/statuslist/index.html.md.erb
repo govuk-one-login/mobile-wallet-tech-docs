@@ -8,9 +8,18 @@ review_in: 6 months
 
 # Check a credential's status
 
-You can use the status list endpoint to check the status of an issued credential. It is a public facing API that can be used by anyone to retrieve shards from the status list.
+The status list service hosts all status lists publicly. Each list is a signed JWT, and you can verify its signature by accessing the status list's JWKS hosted at `https://crs.account.gov.uk/.well-known/jwks.json`.
 
-Shards are used to break down the status list into multiple lists to save space. Each shard holds a number of indexes that have been allocated to credentials by issuers. To preserve privacy, the status list randomly selects which shard an index is issued from.
+<!---
+!! add integration url https://crs.integration.account.gov.uk/.well-known/jwks.json
+--->
+
+You can use the status list uri in the credential to check a credential's status.
+
+The JWT payload is in 2 formats:
+
+* status lists beginning with `/b/` are [BitString status lists](https://www.w3.org/TR/vc-bitstring-status-list/)
+* status lists beginning with `/t/` are [Token status lists](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-12.html)
 
 Each status may contain one of the following values:
 
@@ -26,13 +35,13 @@ Each status may contain one of the following values:
 The URI path for the status list endpoint is `/{type}/{endpoint}`. It is presented as a GET request, where:
 
 * `type` represents the type of status list for this shard (`b` for `BitstringStatusList` or `t` for `TokenStatusList`)
-* `endpoint` represents the hashed ID of a shard
+* `endpoint` represents an ID for a specific status list
 
 ### Request Example
-The following is an example of the `/{type}/{endpoint}` request:
+The following is an example of the `/t/{endpoint}` request:
 
 ```TEXT
-GET /b/A671FED3E9AD HTTP/1.1
+GET /t/A671FED3E9AD HTTP/1.1
 Host: crs.account.gov.uk
 Accept: application/statuslist+jwt
 ```
@@ -51,12 +60,12 @@ The JWT response header will contain the following:
 ```
 
 * `alg` (algorithm). Will be "ES256" - this is the algorithm used to encode the JWT
-* `kid` (key ID). REQUIRED. This key ID must match the key ID used when registering as a credential issuer for the status list. This is used as part of the verification process
-* `type` (status list type). The type of the status list (token status list or bitstring status list)
+* `kid` (key ID). REQUIRED. This key ID represents a key in the status list's JWKS which can be used to verify the JSON web signature (JWS)
+* `typ` (status list type). OPTIONAL. The type of the status list - statuslist+jwt (token) or vc+jwt (bitstring)
 
 #### Payload
 
-The JWT response payload will contain the following:
+The JWT response payload for a token status list will contain the following:
 
 ```JSON
 {
@@ -79,3 +88,41 @@ The JWT response payload will contain the following:
 * `status_list.lst` (list). An encoded version of this shard of the status list
 * `sub` (path). The URI of the shard present in the original HTTP request
 * `ttl` (time-to-live). The lifetime of the cached version of this shard. Shards are updated at regular and set intervals
+
+The JWT response payload for a bitstring status list will contain the following:
+
+```
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2"
+  ],
+  "id": "https://crs.account.gov.uk/b/09B0W0J5D6RC;",
+  "type": [
+    "VerifiableCredential",
+    "BitstringStatusListCredential"
+  ],
+  "issuer": "https://crs.account.gov.uk",
+  "validFrom": "2025-10-01T13:56:45.792Z",
+  "validUntil": "2025-10-01T13:57:28.992Z",
+  "credentialSubject": {
+    "id": "https://crs.account.gov.uk/b/09B0W0J5D6RC",
+    "type": "BitstringStatusList",
+    "statusSize": 2,
+    "statusPurpose": "message",
+    "statusMessages": [
+      {
+        "status": "0x0",
+        "message": "VALID"
+      },
+      {
+        "status": "0x1",
+        "message": "INVALID"
+      }
+    ],
+    "encodedList": "H4sIAAAAAAAAA+3CMQ0AAAACoEIe9k9nD8egKQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8GxKhwqk/DAAA="
+  }
+}
+```
+
+<!---
+Add definitions for the above from spec: https://www.w3.org/TR/vc-bitstring-status-list/#bitstringstatuslistcredential --->

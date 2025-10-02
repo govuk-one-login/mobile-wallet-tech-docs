@@ -8,13 +8,18 @@ review_in: 6 months
 
 # Issue a status list entry
 
-You can use the `/issue` endpoint to request a status list slot for a credential you want to issue. This endpoint lets you retrieve a new `idx`/`uri` pair from the status list, which represents a unique credential being issued to a user's wallet.
+You can use the `/issue` endpoint to request a status list slot for a credential you want to issue. This endpoint lets you retrieve a new `uri`/`idx` pair from the status list, which represents a unique credential being issued to a user's wallet.
 
 To use the `/issue` endpoint you must register as a credential issuer, and you must send your request as a signed JWT.
 
-When you request a new `idx`/`uri` pair for a credential on the status list, GOV.UK Wallet validates your request. If this validation is successful, GOV.UK Wallet will issue a new `idx`/`uri` pair on the status list.
+When you request a new `uri`/`idx` pair for a credential on the status list, GOV.UK Wallet validates your request. If this validation is successful, GOV.UK Wallet will issue a new `uri`/`idx` pair on the status list.
 
-GOV.UK Wallet will also return an index and uri to where you can retrieve this credential's status. You should include this response in your issued credential.
+GOV.UK Wallet will also return a uri and an index to where you can retrieve this credential's status. You must include this response in your issued credential.
+
+For guidance on how to include the status list response in your credentials, see:
+
+* the [Token status list specification](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-12.html) for mdoc credentials
+* the [BitString status list specification](https://www.w3.org/TR/vc-bitstring-status-list/) for JWT-VC credentials
 
 ### Technical details
 
@@ -30,14 +35,14 @@ The request must include:
 
 * `header`: Authorization header including a kid, alg and typ (JWT), which is signed and encoded
 
-* `request body (JSON)`: contains a signed JWT including "expires" (the expiry date) and “iss” (the credential issuer uri)
+* `request body (JWT)`: contains a signed JWT based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), but must follow the requirements below.
 
 
-### Request Example
+### Status list JWT definition `/issue`
 
 #### Header
 
-The JWT header must contain the following parameters:
+The JOSE header must contain the following header parameters:
 
 ```JSON
 {
@@ -46,32 +51,37 @@ The JWT header must contain the following parameters:
   "kid": "1fb2c0f07f643b45cafeb53fb9d9eb34"
 }
 ```
-* `typ` must be "JWT" - this is the media type of the complete JWT.
+* `typ` must be "JWT". REQUIRED. This is the media type of the complete JWT.
 * `alg` (algorithm). REQUIRED. must be "ES256" - this is the algorithm used to sign the JWT.
-* `kid` (key ID). REQUIRED. This key ID must match the key ID used when registering as a credential issuer for the status list. This is used as part of the verification process.
+* `kid` (key ID). REQUIRED. This key ID must be present in the JWKS hosted by the client. This is used to validate the JSON web signature (JWS).
 
 #### Payload
 
-The JWT payload must contain the following parameters:
+The JWT payload must contain the following claims:
 
 ```JSON
 {
-  "iss": "https://issuer.domain.com",
-  "expires": "1734709493"
+  "iss": "exampleclientIDabcd123",
+  "iat": 1686920170,
+  "jti": "62b45850-4c5c-4696-983a-af66450301d4"
+  "statusExpiry": 1734709493
 }
 ```
 
-* `iss` (issuer). REQUIRED. The URL of the credential issuer service operated by the organisation sharing the credential.
-* `expires` (expiration time). REQUIRED. The expiry date for the credential - after this date the credential will expire.
+* `iss` (issuer). REQUIRED. The [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.
+* `iat` (issued at). REQUIRED. The UNIX timestamp when the request JWT was issued.
+* `jti` (JWT ID). REQUIRED. We will validate the format provided to make sure it is a lowercase UUID.
+* `statusExpiry` (expiration time). REQUIRED. The point after which the status expires - after this date the credential will be removed from the status list. This should match the issued credential's expiry date. We do not support credentials lasting over 10 years. This must be a number formatted as a UNIX timestamp.  
 
-This is an example of the post request signed and encoded as a base64 jwt:
+This is an example of the post request signed and encoded as a JWT:
 
 ```
 POST /issue HTTP/1.1
 Host: crs.account.gov.uk
+Content-Type: application/jwt
 Accept: application/json
 
-eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJodHRwczovL2lzc3Vlci5kb21haW4uY29tIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTM4NTIifQ.rLdMvfxoVUhfEmJsRfJw1Nfzy0Kq88CG4IhpFKpeo8rJ_1zDzAp4-812herMHaWxoT4r-3v0l7t1RdM96h9GIg
+eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjgwODY4Nzk0LTM2MjYtNDNmOC05YTRkLWEwZDk4YWE3ZGE2NiJ9.eyJpc3MiOiJleGFtcGxlQ2xpZW50SWQxMjMzIiwiaWF0IjoxNzU5NDAyMjgzLCJqaXQiOiJiYzBmYmZmMy1jYjA0LTQyODYtYThiYS1mNDk1NmNjYmUyZDciLCJzdGF0dXNFeHBpcnkiOjE3Nzk2MTY1ODN9.yasAT3XhugXJhat_rVnVTkXdA3KS99DCZJV79WohLf18mkbKcuGlDVegmZFVCg6NOts0m3uI7Wet1QNGm07Xag
 ```
 
 ### Example Response
@@ -81,12 +91,12 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-  "idx": 3,
   "uri": "https://crs.account.gov.uk/b/A671FED3E9AD"
+  "idx": 3,
 }
 ```
 
-* `idx` (index). The index at which the credential will be stored in the status list found on the uri
 * `uri` (status list). The uri to the status list endpoint in which the new credential has been stored
+* `idx` (index). The index at which the credential will be stored in the status list found on the uri
 
-You should store `idx` and `uri`, as they must be included in requests to the [`revoke` API](/status-list/revoke-credential). 
+If you want to [revoke a credential](/status-list/revoke-credential), you must store `uri` and `idx`.
