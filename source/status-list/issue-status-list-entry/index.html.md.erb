@@ -51,9 +51,13 @@ The JOSE header must contain the following header parameters:
   "kid": "1fb2c0f07f643b45cafeb53fb9d9eb34"
 }
 ```
-* `typ`. REQUIRED. Must be "JWT". This is the media type of the complete JWT.
-* `alg` (algorithm). REQUIRED. Must be "ES256". This is the algorithm used to sign the JWT.
-* `kid` (key ID). REQUIRED. This key ID must be present in the JWKS hosted by the client. This is used to validate the JSON web signature (JWS).
+
+| Parameter | Required or optional | Description           |
+|-----------|----------------------|-----------------------|
+| `typ`     | Required             | `typ` stands for 'type'. You must set this value to be `JWT`. This is the media type of the complete JWT.    |
+| `alg`     | Required             | `alg` stands for 'algorithm'. You must set this value to be `ES256`. This is the algorithm used to sign the JWT.     |
+| `kid`     | Required             | `kid` stands for 'key ID'. This key ID must be present in your hosted JWKS. This is used to validate the JSON web signature (JWS).     |
+
 
 #### Payload
 
@@ -68,10 +72,12 @@ The JWT payload must contain the following claims:
 }
 ```
 
-* `iss` (issuer). REQUIRED. The [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.
-* `iat` (issued at). REQUIRED. The UNIX timestamp when the request JWT was issued.
-* `jti` (JWT ID). REQUIRED. Provides a unique identifier for the JWT. The Status List service will validate the format provided to make sure it is a lowercase UUID.
-* `statusExpiry` (expiration time). REQUIRED. The point after which the status expires - after this date the credential will be removed from the status list. This should match the issued credential's expiry date and must be a number formatted as a UNIX timestamp. The Status List service does not support credentials lasting over 10 years. 
+| Claim | Required or optional | Description           |
+|-------|----------------------|-----------------------|
+| `iss` | Required             | `iss` stands for 'issuer'. This is the [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.    |
+| `iat` | Required             | `iat` stands for 'issued at'. This is the UNIX timestamp when the request JWT was issued.    |
+| `jti` | Required             | `jwt` stands for 'JWT ID'. This provides a unique identifier for the JWT. The Status List service will validate the format provided to make sure it is a lowercase UUID.    |
+| `statusExpiry` | Required    | The point after which the status expires. After this date the credential will be removed from the status list.<br><br>This value should match the issued credential's expiry date and must be a number formatted as a UNIX timestamp. The Status List service does not support credentials lasting over 10 years.    |
 
 ### Example Request
 
@@ -98,7 +104,7 @@ Content-Type: application/json
 }
 ```
 
-* `uri` (status list). The uri to the status list endpoint in which the new credential has been stored
-* `idx` (index). The index at which the credential will be stored in the status list found on the uri
-
-If you want to [revoke a credential](/status-list/revoke-credential), you must store `uri` and `idx`.
+| Parameter | Description           |
+|-----------|-----------------------|
+| `uri`     | `uri` stands for 'uniform resource identifier'. This is the uri to the status list endpoint in which the new credential has been stored.    |
+| `idx`     | `idx` stands for 'index'. This is the index at which the credential will be stored in the status list found on the uri.    |

@@ -55,9 +55,11 @@ The JWT response header will contain the following:
 }
 ```
 
-* `alg` (algorithm). Will be "ES256" - this is the algorithm used to encode the JWT
-* `kid` (key ID). REQUIRED. This key ID represents a key in the status list's JWKS which can be used to verify the JSON web signature (JWS)
-* `typ` (status list type). OPTIONAL. The type of the status list - statuslist+jwt (token) or vc+jwt (bitstring)
+| Parameter | Description           |
+|-----------|-----------------------|
+| `alg`     | `alg` stands for 'algorithm'. This value will be returned as `ES256`. This is the algorithm used to encode the JWT.    |
+| `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List service's JWKS which can be used to verify the JSON web signature (JWS).    |
+| `typ`     | `typ` stands for 'type'. This is the type of the status list. It can be `statuslist+jwt` (token) or `vc+jwt` (bitstring).    |
 
 #### Payload
 
@@ -77,13 +79,15 @@ The JWT response payload for a Token status list will contain the following:
 }
 ```
 
-* `exp` (expiry). The expiry of the subject credential
-* `iat` (issued at). The timestamp the subject credential was originally issued at
-* `iss` (issuer). The URL of the credential issuer service operated by the organisation sharing the credential
-* `status_list.bits` (bits). The number of bits that represent a status
-* `status_list.lst` (list). An encoded version of this shard of the status list
-* `sub` (path). The URI of the shard present in the original HTTP request
-* `ttl` (time-to-live). The lifetime of the cached version of this shard. Shards are updated at regular and set intervals
+| Parameter | Description           |
+|-----------|-----------------------|
+| `exp`     | `exp` stands for 'expiry'. This is the expiry of the subject credential.    |
+| `iat`     | `iat` stands for 'issued at'. This is the timestamp the subject credential was originally issued at.    |
+| `iss`     | `iss` stands for 'issuer'. This is the URL of the credential issuer service operated by the organisation sharing the credential.    |
+| `status_list.bits` | The number of bits that represent a status.    |
+| `status_list.lst` | `lst` stands for 'list'. This is an encoded version of this shard of the status list.    |
+| `sub` | `sub` stands for 'subject'. This is the URI of the shard that was in the original HTTP request.    |
+| `ttl` | `ttl` stands for 'time-to-live'. This is the lifetime of the cached version of this shard. Shards are updated at regular and set intervals.    |
 
 The JWT response payload for a Bitstring status list will contain the following:
 
@@ -121,4 +125,12 @@ The JWT response payload for a Bitstring status list will contain the following:
 ```
 
 <!---
-Add definitions for the above from spec: https://www.w3.org/TR/vc-bitstring-status-list/#bitstringstatuslistcredential --->
+Add definitions for the above from spec: https://www.w3.org/TR/vc-bitstring-status-list/#bitstringstatuslistcredential 
+
+| Parameter | Description           |
+|-----------|-----------------------|
+| `parameter`     | Description here.    |
+
+
+
+--->
