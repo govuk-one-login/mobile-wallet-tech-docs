@@ -9,8 +9,27 @@ review_in: 6 months
 
 To issue credentials with a status, you must register with the Status List service. To do this, speak to your GOV.UK Wallet engagement manager or [contact us](contact-us).
 
-When you register with the Status List service, you get a unique `clientId`. You must include this `clientId` identifier as [the `iss` claim](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1) in the JWTs you send to the [`/issue`](../issue-status-list-entry) and [`/revoke`](../revoke-credential) endpoints.
+## Register a status list client
 
-Your `clientId` determines whether your status is assigned to a Token or Bitstring status list. If you need to use both status list formats you will get 2 `clientId`s, because the association between `clientId` and the status list is direct.
+Only valid status list clients can issue and revoke statuses in the status list service. 
+
+When registering as a status list client, you must provide:
+
+* a public JWKS endpoint - used to verify the signatures of the status list client's signed JWTs for the issue and revoke endpoint
+* a status list type (Bitstring or Token) - the type of status issued for this specific status list client 
+
+You can register multiple status list clients if you need to.
+
+When you complete your registration, you get a unique `clientId`. You must include your `clientId` identifier as [the `iss` claim](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1) in the JWTs you send to the [`/issue`](../issue-status-list-entry) and [`/revoke`](../revoke-credential) endpoints.
 
 The requests to and responses from the status list are the same, regardless of the status list type. You must make sure the status list responses are included in your credential correctly.
+
+## Access the status list APIs
+
+When you register as a status list client, we will work with you to grant access to our APIs and provide the API URLs.
+
+## Test your integration
+
+The status list service operates an integration and a production environment. You must register a status list client for each environment.
+
+We recommend that you use the integration environment to test your integration with the status list before you move to production. The integration environment should not be used for publicly issued credentials.
