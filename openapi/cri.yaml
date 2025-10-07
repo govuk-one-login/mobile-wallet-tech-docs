@@ -126,15 +126,16 @@ paths:
   # `crs`
   /issue:
     post:
-      description: An endpoint to request a new status index for a GOV.UK wallet credential. The wallet Credential Issuer must provide their registered status list `client id` and the `expiry date` of the credential they are about to issue in a signed JWT. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs. This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature.
+      description: An endpoint to request a new status index for a GOV.UK wallet credential. This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature.
       requestBody:
+        description: JOSE signed JWT containing Credential Issuer registered status list `client id` and the `expiry date` of the credential they are about to issue in a signed JWT. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs.
         required: true
         content:
           application/jwt:
             schema:
               $ref: '#/components/schemas/IssueRequestBody'
             example:
-              jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiZXhwaXJlcyI6IjE3MzQ3MDk0OTMifQ.NXOgtDaErMGh1McajjH9Jo2K5b18R-_u-_SUiaJX_AGymGQTyO1FNe9PcnuWgD7SYMIiuxysX8gmVjESFPtaVg
+              jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWF0IjoxNzU4MDM4OTEyLCJzdGF0dXNFeHBpcnkiOjE3ODk1NzQ5MDksImp0aSI6IkJDRUE0RTUxLTZFQ0EtNDU0Ny04RDE4LTRCOTcxQjcyQzE0NiJ9.QeR_O8MhZBob2CJeRUZpBn6KaQnazTpHZozJrZxXUjDTgpliUjg7PXCpfckCr3sNDFRxoFfHSnV4HOTZNlrUBg
       responses:
         '200':
           description: A response that contains a status index and a uri to the status list where this newly issued `VALID` (binary 00) status index value can be found.
@@ -146,83 +147,109 @@ paths:
                 index: 3
                 uri: "https://crs.account.gov.uk/b/A671FED3E9AD"
         '400':
-          description: Bad Request
+          description: Bad request (invalid JWT, missing fields, wrong content-type, etc.)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Issue400ErrorResponse"
               example:
                 error: BAD_REQUEST
-                error_description: "JWT payload missing `iss` claim"
+                error_description: "No Type in Header"
         '401':
-          description: Unauthorized
+          description: Unauthorized (client not found)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Issue401ErrorResponse"
               example:
                 error: UNAUTHORISED
-                error_description: "Unregistered Issuer client ID <Client ID>"
+                error_description: "No matching client found with ID: invalidClientId"
         '403':
-          description: Forbidden
+          description: Forbidden (JWT signature verification failure)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Issue403ErrorResponse"
               example:
                 error: FORBIDDEN
-                error_description: "Unable to access JWKs endpoint"
+                error_description: "Failure verifying the signature of the jwt"
         '500':
-          description: Forbidden
+          description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Issue500ErrorResponse"
               example:
                 error: INTERNAL_SERVER_ERROR
-                error_description: "Internal server error"
+                error_description: "Error receiving messages: ..."
   # `crs`
   /revoke:
     post:
-      description: An endpoint used by GOV.UK One Login Wallet Credential Issuers to revoke a status list index associated with a wallet credential that the wallet credential issuer has issued. The wallet Credential Issuer must provide their registered status list client id in the `iss` claim. The index in the `idx` claim and the URI of the index in the `uri` claim. The `idx` and `uri` claims in the request JWT should match exactly what was issued by the status list service at the time of issuance. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs. This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature. The status list service will only keep associations between credential issuers and indexes issued to the credential issuers. It is the issuers responsibility to keep correlation between credentials and index issued to those credentials.
+      description: An endpoint used by GOV.UK One Login Wallet Credential Issuers to revoke a status list index associated with a wallet credential that they issued.  This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature.
       requestBody:
+        description: JOSE signed JWT containing the wallet Credential Issuer registered status list client id, status index and the URI of the status list with the index. The `idx` and `uri` claims in the request JWT should match exactly what was issued by the status list service at the time of issuance. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs. The status list service will only keep associations between credential issuers and indexes issued to the credential issuers. It is the issuers responsibility to keep correlation between credentials and index issued to those credentials.
         required: true
         content:
           application/jwt:
             schema:
-              $ref: '#/components/schemas/RevokeCredentialRequest'
+              $ref: '#/components/schemas/RevokeRequest'
             example:
-              jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWR4IjozLCJ1cmkiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay90LzNCMEYzQkQwODdBNyJ9.BYHtcw-ao-wB9FK-vOkRIr2c683sWS46Y3gpJ489GAS35zLs7AkPEq6Br-KrWbhzTUOZcjB4QO7aP6t0WRqzvw
+              jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWF0IjoxNzU4MDM4OTEyLCJpZHgiOjMsInVyaSI6Imh0dHBzOi8vY3JzLmFjY291bnQuZ292LnVrL3QvM0IwRjNCRDA4N0E3IiwianRpIjoiQkNFQTRFNTEtNkVDQS00NTQ3LThEMTgtNEI5NzFCNzJDMTQ2In0.x6Xh0QRPcuW3TzZkbkarHS5FfyfiY_Wh4zIIWzcw4ZORaKIRIXiRMUSjPcaGRO63_EhbX29BSzsKNEii4qOYIg
       responses:
         '202':
-          description: "HTTP/1.1 202 Accepted"
+          description: Revocation processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RevokeResponse"
+              example:
+                    message: "Request processed for revocation"
+                    revokedAt: 1734709493
         '400':
-          description: Bad Request
+          description: Bad request (invalid JWT, missing fields, wrong content-type, etc.)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Revoke400ErrorResponse"
               example:
                 error: BAD_REQUEST
-                error_description: "JWT payload missing `iss` claim"
+                error_description: "No Type in Header"
         '401':
-          description: Unauthorized
+          description: Unauthorized (client not found or client mismatch)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Revoke401ErrorResponse"
               example:
-                error: UNAUTHORISED
-                error_description: "Unregistered Issuer client ID <Client ID>"
+                error: "UNAUTHORISED"
+                error_description: "No matching client found with ID: invalidClientId"
         '403':
-          description: Forbidden
+          description: Forbidden (JWT signature verification failure or JWKS fetch failure)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Revoke403ErrorResponse"
               example:
-                error: INTERNAL_SERVER_ERROR
-                error_description: "Unregistered Issuer client ID <Client ID>"
+                error: FORBIDDEN
+                error_description: "Failure verifying the signature of the jwt"
+        "404":
+          description: Entry not found or list type mismatch
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revoke404ErrorResponse"
+              example:
+                error: "NOT_FOUND"
+                error_description: "Entry not found in status list table"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revoke500ErrorResponse"
+              example:
+                error: "INTERNAL_SERVER_ERROR"
+                error_description: "Error processing revocation request"
 
   # `crs`
   /{type}/{endpoint}:
@@ -232,43 +259,44 @@ paths:
         - in: path
           name: type
           schema:
-            type: string
-            example: "b"
+            $ref: '#/components/schemas/TokenStatusListRequestPathType'
           required: true
-          description: "The type of list that is being returned"
+          description: "Path character specific to the type of list that is being requested"
         - in: path
           name: endpoint
           schema:
             type: string
             example: "A671FED3E9AD"
           required: true
-          description: "The specific endpoint to return"
+          description: "Unique name representing the specific status list"
       responses:
         '200':
           description: "OK"
           content:
-            application/jwt:
+            application/statuslist+jwt:
               schema:
-                $ref: '#/components/schemas/StatusListResponse'
+                  $ref: '#/components/schemas/TokenStatusListResponse'
+            application/vc+jwt:
+              schema:
+                  $ref: '#/components/schemas/BitstringStatusListResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusList404ErrorResponse"
+              example:
+                error: NOT_FOUND
+                error_description: "Status List not found for endpoint uri"
         '500':
-          description: Invalid Method
+          description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/StatusList500ErrorResponse"
               example:
                 error: INTERNAL_SERVER_ERROR
-                error_description: "No endpoint uri specified in request"
-        '404':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StatusList404ErrorResponse"
-              example:
-                error: INTERNAL_SERVER_ERROR
-                error_description: "Status List not found for endpoint uri: "
-
+                error_description: "..."
   # `cri`
   /.well-known/openid-credential-issuer:
     get:
@@ -484,32 +512,81 @@ components:
       required:
         - error
     IssueRequestBody:
+      type: string
+      description: |
+        JOSE signed JWT containing issuer information and status expiry.
+        Example Header and Payload:
+        {
+            "alg": "ES256",
+            "typ": "JWT",
+            "kid": "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
+        },
+        {
+          "iss": "clientId-abcdef",
+          "iat": 1758038912,
+          "statusExpiry": 1789574909,
+          "jti": "BCEA4E51-6ECA-4547-8D18-4B971B72C146"
+        }
       properties:
-        issue:
-          description: The request to issue a credential.
+        alg:
           type: string
-          format: jwt
+          description: |
+            Algorithm used for signing the JWT (ES256) - Stored in JWT Header
+          example: "ES256"
+        typ:
+          type: string
+          description: |
+            Type of the token, should be "JWT" - Stored in JWT Header
+          example: "JWT"
+        kid:
+          type: string
+          description: |
+            Key ID used to identify the signing key in the credential issuers JWKS endpoint. This will be used to verify the signature of the JWT. - Stored in JWT Header
+          example: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
+        iss:
+          type: string
+          description: |
+            Issuer: must match a known clientId - As defined in rfc7519
+          example: "clientId-abcdef"
+        iat:
+          type: number
+          description: |
+            (unix timestamp) Issued At date - As defined in rfc7519
+          example: 1758038912
+        statusExpiry:
+          type: number
+          description: |
+            (unix timestamp) A timestamp representing when the moment the issued credential expires. It should not be longer than 10 years from the iat claim
+          example: 1789574909
+        jti:
+          type: string
+          description: |
+            JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks
+          example: "BCEA4E51-6ECA-4547-8D18-4B971B72C146"
       required:
-        - issueStatusListEntryRequest
-    IssueStatusListEntryRequest:
-      type: object
-      properties:
-        credential:
-          description: The request JWT that contains the `iss` and `expires` claims needed to issue a status index.
-          type: string
-          format: jwt
+        - alg
+        - typ
+        - kid
+        - iss
+        - iat
+        - statusExpiry
+        - jti
+      example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWF0IjoxNzU4MDM4OTEyLCJzdGF0dXNFeHBpcnkiOjE3ODk1NzQ5MDksImp0aSI6IkJDRUE0RTUxLTZFQ0EtNDU0Ny04RDE4LTRCOTcxQjcyQzE0NiJ9.QeR_O8MhZBob2CJeRUZpBn6KaQnazTpHZozJrZxXUjDTgpliUjg7PXCpfckCr3sNDFRxoFfHSnV4HOTZNlrUBg"
     IssueResponse:
       type: object
       properties:
-        uri:
-          description: The uri to the status list in which the credential status is stored.
-          type: string
-        index:
-          description: The index at which the specific credential status value is stored.
+        idx:
           type: number
+          minimum: 0
+          example: 3
+          description: The assigned Status List index. This index position is unique within the Status List identified by the URI
+        uri:
+          type: string
+          example: "https://crs.account.gov.uk/b/A671FED3E9AD"
+          description: The URI of the Status List that holds the issued credential. It is used in combination with the index to retrieve the Status List entry
       required:
+        - idx
         - uri
-        - index
     Issue400ErrorResponse:
       type: object
       properties:
@@ -587,6 +664,28 @@ components:
           type: string
       required:
         - error
+    Revoke404ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be 'NOT_FOUND'.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    Revoke500ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
     StatusList500ErrorResponse:
       type: object
       properties:
@@ -609,30 +708,284 @@ components:
           type: string
       required:
         - error
-    RevokeCredentialRequest:
-      type: object
+    RevokeRequest:
+      type: string
+      description: |
+        JOSE signed JWT containing the index and URI to revoke.
+        Example Header and Payload:
+        {
+            "alg": "ES256",
+            "typ": "JWT",
+            "kid": "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
+        },
+        {
+          "iss": "clientId-abcdef",
+          "iat": 1758038912,
+          "idx": 3,
+          "uri": "https://crs.account.gov.uk/b/A671FED3E9AD",
+          "jti": "DB290616-1F3C-4FF9-939F-2749ABDBACEC"
+        }
       properties:
-        jwt:
+        alg:
           type: string
-          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjFmYjJjMGYwN2Y2NDNiNDVjYWZlYjUzZmI5ZDllYjM0In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWR4IjozLCJ1cmkiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay90LzNCMEYzQkQwODdBNyJ9.BYHtcw-ao-wB9FK-vOkRIr2c683sWS46Y3gpJ489GAS35zLs7AkPEq6Br-KrWbhzTUOZcjB4QO7aP6t0WRqzvw"
+          description: |
+            Algorithm used for signing the JWT (ES256) - Stored in JWT Header
+          example: "ES256"
+        typ:
+          type: string
+          description: |
+            Type of the token, should be "JWT" - Stored in JWT Header
+          example: "JWT"
+        kid:
+          type: string
+          description: |
+            Key ID used to identify the signing key in the credential issuers JWKS endpoint. This will be used to verify the signature of the JWT - Stored in JWT Header
+          example: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
+        iss:
+          type: string
+          description: |
+            Issuer: must match a known clientId - As defined in rfc7519
+          example: "clientId-abcdef"
+        iat:
+          type: number
+          description: |
+            (unix timestamp) Issued At date - As defined in rfc7519
+          example: 1758038912
+        idx:
+          type: number
+          minimum: 0
+          description: |
+            The index to revoke
+          example: 3
+        uri:
+          type: string
+          description: |
+            The URI of the Status List that holds the issued credential. The uri + idx combination is used to uniquely identify the entry to revoke
+          example: "https://crs.account.gov.uk/b/A671FED3E9AD"
+        jti:
+          type: string
+          description: |
+            JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks
+          example: "DB290616-1F3C-4FF9-939F-2749ABDBACEC"
+      required:
+        - alg
+        - typ
+        - kid
+        - iss
+        - iat
+        - idx
+        - uri
+        - jti
+      example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWF0IjoxNzU4MDM4OTEyLCJpZHgiOjMsInVyaSI6Imh0dHBzOi8vY3JzLmFjY291bnQuZ292LnVrL3QvM0IwRjNCRDA4N0E3IiwianRpIjoiQkNFQTRFNTEtNkVDQS00NTQ3LThEMTgtNEI5NzFCNzJDMTQ2In0.x6Xh0QRPcuW3TzZkbkarHS5FfyfiY_Wh4zIIWzcw4ZORaKIRIXiRMUSjPcaGRO63_EhbX29BSzsKNEii4qOYIg"
       xml:
         name: issuerequest
-    StatusListResponse:
+    RevokeResponse:
       type: object
       properties:
-        jwt:
+        message:
           type: string
-          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjVjNjhjNjZjNWRkZTMwMzhjMmNiNzM5MGY4YTk5MzYyIn0eyJleHAiOjIyOTE3MjAxNzAsImlhdCI6MTY4NjkyMDE3MCwiaXNzIjoiaHR0cHM6Ly9hcGkuc3RhdHVzLWxpc3Quc2VydmljZS5nb3YudWsiLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoyLCJsc3QiOiJlTnB6ZEFFQUFNZ0FoZyJ9LCJzdWIiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay9iLzNCMEYzQkQwODdBNyIsInR0bCI6NDMyMDB9iq3Hen7iVSNijEzrSNVmqupLxitYS-okhrCrTf_j9ZpUhz4CKIogaNKCN8HHzj3Ewus0Np307hjdzTXnT0u_6w"
-      xml:
-        name: issuerequest
-    StatusListResponse:
-      type: object
+          enum:
+            ["Request processed for revocation", "Credential already revoked"]
+          description: Status message indicating the result
+        revokedAt:
+          type: number
+          minimum: 0
+          example: 1734709493
+          description: Unix timestamp when the credential was revoked
+      required:
+        - message
+        - revokedAt
+    TokenStatusListRequestPathType:
+      type: string
+      enum: ["b", "t"]
+      example: "b"
+    TokenStatusListResponse:
+      type: string
+      description: JOSE signed IETF Token Status List JWT containing the status list.
+      example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJleHAiOjE3NTk5MTg3NTQsImlhdCI6MTc1OTMxMzk1NCwiaXNzIjoiaHR0cHM6Ly9jcnMuYWNjb3VudC5nb3YudWsvIiwic3RhdHVzX2xpc3QiOnsiYml0cyI6MiwibHN0IjoiZU5wemRBRUFBTWdBaGcifSwic3ViIjoiaHR0cHM6Ly9jcnMuYWNjb3VudC5nb3YudWsvdC8zQjBGM0JEMDg3QTciLCJ0dGwiOjM2MDB9.mESUJzZ07hCCdAzHXJZaxkKNdvYBJPwRLvqyP185t72hJUBMdFvVI-ynQjl7KRmcidxBXuI_gCHppAqctk1rAQ"
       properties:
-        jwt:
+        alg:
           type: string
-          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjhmNjY3NmUxYTQ3Njg2MmYwNTZhODA2MDY0ZjhkNGY5In0.eyJleHAiOjE2ODc1MjQ5NzAsImlhdCI6MTY4NjkyMDE3MCwiaXNzIjoiaHR0cHM6Ly9hcGkuc3RhdHVzLWxpc3Quc2VydmljZS5nb3YudWsiLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoyLCJsc3QiOiJlTnB6ZEFFQUFNZ0FoZyJ9LCJzdWIiOiJodHRwczovL2FwaS5zdGF0dXMtbGlzdC5zZXJ2aWNlLmdvdi51ay9iLzNCMEYzQkQwODdBNyIsInR0bCI6NDMyMDB9.TnB-o9WQaiS-j-APmCy2iLXiC-eNccAAUnM_nuUVCPG-FBtzSqufVIJJSGZN5aOXQMiPC6whxzmBnYeTbjigKg"
+          description: Algorithm used for signing the JWT (ES256) - Stored in JWT Header
+          example: "ES256"
+        typ:
+          type: string
+          description: Type of the token, should be "JWT" - Stored in JWT Header
+          example: "JWT"
+        kid:
+          type: string
+          description: |
+            Key ID used to identify the signing key in the status list JWKS endpoint.
+            The public key can be used to verify the signature of the JWT.
+          example: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
+        exp:
+          type: number
+          description: |
+             expiry date timestamp (as defined in rfc7519) of the status list JWT.
+             The information in the JWT past date may be invalid and it must not be used beyond this date.
+             A stale status list may only be used in scenarios where there is an outage and the status list service is unable to serve a fresh status list.
+          example: "https://crs.account.gov.uk/"
+        iss:
+          type: string
+          description: url of the issuer of the status list.
+          example: "https://crs.account.gov.uk/"
+        iat:
+          type: number
+          description: (unix timestamp) Issued At date - As defined in rfc7519
+          example: 1758038912
+        sub:
+          type: string
+          description: The URI of this Status List that holds the status indexes.
+          example: "https://crs.account.gov.uk/"
+        ttl:
+          type: number
+          description: time duration in seconds for how long the status list can be cached.
+          example: "https://crs.account.gov.uk/b/A671FED3E9AD"
+        status_list:
+          type: object
+          description: |
+            The status list JWT containing the status information of the Referenced Token.
+            The status of each Referenced Token is identified using an index that maps to two bits within the byte array.
+            The byte array is compressed using DEFLATE [RFC1951] with the ZLIB [RFC1950] data format and base64url-encoded.
+          example:
+            status_list":
+              bits: 2,
+              lst: "eNpzdAEAAMgAhg"
+          properties:
+            bits:
+              type: number
+              minimum: 2
+              maximum: 2
+              description: |
+                Number of bits used to represent the status at a particular index. Only 2 bit status indexes are supported.
+            lst:
+              type: string
+              description: |
+                A compressed byte array containing the status information of the Referenced Token.
+                The status of each Referenced Token is identified using an index that maps to two bits within the byte array.
+                The byte array is compressed using DEFLATE [RFC1951] with the ZLIB [RFC1950] data format and base64url-encoded.
+      required:
+        - alg
+        - typ
+        - kid
+        - exp
+        - iss
+        - iat
+        - sub
+        - ttl
+        - status_list
       xml:
         name: issuerequest
+    BitstringStatusListResponse:
+      type: string
+      description: JOSE signed Bitstring Status List credential containing the status list.
+      properties:
+        alg:
+          type: string
+          description: Algorithm used for signing the JWT (ES256) - Stored in JWT Header
+          example: "ES256"
+        kid:
+          type: string
+          description: |
+            Key ID used to identify the signing key in the status list JWKS endpoint.
+            The public key can be used to verify the signature of the JWT.
+          example: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
+        context:
+          type: array
+          description: Verifiable credential data model v2
+          example: ["https://www.w3.org/ns/credentials/v2", "https://www.w3.org/ns/credentials/examples/v2"]
+        id:
+          type: string
+          description: A unique URL that represents this status list.
+          example: "https://crs.account.gov.uk/b/A671FED3E9AD"
+        type:
+          type: array
+          description: The type of credential.
+          example: ["VerifiableCredential", "BitstringStatusListCredential"]
+        issuer:
+          type: string
+          description: The URL of the issuer of Status List credential.
+          example: "https://crs.account.gov.uk/"
+        validFrom:
+          type: string
+          description: Date after which the status list credential is valid. ISO 8601 format YYYY-MM-DDTHH:MM:SSZ
+          example: "2025-10-01T14:00:00Z"
+        validUntil:
+          type: string
+          description: Date until the status list credential is valid. ISO 8601 format YYYY-MM-DDTHH:MM:SSZ
+          example: "2025-10-01T14:00:00Z"
+        credentialSubject:
+          type: object
+          description: The status list subject about which the claims are made.
+          example:
+            credentialSubject:
+              id: "https://crs.account.gov.uk/b/A671FED3E9AD#list"
+              type: "BitstringStatusList"
+              statusSize: 2,
+              statusPurpose: "message"
+              statusMessage: [
+                { "status": "0x0", "message": "VALID" },
+                { "status": "0x1", "message": "INVALID" }
+              ]
+              encodedList: "H4sIAAAAAAAAA3MUBABJTAvCAgAAAA"
+              ttl: 3600
+          properties:
+            id:
+              type: string
+              description: URL representing the unique id of the list.
+              example: "https://crs.account.gov.uk/b/A671FED3E9AD#list"
+            type:
+              type: string
+              description: This must only be BitstringStatusList
+              example: "BitstringStatusList"
+            statusSize:
+              type: number
+              description: The size of the status list in bits.
+              example: 2
+            statusPurpose:
+              type: string
+              description: The purpose of the status list as dexscribed in statusMessage.
+              example: "message"
+            statusMessage:
+              type: array
+              description: |
+                The status message representing different statuses supported by the list and appropriate hexadecimal value.
+                The statusMessage is an array of objects, each object containing a status and a message.
+                The status is a hexadecimal value representing the status of the Referenced Token.
+                The message is the status message representing different statuses supported by the list.
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The hexadecimal string representig the status value in the status list.
+                    enum: ["0x0", "0x1"]
+                  message:
+                    type: string
+                    description: The status message representing different statuses supported by the list.
+                    enum: ["VALID", "INVALID"]
+                required:
+                  - status
+                  - message
+            encodedList:
+              type: string
+              description: |
+                The Multibase-encoded base64url (with no padding) [RFC4648] representation of the GZIP-compressed [RFC1952] bitstring values for the associated range of verifiable credential status values.
+              example: "H4sIAAAAAAAAA3MUBABJTAvCAgAAAA"
+            ttl:
+              type: number
+              description: The time to live of the status list when it is cached.
+              example: 3600
+      required:
+        - alg
+        - kid
+        - context
+        - id
+        - type
+        - issuer
+        - validFrom
+        - validUntil
+        - credentialSubject
     MetadataResponse:
       type: object
       properties:
