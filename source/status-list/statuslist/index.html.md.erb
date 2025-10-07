@@ -125,11 +125,21 @@ The JWT response payload for a Bitstring status list will contain the following:
 ```
 
 <!---
-Add definitions for the above from spec: https://www.w3.org/TR/vc-bitstring-status-list/#bitstringstatuslistcredential 
+Add definitions for the above from spec: https://www.w3.org/TR/vc-bitstring-status-list/#bitstringstatuslistcredential
 
 | Parameter | Description           |
 |-----------|-----------------------|
-| `parameter`     | Description here.    |
+| `id`      | Description here.    |
+| `type`    | Description here.    |
+| `issuer`  | Description here.    |
+| `validFrom`  | The earliest point in time at which the status list is valid.    |
+| `validUntil` | The latest point in time at which the status list is valid.    |
+| `credentialSubject.id` | Description here.    |
+| `credentialSubject.type` | The type of the credential subject. This will be `BitstringStatusList`.    |
+| `credentialSubject.statusSize` | Description here.    |
+| `credentialSubject.statusPurpose` | Description here.    |
+| `credentialSubject.statusMessages` | Description here.    |
+| `credentialSubject.encodedList` | Description here.    |
 
 
 

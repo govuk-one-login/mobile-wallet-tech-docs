@@ -1,7 +1,7 @@
 ---
 title: Notification
 weight: 7
-last_reviewed_on: 2025-04-18
+last_reviewed_on: 2025-08-25
 review_in: 6 months
 ---
 
@@ -59,6 +59,7 @@ To validate the access token, you should complete the following steps.
 - the value of the `iss` (issuer) claim matches the GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
 - the value of the `aud` (audience) claim is credential issuer URL
 - the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
+- the value of the `exp` (expiration time) claim is in the future
 - the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
 - this API has not received another access token with the same `jti` (JWT ID) that is still within its validity period
 
@@ -86,21 +87,43 @@ Below is an example of a notification when a credential is successfully stored i
 
 More information about the notification request can be found in the [OID4VCI specification] (https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.1).
 
-### Response format
+### Successful response format
 
-When a notification is processed successfully, the credential issuer should return a 204 No Content HTTP status code.
+When a notification is processed successfully, the credential issuer must return a 204 No Content HTTP status code.
+
+### Error response format
 
 If the notification could not be processed successfully, the credential issuer must return an appropriate HTTP error status code.
 
-When the notification request does not include an access token or the access token is invalid, the notification endpoint must return a 401 Unauthorized status code and a WWW-Authenticate header as defined in [RFC6750](https://datatracker.ietf.org/doc/html/rfc6750#section-3).
+When the notification request does not include an access token or the access token is invalid, the notification endpoint must return a 401 Unauthorized HTTP status code and include the `WWW-Authenticate` response header field as defined in [RFC6750](https://datatracker.ietf.org/doc/html/rfc6750#section-3), specifying the `Bearer` authentication scheme.
 
-When the `notification_id` value is invalid, the notification endpoint must return a 400 Bad Request HTTP status code and a response body in JSON format containing the following parameter:
+This is an example error response to a request with no access token:
+
+```
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer
+Cache-Control: no-store
+```
+
+This is an example error response to an authentication attempt using an invalid access token:
+
+```
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer error="invalid_token"
+Cache-Control: no-store
+```
+
+When there is an issue with the request body (e.g. the `notification_id` value is invalid), the notification endpoint must return a 400 Bad Request HTTP status code and a response body in JSON format containing the following parameter:
 
 - `error`: A case-sensitive string indicating the error - `invalid_notification_id` (the request's `notification_id` was invalid), or `invalid_notification_request` (the request was invalid)
 
 Below is an example of a notification error response when the notification request included an invalid `notification_id`:
 
 ```
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+
 {
   "error": "invalid_notification_id"
 }

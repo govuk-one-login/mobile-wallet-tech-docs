@@ -43,6 +43,11 @@ paths:
       responses:
         '200':
           description: Credential.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                example: "no-store"
           content:
             application/json:
               schema:
@@ -51,6 +56,31 @@ paths:
                 credentials:
                   - credential: eyJraWQiOiJkaWQ6d2ViOmV4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIzVkY2JlZTg2M2I1ZDdjYzMwYzliYTFmNzM5M2RhY2M2YzE2NjEwNzgyZTRiNmExOTFmOTRhN2U4YjFlMTUxMGYiLCJjdHkiOiJ2YyIsInR5cCI6InZjK2p3dCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL2V4YW1wbGUtY3JlZGVudGlhbC1pc3N1ZXIuZ292LnVrIiwic3ViIjoiZGlkOmtleTp6RG5hZVNHZlNRTVl2bkxiTFdFdWJoaEdEUG9xN3BBOU1NTnZ1bXZic21NQ1pvdlVSIiwiaWF0IjoiMTcxMjY2NDczMSIsIm5iZiI6IjE3MTI2NjQ3MzEiLCJleHAiOiIxNzQ0MjIxNjU3IiwiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnL25zL2NyZWRlbnRpYWxzL3YyIiwiPEpTT04tTEQgQ09OVEVYVCBVUkkgRk9SIElTU1VFUj4iXSwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIkZpc2hpbmdMaWNlbmNlIl0sImlzc3VlciI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5nb3YudWsiLCJuYW1lIjoiRmlzaGluZyBsaWNlbmNlIiwiZGVzY3JpcHRpb24iOiI8T1BUSU9OQUwgQ1JFREVOVElBTCBERVNDUklQVElPTj4iLCJ2YWxpZEZyb20iOiIyMDI0LTA0LTA5VDEyOjEyOjExWiIsInZhbGlkVW50aWwiOiIyMDI4LTEyLTEwVDIyOjU5OjU5WiIsImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImlkIjoiZGlkOmtleTp6RG5hZVNHZlNRTVl2bkxiTFdFdWJoaEdEUG9xN3BBOU1NTnZ1bXZic21NQ1pvdlVSIiwibmFtZSI6W3sibmFtZVBhcnRzIjpbeyJ2YWx1ZSI6IlNhcmFoIiwidHlwZSI6IkdpdmVuTmFtZSJ9LHsidmFsdWUiOiJFZHdhcmRzIiwidHlwZSI6IkZhbWlseU5hbWUifV19XSwiZmlzaGluZ0xpY2VuY2UiOlt7ImxpY2VuY2VOdW1iZXIiOiIwMDk4Nzg4NjMiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTEyLTEwIiwiZXhwaXJhdGlvbkRhdGUiOiIyMDI4LTEyLTEwIn1dfX0.UXGyl9ihcMNn-RlqBe_8rTxvtPDqdaGLKMJs3pk9QL4zgEZbF4LZmeZt-k2p04MSlW8IX8uWKgtxFDOGu9j2rQ
                 notification_id: 776aefd4-26c6-4a5f-aa7c-b5e294cd87cd
+        '400':
+          description: Bad Request
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                example: "no-store"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Credential400ErrorResponse"
+              example:
+                error: invalid_proof
+        '401':
+          description: Unauthorized
+          headers:
+            WWW-Authenticate:
+              description: Indicates the authentication scheme that should be used to access the resource.
+              schema:
+                type: string
+                example: Bearer error="invalid_token"
+            Cache-Control:
+              schema:
+                type: string
+                example: "no-store"
   # `cri`
   /notification:
     post:
@@ -72,6 +102,11 @@ paths:
           description: No Content
         '400':
           description: Bad Request
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                example: "no-store"
           content:
             application/json:
               schema:
@@ -80,8 +115,9 @@ paths:
                 error: invalid_notification_id
         '401':
           description: Unauthorized
-          content:
-            application/json:
+          headers:
+            WWW-Authenticate:
+              description: Indicates the authentication scheme that should be used to access the resource.
               schema:
                 $ref: "#/components/schemas/Notification401ErrorResponse"
               example:
@@ -251,16 +287,16 @@ paths:
                 credential_endpoint: https://example-credential-issuer.gov.uk/credential
                 notification_endpoint: https://example-credential-issuer.gov.uk/notification
                 credential_configurations_supported:
-                  fishingLicence:
+                  FishingLicenceCredential:
                     format: jwt_vc_json
                     credential_definition:
                       type:
                         - VerifiableCredential
-                        - FishingLicence
+                        - FishingLicenceCredential
                     cryptographic_binding_methods_supported:
                       - did
-                    cryptographic_suites_supported:
-                      - ES256K
+                    credential_signing_alg_values_supported:
+                      - ES256
                     proof_types_supported:
                       jwt:
                         proof_signing_alg_values_supported:
@@ -310,6 +346,7 @@ paths:
               example:
                 "@context":
                   - https://www.w3.org/ns/did/v1
+                  - https://w3id.org/security/suites/jws-2020/v1
                 id: did:web:example-credential-issuer.gov.uk
                 verificationMethod:
                   - id: did:web:example-credential-issuer.gov.uk#5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
@@ -375,7 +412,7 @@ components:
       type: object
       properties:
         credentials:
-          description: An array of one or more issued credentials.
+          description: An array containing one issued credential.
           type: array
           items:
             $ref: "#/components/schemas/Credential"
@@ -394,6 +431,12 @@ components:
           format: jwt
       required:
         - credential
+    Credential400ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code, such as `invalid_proof` or `invalid_nonce`.
+          type: string
     NotificationRequestBody:
       type: object
       properties:
@@ -647,19 +690,10 @@ components:
             type: string
         proof_types_supported:
           $ref: '#/components/schemas/ProofTypesSupported'
-        display:
-          description: Display properties of the credential, such as the display name, logo, background colour, etc.
-          type: array
-          items:
-            $ref: '#/components/schemas/FishingLicenceDisplay'
-        credentialSubject:
-          $ref: '#/components/schemas/CredentialSubject'
       required:
-        - credentialSubject
         - credential_definition
         - credential_signing_alg_values_supported
         - cryptographic_binding_methods_supported
-        - display
         - format
         - proof_types_supported
     CredentialDefinition:
@@ -687,98 +721,10 @@ components:
           type: array
           items:
             type: string
-        key_attestations_required:
-          type: object
       required:
-        - key_attestations_required
         - proof_signing_alg_values_supported
     KeyAttestationsRequired:
       type: object
-    FishingLicenceDisplay:
-      type: object
-      properties:
-        name:
-          type: string
-        locale:
-          type: string
-        background_color:
-          type: string
-        text_color:
-          type: string
-      required:
-        - background_color
-        - locale
-        - name
-        - text_color
-    CredentialSubject:
-      description: Display properties of the subject of the credential.
-      type: object
-      properties:
-        name:
-          type: array
-          items:
-            $ref: '#/components/schemas/Name'
-        fishingLicenceRecord:
-          $ref: '#/components/schemas/FishingLicenceRecord'
-      required:
-        - fishingLicenceRecord
-        - name
-    Name:
-      type: object
-      properties:
-        nameParts:
-          type: array
-          items:
-            $ref: '#/components/schemas/NameParts'
-      required:
-        - nameParts
-    NameParts:
-      type: object
-      properties:
-        display:
-          type: array
-          items:
-            $ref: '#/components/schemas/Display'
-      required:
-        - display
-    Display:
-      type: object
-      properties:
-        name:
-          type: string
-        locale:
-          type: string
-      required:
-        - locale
-        - name
-    FishingLicenceRecord:
-      type: object
-      properties:
-        licenceNumber:
-          $ref: '#/components/schemas/LicenceNumber'
-        expirationDate:
-          $ref: '#/components/schemas/ExpirationDate'
-      required:
-        - licenceNumber
-        - expirationDate
-    LicenceNumber:
-      type: object
-      properties:
-        display:
-          type: array
-          items:
-            $ref: '#/components/schemas/Display'
-      required:
-        - display
-    ExpirationDate:
-      type: object
-      properties:
-        display:
-          type: array
-          items:
-            $ref: '#/components/schemas/Display'
-      required:
-        - display
     DidResponse:
       type: object
       properties:
