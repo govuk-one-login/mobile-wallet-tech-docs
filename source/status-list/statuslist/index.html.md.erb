@@ -124,23 +124,19 @@ The JWT response payload for a Bitstring status list will contain the following:
 }
 ```
 
-<!---
-Add definitions for the above from spec: https://www.w3.org/TR/vc-bitstring-status-list/#bitstringstatuslistcredential
-
 | Parameter | Description           |
 |-----------|-----------------------|
-| `id`      | Description here.    |
-| `type`    | Description here.    |
-| `issuer`  | Description here.    |
+| `id`      | A unique URL that represents this status list.    |
+| `type`    | The type of credential.    |
+| `issuer`  | The URL of this status list credential's issuer.    |
 | `validFrom`  | The earliest point in time at which the status list is valid.    |
 | `validUntil` | The latest point in time at which the status list is valid.    |
-| `credentialSubject.id` | Description here.    |
-| `credentialSubject.type` | The type of the credential subject. This will be `BitstringStatusList`.    |
-| `credentialSubject.statusSize` | Description here.    |
-| `credentialSubject.statusPurpose` | Description here.    |
-| `credentialSubject.statusMessages` | Description here.    |
-| `credentialSubject.encodedList` | Description here.    |
-
-
-
---->
+| `credentialSubject` | The status list subject about which the claims below are made.    |
+| `credentialSubject.id` | A unique URL that represents this status list.    |
+| `credentialSubject.type` | The type of credential. This will be `BitstringStatusList`.    |
+| `credentialSubject.statusSize` | The size of the status list in bits.    |
+| `credentialSubject.statusPurpose` | The purpose of the status list, as described in statusMessage.    |
+| `credentialSubject.statusMessages` | This is an array of objects, which each contain a status and a message..    |
+| `credentialSubject.statusMessages.status` | This represents the status value in the status list. It is a hexadecimal string, and will be `"0x0"` or `"1x1"`.    |
+| `credentialSubject.statusMessages.message` | The status message representing the status value. This will be `"VALID"` or `"INVALID"`.    |
+| `credentialSubject.encodedList` | This is a multibase-encoded base64url (with no padding) representation of the GZIP-compressed bitstring values for the associated range of verifiable credential status values.    |
