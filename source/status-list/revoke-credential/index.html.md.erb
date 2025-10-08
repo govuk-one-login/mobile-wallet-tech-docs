@@ -68,7 +68,7 @@ The JWT payload must contain the following claims:
 
 | Claim | Required or optional | Description           |
 |-------|----------------------|-----------------------|
-| `iss` | Required             | `iss` stands for 'issuer'. This is the [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.    |
+| `iss` | Required             | `iss` stands for 'issuer'. This is the [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.<br><br>Make sure you are using the correct `clientId` for your environment - production or integration.        |
 | `iat` | Required             | `iat` stands for 'issued at'. This is the UNIX timestamp when the request JWT was issued.    |
 | `jti` | Required             | `jwt` stands for 'JWT ID'. This provides a unique identifier for the JWT. The Status List service will validate the format provided to make sure it is a lowercase UUID.    |
 | `uri` | Required             | `uri` stands for 'uniform resource identifier'. This is the uri of the status list that holds the status to revoke.    |
@@ -80,7 +80,7 @@ Your `uri` and `idx` must exactly match the response from the [`/issue` endpoint
 
 ```TEXT
 POST /revoke HTTP/1.1
-Host: crs.account.gov.uk
+Host: <API.CRS.ACCOUNT.GOV.UK>
 Content-Type: application/json
 
 eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjgwODY4Nzk0LTM2MjYtNDNmOC05YTRkLWEwZDk4YWE3ZGE2NiJ9.eyJpc3MiOiJleGFtcGxlQ2xpZW50SWQxMjMzIiwiaWF0IjoxNzU5NDAyMjgzLCJqaXQiOiJiYzBmYmZmMy1jYjA0LTQyODYtYThiYS1mNDk1NmNjYmUyZDciLCJ1cmkiOiJodHRwczovL2Nycy5hY2NvdW50Lmdvdi51ay9iL0E2NzFGRUQzRTlBRCIsImlkeCI6M30.Y1yAhYz8kZnURYLQcrBNHs27wsOMHvqqazusyoaOwpQoJZ92P74NWQWqW7AXecrqvMxtK_OlsvI2zRMZxshR-Q
