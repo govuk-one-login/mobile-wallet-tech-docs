@@ -252,16 +252,10 @@ paths:
                 error_description: "Error processing revocation request"
 
   # `crs`
-  /{type}/{endpoint}:
+  /t/{endpoint}:
     get:
-      description: A public endpoint that returns either a W3C Bitstring Status List credential or an IETF Token Status List JWT. The list that is returned depends on list type for the wallet Credential Issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
+      description: A public endpoint that returns an IETF Token Status List JWT. The list that is returned depends on list type for the wallet Credential Issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
       parameters:
-        - in: path
-          name: type
-          schema:
-            $ref: '#/components/schemas/TokenStatusListRequestPathType'
-          required: true
-          description: "Path character specific to the type of list that is being requested"
         - in: path
           name: endpoint
           schema:
@@ -276,6 +270,40 @@ paths:
             application/statuslist+jwt:
               schema:
                   $ref: '#/components/schemas/TokenStatusListResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusList404ErrorResponse"
+              example:
+                error: NOT_FOUND
+                error_description: "Status List not found for endpoint uri"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusList500ErrorResponse"
+              example:
+                error: INTERNAL_SERVER_ERROR
+                error_description: "..."
+  # `crs`
+  /b/{endpoint}:
+    get:
+      description: A public endpoint that returns a W3C Bitstring Status List credential JWT. The list that is returned depends on list type for the wallet Credential Issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
+      parameters:
+        - in: path
+          name: endpoint
+          schema:
+            type: string
+            example: "A671FED3E9AD"
+          required: true
+          description: "Unique name representing the specific status list"
+      responses:
+        '200':
+          description: "OK"
+          content:
             application/vc+jwt:
               schema:
                   $ref: '#/components/schemas/BitstringStatusListResponse'

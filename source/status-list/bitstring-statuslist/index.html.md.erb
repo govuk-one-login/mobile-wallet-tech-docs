@@ -1,0 +1,116 @@
+---
+title: Checking a credential's status in Bitstring status list
+weight: 10
+last_reviewed_on: 2025-10-02
+review_in: 6 months
+---
+
+
+# Checking a credential's status in Bitstring status list
+
+The Status List service hosts all status lists publicly. Each list is a signed JWT. You can verify the JWT's signature by accessing the Status List service's JWKS hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
+
+You can use the status list `uri` in the credential to check a credential's status.
+
+The status lists beginning with `/b/` in path are [Bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/) JWT payload.
+For consistency between the two different lists that the status list service publishes it uses the more [complex implementation of Bitstring status list](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
+Each status at a specific index in the status list uses 2 bits.
+Each status index may contain one of the following bit combinations:
+
+* `00` (VALID). Represents a valid credential
+* `01` (INVALID). Represents a credential that has been revoked (marked as invalid)
+* `10` (NOT USED). Currently not used.
+* `11` (NOT USED). Currently not used.
+
+## Technical details
+
+### Endpoint URI
+
+The URI path for the Bitstring status list endpoint is `/b/{endpoint}`. It is presented as a GET request, where:
+
+* `b` represents the type of status list for this shard `BitstringStatusList`
+* `endpoint` represents an ID for a specific status list
+
+### Request Example
+The following is an example of the `/b/{endpoint}` request:
+
+```TEXT
+GET /b/A671FED3E9AD HTTP/1.1
+Host: crs.account.gov.uk
+Accept: application/json
+```
+### Request Response
+
+#### Header
+
+The JWT response header will contain the following:
+
+```JSON
+{
+  "alg": "ES256",
+  "kid": "12",
+  "typ": "vc+jwt"
+}
+```
+
+| Parameter | Description           |
+|-----------|-----------------------|
+| `alg`     | `alg` stands for 'algorithm'. This value will be returned as `ES256`. This is the algorithm used to encode the JWT.    |
+| `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List service's JWKS which can be used to verify the JSON web signature (JWS).    |
+| `typ`     | `typ` stands for 'type'. This is the type of the status list. It `vc+jwt` for `BitstringStatusList`.    |
+
+#### Payload
+
+The JWT response payload for a Token status list will contain the following:
+
+```JSON
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://www.w3.org/ns/credentials/examples/v2"
+  ],
+  "id": "https://crs.account.gov.uk/b/A671FED3E9AD",
+  "type": [
+    "VerifiableCredential",
+    "BitstringStatusListCredential"
+  ],
+  "issuer": "https://crs.account.gov.uk/",
+  "validFrom": "2025-10-01T14:00:00Z",
+  "validUntil": "2025-10-08T14:00:00Z",
+  "credentialSubject": {
+    "id": "https://crs.account.gov.uk/b/A671FED3E9AD#list",
+    "type": "BitstringStatusList",
+    "statusSize": 2,
+    "statusPurpose": "message",
+    "statusMessage": [
+      {
+        "status": "0x0",
+        "message": "VALID"
+      },
+      {
+        "status": "0x1",
+        "message": "INVALID"
+      }
+    ],
+    "encodedList": "H4sIAAAAAAAAA3MUBABJTAvCAgAAAA",
+    "ttl": "3600"
+  }
+}
+```
+
+| Parameter | Description           |
+|-----------|-----------------------|
+| `id`      | A unique URL that represents this status list.    |
+| `type`    | The type of credential.    |
+| `issuer`  | The URL of this status list credential's issuer.    |
+| `validFrom`  | The earliest point in time at which the status list is valid.    |
+| `validUntil` | The latest point in time at which the status list is valid.    |
+| `credentialSubject` | The status list subject about which the claims below are made.    |
+| `credentialSubject.id` | A unique URL that represents this status list.    |
+| `credentialSubject.type` | The type of credential. This will be `BitstringStatusList`.    |
+| `credentialSubject.statusSize` | The size of the status list in bits.    |
+| `credentialSubject.statusPurpose` | The purpose of the status list, as described in statusMessage.    |
+| `credentialSubject.statusMessages` | This is an array of objects, which each contain a status and a message..    |
+| `credentialSubject.statusMessages.status` | This represents the status value in the status list. It is a hexadecimal string, and will be `"0x0"` or `"1x1"`.    |
+| `credentialSubject.statusMessages.message` | The status message representing the status value. This will be `"VALID"` or `"INVALID"`.    |
+| `credentialSubject.encodedList` | This is a multibase-encoded base64url (with no padding) representation of the GZIP-compressed bitstring values for the associated range of verifiable credential status values.    |
