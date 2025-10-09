@@ -421,8 +421,7 @@ paths:
   /.well-known/jwks.json:
     get:
       description: |-
-        TODO: Update description to be more generic since it is now used in multiple places.
-        A public endpoint for GOV.UK One Login to retrieve the credential issuer's JSON Web Key Set (JWKS) of public keys which can be used to verify the the pre-authorised code.
+        A public endpoint that stores the JSON Web Key Set (JWKS) of public keys issued by a service. These keys can be used by client applications to verify the signature of a JSON Web Token (JWT).
       responses:
         '200':
           description: Credential issuer's JWKS.
