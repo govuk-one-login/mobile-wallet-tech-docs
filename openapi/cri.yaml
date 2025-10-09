@@ -203,8 +203,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/RevokeResponse"
               example:
-                    message: "Request processed for revocation"
-                    revokedAt: 1734709493
+                message: "Request processed for revocation"
+                revokedAt: 1734709493
         '400':
           description: Bad request (invalid JWT, missing fields, wrong content-type, etc.)
           content:
@@ -252,12 +252,12 @@ paths:
                 error_description: "Error processing revocation request"
 
   # `crs`
-  /t/{endpoint}:
+  /t/{statusListIdentifier}:
     get:
       description: A public endpoint that returns an IETF Token Status List JWT. The list that is returned depends on list type for the wallet Credential Issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
       parameters:
         - in: path
-          name: endpoint
+          name: statusListIdentifier
           schema:
             type: string
             example: "A671FED3E9AD"
@@ -269,7 +269,7 @@ paths:
           content:
             application/statuslist+jwt:
               schema:
-                  $ref: '#/components/schemas/TokenStatusListResponse'
+                $ref: '#/components/schemas/TokenStatusListResponse'
         '404':
           description: Not Found
           content:
@@ -289,12 +289,12 @@ paths:
                 error: INTERNAL_SERVER_ERROR
                 error_description: "..."
   # `crs`
-  /b/{endpoint}:
+  /b/{statusListIdentifier}:
     get:
       description: A public endpoint that returns a W3C Bitstring Status List credential JWT. The list that is returned depends on list type for the wallet Credential Issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
       parameters:
         - in: path
-          name: endpoint
+          name: statusListIdentifier
           schema:
             type: string
             example: "A671FED3E9AD"
@@ -306,7 +306,7 @@ paths:
           content:
             application/vc+jwt:
               schema:
-                  $ref: '#/components/schemas/BitstringStatusListResponse'
+                $ref: '#/components/schemas/BitstringStatusListResponse'
         '404':
           description: Not Found
           content:
@@ -420,7 +420,9 @@ paths:
   # `cri`
   /.well-known/jwks.json:
     get:
-      description: A public endpoint for GOV.UK One Login to retrieve the credential issuer's JSON Web Key Set (JWKS) of public keys which can be used to verify the the pre-authorised code.
+      description: |-
+        TODO: Update description to be more generic since it is now used in multiple places.
+        A public endpoint for GOV.UK One Login to retrieve the credential issuer's JSON Web Key Set (JWKS) of public keys which can be used to verify the the pre-authorised code.
       responses:
         '200':
           description: Credential issuer's JWKS.
@@ -812,8 +814,7 @@ components:
       properties:
         message:
           type: string
-          enum:
-            ["Request processed for revocation", "Credential already revoked"]
+          enum: ["Request processed for revocation", "Credential already revoked"]
           description: Status message indicating the result
         revokedAt:
           type: number
@@ -849,9 +850,9 @@ components:
         exp:
           type: number
           description: |
-             expiry date timestamp (as defined in rfc7519) of the status list JWT.
-             The information in the JWT past date may be invalid and it must not be used beyond this date.
-             A stale status list may only be used in scenarios where there is an outage and the status list service is unable to serve a fresh status list.
+            expiry date timestamp (as defined in rfc7519) of the status list JWT.
+            The information in the JWT past date may be invalid and it must not be used beyond this date.
+            A stale status list may only be used in scenarios where there is an outage and the status list service is unable to serve a fresh status list.
           example: "https://crs.account.gov.uk/"
         iss:
           type: string
@@ -951,10 +952,7 @@ components:
               type: "BitstringStatusList"
               statusSize: 2,
               statusPurpose: "message"
-              statusMessage: [
-                { "status": "0x0", "message": "VALID" },
-                { "status": "0x1", "message": "INVALID" }
-              ]
+              statusMessage: [{"status": "0x0", "message": "VALID"}, {"status": "0x1", "message": "INVALID"}]
               encodedList: "H4sIAAAAAAAAA3MUBABJTAvCAgAAAA"
               ttl: 3600
           properties:

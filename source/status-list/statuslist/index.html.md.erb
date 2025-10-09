@@ -1,12 +1,11 @@
 ---
-title: Checking a credential's status in Bitstring status list
+title: Checking a credential's status in a status list
 weight: 10
 last_reviewed_on: 2025-10-02
 review_in: 6 months
 ---
 
-
-# Checking a credential's status in Bitstring status list
+# Checking a credential's status in a status list
 
 The Status List service hosts all status lists publicly. Each list is a signed JWT. You can verify the JWT's signature by accessing the Status List service's JWKS hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
 
@@ -14,6 +13,7 @@ You can use the status list `uri` in the credential to check a credential's stat
 
 The status lists beginning with `/b/` in path are [Bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/) JWT payload.
 For consistency between the two different lists that the status list service publishes it uses the more [complex implementation of Bitstring status list](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
+
 Each status at a specific index in the status list uses 2 bits.
 Each status index may contain one of the following bit combinations:
 
@@ -26,19 +26,76 @@ Each status index may contain one of the following bit combinations:
 
 ### Endpoint URI
 
-The URI path for the Bitstring status list endpoint is `/b/{endpoint}`. It is presented as a GET request, where:
+The URI path for the Bitstring status list endpoint is `/b/{statusListIdentifier}`.
+The URI path for the Token status list endpoint is `/t/{statusListIdentifier}`.
 
-* `b` represents the type of status list for this shard `BitstringStatusList`
-* `endpoint` represents an ID for a specific status list
+Both are presented as a GET request. The combination of status list list type and status list identifier represents a unique status list.
+### Token Status List Request Example
+The following is an example of the `/t/{statusListIdentifier}` request:
 
-### Request Example
-The following is an example of the `/b/{endpoint}` request:
+```TEXT
+GET /t/A671FED3E9AD HTTP/1.1
+Host: crs.account.gov.uk
+Accept: application/statuslist+jwt
+```
+
+### Request Response
+
+#### Header
+
+The JWT response header will contain the following:
+
+```JSON
+{
+  "alg": "ES256",
+  "kid": "12",
+  "typ": "statuslist+jwt"
+}
+```
+
+| Parameter | Description           |
+|-----------|-----------------------|
+| `alg`     | `alg` stands for 'algorithm'. This value will be returned as `ES256`. This is the algorithm used to encode the JWT.    |
+| `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List service's JWKS which can be used to verify the JSON web signature (JWS).    |
+| `typ`     | `typ` stands for 'type'. This is the type of the status list. It can be `statuslist+jwt` (token) or `vc+jwt` (bitstring).    |
+
+#### Payload
+
+The JWT response payload for a Token status list will contain the following:
+
+```JSON
+{
+  "exp": 2291720170,
+  "iat": 1686920170,
+  "iss": "https://crs.account.gov.uk",
+  "status_list": {
+    "bits": 2,
+    "lst": "eNpzdAEAAMgAhg"
+  },
+  "sub": "https://crs.account.gov.uk/b/A671FED3E9AD",
+  "ttl": 43200
+}
+```
+
+| Parameter | Description           |
+|-----------|-----------------------|
+| `exp`     | `exp` stands for 'expiry'. This is the expiry of the subject credential.    |
+| `iat`     | `iat` stands for 'issued at'. This is the timestamp the subject credential was originally issued at.    |
+| `iss`     | `iss` stands for 'issuer'. This is the URL of the credential issuer service operated by the organisation sharing the credential.    |
+| `status_list.bits` | The number of bits that represent a status.    |
+| `status_list.lst` | `lst` stands for 'list'. This is an encoded version of this shard of the status list.    |
+| `sub` | `sub` stands for 'subject'. This is the URI of the shard that was in the original HTTP request.    |
+| `ttl` | `ttl` stands for 'time-to-live'. This is the lifetime of the cached version of this shard. Shards are updated at regular and set intervals.    |
+
+### Bitstring Status List Request Example
+The following is an example of the `/b/{statusListIdentifier}` request:
 
 ```TEXT
 GET /b/A671FED3E9AD HTTP/1.1
 Host: crs.account.gov.uk
 Accept: application/json
 ```
+
 ### Request Response
 
 #### Header
