@@ -34,7 +34,7 @@ The issue endpoint must accept HTTP POST requests.
 
 The request must include:
 
-* `header`: Authorization header including a kid, alg and typ (JWT), which is signed and encoded
+* `header`: You must provide the `Content-Type` header - the only valid value is `application/jwt`
 * `request body (JWT)`: contains a signed JWT based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), which must follow the requirements below
 
 

@@ -28,7 +28,7 @@ The revoke endpoint must accept HTTP POST requests.
 
 The request must include:
 
-* `header`: Authorization header including a kid, alg and type (JWT), which is signed and encoded
+* `header`: You must provide the `Content-Type` header - the only valid value is `application/jwt`
 * `request body`: contains a signed jwt based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), which must follow the requirements below
 
 
@@ -81,7 +81,7 @@ Your `uri` and `idx` must exactly match the response from the [`/issue` endpoint
 ```TEXT
 POST /revoke HTTP/1.1
 Host: <API.CRS.ACCOUNT.GOV.UK>
-Content-Type: application/json
+Content-Type: application/jwt
 
 eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjgwODY4Nzk0LTM2MjYtNDNmOC05YTRkLWEwZDk4YWE3ZGE2NiJ9.eyJpc3MiOiJleGFtcGxlQ2xpZW50SWQxMjMzIiwiaWF0IjoxNzU5NDAyMjgzLCJqaXQiOiJiYzBmYmZmMy1jYjA0LTQyODYtYThiYS1mNDk1NmNjYmUyZDciLCJ1cmkiOiJodHRwczovL2Nycy5hY2NvdW50Lmdvdi51ay9iL0E2NzFGRUQzRTlBRCIsImlkeCI6M30.Y1yAhYz8kZnURYLQcrBNHs27wsOMHvqqazusyoaOwpQoJZ92P74NWQWqW7AXecrqvMxtK_OlsvI2zRMZxshR-Q
 ```

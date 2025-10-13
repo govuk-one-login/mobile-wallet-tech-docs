@@ -554,7 +554,7 @@ components:
           "iss": "clientId-abcdef",
           "iat": 1758038912,
           "statusExpiry": 1789574909,
-          "jti": "BCEA4E51-6ECA-4547-8D18-4B971B72C146"
+          "jti": "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
         }
       properties:
         alg:
@@ -591,7 +591,7 @@ components:
           type: string
           description: |
             JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks
-          example: "BCEA4E51-6ECA-4547-8D18-4B971B72C146"
+          example: "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
       required:
         - alg
         - typ
@@ -752,7 +752,7 @@ components:
           "iat": 1758038912,
           "idx": 3,
           "uri": "https://crs.account.gov.uk/b/A671FED3E9AD",
-          "jti": "DB290616-1F3C-4FF9-939F-2749ABDBACEC"
+          "jti": "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
         }
       properties:
         alg:
@@ -795,7 +795,7 @@ components:
           type: string
           description: |
             JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks
-          example: "DB290616-1F3C-4FF9-939F-2749ABDBACEC"
+          example: "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
       required:
         - alg
         - typ
