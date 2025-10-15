@@ -98,7 +98,7 @@ The JWT response payload for a Bitstring status list will contain the following:
         "message": "INVALID"
       }
     ],
-    "encodedList": "H4sIAAAAAAAAA3MUBABJTAvCAgAAAA",
+    "encodedList": "uH4sIAAAAAAAAA3MUBABJTAvCAgAAAA",
     "ttl": "3600"
   }
 }
@@ -193,3 +193,45 @@ The JWT response payload for a Token status list will contain the following:
 | `sub` | `sub` stands for 'subject'. This is the URI of the shard that was in the original HTTP request.    |
 | `ttl` | `ttl` stands for 'time-to-live'. This is the lifetime of the cached version of this shard. Shards are updated at regular and set intervals.    |
 
+##  JSON Web Key Set (JWKS)
+The JWKS endpoint exposes the status list's public cryptographic keys in JSON Web Key Set (JWKS) format. A public key can be used to verify the signature of the each status list to make sure that it was published by the status list service and it has not been tampered with.
+
+### Technical details
+
+#### Endpoint location
+
+The JWKS is a publicly accessible at the standardised location `/.well-known/jwks.json` on the status list service domain.
+
+#### Response format
+
+The endpoint must return a 200 OK HTTP status code and a valid JSON response that follows the JWKS specification defined in [RFC 7517](https://datatracker.ietf.org/doc/html/rfc7517). Each key within the JWKS is represented as a JSON Web Key (JWK) object. The JWKS usually contains only one key, but it can contain two keys during a key rotation overlap period.
+
+The JWK for an elliptic curve key based on the P-256 curve must include the following parameters:
+
+- `kty`: The family of cryptographic algorithms used with the key - must be "EC".
+- `kid`: A unique identifier for a specific key within the set - this value will be referenced in the status list JWT header to show which key must be used for verification. This parameter is important for associating the correct public key with the status list being verified.
+- `crv`: Cryptographic curve used with the key - must be "P-256".
+- `x`: The "x" coordinate for the elliptic curve point.
+- `y`: The "y" coordinate for the elliptic curve point.
+- `alg`: The cryptographic algorithm used with the key - must be "ES256".
+- `use`: The intended use of the key - must be "sig" to indicate the key can be used to verify the signature.
+
+### JWKS example
+
+Below is an example of a JWKS containing one elliptic curve key based on the P-256 curve:
+
+```JSON
+{
+  "keys": [
+    {
+      "kty": "EC",
+      "use": "sig",
+      "crv": "P-256",
+      "kid": "5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f",
+      "x": "6jCKX_QRrmTeEJi-uiwcYqu8BgMgl70g2pdAst24MPE",
+      "y": "icPzjbSk6apD_SNvQt8NWOPlPeGG4KYU55GfnARryoY",
+      "alg": "ES256"
+    }
+  ]
+}
+```
