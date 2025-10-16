@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Check a credential's status
 
-The Status List service hosts all status lists publicly. Each list is a signed JWT. You can verify the JWT's signature by accessing the Status List service's JWKS hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
+The Status List service hosts all status lists publicly. Each list is a signed JWT. You can verify the JWT's signature by accessing [the Status List service's JWKS](#json-web-key-set-jwks) hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
 
 There are two formats that the Status List service supports: [Bitstring status lists](#bitstring-status-list) and [Token status lists](#token-status-list).
 
@@ -194,13 +194,14 @@ The JWT response payload for a Token status list will contain the following:
 | `ttl` | `ttl` stands for 'time-to-live'. This is the lifetime of the cached version of this shard. Shards are updated at regular and set intervals.    |
 
 ##  JSON Web Key Set (JWKS)
-The JWKS endpoint exposes the status list's public cryptographic keys in JSON Web Key Set (JWKS) format. A public key can be used to verify the signature of the each status list to make sure that it was published by the status list service and it has not been tampered with.
+
+The JWKS endpoint exposes the Status List service's public cryptographic keys in JSON Web Key Set (JWKS) format. You can use a public key to verify the signature of a status list. This verification lets you make sure that the status list was published by the Status List service and it has not been tampered with.
 
 ### Technical details
 
 #### Endpoint location
 
-The JWKS is a publicly accessible at the standardised location `/.well-known/jwks.json` on the status list service domain.
+The JWKS is publicly accessible at the standardised location `/.well-known/jwks.json` on the Status List service domain.
 
 #### Response format
 
@@ -208,13 +209,15 @@ The endpoint must return a 200 OK HTTP status code and a valid JSON response tha
 
 The JWK for an elliptic curve key based on the P-256 curve must include the following parameters:
 
-- `kty`: The family of cryptographic algorithms used with the key - must be "EC".
-- `kid`: A unique identifier for a specific key within the set - this value will be referenced in the status list JWT header to show which key must be used for verification. This parameter is important for associating the correct public key with the status list being verified.
-- `crv`: Cryptographic curve used with the key - must be "P-256".
-- `x`: The "x" coordinate for the elliptic curve point.
-- `y`: The "y" coordinate for the elliptic curve point.
-- `alg`: The cryptographic algorithm used with the key - must be "ES256".
-- `use`: The intended use of the key - must be "sig" to indicate the key can be used to verify the signature.
+| Parameter   | Definition                                    |
+|-------------|-----------------------------------------------|
+| `kty`       | The family of cryptographic algorithms used with the key. This must be `EC`.    |
+| `kid`       | A unique identifier for a specific key within the set. This value will be referenced in the status list JWT header to show which key must be used for verification. This parameter is important for associating the correct public key with the status list being verified.    |
+| `crv`       | The cryptographic curve used with the key. This must be `P-256`.        |
+| `x`         | The "x" coordinate for the elliptic curve point.      |
+| `y`         | The "y" coordinate for the elliptic curve point.      |
+| `alg`       | The cryptographic algorithm used with the key. This must be `ES256`.       |
+| `use`       | The intended use of the key. This must be `sig` to indicate the key can be used to verify the signature.     |
 
 ### JWKS example
 
