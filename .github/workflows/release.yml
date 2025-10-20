@@ -27,7 +27,7 @@ jobs:
         run: echo "version=$(git describe --tags --abbrev=0)" >> "$GITHUB_OUTPUT"
 
       - name: Create semantic release
-        uses: cocogitto/cocogitto-action@c7a74f5406bab86da17da0f0e460a69f8219a68c # v3.11
+        uses: cocogitto/cocogitto-action@390bda87a19bf627e03ad075c67a11e9ddbb7547 # v3.11
         id: release
         with:
           release: true
