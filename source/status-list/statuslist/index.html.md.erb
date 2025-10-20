@@ -16,7 +16,7 @@ You can use the status list `uri` in the credential to check a credential's stat
 Each status at a specific index in the status list uses 2 bits. Each status index may contain one of the following bit combinations:
 
 * `00` (VALID). Represents a valid credential
-* `01` (INVALID). Represents a credential that has been revoked (marked as invalid)
+* `01` (INVALID). Represents a credential that has been permanently revoked (marked as invalid)
 * `10` (NOT USED). Currently not used
 * `11` (NOT USED). Currently not used
 
@@ -207,7 +207,7 @@ The JWKS is publicly accessible at the standardised location `/.well-known/jwks.
 
 The endpoint must return a 200 OK HTTP status code and a valid JSON response that follows the JWKS specification defined in [RFC 7517](https://datatracker.ietf.org/doc/html/rfc7517). Each key within the JWKS is represented as a JSON Web Key (JWK) object. The JWKS usually contains only one key, but it can contain two keys during a key rotation overlap period.
 
-The JWK for an elliptic curve key based on the P-256 curve must include the following parameters:
+The JWK for an elliptic curve public key based on the P-256 curve must include the following parameters:
 
 | Parameter   | Definition                                    |
 |-------------|-----------------------------------------------|
@@ -221,7 +221,7 @@ The JWK for an elliptic curve key based on the P-256 curve must include the foll
 
 ### JWKS example
 
-Below is an example of a JWKS containing one elliptic curve key based on the P-256 curve:
+Below is an example of a JWKS containing one elliptic curve public key based on the P-256 curve:
 
 ```JSON
 {
