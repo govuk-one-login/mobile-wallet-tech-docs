@@ -8,11 +8,11 @@ review_in: 6 months
 
 # Revoke a credential
 
-As a credential issuer, you can call the `/revoke` endpoint to revoke credentials you have previously issued. You cannot use it to revoke credentials issued by anyone else.
+As a credential issuer, you can call the `/revoke` endpoint to revoke a credential you have previously issued. You cannot use it to revoke a credential issued by anyone else.
 
 The Status List service validates all calls to the `/revoke` endpoint to make sure that the caller has the correct rights to revoke the credential.
 
-When you call the `/revoke` endpoint on an existing status, the status list records that status as invalid. This state change will be reflected in the published status list within a short timeframe. This process can not be reversed. There is [more guidance on this in the statuslist endpoint page](statuslist/).
+When you call the `/revoke` endpoint on an existing status, the status list records that status as revoked. This state change will be reflected in the published status list within a short timeframe. This process can not be reversed. There is [more guidance on this in the statuslist endpoint page](statuslist/).
 
 ### Technical details
 
