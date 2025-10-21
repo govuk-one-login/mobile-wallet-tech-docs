@@ -7,9 +7,9 @@ review_in: 6 months
 
 # Check a credential's status
 
-The Status List service hosts all status lists publicly. Each list is a signed JWT. You can verify the JWT's signature by accessing [the Status List service's JWKS](#json-web-key-set-jwks) hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
+The Status List Service hosts all status lists publicly. Each list is a signed JWT. You can verify the JWT's signature by accessing [the Status List Service's JWKS](#json-web-key-set-jwks) hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
 
-There are two formats that the Status List service supports: [Bitstring status lists](#bitstring-status-list) and [Token status lists](#token-status-list).
+There are two formats that the Status List Service supports: [Bitstring status lists](#bitstring-status-list) and [Token status lists](#token-status-list).
 
 You can use the status list `uri` in the credential to check a credential's status.
 
@@ -24,7 +24,7 @@ Each status at a specific index in the status list uses 2 bits. Each status inde
 
 Status lists where the URI path begins with `/b/` are Bitstring status lists that follow the [W3C Bitstring Status List specification](https://www.w3.org/TR/vc-bitstring-status-list/).
 
-For consistency between the two different lists that the status list service publishes, the Status List service uses the more [complex implementation of Bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
+For consistency between the two different lists that the status list service publishes, the Status List Service uses the more [complex implementation of Bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
 
 ### Technical details
 
@@ -62,7 +62,7 @@ The JWT response header will contain the following:
 | Parameter | Description           |
 |-----------|-----------------------|
 | `alg`     | `alg` stands for 'algorithm'. This value will be returned as `ES256`. This is the algorithm used to encode the JWT.    |
-| `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List service's JWKS which can be used to verify the JSON web signature (JWS).    |
+| `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List Service's JWKS which can be used to verify the JSON web signature (JWS).    |
 | `typ`     | `typ` stands for 'type'. This is the type of the status list. It is `vc+jwt` for Bitstring status lists.    |
 
 ##### Payload
@@ -116,7 +116,7 @@ The JWT response payload for a Bitstring status list will contain the following:
 | `credentialSubject.type` | The type of credential. This will be `BitstringStatusList`.    |
 | `credentialSubject.statusSize` | The size of the status list in bits.    |
 | `credentialSubject.statusPurpose` | The purpose of the status list, as described in statusMessage.    |
-| `credentialSubject.statusMessages` | This is an array of objects, which each contain a status and a message..    |
+| `credentialSubject.statusMessages` | This is an array of objects, which each contain a status and a message.    |
 | `credentialSubject.statusMessages.status` | This represents the status value in the status list. It is a hexadecimal string, and will be `"0x0"` or `"1x1"`.    |
 | `credentialSubject.statusMessages.message` | The status message representing the status value. This will be `"VALID"` or `"INVALID"`.    |
 | `credentialSubject.encodedList` | This is a multibase-encoded base64url (with no padding) representation of the GZIP-compressed bitstring values for the associated range of verifiable credential status values.    |
@@ -162,7 +162,7 @@ The JWT response header will contain the following:
 | Parameter | Description           |
 |-----------|-----------------------|
 | `alg`     | `alg` stands for 'algorithm'. This value will be returned as `ES256`. This is the algorithm used to encode the JWT.    |
-| `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List service's JWKS which can be used to verify the JSON web signature (JWS).    |
+| `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List Service's JWKS which can be used to verify the JSON web signature (JWS).    |
 | `typ`     | `typ` stands for 'type'. This is the type of the status list. This will be `statuslist+jwt` for a Token status list.    |
 
 ##### Payload
@@ -195,13 +195,13 @@ The JWT response payload for a Token status list will contain the following:
 
 ##  JSON Web Key Set (JWKS)
 
-The JWKS endpoint exposes the Status List service's public cryptographic keys in JSON Web Key Set (JWKS) format. You can use a public key to verify the signature of a status list. This verification lets you make sure that the status list was published by the Status List service and it has not been tampered with.
+The JWKS endpoint exposes the Status List Service's public cryptographic keys in JSON Web Key Set (JWKS) format. You can use a public key to verify the signature of a status list. This verification lets you make sure that the status list was published by the Status List Service and it has not been tampered with.
 
 ### Technical details
 
 #### Endpoint location
 
-The JWKS is publicly accessible at the standardised location `/.well-known/jwks.json` on the Status List service domain.
+The JWKS is publicly accessible at the standardised location `/.well-known/jwks.json` on the Status List Service domain.
 
 #### Response format
 
