@@ -620,7 +620,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'BAD_REQUEST'.
+          description: An error code - must be `BAD_REQUEST`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -631,7 +631,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'UNAUTHORISED'.
+          description: An error code - must be `UNAUTHORISED`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -642,7 +642,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'FORBIDDEN'.
+          description: An error code - must be `FORBIDDEN`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -653,7 +653,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
+          description: An error code - must be `INTERNAL_SERVER_ERROR`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -664,7 +664,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'BAD_REQUEST'.
+          description: An error code - must be `BAD_REQUEST`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -675,7 +675,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'UNAUTHORISED'.
+          description: An error code - must be `UNAUTHORISED`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -686,7 +686,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'FORBIDDEN'.
+          description: An error code - must be `FORBIDDEN`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -697,7 +697,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'NOT_FOUND'.
+          description: An error code - must be `NOT_FOUND`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -708,7 +708,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
+          description: An error code - must be `INTERNAL_SERVER_ERROR`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -719,7 +719,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'INTERNAL_SERVER_ERROR'.
+          description: An error code - must be `INTERNAL_SERVER_ERROR`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -730,7 +730,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be 'NOT_FOUND'.
+          description: An error code - must be `NOT_FOUND`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
