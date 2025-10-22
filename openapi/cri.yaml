@@ -126,7 +126,7 @@ paths:
   # `crs`
   /issue:
     post:
-      description: An endpoint to request a new status index for a GOV.UK wallet credential. This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature.
+      description: An endpoint to request a new status index for a GOV.UK wallet credential. This API will use the issuer's `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature.
       requestBody:
         description: JOSE signed JWT containing Credential Issuer registered status list `client id` and the `expiry date` of the credential they are about to issue in a signed JWT. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs.
         required: true
@@ -185,7 +185,7 @@ paths:
   # `crs`
   /revoke:
     post:
-      description: An endpoint used by GOV.UK One Login Wallet Credential Issuers to revoke a status list index associated with a wallet credential that they issued.  This API will use the Issuers `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature.
+      description: An endpoint used by GOV.UK Wallet credential issuers to revoke a status list index associated with a GOV.UK Wallet credential that they issued. This API will use the issuer's `/.well-known/jwks.json` endpoint to locate the signing keys to verify the signature.
       requestBody:
         description: JOSE signed JWT containing the wallet Credential Issuer registered status list client id, status index and the URI of the status list with the index. The `idx` and `uri` claims in the request JWT should match exactly what was issued by the status list service at the time of issuance. Status list supports ES256 (elliptic-curve cryptography with curve P-256) signed JWTs. The status list service will only keep associations between credential issuers and indexes issued to the credential issuers. It is the issuers responsibility to keep correlation between credentials and index issued to those credentials.
         required: true
@@ -254,7 +254,7 @@ paths:
   # `crs`
   /t/{statusListIdentifier}:
     get:
-      description: A public endpoint that returns an IETF Token Status List JWT. The list that is returned depends on list type for the wallet Credential Issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
+      description: A public endpoint that returns an IETF Token Status List JWT. The list that is returned depends on the list type for the GOV.UK Wallet credential issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
       parameters:
         - in: path
           name: statusListIdentifier
@@ -291,7 +291,7 @@ paths:
   # `crs`
   /b/{statusListIdentifier}:
     get:
-      description: A public endpoint that returns a W3C Bitstring Status List credential JWT. The list that is returned depends on list type for the wallet Credential Issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
+      description: A public endpoint that returns a W3C Bitstring Status List credential JWT. The list that is returned depends on the list type for the GOV.UK Wallet credential issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
       parameters:
         - in: path
           name: statusListIdentifier
@@ -608,11 +608,11 @@ components:
           type: number
           minimum: 0
           example: 3
-          description: The assigned Status List index. This index position is unique within the Status List identified by the URI
+          description: The assigned status list index. This index position is unique within the status list identified by the URI
         uri:
           type: string
           example: "https://crs.account.gov.uk/b/A671FED3E9AD"
-          description: The URI of the Status List that holds the issued credential. It is used in combination with the index to retrieve the Status List entry
+          description: The URI of the status list that holds the issued credential. It is used in combination with the index to retrieve the status list entry
       required:
         - idx
         - uri
@@ -789,7 +789,7 @@ components:
         uri:
           type: string
           description: |
-            The URI of the Status List that holds the issued credential. The uri + idx combination is used to uniquely identify the entry to revoke
+            The URI of the status list that holds the issued credential. The uri + idx combination is used to uniquely identify the entry to revoke
           example: "https://crs.account.gov.uk/b/A671FED3E9AD"
         jti:
           type: string
@@ -863,7 +863,7 @@ components:
           example: 1758038912
         sub:
           type: string
-          description: The URI of this Status List that holds the status indexes.
+          description: The URI of this status list that holds the status indexes.
           example: "https://crs.account.gov.uk/"
         ttl:
           type: number
@@ -906,7 +906,7 @@ components:
         name: issuerequest
     BitstringStatusListResponse:
       type: string
-      description: JOSE signed Bitstring Status List credential containing the status list.
+      description: JOSE signed Bitstring status list credential containing the status list.
       properties:
         alg:
           type: string
@@ -932,7 +932,7 @@ components:
           example: ["VerifiableCredential", "BitstringStatusListCredential"]
         issuer:
           type: string
-          description: The URL of the issuer of Status List credential.
+          description: The URL of the issuer of status list credential.
           example: "https://crs.account.gov.uk/"
         validFrom:
           type: string
