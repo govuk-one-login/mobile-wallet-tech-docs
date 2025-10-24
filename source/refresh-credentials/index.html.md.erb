@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Refresh credentials
 
-When a credential expires, you can prompt the user to click a refresh button in the app to get a new credential.
+A credential expires when it passes its [`validUntil` date](/credential-issuer-functionality/credential/#payload). Shortly before this happens, you can prompt the user to click a refresh button in the app to replace their old credential with a new one.
 
 If the new credential is added successfully, the user will only see the new credential in their documents. The old credential will be removed.
 
