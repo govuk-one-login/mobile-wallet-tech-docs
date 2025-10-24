@@ -15,14 +15,14 @@ Only valid status list clients can issue and revoke statuses in the Status List 
 
 When registering as a status list client, you must provide:
 
-* a public JWKS endpoint - used to verify the signatures of the status list client's signed JWTs for the issue and revoke endpoint
+* a public JSON web key set (JWKS) endpoint - used to verify the signatures of the status list client's signed JSON web tokens (JWTs) for the issue and revoke endpoint
 * a status list type (Bitstring or Token) - the type of status issued for this specific status list client
 
 You can register multiple status list clients if you need to.
 
 When you complete your registration, you get a unique `clientId`. You must include your `clientId` identifier as [the `iss` claim](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1) in the JWTs you send to the [`/issue`](../issue-status-list-entry) and [`/revoke`](../revoke-credential) endpoints.
 
-The requests to and responses from the Status List Service are the same, regardless of the status list type. You must make sure the status list responses are included in your credential correctly.
+The requests to and responses from the Status List Service are the same, regardless of the status list type. You must make sure the Status List Service's responses are included in your credential correctly.
 
 ## Access the Status List Service APIs
 

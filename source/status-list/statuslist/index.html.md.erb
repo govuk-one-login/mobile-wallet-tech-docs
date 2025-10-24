@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Check a credential's status
 
-The Status List Service hosts all status lists publicly. Each list is a signed JWT. You can verify the JWT's signature by accessing [the Status List Service's JWKS](#json-web-key-set-jwks) hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
+The Status List Service hosts all status lists publicly. Each list is a signed JSON web token (JWT). You can verify the JWT's signature by accessing [the Status List Service's JSON web key set (JWKS)](#json-web-key-set-jwks) hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
 
 There are two formats that the Status List Service supports: [Bitstring status lists](#bitstring-status-list) and [Token status lists](#token-status-list).
 
@@ -32,8 +32,8 @@ For consistency between the two different lists that the status list service pub
 
 The URI path for the Bitstring status list endpoint is `/b/{statusListIdentifier}`. It is presented as a GET request, where:
 
-* `b` represents the type of status list for this shard: `BitstringStatusList`
-* `statusListIdentifier` represents an ID for a specific status list
+* `b` represents the type of status list: `BitstringStatusList`
+* `statusListIdentifier` represents an ID for a specific status list 
 
 #### Bitstring status list request example
 
@@ -112,7 +112,7 @@ The JWT response payload for a Bitstring status list will contain the following:
 | `validFrom`  | The earliest point in time at which the status list is valid.    |
 | `validUntil` | The latest point in time at which the status list is valid.    |
 | `credentialSubject` | The status list subject about which the claims below are made.    |
-| `credentialSubject.id` | A unique URL that represents this status list.    |
+| `credentialSubject.id` | A unique URI that represents this status list.    |
 | `credentialSubject.type` | The type of credential. This will be `BitstringStatusList`.    |
 | `credentialSubject.statusSize` | The size of the status list in bits.    |
 | `credentialSubject.statusPurpose` | The purpose of the status list, as described in statusMessage.    |
@@ -132,7 +132,7 @@ Status lists where the URI path begins with `/t/` are Token status lists that fo
 
 The URI path for the Token status list endpoint is `/t/{statusListIdentifier}`. It is presented as a GET request, where:
 
-* `t` represents the type of status list for this shard: `TokenStatusList`
+* `t` represents the type of status list: `TokenStatusList`
 * `statusListIdentifier` represents an ID for a specific status list
 
 ### Token Status List Request Example
@@ -189,9 +189,9 @@ The JWT response payload for a Token status list will contain the following:
 | `iat`     | `iat` stands for 'issued at'. This is the timestamp the subject credential was originally issued at.    |
 | `iss`     | `iss` stands for 'issuer'. This is the URL of the credential issuer service operated by the organisation sharing the credential.    |
 | `status_list.bits` | The number of bits that represent a status.    |
-| `status_list.lst` | `lst` stands for 'list'. This is an encoded version of this shard of the status list.    |
-| `sub` | `sub` stands for 'subject'. This is the URI of the shard that was in the original HTTP request.    |
-| `ttl` | `ttl` stands for 'time-to-live'. This is the lifetime of the cached version of this shard. Shards are updated at regular and set intervals.    |
+| `status_list.lst` | `lst` stands for 'list'. This is an encoded version of this status list.    |
+| `sub` | `sub` stands for 'subject'. This is the URI of the status list that was in the original HTTP request.    |
+| `ttl` | `ttl` stands for 'time-to-live'. This is the lifetime of the cached version of this status list. Status lists are updated at regular and set intervals.    |
 
 ##  JSON Web Key Set (JWKS)
 

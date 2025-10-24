@@ -16,27 +16,29 @@ When you call the `/revoke` endpoint on an existing status, the status list reco
 
 ### Technical details
 
+The requests to and responses from the Status List Service are the same, regardless of the credential or status list type.
+
 #### Endpoint URI
 
 The URI path for the revoke credential endpoint is `/revoke`.
 
-When you register as a credential issuer with the Status List Service, you get access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json` endpoint. This is used to verify the JWT.
+When you register as a credential issuer with the Status List Service, you get access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json` endpoint. This is used to verify the JSON web token (JWT).
 
 #### Request format
 
-The revoke endpoint must accept HTTP POST requests.
+The revoke endpoint only accepts HTTP POST requests.
 
 The request must include:
 
 * `header`: you must provide the `Content-Type` header - the only valid value is `application/jwt`
-* `request body`: contains a signed jwt based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), which must follow the requirements below
+* `request body`: contains a signed JWT based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), which must follow the requirements below
 
 
 ### Status list JWT definition `/revoke`
 
 #### Header
 
-The JOSE header must contain the following header parameters:
+The JSON Object Signing and Encryption (JOSE) header (based on [RFC-7515](https://datatracker.ietf.org/doc/html/rfc7515#section-4)) must contain the following header parameters:
 
 ```JSON
 {
