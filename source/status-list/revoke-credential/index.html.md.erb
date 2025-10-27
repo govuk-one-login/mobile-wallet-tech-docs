@@ -1,0 +1,95 @@
+---
+title: Revoke a credential
+weight: 6
+last_reviewed_on: 2025-10-22
+review_in: 6 months
+---
+
+
+# Revoke a credential
+
+As a credential issuer, you can call the `/revoke` endpoint to revoke a credential you have previously issued. You cannot use it to revoke a credential issued by anyone else.
+
+The Status List Service validates all calls to the `/revoke` endpoint to make sure that the caller has the correct rights to revoke the credential.
+
+When you call the `/revoke` endpoint on an existing status, the status list records that status as revoked. This state change will be reflected in the published status list within a short timeframe. This process can not be reversed. There is [more guidance on this in the statuslist endpoint page](../statuslist).
+
+### Technical details
+
+The requests to and responses from the Status List Service are the same, regardless of the credential or status list type.
+
+#### Endpoint URI
+
+The URI path for the revoke credential endpoint is `/revoke`.
+
+When you register as a credential issuer with the Status List Service, you get access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json` endpoint. This is used to verify the JSON web token (JWT).
+
+#### Request format
+
+The revoke endpoint only accepts HTTP POST requests.
+
+The request must include:
+
+* `header`: you must provide the `Content-Type` header - the only valid value is `application/jwt`
+* `request body`: contains a signed JWT based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), which must follow the requirements below
+
+
+### Status list JWT definition `/revoke`
+
+#### Header
+
+The JSON Object Signing and Encryption (JOSE) header (based on [RFC-7515](https://datatracker.ietf.org/doc/html/rfc7515#section-4)) must contain the following header parameters:
+
+```JSON
+{
+  "typ": "JWT",
+  "alg": "ES256",
+  "kid": "499b46712489a805510bdf3e61e1f93d"
+}
+```
+
+| Parameter | Required or optional | Description           |
+|-----------|----------------------|-----------------------|
+| `typ`     | Required             | `typ` stands for 'type'. You must set this value to be `JWT`. This is the media type of the complete JWT.    |
+| `alg`     | Required             | `alg` stands for 'algorithm'. You must set this value to be `ES256`. This is the algorithm used to sign the JWT.     |
+| `kid`     | Required             | `kid` stands for 'key ID'. This key ID must be present in your hosted JWKS. This is used to validate the JSON web signature (JWS).     |
+
+#### Payload
+
+The JWT payload must contain the following claims:
+
+```JSON
+{
+  "iss": "asKWnsjeEJEWjjwSHsIksIksIhBe",
+  "iat": 1686920170,
+  "jti": "62b45850-4c5c-4696-983a-af66450301d4",
+  "uri": "https://crs.account.gov.uk/t/3B0F3BD087A7",
+  "idx": 3
+}
+```
+
+| Claim | Required or optional | Description           |
+|-------|----------------------|-----------------------|
+| `iss` | Required             | `iss` stands for 'issuer'. This is the [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.<br><br>Make sure you are using the correct `clientId` for your environment - production or integration.        |
+| `iat` | Required             | `iat` stands for 'issued at'. This is the UNIX timestamp when the request JWT was issued.    |
+| `jti` | Required             | `jti` stands for 'JWT ID'. This provides a unique identifier for the JWT. The Status List Service will validate the format provided to make sure it is a lowercase UUID.    |
+| `uri` | Required             | `uri` stands for 'uniform resource identifier'. This is the uri of the status list that holds the status to revoke.    |
+| `idx` | Required             | `idx` stands for 'index'. This is the index of the status to be revoked.    |
+
+Your `uri` and `idx` must exactly match the response from the [`/issue` endpoint](/status-list/issue-status-list-entry).
+
+### Example Request
+
+```TEXT
+POST /revoke HTTP/1.1
+Host: <API.CRS.ACCOUNT.GOV.UK>
+Content-Type: application/jwt
+
+eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjgwODY4Nzk0LTM2MjYtNDNmOC05YTRkLWEwZDk4YWE3ZGE2NiJ9.eyJpc3MiOiJleGFtcGxlQ2xpZW50SWQxMjMzIiwiaWF0IjoxNzU5NDAyMjgzLCJqaXQiOiJiYzBmYmZmMy1jYjA0LTQyODYtYThiYS1mNDk1NmNjYmUyZDciLCJ1cmkiOiJodHRwczovL2Nycy5hY2NvdW50Lmdvdi51ay9iL0E2NzFGRUQzRTlBRCIsImlkeCI6M30.Y1yAhYz8kZnURYLQcrBNHs27wsOMHvqqazusyoaOwpQoJZ92P74NWQWqW7AXecrqvMxtK_OlsvI2zRMZxshR-Q
+```
+
+### Example Response
+
+```
+HTTP/1.1 202 ACCEPTED
+```
