@@ -27,13 +27,13 @@ jobs:
         run: echo "version=$(git describe --tags --abbrev=0)" >> "$GITHUB_OUTPUT"
 
       - name: Create semantic release
-        uses: cocogitto/cocogitto-action@c7a74f5406bab86da17da0f0e460a69f8219a68c # v3.11
+        uses: cocogitto/cocogitto-action@390bda87a19bf627e03ad075c67a11e9ddbb7547 # v4.0.0
         id: release
         with:
-          release: true
+          command: bump
+          args: --auto
           git-user: 'github-actions[bot]'
           git-user-email: 'github-actions[bot]@users.noreply.github.com'
-          check-latest-tag-only: true
 
       - name: Check if version was bumped
         id: created
@@ -54,7 +54,7 @@ jobs:
 
       - name: Create GitHub release
         if: steps.created.outputs.bump == 'true'
-        uses: softprops/action-gh-release@62c96d0c4e8a889135c1f3a25910db8dbe0e85f7 # v2.3.4
+        uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090 # v2.4.1
         with:
           tag_name: ${{ steps.release.outputs.version }}
           draft: false
