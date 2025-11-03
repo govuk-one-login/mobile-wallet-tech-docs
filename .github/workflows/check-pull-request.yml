@@ -16,7 +16,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Verify conventional commit standards
-        uses: cocogitto/cocogitto-action@390bda87a19bf627e03ad075c67a11e9ddbb7547 # v4.0.0
+        uses: cocogitto/cocogitto-action@9a9fe03b31c47444290c0d7f9b1ee1b44ee13f20 # v4.1.0
         with:
           command: check
           args: --from-latest-tag
@@ -29,7 +29,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Ruby
-        uses: ruby/setup-ruby@4ff6f3611a42bc75eee1e5138240eb1613f48c8f # v1.266.0
+        uses: ruby/setup-ruby@d5126b9b3579e429dd52e51e68624dda2e05be25 # v1.267.0
         with:
           bundler-cache: true
       - name: Build Middleman
