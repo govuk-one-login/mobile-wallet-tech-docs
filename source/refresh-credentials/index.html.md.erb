@@ -1,7 +1,7 @@
 ---
 title: Refresh credentials
-weight: 10
-last_reviewed_on: 2025-09-30
+weight: 9
+last_reviewed_on: 2025-11-05
 review_in: 6 months
 ---
 
@@ -9,15 +9,23 @@ review_in: 6 months
 
 A credential expires when it passes its [`validUntil` date](/credential-issuer-functionality/credential/#payload). Shortly before this happens, you can prompt the user to click a refresh button in the app to replace their old credential with a new one.
 
-If the new credential is added successfully, the user will only see the new credential in their documents. The old credential will be removed.
+<!---
+to check: are there other things that would trigger need for manual refresh?
+--->
 
-## Update metadata
+If GOV.UK Wallet adds the new credential successfully, the user will only see the new credential in their documents. GOV.UK Wallet will remove the old credential.
 
-To allow credentials to be refreshed manually by the user, you must add the [`credential_refresh_web_journey_url` parameter](../credential-issuer-functionality/metadata) to your metadata. This parameter lets GOV.UK Wallet show the user a refresh button that starts a new credential issuance process.
+<!---
+What happens to status list entry - check
+--->
+
+## Update credential issuer metadata
+
+To allow credentials to be refreshed manually by the user, you must add the [`credential_refresh_web_journey_url` parameter](../credential-issuer-functionality/metadata) to your credential issuer metadata. This parameter lets GOV.UK Wallet show the user a refresh button that starts a new credential issuance process.
 
 ## Understand GOV.UK Wallet's manual credential refresh flow
 
-This diagram shows the exchange between a government service (the 'credential issuer') and GOV.UK Wallet when the user performs a credential refresh. This diagram, and the descriptions below it, are an explanation of each step in the process.
+This diagram shows the exchange between a government service (the 'credential issuer') and GOV.UK Wallet when the user refreshes a credential. This diagram, and the descriptions below it, are an explanation of each step in the process.
 
 <div aria-hidden="true">
 <script type="module">
@@ -82,7 +90,7 @@ This diagram shows the exchange between a government service (the 'credential is
     
 1. The app adds the metadata to its cache.
 
-1. The app finds the [`credential_refresh_web_journey_url`]() value in the cached metadata.
+1. The app finds the [`credential_refresh_web_journey_url`](../credential-issuer-functionality/metadata) value in the cached metadata.
 
 1. The app validates the `credential_refresh_web_journey_url`.
 
@@ -107,3 +115,7 @@ This diagram shows the exchange between a government service (the 'credential is
 1. The app redeems the credential offer.
 
 When the app has redeemed the credential offer, the standard [GOV.UK Wallet credential process](/issuing-credentials-to-wallet.html#your-service-publishes-metadata-about-the-credentials-it-publishes) continues.
+
+<!---
+from which step does the issuance journey continue after this
+--->
