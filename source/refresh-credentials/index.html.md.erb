@@ -21,7 +21,7 @@ What happens to status list entry - check
 
 ## Update credential issuer metadata
 
-To allow credentials to be refreshed manually by the user, you must add the [`credential_refresh_web_journey_url` parameter](../credential-issuer-functionality/metadata) to your credential issuer metadata. This parameter lets GOV.UK Wallet show the user a refresh button that starts a new credential issuance process.
+To allow credentials to be refreshed manually by the user, you must add the [`credential_refresh_web_journey_url` parameter](../credential-issuer-functionality/metadata/#credential-information) to your credential issuer metadata. This parameter lets GOV.UK Wallet show the user a refresh button that starts a new credential issuance process.
 
 ## Understand GOV.UK Wallet's manual credential refresh flow
 
@@ -90,7 +90,7 @@ This diagram shows the exchange between a government service (the 'credential is
     
 1. The app adds the metadata to its cache.
 
-1. The app finds the [`credential_refresh_web_journey_url`](../credential-issuer-functionality/metadata) value in the cached metadata.
+1. The app finds the [`credential_refresh_web_journey_url`](../credential-issuer-functionality/metadata/#credential-information) value in the cached metadata.
 
 1. The app validates the `credential_refresh_web_journey_url`.
 
