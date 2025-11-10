@@ -48,15 +48,15 @@ Each credential object in `credential_configurations_supported` must include the
 - `credential_signing_alg_values_supported`
 - `proof_types_supported`
 
-If you want to prompt users to refresh a credential after it expires, you can also include the optional `credential_refresh_web_journey_url` parameter. This must be set to the URL where your users can begin their credential refresh journey, as follows: 
+There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-12.2.4) in the OID4VCI specification.
+
+If you want to prompt users to refresh a credential after it expires, you can also include the optional `credential_refresh_web_journey_url` parameter. This is a custom parameter that is not part of the OID4VCI specification. `credential_refresh_web_journey_url` must be set to the URL where your users can go through the credential refresh web journey in their browser, as follows: 
 
  ```
  "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh"
  ```
 
  There is [guidance on refreshing credentials](../../refresh-credentials).
-
-There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-12.2.4) in the OpenID for Verifiable Credential Issuance 1.0 specification.
 
 ## Metadata example
 
