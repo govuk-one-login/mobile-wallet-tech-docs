@@ -15,7 +15,7 @@ Your public keys need to stay available through the lifecycle of your credential
 
 For your credential issuer service, you should include specific key management features.
 
-Your service needs a key refresh process that creates a new asymmetric public or private key pair for signing new VCs, but that retains trust in the previous versions of the public key for verifying.
+Your service needs a key rotation process that periodically generates a new asymmetric key pair for signing new verifiable credentials, but that retains trust in previous public keys so that existing credentials remain verifiable.
 
 You can do this by making sure the public part of the historical key is retained, while the private key is destroyed. For example, a VC issued by an internal and external issuer.
 
