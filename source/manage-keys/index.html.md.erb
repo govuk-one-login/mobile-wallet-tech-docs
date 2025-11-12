@@ -11,7 +11,7 @@ GOV.UK Wallet needs to verify the validity of the credentials your service issue
 
 When issuing credentials in [W3C Verifiable Credential Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/) format and signing with your private keys, your credentials need to be verified by the public keys you made available in the `did:web` document.
 
-Your public keys need to stay available through the lifecycle of your credentials. A public key used to sign a group of verifiable credentials (VCs) can not be made inactive until after the VCs have expired. You should keep public keys in an inactive state, available to be verified.
+To make sure your credentials can be verified if a private key expires, you must keep your public key active until the credentials signed with it have expired. This is so that the signature on the credentials can be verified.
 
 For your credential issuer service, you should include specific key management features.
 
