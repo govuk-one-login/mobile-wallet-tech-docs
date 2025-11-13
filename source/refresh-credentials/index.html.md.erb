@@ -17,7 +17,7 @@ GOV.UK Wallet lets your users get a new credential without going through the lon
 
 To let your users manually refresh a credential, you must add the [`credential_refresh_web_journey_url` parameter](../credential-issuer-functionality/metadata/#credential-information) to your credential issuer metadata. This is a custom parameter that is not part of the OID4VCI specification.
 
-`credential_refresh_web_journey_url` lets you specify a URL that skips the user close to the end of the credential issuance journey. If this parameter is present in your metadata, your users will get a prompt to refresh when their credential passes its `validUntil` date.
+`credential_refresh_web_journey_url` lets you specify a URL that jumps the user close to the end of the credential issuance journey. If this parameter is present in your metadata, your users will get a prompt to refresh when their credential passes its `validUntil` date.
 
 When your user taps the 'Refresh' button in the app, the app will take the user to your specified URL to start their credential refresh web journey in their browser. At the end of this journey, you must provide a new credential offer that GOV.UK Wallet can use to request a new credential. 
 
@@ -89,7 +89,7 @@ This diagram shows the exchange between a government service (the 'credential is
 
 1. The app validates the `credential_refresh_web_journey_url`.
 
-1. If the validation is successful, the app shows the user a refresh button.
+1. If the validation is successful, the app shows the user a 'Refresh' button.
 
 1. The user selects the 'Refresh' button in the app.
 
