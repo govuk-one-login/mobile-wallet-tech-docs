@@ -56,11 +56,13 @@ This diagram shows the exchange between a government service (the 'credential is
     app->>app: Validates `credential_refresh_web_journey_url`
     app->>app: Shows refresh button to the user
   deactivate app
-  user->>app: Clicks refresh button
+  user->>app: Clicks 'Refresh' button
   app->>ecri: Accesses your service
   activate ecri
     ecri->>ol: Authenticates user
+  activate ol
     ol-->>ecri: Fetches user's walletSubjectID
+  deactivate ol
     ecri->>ecri: Generates credential offer
     ecri-->>ecri: Renders credential offer<br>deep link
     user->>ecri: Clicks deep link
