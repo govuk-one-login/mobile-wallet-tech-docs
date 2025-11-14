@@ -90,8 +90,8 @@ The JWT payload must contain the following claims:
 |------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `clientId`      | Your client ID, which you received when you registered your service to use GOV.UK One Login.   |
 | `credential_identifiers`     | The unique identifier for the specific credential offer. GOV.UK Wallet currently only supports one identifier per pre-authorised code. This should be a long random value (for example, a UUIDv4) and should not be a personal identifier or account identifier.     |
-| `exp`         | The expiration date of the pre-authorised code. We recommend this is aligned with the length of time a user can remain inactive on your service, up to a maximum of 1 hour. Must be expressed in epoch time as per the [IETF RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519).     |
-| `iat`         | The time at which the pre-authorised code was issued. Must be expressed in epoch time as per the [IETF RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519).     |
+| `exp`         | The expiration date of the pre-authorised code. We recommend this is aligned with the length of time a user can remain inactive on your service, up to a maximum of 1 hour. Must be expressed in epoch time, in seconds, as per the [IETF RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519).     |
+| `iat`         | The time at which the pre-authorised code was issued. Must be expressed in epoch time, in seconds, as per the [IETF RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519).     |
 | `iss`         | The URL of your credential issuer.      |
 | `aud`         | The URL of the authorisation server your credential issuer relies on for authorisation. This must be set to the GOV.UK One Login authorisation server: `https://token.account.gov.uk/`.     |
 
@@ -126,7 +126,7 @@ Your credential issuer must pass the credential offer to GOV.UK Wallet by value 
 
 The URL for passing a credential offer by value is in the following format:
 
-1. The GOV.UK Wallet `credential offer` endpoint
+1. The GOV.UK Wallet credential offer endpoint
 2. A query parameter `credential_offer` that contains the Base64Url-encoded credential offer object
 
 For example:
@@ -140,7 +140,7 @@ https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credential_confi
 To provide a consistent experience across devices, your service's webpage should present the credential offer URL to the user in 2 ways:
 
 - as a QR code: this is best for users accessing your service on a separate device, so they can scan the code to communicate the credential offer to their GOV.UK Wallet
-- as a call-to-action (CTA) link: this is best for users already on their mobile device - selecting the CTA link directly opens the credential offer in their GOV.UK Wallet
+- as a call-to-action (CTA) link: this is best for users already on their mobile device - clicking on the CTA link directly opens the credential offer in their GOV.UK Wallet
 
 This approach provides a user-friendly way to deliver the credential offer to GOV.UK Wallet, regardless of which device the user is on.
 
