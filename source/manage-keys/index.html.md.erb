@@ -15,9 +15,7 @@ To make sure your credentials can be verified if a private key expires, you must
 
 For your credential issuer service, you should include specific key management features.
 
-Your service needs a key rotation process that periodically generates a new asymmetric key pair for signing new verifiable credentials, but that retains trust in previous public keys so that existing credentials remain verifiable.
-
-You can do this by making sure the public part of the historical key is retained, while the private key is destroyed. For example, a VC issued by an internal and external issuer.
+Your service needs a key rotation process that periodically generates a new asymmetric key pair for signing new verifiable credentials, but that retains trust in previous public keys so that existing credentials remain verifiable. You can do this by making sure the public part of the historical key is retained, while the private key is destroyed.
 
 Your service also needs key revocation. This must include a notice from the credential issuer to explain that a specific key should be removed from operational use before it expires. This will generally happen when the key is lost or compromised. If a key is compromised, it can be used by an attacker to decrypt or forge messages, impersonate an identity, or access sensitive information.
 
