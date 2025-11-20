@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Refresh credentials
 
-Digital credentials in GOV.UK Wallet have a technical expiry date, which is when the digital version of a user's credential is no longer valid and must be updated. You can set this technical expiry date using the [`validUntil` claim](/credential-issuer-functionality/credential/#payload) in the credential. There is [more guidance on credential expiration](/credential-issuer-functionality/credential/#guidance-on-credential-expiration).
+Digital credentials in GOV.UK Wallet have a technical expiry date, which is when the digital version of a user's credential is no longer valid and must be updated. You can set this technical expiry date using the [`validUntil` claim](/issue-a-credential/credential/#payload) in the credential. There is [more guidance on credential expiration](/issue-a-credential/credential/#guidance-on-credential-expiration).
 
 When a credential passes its `validUntil` date, it will fail programmatic verification and must be rejected by anyone who verifies it. The user will see their expired credential marked as 'Invalid' and greyed out in the app. 
 
@@ -15,7 +15,7 @@ GOV.UK Wallet lets your users get a new credential without going through the lon
 
 ## Update credential issuer metadata
 
-To let your users manually refresh a credential, you must add the [`credential_refresh_web_journey_url` parameter](../credential-issuer-functionality/metadata/#credential-information) to your credential issuer metadata. This is a custom parameter that is not part of the OID4VCI specification.
+To let your users manually refresh a credential, you must add the [`credential_refresh_web_journey_url` parameter](../issue-a-credential/metadata/#credential-information) to your credential issuer metadata. This is a custom parameter that is not part of the OID4VCI specification.
 
 `credential_refresh_web_journey_url` lets you specify a URL that jumps the user close to the end of the credential issuance journey. If this parameter is present in your metadata, your users will get a prompt to refresh when their credential passes its `validUntil` date.
 
@@ -84,7 +84,7 @@ This diagram shows the exchange between a government service (the 'credential is
 
 1. Your service returns its credential issuer metadata.
 
-1. The app finds the [`credential_refresh_web_journey_url`](../credential-issuer-functionality/metadata/#credential-information) value in the credential issuer metadata.
+1. The app finds the [`credential_refresh_web_journey_url`](../issue-a-credential/metadata/#credential-information) value in the credential issuer metadata.
 
 1. The app validates the `credential_refresh_web_journey_url`.
 
@@ -96,7 +96,7 @@ This diagram shows the exchange between a government service (the 'credential is
 
 1. Your service fetches the user’s `walletSubjectId` from the GOV.UK One Login [`/userinfo` API](https://docs.sign-in.service.gov.uk/integrate-with-integration-environment/authenticate-your-user/#retrieve-user-information).
 
-1. Your service generates a credential offer. Included in this offer is a [pre-authorised code](/credential-issuer-functionality/credential-offer/#the-pre-authorised-code) signed by your service.
+1. Your service generates a credential offer. Included in this offer is a [pre-authorised code](/issue-a-credential/credential-offer/#the-pre-authorised-code) signed by your service.
 
 1. Your service renders the credential offer to the user as a deep link.
 
