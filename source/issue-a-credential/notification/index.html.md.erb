@@ -23,14 +23,14 @@ You must include a unique `notification_id` parameter in each [credential respon
 
 The notification endpoint’s location is implementation-specific within the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html).
 
-You as the credential issuer must publish the location of your notification endpoint in your [metadata](/issue-a-credential/metadata/api.html#well-known-openid-credential-issuer) using the `notification_endpoint` parameter.
+As the credential issuer, you must publish the location of your notification endpoint in your [metadata](/issue-a-credential/metadata/api.html#well-known-openid-credential-issuer) using the `notification_endpoint` parameter.
 
 ### Request format
 
 The notification endpoint must accept HTTP POST requests. The request must include the:
 
-* authorization header: A bearer access token, which must be a JSON Web Token (JWT), issued by GOV.UK One Login
-* request body (JSON): The notification details
+* `Authorization` header: A bearer access token, which must be a JSON Web Token (JWT), issued by GOV.UK One Login
+* JSON request body: The notification details
 
 ### Request validation
 
@@ -93,7 +93,7 @@ This is an example of a notification when a credential is successfully stored in
 }
 ```
 
-More information about the notification request can be found in the [OID4VCI specification] (https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.1).
+More information about the notification request can be found in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.1).
 
 ### Response format
 
