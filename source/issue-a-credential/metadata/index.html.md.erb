@@ -1,31 +1,29 @@
 ---
-title: Metadata
+title: Publish your metadata
 weight: 3
-last_reviewed_on: 2025-11-12
+last_reviewed_on: 2025-11-26
 review_in: 6 months
 ---
 
-# Metadata
+# Publish your metadata
 
-The metadata endpoint is a required endpoint that provides essential configuration information about the credential issuer.
+The metadata endpoint provides essential configuration information about a credential issuer’s implementation. To issue credentials, you must publish your metadata endpoint so that GOV.UK Wallet and verifiers can learn information about your credential issuer, such as:
 
-This endpoint lets GOV.UK Wallet and verifiers dynamically learn information about the credential issuer, such as:
-
-* the endpoints used in the issuance flow
-* the supported credential types
-* how credentials should be displayed in the wallet
+- the endpoints used in your issuance flow
+- the supported credential types
+- how your credentials should be displayed in the wallet
 
 ## Technical details
 
 ### Endpoint location
 
-The metadata must be publicly accessible at the standardised location `/.well-known/openid-credential-issuer` on the credential issuer's domain. The data published is non-sensitive metadata about the service.
+Your metadata must be publicly accessible at the standardised location on your credential issuer domain: `/.well-known/openid-credential-issuer.` The data published is non-sensitive metadata about your service.
 
 ### Response format
 
-The endpoint must return a 200 OK HTTP status code and valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata).
+The endpoint must return a `200 OK` HTTP status code and valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata).
 
-The metadata must include the following parameters:
+Your metadata must include the following parameters:
 
 - `credential_issuer`: The URL of the credential issuer.
 - `authorization_servers`: An array of URLs for the authorisation servers the credential issuer relies on for authorisation. This must be set to the GOV.UK One Login URL.
