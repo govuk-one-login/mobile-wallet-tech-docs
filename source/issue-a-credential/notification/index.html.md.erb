@@ -38,7 +38,7 @@ The notification endpoint must accept HTTP POST requests. The request must inclu
 
 Your request must include an access token issued by the GOV.UK One Login token service as a bearer token in the `Authorization` header. This is the same as the access token used for authorising the issuance of a verifiable credential.
 
-As the credential issuer, you must validate the access token to make sure it was issued by GOV.UK One Login and the request originates from the expected user.
+Your credential issuer must validate the access token to make sure it was issued by GOV.UK One Login and the request originates from the expected user.
 
 To validate the access token, you must verify the signature, and validate the header parameters and payload claims.
 
