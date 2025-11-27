@@ -1,7 +1,7 @@
 ---
 title: Publish your metadata
 weight: 3
-last_reviewed_on: 2025-11-26
+last_reviewed_on: 2025-11-27
 review_in: 6 months
 ---
 
@@ -25,10 +25,12 @@ The endpoint must return a `200 OK` HTTP status code and valid JSON response tha
 
 Your metadata must include the following parameters:
 
-- `credential_issuer`: The URL of the credential issuer.
-- `authorization_servers`: An array of URLs for the authorisation servers the credential issuer relies on for authorisation. This must be set to the GOV.UK One Login URL.
-- `credential_endpoint`: The URL of the credential issuer's [credential endpoint](/issue-a-credential/credential/#credential), where credentials can be obtained.
-- `credential_configurations_supported`: An object describing the credentials offered by the credential issuer.
+| Parameter                             | Description                                                                                                                                     | 
+|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------| 
+| `credential_issuer`                   | The URL of the credential issuer.                                                                                                               | 
+| `authorization_servers`               | An array of URLs for the authorization servers your credential issuer relies on for authorization. This must be set to the GOV.UK One Login URL | 
+| `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-a-credential/credential/#credential), where credentials can be obtained.       |
+| `credential_configurations_supported` | An object describing the credentials offered by your credential issuer                                                                          |
 
 If your credential issuer implements the optional [notification endpoint](/issue-a-credential/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
 
@@ -36,58 +38,87 @@ You can define and use additional metadata parameters.
 
 #### Credential information
 
-The `credential_configurations_supported` object contains key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
+The `credential_configurations_supported` object contains key-value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
 
 Each credential object in `credential_configurations_supported` must include the following parameters:
 
 - `format`
 - `credential_definition`
 - `cryptographic_binding_methods_supported`
-- `credential_signing_alg_values_supported`
+- `cryptographic_suites_supported`
 - `proof_types_supported`
+- `credential_subject`
 
-There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-12.2.4) in the OID4VCI specification.
+GOV.UK Wallet also requires your credential issuer’s metadata to support English and Welsh translation.
 
-If you want to prompt users to refresh a credential after it expires, you can also include the optional `credential_refresh_web_journey_url` parameter. This is a custom parameter that is not part of the OID4VCI specification. You must set `credential_refresh_web_journey_url` to the URL where your users can go through the credential refresh web journey in their browser. For example: 
-
- ```
- "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh"
- ```
-
-For more information, there is [guidance on refreshing credentials](../../refresh-credentials).
-
+There is more information about the [`credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.2.3).
 ## Metadata example
 
 Below is an example of a credential issuer metadata:
 
 ```JSON
 {
-  "credential_issuer": "https://example-credential-issuer.gov.uk",
-  "authorization_servers": ["https://token.account.gov.uk"],
-  "credential_endpoint": "https://example-credential-issuer.gov.uk/credential",
-  "notification_endpoint": "https://example-credential-issuer.gov.uk/notification",
+  "credential_issuer": "https://example-credential-issuer.mobile.build.account.gov.uk",
+  "authorization_servers": ["https://token.build.account.gov.uk"],
+  "credential_endpoint": "https://example-credential-issuer.mobile.build.account.gov.uk/credential",
+  "notification_endpoint": "https://example-credential-issuer.mobile.build.account.gov.uk/notification",
   "credential_configurations_supported": {
-    "FishingLicenceCredential": {
+    "fishing_licence": {
       "format": "jwt_vc_json",
       "credential_definition": {
         "type": [
           "VerifiableCredential",
-          "FishingLicenceCredential"
+          "FishingLicence"
       ]},
       "cryptographic_binding_methods_supported": [
         "did"
       ],
-      "credential_signing_alg_values_supported": [
-        "ES256"
+      "cryptographic_suites_supported": [
+        "ES256K"
       ],
       "proof_types_supported": {
         "jwt": {
           "proof_signing_alg_values_supported": [
             "ES256"
-          ]
+          ],
+          "key_attestations_required": {
+          }
         }
       },
-      "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh"
+      "credential_subject": {
+        "name": [
+          {
+            "nameParts": [
+              {
+                "display": [
+                  {
+                    "name": "Name",
+                    "locale": "en-GB"
+                  },
+                  {
+                    "name": "Enw",
+                    "locale": "cy-GB"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "fishing_licence_record": {
+          "licenceNumber": {
+            "display": [
+              {
+                "name": "Fishing Licence number",
+                "locale": "en-GB"
+              },
+              {
+                "name": "Rhif Trwydded Pysgota",
+                "locale": "cy-GB"
+              }
+            ]
+          }
+        }
+      }
     }
   }
 }
