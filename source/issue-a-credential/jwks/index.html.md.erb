@@ -14,13 +14,13 @@ The JWKS endpoint is a required endpoint that exposes the credential issuer’s 
 
 ### Endpoint location
 
-The JWKS must be publicly accessible at the standardised location `/.well-known/jwks.json` on the credential issuer's domain.
+Your JWKS must be publicly accessible at the standardised location `/.well-known/jwks.json` on your domain.
 
 ### Response format
 
 The endpoint must return a `200 OK` HTTP status code and a valid JSON response that follows the JWKS specification defined in [RFC 7517](https://datatracker.ietf.org/doc/html/rfc7517). Each key within the JWKS is represented as a JSON Web Key (JWK) object. The JWKS usually contains one key, but it can contain two keys during a key rotation overlap period.
 
-The JWK for an elliptic curve key based on the P-256 curve must include the following parameters:
+Your JWK for an elliptic curve key based on the P-256 curve must include the following parameters:
 
 | Parameter | Definition                                                                                                                                                                                                                                                                                                                  | 
 |-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -32,9 +32,9 @@ The JWK for an elliptic curve key based on the P-256 curve must include the foll
 | `alg`     | The cryptographic algorithm used with the key - must be “ES256”.                                                                                                                                                                                                                                                            | 
 | `use`     | The intended use of the key - must be “sig” to indicate a signing key.                                                                                                                                                                                                                                                      |
 
-### JWKS example
+## JWKS example
 
-Below is an example of a JWKS containing one elliptic curve key based on the P-256 curve:
+This is an example of a JWKS containing one elliptic curve key based on the P-256 curve:
 
 ```JSON
 {
