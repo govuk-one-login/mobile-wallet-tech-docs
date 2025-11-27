@@ -1,7 +1,7 @@
 ---
-title: GOV.UK One Login Wallet Technical Documentation
+title: GOV.UK Wallet Technical Documentation
 weight: 1
-last_reviewed_on: 2025-05-14
+last_reviewed_on: 2025-11-27
 review_in: 6 months
 ---
 
@@ -9,34 +9,33 @@ review_in: 6 months
 
 GOV.UK Wallet lets users save and share digital versions of their government documents on their smartphone or device.
 
-## Issuing a document as a government service
+If you work in a central government department, you can use GOV.UK Wallet to [issue digital and verifiable versions of the physical documents you already issue](#issuing-a-document-as-a-government-service) as part of your service.
 
-If you work in a central government department, you can use GOV.UK Wallet to issue digital and verifiable versions of the physical documents you issue already as part of your service.  
+You will be able to [consume credentials from GOV.UK Wallet](#using-and-consuming-a-document) if you are a: 
+
+* public sector organisation (such as central government, the NHS, or a local authority) 
+* certified Digital Verification Services (DVS) provider on the [digital identity and attribute services register](https://www.digital-identity-services-register.service.gov.uk/)
+
+## Issuing a document as a government service
 
 Before you can issue credentials to GOV.UK Wallet, you must already be using [GOV.UK One Login](https://www.sign-in.service.gov.uk/) in your service to log in your users or verify their identities. You should discuss using GOV.UK Wallet with your GOV.UK One Login Engagement Manager, or [contact us](contact-us).
 
-This documentation helps people such as developers and product managers of services that are using GOV.UK One Login to:
+This documentation is for people such as developers and product managers on services that are already using GOV.UK One Login. The documentation will help you:
 
-* learn how to issue digitally verifiable credentials to GOV.UK Wallet as part of their service journey 
+* learn how to issue digitally verifiable credentials to GOV.UK Wallet as part of your service journey
 * understand [how GOV.UK Wallet works for credential issuers](issuing-credentials-to-wallet)
 * [prepare your service to use GOV.UK Wallet](before-integrating)
-* understand [how organisations and individuals can receive and validate digital credentials you have issued](consuming-and-verifying-credentials) when presented by the holder
-* access [sample reference material](use-sample-reference-material) to validate your implementation
+* understand [how organisations and individuals can receive and validate digital credentials you have issued](consuming-and-verifying-credentials) when the holder presents them
 
 ## Using and consuming a document 
 
-You will be able to consume credentials from GOV.UK Wallet if you are: 
-
-* a public sector organisation (such as central government, the NHS, or a local authority) 
-* a certified Digital Verification Services (DVS) provider on the [digital identity and attribute services register](https://www.digital-identity-services-register.service.gov.uk/)
-
-This documentation helps developers and service teams in these organisations to:
+This documentation is for developers and service teams in public sector organisations or DVS providers. It can help you to:
 
 * understand [how GOV.UK wallet works for consuming credentials](consuming-and-verifying-credentials)
 * understand the [open standards that will allow their service to consume and verify credentials and attributes](consuming-and-verifying-credentials/supported-protocols)
 
-This documentation will be updated as new information and features become available. 
+We’ll update this documentation as new information and features become available. 
 
-Digital verification services should read the guidance about [using GOV.UK Wallet in the digital identity sector](https://gov.uk/guidance/using-govuk-wallet-in-the-digital-identity-sector)​​ to understand the different models available.
+Digital verification services should read the guidance about [using GOV.UK Wallet in the digital identity sector](https://gov.uk/guidance/using-govuk-wallet-in-the-digital-identity-sector) to understand the different models available.
 
 <%= partial "partials/changelog" %>
