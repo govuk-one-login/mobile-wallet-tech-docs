@@ -99,7 +99,7 @@ You can find more information about the notification request in the [OID4VCI spe
 
 You should return a `204 No Content` HTTP status code when you process a notification successfully.
 
-If the notification could not be processed successfully, you must return an appropriate HTTP error status code.
+If the notification could not be processed, you must return an appropriate HTTP error status code.
 
 If the request does not include an access token or the access token is invalid, the notification endpoint must return a `401 Unauthorized` status code and a `WWW-Authenticate` header as defined in [RFC6750](https://datatracker.ietf.org/doc/html/rfc6750#section-3).
 
