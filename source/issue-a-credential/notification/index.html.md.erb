@@ -11,9 +11,9 @@ The credential issuer notification endpoint is an optional endpoint defined in t
 
 GOV.UK Wallet can send notifications about events such as:
 
-* the credential has been successfully stored in the GOV.UK Wallet
-* the credential could not be stored in the GOV.UK Wallet because it is invalid
-* the user has taken specific actions related to the offered credential, such as declining to save it
+- the credential has been successfully stored in the GOV.UK Wallet
+- the credential could not be stored in the GOV.UK Wallet because it is invalid
+- the user has taken specific actions related to the offered credential, such as declining to save it
 
 You must include a unique `notification_id` parameter in each [credential response](/issue-a-credential/credential/#credential-response) for GOV.UK Wallet to be able to send notifications.
 
@@ -29,14 +29,14 @@ As the credential issuer, you must publish the location of your notification end
 
 The notification endpoint must accept HTTP POST requests. The request must include the:
 
-* `Authorization` header: A bearer access token, which must be a JSON Web Token (JWT), issued by GOV.UK One Login
-* JSON request body: The notification details
+- `Authorization` header: A bearer access token, which must be a JSON Web Token (JWT), issued by GOV.UK One Login
+- JSON request body: The notification details
 
 ### Request validation
 
 #### Authorization header
 
-Your request must include an access token issued by the GOV.UK One Login token service as a bearer token in the `Authorization` header. This is the same as the access token used for authorising the issuance of a verifiable credential.
+The request must include an access token issued by the GOV.UK One Login token service as a bearer token in the `Authorization` header. This is the same as the access token used for authorising the issuance of a verifiable credential.
 
 Your credential issuer must validate the access token to make sure it was issued by GOV.UK One Login and the request originates from the expected user.
 
@@ -59,11 +59,11 @@ Make sure the value of the `typ` (Type) parameter is `"at+jwt"`.
 
 Make sure that: 
 
-* the value of the `iss` (issuer) claim matches the GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
-* the value of the `aud` (audience) claim is the credential issuer URL
-* the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
-* the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
-* this API has not received another access token with the same `jti` (JWT ID) that is still within its validity period
+- the value of the `iss` (issuer) claim matches the GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
+- the value of the `aud` (audience) claim is the credential issuer URL
+- the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
+- the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
+- this API has not received another access token with the same `jti` (JWT ID) that is still within its validity period
 
 #### Request body
 
@@ -77,9 +77,9 @@ The request body must be in JSON format and contain the following parameters:
 
 The value of the `event` parameter must be one of the following enums:
 
-* `credential_accepted` (GOV.UK Wallet accepted the credential)
-* `credential_failure` (GOV.UK Wallet rejected the credential)
-* `credential_deleted` (user declined or deleted the credential) 
+- `credential_accepted` (GOV.UK Wallet accepted the credential)
+- `credential_failure` (GOV.UK Wallet rejected the credential)
+- `credential_deleted` (user declined the credential) 
 
 Your credential issuer must validate the contents of the request body and should ignore any unrecognised parameters.
 
@@ -105,7 +105,7 @@ If the request does not include an access token or the access token is invalid, 
 
 When the `notification_id` value is invalid, the notification endpoint must return a `400 Bad Request` HTTP status code and a response body in JSON format containing the following parameter:
  
-* `error`: A case-sensitive string indicating the error - `invalid_notification_id` (the request’s `notification_id` was invalid), or `invalid_notification_request` (the request was invalid)
+- `error`: A case-sensitive string indicating the error - `invalid_notification_id` (the request’s `notification_id` was invalid), or `invalid_notification_request` (the request was invalid)
 
 This is an example of a notification error response when the notification request included an invalid `notification_id`:
 
@@ -119,3 +119,6 @@ You can find more information about the error notification responses in the [OID
 ### Idempotency
 
 You must implement the notification endpoint so that identical requests with the same `notification_id` always return the same response. This is referred to as idempotence.
+
+There may be situations where a request is duplicated, such as network or connectivity issues.  If identical requests are made with the same `notification_id` the notification endpoint must return the same response. 
+
