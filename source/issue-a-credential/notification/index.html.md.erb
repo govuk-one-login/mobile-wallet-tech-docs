@@ -43,7 +43,7 @@ As the credential issuer, you must validate the access token to make sure it was
 To validate the access token, you must verify the signature, and validate the header parameters and payload claims.
 
 
-#### Verify the signature:
+##### Verify the signature
 
 1. Retrieve the GOV.UK One Login token service’s JSON Web Key Set (JWKS) from their published JWKS endpoint.
 2. Get the `kid` (key ID) parameter from the access token header.
@@ -51,16 +51,16 @@ To validate the access token, you must verify the signature, and validate the he
 4. Confirm the `alg` (algorithm) parameter in the token header matches the algorithm of the identified public key.
 5. Use the matching public key to cryptographically verify the token signature using the specified algorithm.
 
-#### Validate the header parameters
+##### Validate the header parameters
 
-1. Make sure the value of the `typ` (Type) parameter is `"at+jwt"`.
+Make sure the value of the `typ` (Type) parameter is `"at+jwt"`.
 
-#### Validate the payload claims
+##### Validate the payload claims
 
 Make sure that: 
 
 * the value of the `iss` (issuer) claim matches the GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
-* the value of the `aud` (audience) claim is credential issuer URL
+* the value of the `aud` (audience) claim is the credential issuer URL
 * the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
 * the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
 * this API has not received another access token with the same `jti` (JWT ID) that is still within its validity period
@@ -75,7 +75,7 @@ The request body must be in JSON format and contain the following parameters:
 | `notification_id`   | Required             | A string (this could be a UUID) received in the credential response, uniquely identifying an individual credential issuance occurrence. |
 | `event_description` | Optional             | Additional information that GOV.UK Wallet may provide about the event.                                                                  |
 
-The value of the`event` parameter must be one of the following enums:
+The value of the `event` parameter must be one of the following enums:
 
 * `credential_accepted` (GOV.UK Wallet accepted the credential)
 * `credential_failure` (GOV.UK Wallet rejected the credential)
@@ -83,7 +83,7 @@ The value of the`event` parameter must be one of the following enums:
 
 You as the credential issuer must validate the contents of the request body and should ignore any unrecognised parameters.
 
-This is an example of a notification when a credential is successfully stored in the GOV.UK Wallet:
+This is an example of a notification when a credential is successfully stored in GOV.UK Wallet:
 
 ```
 {
@@ -93,7 +93,7 @@ This is an example of a notification when a credential is successfully stored in
 }
 ```
 
-More information about the notification request can be found in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.1).
+You can find more information about the notification request in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.1).
 
 ### Response format
 
@@ -114,7 +114,7 @@ This is an example of a notification error response when the notification reques
   "error": "invalid_notification_id"
 }
 ```
-More information about the error notification responses can be found in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.3).
+You can find more information about the error notification responses in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-10.3).
 
 ### Idempotency
 
