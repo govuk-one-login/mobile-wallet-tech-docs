@@ -1,38 +1,42 @@
 ---
 title: Before you issue a credential
 weight: 3
-last_reviewed_on: 2025-04-15
+last_reviewed_on: 2025-11-27
 review_in: 6 months
 ---
 
 # Before you issue a credential
 
-Before you can issue a credential, you should do the following.
+Before you can issue a credential, you must do the following.
 
 ## Onboard with GOV.UK One Login
 
 GOV.UK Wallet uses GOV.UK One Login to authenticate users. This process makes sure that credentials are issued into a wallet that is logged in as the same user the credential is for.
 
-You must complete the onboarding process for GOV.UK One Login before you can issue credentials to GOV.UK Wallet. There is [guidance on the GOV.UK One Login onboarding process in their technical documentation](https://docs.sign-in.service.gov.uk/).
+You must complete the onboarding process for GOV.UK One Login before you can issue credentials to GOV.UK Wallet. There’s further [guidance on onboarding to GOV.UK One Login](https://docs.sign-in.service.gov.uk/).
 
-When you complete the GOV.UK One Login onboarding process, make sure that you have:
+When you complete the GOV.UK One Login onboarding process, make sure you have:
 
-* your unique client identifier - this identifier must be included as a claim (`client_id`) in the pre-authorised code your service generates as part of issuing a GOV.UK Wallet credential offer
-* requested that  the `walletSubjectId` custom claim is activated for your GOV.UK One Login client  - this is a pairwise identifier that will be used to prove that the user logged in to your service and GOV.UK Wallet are the same user
+- requested that the GOV.UK One Login onboarding team activates the `walletSubjectId` custom claim for your GOV.UK One Login client  - this is a pairwise identifier used to prove that the user logged in to your service and to GOV.UK Wallet are the same user
+- your unique client identifier - this identifier must be included as a claim (`client_id`) in the pre-authorised code your service generates as part of issuing a GOV.UK Wallet credential offer
+
 
 ## Agree a credential template
 
-Before you can issue a credential, you must confirm with the GOV.UK Wallet onboarding team:
+Your credential template will be created from the following details:
 
-* the credential type - this can be [mDoc](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) or [JWT VC](https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/)
-* which attributes are to be included in the digital credential and its schema
-* the colour of the digital card
-* whether users can have multiple instances of this credential, or only one at a time
+- the credential type - this can be [mdoc](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) or [W3C Verifiable Credential Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/)
+- the attributes you want to include in the digital credential and its schema
+- the colour of the digital card
+- whether users can have multiple instances of this credential, or only one at a time
 
-To integrate with GOV.UK Wallet you must send the GOV.UK Wallet team:
+Before you can issue a credential, you must confirm these with the GOV.UK Wallet onboarding team.
 
-* your issuer URL (both integration and production)
-* your issuer logo in English and Welsh
+To integrate with GOV.UK Wallet, you must send the GOV.UK Wallet team your:
+
+- issuer URL (both integration and production)
+- issuer logo in English and Welsh
+
 
 ## Follow relevant standards
 
@@ -40,14 +44,14 @@ When you are preparing to issue a credential to GOV.UK Wallet you must align wit
 
 GOV.UK Wallet will support multiple credential formats to represent government documents. These documents can be: 
 
-* [mdoc based credentials for the digital driving licence](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)
-* other Verifiable Credentials (VCs), including [W3C Verifiable Credential Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/) and later [other formats allowing selective disclosure of attributes](https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/)
+- [mdoc-based credentials for the digital driving licence](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)
+- other verifiable credentials (VCs), including [W3C Verifiable Credential Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/) and later [other formats allowing selective disclosure of attributes](https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/)
 
 GOV.UK Wallet supports [OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) for its issuance flow.
 
 You should also:
 
-* follow the government [Service Standard](https://www.gov.uk/service-manual/service-standard), for example making all information available in Welsh
-* use findings identified by your user research to meet your users’ needs
+- follow the government [Service Standard](https://www.gov.uk/service-manual/service-standard), for example making all information available in Welsh
+- use findings identified by your user research to meet your users’ needs, as specified in the [Government Design Principles](https://www.gov.uk/guidance/government-design-principles#start-with-user-needs)
 
-To get started, you need to [authenticate users with One Login](issue-a-credential/authenticate-users).
+To get started, you need to [authenticate users with GOV.UK One Login](issue-a-credential/authenticate-users).
