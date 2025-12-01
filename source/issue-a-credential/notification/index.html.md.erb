@@ -1,7 +1,7 @@
 ---
 title: Handle notifications from GOV.UK Wallet
 weight: 7
-last_reviewed_on: 2025-11-27
+last_reviewed_on: 2025-01-12
 review_in: 3 months
 ---
 
@@ -118,7 +118,5 @@ You can find more information about the error notification responses in the [OID
 
 ### Idempotency
 
-You must implement the notification endpoint so that identical requests with the same `notification_id` always return the same response. This is referred to as idempotence.
-
-There may be situations where a request is duplicated, such as network or connectivity issues.  If identical requests are made with the same `notification_id` the notification endpoint must return the same response. 
+There may be situations where a request is duplicated, such as network or connectivity issues.  If identical requests are made with the same `notification_id` then your notification endpoint must return an identical response. 
 
