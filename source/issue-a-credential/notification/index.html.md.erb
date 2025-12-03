@@ -27,7 +27,7 @@ As the credential issuer, you must publish the location of your notification end
 
 ### Request format
 
-The notification endpoint must accept HTTP POST requests. The request must include the:
+Your notification endpoint must accept HTTP `POST` requests. The request must include the:
 
 - `Authorization` header: A bearer access token, which must be a JSON Web Token (JWT), issued by GOV.UK One Login
 - JSON request body: The notification details
@@ -101,7 +101,7 @@ You should return a `204 No Content` HTTP status code when you process a notific
 
 If the notification could not be processed, you must return an appropriate HTTP error status code.
 
-If the request does not include an access token or the access token is invalid, the notification endpoint must return a `401 Unauthorized` status code and a `WWW-Authenticate` header as defined in [RFC6750](https://datatracker.ietf.org/doc/html/rfc6750#section-3).
+If the request does not include an access token or the access token is invalid, your notification endpoint must return a `401 Unauthorized` status code and a `WWW-Authenticate` header as defined in [RFC6750](https://datatracker.ietf.org/doc/html/rfc6750#section-3).
 
 When the `notification_id` value is invalid, the notification endpoint must return a `400 Bad Request` HTTP status code and a response body in JSON format containing the following parameter:
  
@@ -118,5 +118,4 @@ You can find more information about the error notification responses in the [OID
 
 ### Idempotency
 
-There may be situations where a request is duplicated, such as network or connectivity issues.  If identical requests are made with the same `notification_id` then your notification endpoint must return an identical response. 
-
+There may be situations where a notification is sent more than once, for example as a result of network issues.  If identical requests are made with the same `notification_id` then your notification endpoint must return an identical response.
