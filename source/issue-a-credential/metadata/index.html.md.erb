@@ -25,12 +25,12 @@ The endpoint must return a `200 OK` HTTP status code and valid JSON response tha
 
 Your metadata must include the following parameters:
 
-| Parameter                             | Description                                                                                                                                     | 
-|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------| 
-| `credential_issuer`                   | The URL of the credential issuer.                                                                                                               | 
-| `authorization_servers`               | An array of URLs for the authorization servers your credential issuer relies on for authorization. This must be set to the GOV.UK One Login URL | 
-| `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-a-credential/credential/#credential), where credentials can be obtained.       |
-| `credential_configurations_supported` | An object describing the credentials offered by your credential issuer                                                                          |
+| Parameter                             | Description                                                                                                                                      | 
+|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------| 
+| `credential_issuer`                   | The URL of the credential issuer.                                                                                                                | 
+| `authorization_servers`               | An array of URLs for the authorization servers your credential issuer relies on for authorization. This must be set to the GOV.UK One Login URL. | 
+| `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-a-credential/credential/#credential), where credentials can be obtained.        |
+| `credential_configurations_supported` | An object describing the credentials offered by your credential issuer.                                                                          |
 
 If your credential issuer implements the optional [notification endpoint](/issue-a-credential/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
 
