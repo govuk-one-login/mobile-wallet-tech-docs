@@ -8,7 +8,7 @@
 ### Issue tracking
 <!-- List any related Jira tickets -->
 
-- [DCMAW-XXXX](https://govukverify.atlassian.net/browse/DCMAW-XXX)
+- [DCMAW-XXXXX](https://govukverify.atlassian.net/browse/DCMAW-XXXXX)
 
 ### Changelog
 
@@ -18,5 +18,4 @@ If this change is significant (for example, launching a new feature or deprecati
 - [ ] Update the `last_reviewed_on` field
 - [ ] Generate the documentation site locally ensuring it builds
 - [ ] View on localhost ensuring the static website works
-- [ ] Commit messages that conform to conventional commit messages
 - [ ] Pull request has a clear title with a short description about the update in the documentation
