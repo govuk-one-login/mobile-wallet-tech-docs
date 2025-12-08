@@ -1,36 +1,36 @@
 ---
-title: Metadata
+title: Publish your metadata
 weight: 3
-last_reviewed_on: 2025-11-12
+last_reviewed_on: 2025-12-04
 review_in: 6 months
 ---
 
-# Metadata
+# Publish your metadata
 
-The metadata endpoint is a required endpoint that provides essential configuration information about the credential issuer.
+The metadata endpoint provides essential configuration information about a credential issuer’s implementation. To issue credentials, you must publish your metadata endpoint so that GOV.UK Wallet and verifiers can learn information about your credential issuer, such as:
 
-This endpoint lets GOV.UK Wallet and verifiers dynamically learn information about the credential issuer, such as:
-
-* the endpoints used in the issuance flow
-* the supported credential types
-* how credentials should be displayed in the wallet
+- the endpoints used in your issuance flow
+- the supported credential types
+- how your credentials should be displayed in the wallet
 
 ## Technical details
 
 ### Endpoint location
 
-The metadata must be publicly accessible at the standardised location `/.well-known/openid-credential-issuer` on the credential issuer's domain. The data published is non-sensitive metadata about the service.
+Your metadata must be publicly accessible at the standardised location on your credential issuer domain: `/.well-known/openid-credential-issuer.` The data published is non-sensitive metadata about your service.
 
 ### Response format
 
-The endpoint must return a 200 OK HTTP status code and valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata).
+The endpoint must return a `200 OK` HTTP status code and valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-metadata).
 
-The metadata must include the following parameters:
+Your metadata must include the following parameters:
 
-- `credential_issuer`: The URL of the credential issuer.
-- `authorization_servers`: An array of URLs for the authorisation servers the credential issuer relies on for authorisation. This must be set to the GOV.UK One Login URL.
-- `credential_endpoint`: The URL of the credential issuer's [credential endpoint](/issue-a-credential/credential/#credential), where credentials can be obtained.
-- `credential_configurations_supported`: An object describing the credentials offered by the credential issuer.
+| Parameter                             | Description                                                                                                                                      | 
+|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------| 
+| `credential_issuer`                   | The URL of the credential issuer.                                                                                                                | 
+| `authorization_servers`               | An array of URLs for the authorization servers your credential issuer relies on for authorization. This must be set to the GOV.UK One Login URL. | 
+| `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-a-credential/credential/#credential), where credentials can be obtained.        |
+| `credential_configurations_supported` | An object describing the credentials offered by your credential issuer.                                                                          |
 
 If your credential issuer implements the optional [notification endpoint](/issue-a-credential/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
 
@@ -38,7 +38,7 @@ You can define and use additional metadata parameters.
 
 #### Credential information
 
-The `credential_configurations_supported` object contains key/value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
+The `credential_configurations_supported` object contains key-value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
 
 Each credential object in `credential_configurations_supported` must include the following parameters:
 
@@ -48,7 +48,7 @@ Each credential object in `credential_configurations_supported` must include the
 - `credential_signing_alg_values_supported`
 - `proof_types_supported`
 
-There is more information about [the `credential_configurations_supported` parameter](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-12.2.4) in the OID4VCI specification.
+GOV.UK Wallet also requires your credential issuer’s metadata to support English and Welsh translation.
 
 If you want to prompt users to refresh a credential after it expires, you can also include the optional `credential_refresh_web_journey_url` parameter. This is a custom parameter that is not part of the OID4VCI specification. You must set `credential_refresh_web_journey_url` to the URL where your users can go through the credential refresh web journey in their browser. For example: 
 
