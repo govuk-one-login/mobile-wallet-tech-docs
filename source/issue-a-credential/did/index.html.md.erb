@@ -28,7 +28,7 @@ Your DID document must include the following parameters:
 | `@context`           | A set of URI references that define the meaning of the terms used in the DID document, allowing its properties to be correctly interpreted.              | 
 | `id`                 | The decentralised identifier of the credential issuer in the format `did:web:<CREDENTIAL_ISSUER_DOMAIN>#<KEY_ID>`.                                       | 
 | `verificationMethod` | An array of verification methods containing your public keys.                                                                                            | 
-| `assertionMethod`    | An array listing which verification methods you can use for making assertions - in the context of the credential issuer, this means issuing credentials. | 
+| `assertionMethod`    | An array listing which verification methods you can use for making assertions - in the context of the credential issuer, this means issuing credentials. Each item must be the full identifier of a verification method, for example `did:web:<CREDENTIAL_ISSUER_DOMAIN>#<KEY_ID>`. | 
 
 
  Each object in the `verificationMethod` array must contain the following parameters:
