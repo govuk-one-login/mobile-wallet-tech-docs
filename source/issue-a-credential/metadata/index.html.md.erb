@@ -50,13 +50,18 @@ Each credential object in `credential_configurations_supported` must include the
 
 GOV.UK Wallet also requires your credential issuer’s metadata to support English and Welsh translation.
 
-If you want to prompt users to refresh a credential after it expires, you can also include the optional `credential_refresh_web_journey_url` parameter. This is a custom parameter that is not part of the OID4VCI specification. You must set `credential_refresh_web_journey_url` to the URL where your users can go through the credential refresh web journey in their browser. For example: 
+If you want to prompt users to refresh a credential after it expires, you can also include the optional `credential_refresh_web_journey_url` parameter. This is a custom parameter that is not part of the OID4VCI specification. You must set `credential_refresh_web_journey_url` to the URL where your users can go through the credential refresh web journey in their browser.
+
+If you include the `credential_refresh_web_journey_url` parameter, you must also set a maximum validity period after which the credential must be refreshed. To do this, include the `credential_validity_period_max_days` parameter. For example:
+
 
  ```
- "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh"
+ "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh",
+ "credential_validity_period_max_days": 90
+ 
  ```
 
-For more information, there is [guidance on refreshing credentials](../../refresh-credentials).
+ For more information, there is [guidance on refreshing credentials](../../refresh-credentials).
 
 ## Metadata example
 
@@ -89,7 +94,8 @@ Below is an example of a credential issuer metadata:
           ]
         }
       },
-      "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh"
+      "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh",
+      "credential_validity_period_max_days": 90
     }
   }
 }
