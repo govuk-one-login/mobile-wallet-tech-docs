@@ -21,6 +21,8 @@ To let your users manually refresh a credential, you must add the [`credential_r
 
 When your user taps the 'Refresh' button in the app, the app will take the user to your specified URL to start their credential refresh web journey in their browser. At the end of this journey you must provide a new credential offer that GOV.UK Wallet can use to request a new credential. 
 
+You can also include the `credential_validity_period_max_days` parameter to set a maximum validity period after which the credential must be refreshed. If you include this parameter, GOV.UK Wallet will display the value on the refresh page so that users know how often they need to refresh their document.
+
 You must get the information about the user's existing credential from their user record. GOV.UK Wallet does not share any details about the user when they start your manual refresh journey.
 
 If GOV.UK Wallet adds the new credential successfully, the user will only see the new credential in their documents. GOV.UK Wallet will remove the old credential.
