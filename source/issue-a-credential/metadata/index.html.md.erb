@@ -1,7 +1,7 @@
 ---
 title: Publish your metadata
 weight: 3
-last_reviewed_on: 2025-12-04
+last_reviewed_on: 2025-12-16
 review_in: 6 months
 ---
 
@@ -11,7 +11,7 @@ The metadata endpoint provides essential configuration information about a crede
 
 - the endpoints used in your issuance flow
 - the supported credential types
-- how your credentials should be displayed in the wallet
+- how your credentials should be displayed
 
 ## Technical details
 
@@ -38,7 +38,10 @@ You can define and use additional metadata parameters.
 
 #### Credential information
 
-The `credential_configurations_supported` object contains key-value pairs, where each key is a unique identifier of a verifiable credential supported by the credential issuer and the value is the configuration of that verifiable credential.
+The `credential_configurations_supported` object contains key-value pairs, where:
+
+- each key is a unique identifier of a verifiable credential supported by the credential issuer
+- each value is the configuration of that verifiable credential
 
 Each credential object in `credential_configurations_supported` must include the following parameters:
 
@@ -50,10 +53,17 @@ Each credential object in `credential_configurations_supported` must include the
 
 GOV.UK Wallet also requires your credential issuer’s metadata to support English and Welsh translation.
 
-If you want to prompt users to refresh a credential after it expires, you can also include the optional `credential_refresh_web_journey_url` parameter. This is a custom parameter that is not part of the OID4VCI specification. You must set `credential_refresh_web_journey_url` to the URL where your users can go through the credential refresh web journey in their browser. For example: 
+If you want to prompt users to refresh a credential after it expires, you can also include the optional `credential_refresh_web_journey_url` parameter. This is a custom parameter that is not part of the OID4VCI specification. You must set `credential_refresh_web_journey_url` to the URL where your users can go through the credential refresh web journey in their browser.
+
+If you include a refresh URL you must also include the `credential_validity_period_max_days` parameter, which specifies the credential's validity period in days once it's issued. If the credential's `validUntil` date or `expiryDate` ends before your specified validity period, then the credential will expire earlier. For example, if you set `credential_validity_period_max_days` to 90 days but the credential's `expiryDate` will pass in 30 days' time, then the credential will only be valid for 30 days.
+
+Below is an example of the `credential_refresh_web_journey_url` and `credential_validity_period_max_days` parameters:
+
 
  ```
- "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh"
+ "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh",
+ "credential_validity_period_max_days": 90
+ 
  ```
 
 For more information, there is [guidance on refreshing credentials](../../refresh-credentials).
@@ -89,7 +99,8 @@ Below is an example of a credential issuer metadata:
           ]
         }
       },
-      "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh"
+      "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh",
+      "credential_validity_period_max_days": 90
     }
   }
 }
