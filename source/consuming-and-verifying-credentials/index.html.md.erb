@@ -1,7 +1,7 @@
 ---
 title: Consuming and verifying credentials in GOV.UK Wallet
 weight: 15
-last_reviewed_on: 2025-12-03
+last_reviewed_on: 2026-01-06
 review_in: 6 months
 ---
 
@@ -97,11 +97,13 @@ The business selling the products - the relying party - uses a device with a ver
 
 ### Using GOV.UK Wallet online in the private sector
 
+In the two examples below, a user is purchasing an age-restricted product online using an app or the browser on their phone. This is the same phone where their credentials are held in GOV.UK Wallet. The user holds a [supported credential](consuming-and-verifying-credentials/supported-protocols) that would prove their age in GOV.UK Wallet, such as an [ISO 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) compatible mobile driving licence (mDL).
+
+In these examples the website selling the product - the relying party - must get proof of the user’s age before completing the transaction. To work with GOV.UK Wallet, the relying party website must use a registered DVS certified against the trust framework.
+
+There are more details about credentials available in GOV.UK Wallet, and the attributes a DVS can include in their [verification process](consuming-and-verifying-credentials/credentials-in-wallet).
+
 #### OID4VP same device flow
-
-In this example, a user is purchasing an age-restricted product online using an app or the browser on their phone. This is the same phone where their credentials are held in GOV.UK Wallet. The user holds a credential that would prove their age (for example, a digital driving licence) in GOV.UK Wallet.
-
-The website selling the product - the relying party - must get proof of the user’s age before completing the transaction. To work with GOV.UK Wallet, the relying party website must use a registered DVS certified against the trust framework.
 
 <%= image_tag "OID4VP-same-device.png", { :alt => '' } %>
 
@@ -117,7 +119,7 @@ The website selling the product - the relying party - must get proof of the user
 
 6. The relying party passes the request to the DVS.
 
-7. The DVS requests the data it needs from GOV.UK Wallet. In this example, the data would be a confirmation that the user is above the age needed to complete the transaction.
+7. The DVS requests the data it needs from GOV.UK Wallet, in this example this would be the mDL's `age_over_18` attribute.  The DVS should confirm [credentials and attributes available](consuming-and-verifying-credentials/credentials-in-wallet) for their verification process.
 
 8. GOV.UK Wallet checks that the DVS provider is on the DVS Register.
 
@@ -128,10 +130,6 @@ The website selling the product - the relying party - must get proof of the user
 11. The relying party website shows a visual confirmation of the credential verification. If the verification was successful and the user has proven their age, they can continue with the transaction.
 
 #### OID4VP cross device flow in the private sector
-
-In this example, the user holds a credential that would prove their age (for example, a digital driving licence) in GOV.UK Wallet on their phone. The user is purchasing an age-restricted product online using a separate device (for example, a laptop or tablet).
-
-The website selling the product - the relying party - must get proof of the user’s age before completing the transaction. The relying party is using a registered DVS certified against the trust framework.
 
 <%= image_tag "OID4VP-cross-device.png", { :alt => '' } %>
 
@@ -149,7 +147,7 @@ The data flow for this interaction is as follows.
 
 6. The relying party passes the request to the DVS.
 
-7. The DVS requests the data it needs from GOV.UK Wallet. In this example, the data would be a confirmation that the user is above the age needed to complete the transaction.
+7. The DVS requests the data it needs from GOV.UK Wallet, in this example this would be the mDL's `age_over_18` attribute.  The DVS should confirm [credentials and attributes available](consuming-and-verifying-credentials/credentials-in-wallet) for their verification process.
 
 8. GOV.UK Wallet checks that the DVS provider appears on the DVS Register.
 
