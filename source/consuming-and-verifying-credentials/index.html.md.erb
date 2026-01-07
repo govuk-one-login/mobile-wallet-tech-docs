@@ -101,11 +101,11 @@ In the two examples below, a user is purchasing an age-restricted product online
 
 In these examples the website selling the product - the relying party - must get proof of the user’s age before completing the transaction. To work with GOV.UK Wallet, the relying party website must use a registered DVS certified against the trust framework.
 
-There are more details about credentials available in GOV.UK Wallet, and the attributes a DVS can include in their [verification process](consuming-and-verifying-credentials/credentials-in-wallet).
+There are more details about the [credentials available in GOV.UK Wallet](consuming-and-verifying-credentials/credentials-in-wallet) that you can use in your verification process.
 
-#### OID4VP same device flow in the private sector
+#### OID4VP same device flow
 
-You should use the same device flow when your user's GOV.UK Wallet credentials are held on the same device to the one they're currently using
+You should use the same device flow when your user's GOV.UK Wallet credentials are held on the same device as the one they're currently using.
 
 <%= image_tag "OID4VP-same-device.png", { :alt => '' } %>
 
@@ -133,9 +133,9 @@ The data flow for this interaction is as follows.
 
 11. The relying party website shows a visual confirmation of the credential verification. If the verification was successful and the user has proven their age, they can continue with the transaction.
 
-#### OID4VP cross device flow in the private sector
+#### OID4VP cross device flow
 
-You should use the cross device flow when your user's GOV.UK Wallet credentials are held on a different device to the one they're currently using
+You should use the cross device flow when your user's GOV.UK Wallet credentials are held on a different device to the one they're currently using.
 
 <%= image_tag "OID4VP-cross-device.png", { :alt => '' } %>
 
