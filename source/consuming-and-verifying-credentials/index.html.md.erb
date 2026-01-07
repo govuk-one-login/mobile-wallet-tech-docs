@@ -97,15 +97,19 @@ The business selling the products - the relying party - uses a device with a ver
 
 ### Using GOV.UK Wallet online in the private sector
 
-In the two examples below, a user is purchasing an age-restricted product online using an app or the browser on their phone. This is the same phone where their credentials are held in GOV.UK Wallet. The user holds a [supported credential](consuming-and-verifying-credentials/supported-protocols) that would prove their age in GOV.UK Wallet, such as a mobile driving licence (mDL) which conforms to [ISO 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
+In the two examples below, a user is purchasing an age-restricted product online. The user holds a [supported credential](consuming-and-verifying-credentials/supported-protocols) that would prove their age in GOV.UK Wallet, such as a mobile driving licence (mDL) which conforms to [ISO 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
 
 In these examples the website selling the product - the relying party - must get proof of the user’s age before completing the transaction. To work with GOV.UK Wallet, the relying party website must use a registered DVS certified against the trust framework.
 
 There are more details about credentials available in GOV.UK Wallet, and the attributes a DVS can include in their [verification process](consuming-and-verifying-credentials/credentials-in-wallet).
 
-#### OID4VP same device flow
+#### OID4VP same device flow in the private sector
+
+You should use the same device flow when your user's GOV.UK Wallet credentials are held on the same device to the one they're currently using
 
 <%= image_tag "OID4VP-same-device.png", { :alt => '' } %>
+
+The data flow for this interaction is as follows.
 
 1. During their purchase, the relying party directs the user to a DVS to prove their age. The user chooses to connect this DVS to their GOV.UK Wallet.
 
@@ -119,7 +123,7 @@ There are more details about credentials available in GOV.UK Wallet, and the att
 
 6. The relying party passes the request to the DVS.
 
-7. The DVS requests the data it needs from GOV.UK Wallet, in this example this would be the mDL's `age_over_18` attribute.  The DVS should confirm [credentials and attributes available](consuming-and-verifying-credentials/credentials-in-wallet) for their verification process.
+7. The DVS requests the data it needs from GOV.UK Wallet. In this example, the data needed is the mDL's `age_over_18` attribute. The DVS should confirm [credentials and attributes available](consuming-and-verifying-credentials/credentials-in-wallet) for their verification process.
 
 8. GOV.UK Wallet checks that the DVS provider is on the DVS Register.
 
@@ -130,6 +134,8 @@ There are more details about credentials available in GOV.UK Wallet, and the att
 11. The relying party website shows a visual confirmation of the credential verification. If the verification was successful and the user has proven their age, they can continue with the transaction.
 
 #### OID4VP cross device flow in the private sector
+
+You should use the cross device flow when your user's GOV.UK Wallet credentials are held on a different device to the one they're currently using
 
 <%= image_tag "OID4VP-cross-device.png", { :alt => '' } %>
 
@@ -147,7 +153,7 @@ The data flow for this interaction is as follows.
 
 6. The relying party passes the request to the DVS.
 
-7. The DVS requests the data it needs from GOV.UK Wallet, in this example this would be the mDL's `age_over_18` attribute.  The DVS should confirm [credentials and attributes available](consuming-and-verifying-credentials/credentials-in-wallet) for their verification process.
+7. The DVS requests the data it needs from GOV.UK Wallet. In this example, the data needed is the mDL's `age_over_18` attribute. The DVS should confirm [credentials and attributes available](consuming-and-verifying-credentials/credentials-in-wallet) for their verification process.
 
 8. GOV.UK Wallet checks that the DVS provider appears on the DVS Register.
 
