@@ -1,0 +1,50 @@
+---
+title: Use GOV.UK Wallet to verify credentials in person
+weight: 15
+last_reviewed_on: 2025-12-19
+review_in: 6 months
+---
+
+# Use GOV.UK Wallet to verify credentials in person
+
+
+
+
+
+
+
+## Understand GOV.UK Wallet's in-person sharing flow
+
+<div aria-hidden="true">
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+</script>
+
+<html lang="en">
+  <body>
+    <pre class="mermaid">
+  sequenceDiagram
+  autonumber
+
+  actor user as User
+  participant app as App
+  participant verifier as Verifier
+  
+  user->>app: Opens app to present their information
+  app->>app: Begins device engagement, generates QR code
+  verifier->>app: Scans QR code on user's device
+  verifier->>app: Begins session establishment, sends session public key
+  verifier<<->>app: Establish secure connection, create unique session key
+  verifier->>app: Sends presentation request
+  app->>user: Asks for user consent
+  user->>app: Gives consent, chooses information to share
+  app->>verifier: Sends presentation containing user information
+  verifier->>verifier: Checks presentation, signature, issuer and credential validity
+
+  </pre>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    </script>
+  </body>
+</html>
+</div>
