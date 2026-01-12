@@ -585,7 +585,7 @@ components:
         statusExpiry:
           type: number
           description: |
-            (unix timestamp) A timestamp representing when the moment the issued credential expires. It should be no further than 1 year past the current timestamp
+            (unix timestamp) A timestamp representing the moment when the issued credential expires. It should be no further than 1 year past the current timestamp
           example: 1789574909
         jti:
           type: string
