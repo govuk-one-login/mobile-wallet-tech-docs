@@ -30,7 +30,7 @@ Your metadata must include the following parameters:
 | `credential_issuer`                   | The URL of the credential issuer.                                                                                                                | 
 | `authorization_servers`               | An array of URLs for the authorization servers your credential issuer relies on for authorization. This must be set to the GOV.UK One Login URL. | 
 | `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-a-credential/credential/#credential), where credentials can be obtained.        |
-| `credential_configurations_supported` | An object describing the credentials offered by your credential issuer.                                                                          |
+| `credential_configurations_supported` | An object [describing the credentials](#credential-information) offered by your credential issuer.                                               |
 
 If your credential issuer implements the optional [notification endpoint](/issue-a-credential/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
 
@@ -45,20 +45,27 @@ The `credential_configurations_supported` object contains key-value pairs, where
 
 Each credential object in `credential_configurations_supported` must include the following parameters:
 
-- `format`
-- `credential_definition`
-- `cryptographic_binding_methods_supported`
-- `credential_signing_alg_values_supported`
-- `proof_types_supported`
+| Parameter                                 | Description                                                                                  | 
+|-------------------------------------------|----------------------------------------------------------------------------------------------| 
+| `format`                                  | Format of the credential.                                                                    |
+| `credential_definition`                   | Description of the credential type.                                                          |
+| `cryptographic_binding_methods_supported` | Set of methods available for cryptographically binding the issued credential.                |
+| `credential_signing_alg_values_supported` | Set of algorithms that the credential issuer uses to sign the credential.                    |
+| `proof_types_supported`                   | Key proof(s) supported by the credential issuer.                                             |
+| `credential_refresh_web_journey_url`      | The URL where your users can go through the credential refresh web journey in their browser. |
+| `credential_validity_period_max_days`     | The credential’s validity period in days once it’s issued.                                   |
 
 GOV.UK Wallet also requires your credential issuer’s metadata to support English and Welsh translation.
 
-If you want to prompt users to refresh a credential after it expires, you can also include the optional `credential_refresh_web_journey_url` parameter. This is a custom parameter that is not part of the OID4VCI specification. You must set `credential_refresh_web_journey_url` to the URL where your users can go through the credential refresh web journey in their browser.
+There are further details available on the [metadata endpoint response payload](/api.html#well-known-openid-credential-issuer). 
 
-If you include a refresh URL you must also include the `credential_validity_period_max_days` parameter, which specifies the credential's validity period in days once it's issued. If the credential's `validUntil` date or `expiryDate` ends before your specified validity period, then the credential will expire earlier. For example, if you set `credential_validity_period_max_days` to 90 days but the credential's `expiryDate` will pass in 30 days' time, then the credential will only be valid for 30 days.
+#### Guidance on credential validity period
+
+The `credential_validity_period_max_days` and `credential_refresh_web_journey_url` are custom parameters that are not part of the OID4VCI specification.  You can use these to prompt a user to refresh a credential after it expires.
+
+The value of `credential_validity_period_max_days` specifies the credential's validity period in days once it's issued. If the credential's `validUntil` date or `expiryDate` ends before your specified validity period, then the credential will expire earlier. For example, if you set `credential_validity_period_max_days` to 90 days but the credential's `expiryDate` will pass in 30 days' time, then the credential will only be valid for 30 days.
 
 Below is an example of the `credential_refresh_web_journey_url` and `credential_validity_period_max_days` parameters:
-
 
  ```
  "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh",
@@ -67,41 +74,3 @@ Below is an example of the `credential_refresh_web_journey_url` and `credential_
  ```
 
 For more information, there is [guidance on refreshing credentials](../../refresh-credentials).
-
-## Metadata example
-
-Below is an example of a credential issuer metadata:
-
-```JSON
-{
-  "credential_issuer": "https://example-credential-issuer.gov.uk",
-  "authorization_servers": ["https://token.account.gov.uk"],
-  "credential_endpoint": "https://example-credential-issuer.gov.uk/credential",
-  "notification_endpoint": "https://example-credential-issuer.gov.uk/notification",
-  "credential_configurations_supported": {
-    "FishingLicenceCredential": {
-      "format": "jwt_vc_json",
-      "credential_definition": {
-        "type": [
-          "VerifiableCredential",
-          "FishingLicenceCredential"
-      ]},
-      "cryptographic_binding_methods_supported": [
-        "did"
-      ],
-      "credential_signing_alg_values_supported": [
-        "ES256"
-      ],
-      "proof_types_supported": {
-        "jwt": {
-          "proof_signing_alg_values_supported": [
-            "ES256"
-          ]
-        }
-      },
-      "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh",
-      "credential_validity_period_max_days": 90
-    }
-  }
-}
-```
