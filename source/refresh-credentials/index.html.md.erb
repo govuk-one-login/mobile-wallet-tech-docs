@@ -17,7 +17,7 @@ GOV.UK Wallet lets your users get a new credential without going through the lon
 
 When you issue a credential you must include a [`validUntil` date](../issue-a-credential/credential/#payload).  Once a credential passes this date, GOV.UK Wallet will prompt the user to refresh their credential. GOV.UK Wallet lets your users manually refresh their credential using the mandatory `credential_refresh_web_journey_url` included in your [credential metadata](../issue-a-credential/metadata/#credential-information).  
 
-Your metadata also contains the `credential_validity_period_max_days` parameter.  GOV.UK Wallet will display the value of `credential_validity_period_max_days` on the refresh page so that users know how often they need to refresh their document.  There is guidance on the [credential validity period](#guidance-on-credential-validity-period)
+Your metadata also contains the `credential_validity_period_max_days` parameter.  GOV.UK Wallet will display the value of `credential_validity_period_max_days` on the refresh page so that users know how often they need to refresh their document.  There is guidance on the [credential validity period](#guidance-on-credential-validity-period).
 
 When your user taps the 'Refresh' button in the app, it will take the user to your specified URL to start their credential refresh web journey in their browser. At the end of this journey you must provide a new credential offer that GOV.UK Wallet can use to request a new credential. 
 
