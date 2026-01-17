@@ -26,20 +26,23 @@ review_in: 6 months
   sequenceDiagram
   autonumber
 
-  actor user as User
-  participant app as App
-  participant verifier as Verifier
+  actor user as Credential Holder
+  participant app as GOV.UK One Login App
+  participant vapp as Verifier App
+  actor verifier as Verifier
   
   user->>app: Opens app to present their information
   app->>app: Begins device engagement, generates QR code
-  verifier->>app: Scans QR code on user's device
-  verifier->>app: Begins session establishment, sends session public key
-  verifier<<->>app: Establish secure connection, create unique session key
-  verifier->>app: Sends presentation request
-  app->>user: Asks for user consent
-  user->>app: Gives consent, chooses information to share
-  app->>verifier: Sends presentation containing user information
-  verifier->>verifier: Checks presentation, signature, issuer and credential validity
+  verifier->>vapp: Opens verifier app on their device
+  vapp->>app: Scans QR code on credential holder's device
+  vapp->>app: Begins session establishment, sends session public key
+  vapp<<->>app: Establish secure connection, create unique session key
+  vapp->>app: Sends presentation request
+  app->>user: Asks for credential holder consent
+  user->>app: Gives consent to share
+  app->>vapp: Sends presentation containing credential holder information
+  vapp->>vapp: Checks presentation, signature, issuer and credential validity
+  vapp->>verifier: Displays confirmation
 
   </pre>
     <script type="module">
