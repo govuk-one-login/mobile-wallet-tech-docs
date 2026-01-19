@@ -9,10 +9,9 @@ phase: Beta
 
 # Links to show on right-hand-side of header
 header_links:
-  #About: 
-  #Get Started: 
-  Documentation: /
-  #Support: 
+  GOV.UK Wallet: /
+  Issue credentials: /issue-credentials
+  Verify credentials: /verify-credentials 
 
   # Links to show in the page footer
 footer_links:
