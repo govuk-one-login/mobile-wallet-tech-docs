@@ -11,7 +11,7 @@ phase: Beta
 header_links:
   GOV.UK Wallet: /
   Issue credentials: /issue-credentials/issue-credentials/
-  Verify credentials: /verify-credentials 
+  Verify credentials: /verify-credentials /verify-credentials/
 
   # Links to show in the page footer
 footer_links:
