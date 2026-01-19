@@ -34,8 +34,9 @@ title: Issuing credentials to GOV.UK Wallet
 weight: 1
 last_reviewed_on: 2025-11-27
 review_in: 6 months
+- ---
 + hide_in_navigation: true
----
++ ---
 ```
 
 
