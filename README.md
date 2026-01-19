@@ -1,6 +1,6 @@
 # GOV.UK Wallet technical documentation
-This documentation is for government services that want to integrate with GOV.UK Wallet.
 
+This documentation is for government services that want to integrate with GOV.UK Wallet.
 
 The Wallet technical documentation is based on the [Tech Docs Template](https://github.com/alphagov/tech-docs-template) - a [Middleman template](https://github.com/alphagov/tech-docs-template#:~:text=Template%20is%20a-,Middleman%20template,-that%20you%20can) to build technical documentation using a GOV.UK style.
 
@@ -24,7 +24,7 @@ It may take a few minutes to build the docker container, particularly if it is y
 
 ## Managing content
 
-To add or change existing content, edit the markdown in the `.html.md.erb` files in the `source` folder.  If you add a new folder, remember to add in `index.html.md.rb` file.  This is used by the tech docs `gem` to build the site correctly.  If this is not included you may not be able to generate the site.
+To add or change existing content, edit the markdown in the `.html.md.erb` files in the `source` folder.  If you add a new folder, remember to add in the `index.html.md.rb` file.  This is used by the tech docs `gem` to build the site correctly.  If this is not included you may have issues building the site.
 
 > Always ensure you have checked that new content build correctly by running [`preview-with-docker.sh`](#preview-the-documentation-in-a-browser).
 
