@@ -68,11 +68,11 @@ The JWT header must contain the following parameters:
 }
 ```
 
-| Parameter                                                                          | Description                                                                                                                                                                    |
-|------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|`kid`      | Must match a `kid` in the JSON Web Key Set (JWKS) published to your [`/.well-known/jwks.json`](/issue-a-credential/jwks) endpoint.     |
-|`typ`      | This is the media type of the complete JWT. It must be set to `JWT`.      |
-|`alg`      | This is the algorithm used to sign the JWT. It must be set to `ES256`.    |
+| Parameter                                                                          | Description                                                                                                                       |
+|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+|`kid`      | Must match a `kid` in the JSON Web Key Set (JWKS) published to your [`/.well-known/jwks.json`](/issue-credentials/jwks) endpoint. |
+|`typ`      | This is the media type of the complete JWT. It must be set to `JWT`.                                                              |
+|`alg`      | This is the algorithm used to sign the JWT. It must be set to `ES256`.                                                            |
 
 #### JWT Payload
 
