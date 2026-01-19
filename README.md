@@ -26,7 +26,18 @@ It may take a few minutes to build the docker container, particularly if it is y
 
 To add or change content, edit the markdown in the `.html.md.erb` files in the `source` folder.
 
-In order to configure some aspects of layout, like the header, edit `config/tech-docs.yml`.
+If you do not want the `index.html.md.rb` to be included in the [table of contents (ToC)](#table-of-contents) you can hide it from navigation by adding the following to the top of the page:
+
+```diff
+---
+title: Issuing credentials to GOV.UK Wallet
+weight: 1
+last_reviewed_on: 2025-11-27
+review_in: 6 months
++ hide_in_navigation: true
+---
+```
+
 
 If you move pages around and URLs change, make sure you set up redirects from the old URLs to the new URLs.
 
