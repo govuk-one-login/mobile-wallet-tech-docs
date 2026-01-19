@@ -181,7 +181,7 @@ header_links:
 #### A note on layouts and ToC
 
 When you set a header link the tech docs load the `index.html.md.rb` found at the path you set the link to.  For example setting a `header_link` to  `Support: /contact/support`
-will load the file found at `source/contact/support/index.html.md.rb`.  Although the page will load correctly, it will not be included in the ToC with all the other pages and subfolders contained in. To find the page again the user must click on the header link.
+will load the file found at `source/contact/support/index.html.md.rb`.  Although the page will load correctly, it will not be included in the ToC. To find the page again the user must click on the header link.
 
 The result of this is that once you move to any page in the ToC you cannot easily find your way back to the `index.html.md.rb` content.  This can be quite confusing for a user.  
 
@@ -191,7 +191,7 @@ To work around this you can:
 
 `source/contact/support/index.html.md.rb` to `source/contact/support/overview/index.html.md.rb`
 
-Do not delete the original file.
+> Do not delete the original file.
 
 2. Remove all content from the original file except the metadata code block, setting `hide_in_navigation` to `true`:
 
@@ -212,7 +212,7 @@ redirects:
 
 Although it may seem easier to just set the redirect, this causes a different bug whereby links in pages inconsistently break due to being in a different relative path depending on how a user got there.  This workaround ensures consistency in the page that is loaded and links surrounding it.
 
-Another option could be to always use the absolute url, however that is likely to cause issues if content moves or changes.  If not using relative urls in markdown links is not a problem, this may be somethign you wish to consider.
+Another option could be to always use the absolute url, however that is likely to cause issues if content moves or changes.  If not using relative urls in markdown links is not a problem, this may be something you wish to consider.
 
 
 ## Code of conduct
