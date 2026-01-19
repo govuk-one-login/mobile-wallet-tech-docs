@@ -43,6 +43,7 @@ github_branch: main
 
 redirects:
   /issue-credentials/index.html: /issue-credentials/issue-credentials/
+  /verify-credentials/index.html: /verify-credentials/verify-credentials/
 
 # API description
 api_path: ./openapi/cri.yaml

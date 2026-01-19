@@ -1,0 +1,166 @@
+---
+title: Consuming and verifying credentials in GOV.UK Wallet
+weight: 1
+last_reviewed_on: 2026-01-12
+review_in: 6 months
+layout: verify_credential_layout
+hide_in_navigation: false
+---
+
+# Consuming and verifying credentials in GOV.UK Wallet
+
+GOV.UK Wallet will allow GOV.UK One Login users to store and present digital versions of government-issued documents on their phones.
+
+Government departments will [issue cryptographically verifiable credentials to a user’s GOV.UK Wallet](issuing-credentials-to-wallet). The user’s credentials are linked to their GOV.UK One Login account and to their personal device, and cannot be moved to another device.
+
+GOV.UK Wallet will help:
+
+- government departments and certain other public sector organisations consume and verify credentials or attributes
+- organisations outside of government use verified information passed to them by a digital verification service (DVS), certified under the [UK digital identity and attributes trust framework](https://www.gov.uk/government/collections/uk-digital-identity-and-attributes-trust-framework) and on the [digital identity and attribute services register](https://www.gov.uk/guidance/find-registered-digital-identity-and-attribute-services) (DVS register)
+
+This technical documentation will be updated as new information and features are available. We welcome feedback from partners and industry on our documentation - find out how to [contact us](contact-us).
+
+## Sharing credentials using GOV.UK Wallet
+
+GOV.UK Wallet will let users share their credentials:
+
+- in-person - for example, to prove their age when purchasing age-restricted products
+- online - for example, to share documents with a service securely instead of uploading a photo or a PDF
+
+GOV.UK Wallet will use [standard protocols to offer flexible verification scenarios](consuming-and-verifying-credentials/supported-protocols).
+
+## Trusted list
+
+GOV.UK Wallet will put mechanisms in place to make sure personal data from users is shared only with trusted parties. This will mitigate the risk of malicious apps or services accessing credential data without the user’s knowledge.
+
+GOV.UK Wallet will use trusted lists to identify consumers of credentials. Where data is shared with parties outside of government, GOV.UK Wallet will only release credentials and attributes to a digital verification service (DVS) which is certified against the trust framework and appears on the DVS register.  
+
+Further details on this functionality will be added in future.
+
+## Data flows
+
+### Data flow between credential issuers, holders and verifiers
+
+GOV.UK Wallet is built in 3 parts to connect government departments (credential issuers), users (credential holders) and verifiers requesting data (credential verifiers).
+
+<%= image_tag "wallet-trust-model.png", { :alt => '' } %>
+
+#### 1. Government department issuers
+
+Government departments (issuers) issue digital and verifiable versions of physical documents (credentials) to a user’s GOV.UK Wallet. For example, a government department could issue a credential containing a user’s date of birth that proves their age.
+
+#### 2. GOV.UK Wallet
+
+The credential’s rightful holder (the user the credential refers to) uses GOV.UK Wallet to store, manage and present their credentials online and in person. For example, a user could store a credential containing their date of birth, and present information from it when they need to prove their age.
+
+#### 3. Verifier services
+
+Government departments and certain public sector organisations will be able to verify and use credentials and attributes held in GOV.UK Wallet.  
+ 
+Outside of government, DVS providers will be able to access GOV.UK Wallet and verify information it holds at a user’s request. To be able to do this, a DVS must be:
+
+- certified against the trust framework 
+- added to the DVS register 
+
+For example, a business (known as a relying party) selling age-restricted products could use a certified and registered DVS to request and digitally verify a customer’s age based on attributes held in credentials in their GOV.UK Wallet.
+
+### Using GOV.UK Wallet in person in the private sector
+
+The 3 example flows below illustrate how GOV.UK Wallet, via a registered DVS provider, can be used to purchase age-restricted products from a private sector business. All 3 assume the DVS is providing an orchestration service, but other models will also exist.  There is [guidance on the models available for DVS providers](https://gov.uk/guidance/using-govuk-wallet-in-the-digital-identity-sector).
+
+#### ISO 18013-5 supervised proximity (in person) flow
+
+In this example a user is purchasing age-restricted products in person, such as buying alcohol in a supermarket. They have a valid digital driving licence stored on their personal device in GOV.UK Wallet and will use this to share their information with the business.
+
+The business selling the products - the relying party - uses a device with a verification service provided by a suitable DVS to verify the user’s age. In this example, the verification service is provided via a verifier app. Verification services could also be provided by a point of sale terminal or QR scanner terminal or similar. To work with GOV.UK Wallet, the DVS must be certified against the trust framework and appear on the [DVS register](https://www.gov.uk/guidance/find-registered-digital-identity-and-attribute-services).
+
+
+<%= image_tag "ISO-proximity.png", { :alt => '' } %>
+
+1. The relying party asks the user to show proof of their age.
+
+2. The user who needs to prove their age opens the GOV.UK One Login app.
+
+3. To open GOV.UK Wallet, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (face, fingerprint, PIN or pattern).
+
+4. The verifier app on the relying party’s device is configured to request data from the user’s digital driving licence. For this transaction, the data requested is a proof of age.
+
+5. GOV.UK Wallet generates a QR code on the user’s device, which the user shows to the relying party to begin the verification process.
+
+6. The relying party scans the QR code using the verifier app.
+
+7. GOV.UK Wallet checks that the verifier app is using a trust framework certified and DVS-registered provider.
+
+8. The user reviews the requested data (for example an ‘over 18’ attribute), consents to share it, and allows it to be shared with the verifier app.
+
+9. The verifier app checks the data’s authenticity, origin and validity.
+
+10. The verifier app shows the relying party a visual confirmation of the user’s proof of age.
+
+### Using GOV.UK Wallet online in the private sector
+
+In the two examples below, a user is purchasing an age-restricted product online. The user has a [supported credential](consuming-and-verifying-credentials/supported-protocols) that would prove their age in GOV.UK Wallet, such as a mobile driving licence (mDL) which conforms to [ISO 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
+
+In these examples the website selling the product (relying party) must get proof of the user’s age before completing the transaction. To work with GOV.UK Wallet, the website must use a registered DVS certified against the trust framework.
+
+There are more details about the [credentials available in GOV.UK Wallet](consuming-and-verifying-credentials/credentials-in-wallet) that you can use in your verification process.
+
+#### OID4VP Same device flow
+
+You should use the same device flow when your user's GOV.UK Wallet credentials are held on the same device as the one they're currently using.
+
+<%= image_tag "OID4VP-same-device.png", { :alt => '' } %>
+
+The data flow for this is:
+
+1. During their purchase, the relying party directs the user to a DVS to prove their age. The user chooses to connect this DVS to their GOV.UK Wallet.
+
+2. The DVS used by the relying party’s website is configured to generate a specific credential request. In this example, the credential request would include confirmation that the user is above the age needed to complete the transaction.
+
+3. The relying party’s website or embedded DVS displays the credential request to the user as a link.
+
+4. The user clicks on the link, which opens the GOV.UK One Login app.
+
+5. To open GOV.UK Wallet, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (face, fingerprint, PIN or pattern).
+
+6. The relying party passes the request to the DVS.
+
+7. The DVS requests the data it needs from GOV.UK Wallet. In this example, the data needed is the mDL's `age_over_18` attribute. The DVS should confirm [credentials and attributes available](consuming-and-verifying-credentials/credentials-in-wallet) for their verification process.
+
+8. GOV.UK Wallet checks that the DVS provider is on the DVS Register.
+
+9. The user reviews the requested data, consents to share it, and allows it to be shared with the DVS and the relying party.
+
+10. The DVS checks the data’s authenticity, origin and validity, and passes it to the relying party.
+
+11. The relying party website shows a visual confirmation of the credential verification. If the verification was successful and the user has proven their age, they can continue with the transaction.
+
+#### OID4VP Cross device flow
+
+You should use the cross device flow when your user's GOV.UK Wallet credentials are held on a different device to the one they're currently using.
+
+<%= image_tag "OID4VP-cross-device.png", { :alt => '' } %>
+
+The data flow for this interaction is as follows.
+
+1. During their purchase on their laptop or tablet, the relying party directs the user to a DVS to prove their age. The user chooses to connect this DVS to their GOV.UK Wallet app on their phone.  
+
+2. To open GOV.UK Wallet on their phone, the user authenticates themselves with GOV.UK One Login and uses the device’s local authentication (face, fingerprint, PIN or pattern).
+
+3. The DVS used by the relying party is configured to generate a specific credential request. In this example, the request would include a confirmation that the user is above the age needed to complete the transaction.
+
+4. The relying party displays the credential request to the user as a QR code.
+
+5. The user scans the QR code using GOV.UK Wallet on their phone.
+
+6. The relying party passes the request to the DVS.
+
+7. The DVS requests the data it needs from GOV.UK Wallet. In this example, the data needed is the mDL's `age_over_18` attribute. The DVS should confirm [credentials and attributes available](consuming-and-verifying-credentials/credentials-in-wallet) for their verification process.
+
+8. GOV.UK Wallet checks that the DVS provider appears on the DVS Register.
+
+9. The user reviews the requested data, consents to share it, and allows it to be shared with the DVS and the relying party.
+
+10. The DVS checks the data’s authenticity, origin and validity, and passes it to the relying party
+
+11. The relying party shows a visual confirmation of the credential verification. If verification was successful and the user has proven their age, they can continue with their purchase.
