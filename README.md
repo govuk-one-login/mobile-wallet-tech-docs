@@ -170,17 +170,50 @@ review_in: 6 months
 + layout: {your_layout_name}
 ```
 
-If you plan to navigate to your subsection using the [header links](#header-links), don't forget set the values to your pages e.g:
+If you plan to navigate to your subsection using the [header links](#header-links), don't forget set the values to your pages for example:
 
 ```yaml
-
 header_links:
   Homepage: /
   Support: /contact/support
-
 ```
 
-#### A note layouts and ToC
+#### A note on layouts and ToC
+
+When you set a header link the tech docs load the `index.html.md.rb` found at the path you set the link to.  For example setting a `header_link` to  `Support: /contact/support`
+will load the file found at `source/contact/support/index.html.md.rb`.  Although the page will load correctly, it will not be included in the ToC with all the other pages and subfolders contained in. To find the page again the user must click on the header link.
+
+The result of this is that once you move to any page in the ToC you cannot easily find your way back to the `index.html.md.rb` content.  This can be quite confusing for a user.  
+
+To work around this you can:
+
+1. Create a folder and copy and paste the `index.html.md.rb` file into it.  For example: 
+
+`source/contact/support/index.html.md.rb` to `source/contact/support/overview/index.html.md.rb`
+
+Do not delete the original file.
+
+2. Remove all content from the original file except the metadata code block, setting `hide_in_navigation` to `true`:
+
+```yaml
+---
+title: Your page title
+weight: 1
+hide_in_navigation: true
+---
+```
+
+3. Add a redirect from the header link to the new folder in `config/tech-docs.yml`:
+
+```yaml
+redirects:
+  /contact/support/index.html: /contact/support/overview/
+```
+
+Although it may seem easier to just set the redirect, this causes a different bug whereby links in pages inconsistently break due to being in a different relative path depending on how a user got there.  This workaround ensures consistency in the page that is loaded and links surrounding it.
+
+Another option could be to always use the absolute url, however that is likely to cause issues if content moves or changes.  If not using relative urls in markdown links is not a problem, this may be somethign you wish to consider.
+
 
 ## Code of conduct
 
