@@ -99,9 +99,9 @@ in `config/tech-docs.yml` you can control:
 
 For more information about these read the comments in `config/tech-docs.yml` or look at the tech docs format README.
 
->  Or for more fun, why not take half an hour and play around.  See what happens when you create pages and change the settings.
+>  Or instead of reading, why not take an hour and ask yourself "What if...?".  See what happens when you create pages and change the settings.  It's much more fun.
 
-If you make changes to the config you will need to stop and re-start your docker preview to see these take effect
+If you make changes to the config you will need to stop and re-start your docker preview to see these take effect.
 
 #### Page settings
 
