@@ -119,7 +119,7 @@ There's detailed guidance on [how GOV.UK One Login works](https://docs.sign-in.s
 There's more guidance on [generating and issuing a credential offer](../issue-a-credential/credential-offer/#credential-offer).
 
 <ol start="4">
-  <li>Your service generates a credential offer that includes a <a href="/issue-a-credential/credential-offer/#the-pre-authorised-code">pre-authorised code</a> signed by your service.</li>
+  <li>Your service generates a credential offer that includes a <a href="/issue-credentials/issue-a-credential/credential-offer/#the-pre-authorised-code">pre-authorised code</a> signed by your service.</li>
 
   <li>Your service renders the credential offer to the user as a QR code or deep-link.</li>
 
@@ -158,7 +158,7 @@ There is more guidance on [publishing your metadata](../issue-a-credential/metad
 
 ### Your service issues a credential
 
-There is more guidance on [issuing a credential](/issue-a-credential/credential/#credential).
+There is more guidance on [issuing a credential](../issue-a-credential/credential/).
 
 <ol start="19">
   <li>Your service sends a <code>GET</code> request to the GOV.UK One Login <code>/.well-known/jwks.json</code> to fetch its public keys, which verify the signature on the access token issued by GOV.UK One Login.</li>
@@ -184,7 +184,7 @@ There is more guidance on [issuing a credential](/issue-a-credential/credential/
 
 ### GOV.UK Wallet notifies your service
 
-There is more guidance on [how GOV.UK Wallet notifies your service](/issue-a-credential/notification/).
+There is more guidance on [how GOV.UK Wallet notifies your service](../issue-a-credential/notification/).
 
 The following steps are optional. If you do not offer a `/notification` endpoint then GOV.UK Wallet will not send a notification.
 
