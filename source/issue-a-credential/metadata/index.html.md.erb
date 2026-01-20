@@ -59,7 +59,7 @@ GOV.UK Wallet also requires your credential issuer’s metadata to support Engli
 
 There are further details available on the [metadata endpoint response payload](/issue-a-credential/metadata/api.html#well-known-openid-credential-issuer). 
 
-The `credential_validity_period_max_days` and `credential_refresh_web_journey_url` are custom parameters that are not part of the OID4VCI specification.  You can use these to prompt a user to refresh a credential after it expires. 
+The `credential_validity_period_max_days` and `credential_refresh_web_journey_url` are mandatory custom parameters that are not part of the OID4VCI specification.  You can use these to prompt a user to refresh a credential after it expires. 
 
 There is more information about [how to use the `credential_refresh_web_journey_url` and `credential_validity_period_max_days` to refresh a user's credentials](../../refresh-credentials#guidance-on-credential-validity-period).
 

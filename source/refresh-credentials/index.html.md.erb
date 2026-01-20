@@ -15,15 +15,17 @@ GOV.UK Wallet lets your users get a new credential without going through the lon
 
 ## Update credential issuer metadata
 
-Users can manually refresh a credential using the [`credential_refresh_web_journey_url` parameter](../issue-a-credential/metadata/#credential-information) added to your credential issuer metadata. This is a mandatory custom parameter, that is not part of the OID4VCI specification.
-
-When a credential passes its `validUntil` date your user will be prompted to refresh it.  When your user taps the 'Refresh' button in the app, the app will take the user to your `credential_refresh_web_journey_url`.  This will start their credential refresh journey in their web browser. At the end of this journey you must provide a new credential offer that GOV.UK Wallet can use to request a new credential.
+When a credential passes its `validUntil` date your user will be prompted to refresh it.  When your user taps the 'Refresh' button in the app, the app will take the user to your [`credential_refresh_web_journey_url` parameter](../issue-a-credential/metadata/#credential-information).  This will start their credential refresh journey in their web browser. At the end of this journey you must provide a new credential offer that GOV.UK Wallet can use to request a new credential.
 
 You must also include the `credential_validity_period_max_days` parameter to set a maximum validity period after which the credential must be refreshed. GOV.UK Wallet will display this value on the refresh page so that users know how often they need to refresh their document.
+
+GOV.UK Wallet requires `credential_refresh_web_journey_url` and `credential_validity_period_max_days` to be returned in your metadata endpoint response. These are custom parameters that are not part of the OID4VCI specification.
 
 You must get the information about the user's existing credential from their user record. GOV.UK Wallet does not share any details about the user when they start your manual refresh journey.
 
 If GOV.UK Wallet adds the new credential successfully, the user will only see the new credential in their documents. GOV.UK Wallet will remove the old credential.
+
+
 
 ## Understand GOV.UK Wallet's manual credential refresh flow
 
