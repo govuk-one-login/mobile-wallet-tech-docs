@@ -70,7 +70,7 @@ The JWT header must contain the following parameters:
 
 | Parameter                                                                          | Description                                                                                                                       |
 |------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-|`kid`      | Must match a `kid` in the JSON Web Key Set (JWKS) published to your [`/.well-known/jwks.json`](/issue-credentials/jwks) endpoint. |
+|`kid`      | Must match a `kid` in the JSON Web Key Set (JWKS) published to your [`/.well-known/jwks.json`](/issue-credentials/issue-a-credential/jwks) endpoint. |
 |`typ`      | This is the media type of the complete JWT. It must be set to `JWT`.                                                              |
 |`alg`      | This is the algorithm used to sign the JWT. It must be set to `ES256`.                                                            |
 
@@ -102,7 +102,7 @@ The JWT payload must contain the following claims:
 
 #### Signature
 
-You must sign the pre-authorised code with an Elliptic Curve Digital Signature Algorithm (ECDSA) private key for signing. You must make the corresponding public key, which forms a pair with the private key used for signing, publicly accessible at your [`/.well-known/jwks.json`](/issue-a-credential/jwks) endpoint. This is because GOV.UK One Login will need access to the public key to verify the signature on the pre-authorised code.
+You must sign the pre-authorised code with an Elliptic Curve Digital Signature Algorithm (ECDSA) private key for signing. You must make the corresponding public key, which forms a pair with the private key used for signing, publicly accessible at your [`/.well-known/jwks.json`](/issue-credentials/issue-a-credential/jwks) endpoint. This is because GOV.UK One Login will need access to the public key to verify the signature on the pre-authorised code.
 
 The signing algorithm must be ECDSA with the P-256 curve and the SHA-256 hash function.
 
