@@ -42,8 +42,8 @@ github_repo: govuk-one-login/mobile-wallet-tech-docs
 github_branch: main
 
 redirects:
-  /issue-credentials/index.html: /issue-credentials/issue-credentials/
-  /verify-credentials/index.html: /verify-credentials/verify-credentials/
+  /issue-credentials/index.html: /issue-credentials/issue-credentials/index.html
+  /verify-credentials/index.html: /verify-credentials/verify-credentials/index.html
 
 # API description
 api_path: ./openapi/cri.yaml
