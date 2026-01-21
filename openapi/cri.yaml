@@ -358,6 +358,8 @@ paths:
                         proof_signing_alg_values_supported:
                           - ES256
                         key_attestations_required:
+                    credential_refresh_web_journey_url: https://example-credential-issuer.gov.uk/fishing-refresh
+                    credential_validity_period_max_days: 90
                     display:
                       - name: Fishing Licence number
                         locale: en-GB
@@ -1068,12 +1070,20 @@ components:
             type: string
         proof_types_supported:
           $ref: '#/components/schemas/ProofTypesSupported'
+        credential_refresh_web_journey_url:
+          description: The URL where your users can go through the credential refresh web journey in their browser.
+          type: string
+        credential_validity_period_max_days:
+          description: The credential’s validity period in days once it’s issued.
+          type: number
       required:
-        - credential_definition
-        - credential_signing_alg_values_supported
-        - cryptographic_binding_methods_supported
         - format
+        - credential_definition
+        - cryptographic_binding_methods_supported
+        - credential_signing_alg_values_supported
         - proof_types_supported
+        - credential_refresh_web_journey_url
+        - credential_validity_period_max_days
     CredentialDefinition:
       description: Description of the credential type.
       type: object
