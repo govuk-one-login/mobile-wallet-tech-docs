@@ -54,19 +54,6 @@ When you include the  `age_over_{nn}` in your verification process, the response
 - `age_over_21`
 - `age_over_25`
 
-### Guidance on photos
-
-When you include the `portrait` attribute in your verification process, the photos in the response will be:
-
-- in JPG or PNG format conforming to one of the following file specifications:
-    - `FF D8 FF E0 JPG`
-    - `FF D8 FF EE JPG`
-    - `FF D8 FF DB JPG`
-    - `89 50 4E 47 0D 0A 1A 0A PNG`
-    - `FF D8 FF E0 00 10 4A 46 49 46 00 01 JFIF`
-- no larger than 1 MiB (1 Mebibyte = 1,048,576 bytes) in size after decoding from Base64
-- stripped of EXIF metadata
-
 ### Driving privileges
 
 Driving privileges contain `vehicle_category_codes` that allow your verification process to include information about types of vehicles the licence holder can drive. Driving privileges also contain `codes` that you can use to verify restrictions and conditions applied to the driving licence.
