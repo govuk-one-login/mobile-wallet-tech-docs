@@ -30,7 +30,7 @@ The following [ISO 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-
 | Issuing authority        | `issuing_authority`       | The organisation or authority that issued the driving licence.       | DVLA         |
 | Licence number       | `document_number`        | Identification code of the driving licence.        | USER9801180MA9PC       |
 | Place of birth       | `birth_place`           | Birthplace of the driving licence holder.      | UNITED KINGDOM      |
-| Vehicles you can drive       | `driving_privileges`      | An array of [driving privileges](#driving-privileges).        |
+| Vehicles you can drive       | `driving_privileges`      | An array of [driving privileges](#driving-privileges).        | [{"vehicle_category_code": "A","issue_date": 1004("1998-01-01"),"expiry_date": 1004("2060-01-01"),"codes": [{"code": "101"}, {"code": "102"}]}]               |
 | UN distinguishing sign       | `un_distinguishing_sign`       | Internationally recognised code identifying the country that issued the driving licence, as defined by the United Nations.         | UK          |
 | Address          | `resident_address`        | House number, street and town as they appear on the driving licence.         | 12 Home Road, Hometown          |
 | Post code          | `resident_postal_code`        | Post code as it appears on the driving licence.        | AA9 9QQ       |
@@ -56,7 +56,7 @@ When you include the  `age_over_{nn}` in your verification process, the response
 
 ### Driving privileges
 
-Driving privileges contain `vehicle_category_codes` that allow your verification process to include information about types of vehicles the licence holder can drive. Driving privileges also contain `codes` that you can use to verify restrictions and conditions applied to the driving licence.
+Driving privileges contain mandatory `vehicle_category_codes` that allow your verification process to include information about types of vehicles the licence holder can drive. Driving privileges may also contain optional `codes` that you can use to verify restrictions and conditions applied to the driving licence.
 
 You can find more information about `vehicle_category_codes`:
 
