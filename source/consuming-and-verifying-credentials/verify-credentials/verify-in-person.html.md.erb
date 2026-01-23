@@ -1,0 +1,123 @@
+---
+title: Verify credentials in person
+weight: 3
+last_reviewed_on: 2026-01-20
+review_in: 6 months
+---
+
+# Verify credentials in person
+
+GOV.UK Wallet will allow users to share their credentials in person, for example when purchasing age-restricted products at a supermarket. This process will use the [ISO 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) to let you verify a user’s credentials in person. You will only be able to access user information through a digital verification service (DVS). The DVS must be:
+
+* certified under the [UK digital identity and attributes trust framework](https://www.gov.uk/government/collections/uk-digital-identity-and-attributes-trust-framework)
+* on the [digital identity and attribute services register](https://www.gov.uk/guidance/find-registered-digital-identity-and-attribute-services) (DVS register)
+
+For in-person credential verification, GOV.UK Wallet will support the following:
+
+| Feature             | Support at launch                       |
+|-------------|-----------------------------------------|
+| Device engagement   | QR code                                   |
+| Handover session establishment       | Not supported                     |
+| Reader authentication         | Supported                                |
+| Session encryption       | Only with Curve P-256 for ECDH/ECDSA          |
+| Data retrieval        | Via Bluetooth only, using GATT protocol for transmission where the holder takes the Peripheral role and acts as the GATT server         |
+| Device signature           | COSE EdDSA signatures only            |
+
+We'll publish further details of how we'll support these features, including GOV.UK Wallet’s verification profile, in future updates to this documentation.
+
+You'll be able to see an example of a mobile driving licence (mDL) verifier using our [reference implementation](consuming-and-verifying-credentials/use-sample-reference-material).
+
+## Understand GOV.UK Wallet’s in-person sharing flow
+
+This diagram shows an overview of how GOV.UK Wallet will handle in-person credential sharing to let users share their information with your verifier implementation via the GOV.UK One Login app. This diagram, and the descriptions below it, are an explanation of each step in the process.
+
+<div aria-hidden="true">
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+</script>
+
+<html lang="en">
+  <body>
+    <pre class="mermaid">
+  sequenceDiagram
+  autonumber
+
+  actor user as Credential Holder
+  participant app as GOV.UK One Login App
+  participant vapp as Verifier App
+  actor verifier as Verifier
+  
+  user->>app: Opens app to present their information
+  app->>app: Begins device engagement, generates QR code
+  verifier->>vapp: Opens verifier app on their device
+  vapp->>app: Scans QR code on credential holder's device
+  vapp->>app: Begins session establishment, sends session public key
+  vapp<<->>app: Establish secure connection, create unique session key
+  vapp->>app: Sends presentation request
+  app->>user: Asks for credential holder consent
+  user->>app: Gives consent to share
+  app->>vapp: Sends presentation containing credential holder information
+  vapp->>vapp: Checks presentation, signature, issuer and credential validity
+  vapp->>verifier: Displays confirmation
+
+  </pre>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    </script>
+  </body>
+</html>
+</div>
+
+1. The credential holder opens the GOV.UK One Login app containing their mobile driving licence to present their information.
+
+1. The GOV.UK One Login app begins device engagement and generates a QR code that contains device engagement information and the app’s ephemeral public key.
+
+1. The verifier opens the verifier app on their device.
+
+1. Using the verifier app, the verifier scans the QR code displayed on the credential holder’s device.
+
+1. The verifier app begins session establishment by sending its ephemeral public key to the GOV.UK One Login app, and attempts to establish a secure Bluetooth connection.
+
+1. The two devices establish a secure connection, and create a unique session key to encrypt the data shared during the session.
+
+1. During the session establishment, the verifier app sends its presentation request. This request contains details of the credential holder information the verifier wants to verify.
+
+1. The GOV.UK One Login app receives the presentation request from the verifier’s app, and requests consent from the credential holder to share their data.
+
+1. The credential holder consents to share the requested information with the verifier app.
+
+1. The GOV.UK One Login app sends a presentation back to the verifier app. The presentation contains the information that the credential holder consented to share.
+
+1. The verifier app checks the presentation, its signature and its issuer. It also checks that the credential is still valid.
+
+1. The verifier app displays a confirmation of the result to the verifier.
+
+## How in-person verification looks for your users
+
+In this example, a user is purchasing age-restricted products in person and sharing their information with a business. They have a valid mobile driving licence stored on their personal device in their GOV.UK Wallet.
+
+The business selling the products (the relying party) uses a device with a verification service provided by a suitable DVS provider to verify the user’s age. In this example, the verification service is provided via a verifier app (it could, for example, also be a point of sale terminal, QR scanner terminal etc.). To work with GOV.UK Wallet, the DVS provider must be certified against the trust framework and appear on the DVS register.
+
+<%= image_tag "ISO-proximity.png", { :alt => '' } %>
+
+The data flow for this interaction is as follows:
+
+1. The relying party (the business selling the product) asks the user to show proof of their age.
+
+1. The user opens the GOV.UK One Login app.
+
+1. To access the GOV.UK One Login app, the user authenticates themselves with GOV.UK One Login and also uses their device’s local authentication (face, fingerprint, PIN or pattern).
+
+1. The verifier app on the relying party’s device is configured to request data from the user’s mobile driving licence. For this transaction, the data requested is a proof of age.
+
+1. GOV.UK Wallet generates a QR code on the user’s device, which the user shows to the relying party to begin the verification process.
+
+1. The relying party scans the QR code using the verifier app.
+
+1. GOV.UK Wallet confirms that the verifier app is using a trust framework certified and DVS-registered provider.
+
+1. The user reviews the data that was requested (for example an ‘over 18’ attribute), consents to share it, and allows it to be shared with the verifier app.
+
+1. The verifier app checks the data’s authenticity, origin and validity.
+
+1. The verifier app shows the relying party a visual confirmation of the user’s proof of age.
