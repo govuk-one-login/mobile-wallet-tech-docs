@@ -1,0 +1,66 @@
+---
+title: Mobile driving licence
+weight: 8
+last_reviewed_on: 2026-01-23
+review_in: 6 months
+---
+
+# Mobile driving licence
+
+You will be able to verify information about a user based on the details held in their mobile driving licence (mDL). You can choose the attributes required to fit your verification process from the [ISO 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en). You can also include additional [UK-specific attributes](#uk-specific-attributes) which DVLA provides in their mDL.
+
+You will be able to see an example of an mDL verifier using our [reference implementation](consuming-and-verifying-credentials/use-sample-reference-material).
+
+## User attributes available in GOV.UK Wallet
+
+### ISO 18013-5 attributes
+
+The following [ISO 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) attributes will be available to include in your verification process:
+
+| Attribute     | Data element identifier         | Description           | Example                |
+|---------------|---------------------------------|----------------------|----------------------|
+| Age over      | `age_over_{nn}`                 | Confirmation that the driving licence holder is over the age provided.  There is further information on [this attribute](#guidance-on-age-verification).        | TRUE          |
+| Family name       | `family_name`       | Family name or surname as it appears on the driving licence.      | Johnson          |
+| Given names          | `given_name`         | First and other names as they appear on the driving licence.           | Mike Alfred          |
+| Photo        | `portrait`             | Photo of the driving licence holder as it appears on the driving licence.           | /9j/4AAQSkZJRgABAQpDYXQwMy5qcGf/[...]      |
+| Date of birth        | `birth_date`        | Day, Month and Year of birth as it appears on the driving licence. Formatted as `YYYY-MM-DD`.      | 1980-01-15          |
+| Issue date           | `issue_date`         | Day, Month and Year of issue as it appears on the driving licence. Formatted as `YYYY-MM-DD`.     | 1998-01-16         |
+| Expiry date         | `expiry_date`           | Day, Month and Year of expiry as it appears on the driving licence. Formatted as `YYYY-MM-DD`.           | 2008-01-15             |
+| Issuing country        | `issuing_country`       | A 2 digit code to indicate the country that issued the driving licence.     | GB          |
+| Issuing authority        | `issuing_authority`       | The organisation or authority that issued the driving licence.       | DVLA         |
+| Licence number       | `document_number`        | Identification code of the driving licence.        | USER9801180MA9PC       |
+| Place of birth       | `birth_place`           | Birthplace of the driving licence holder.      | UNITED KINGDOM      |
+| Vehicles you can drive       | `driving_privileges`      | An array of [driving privileges](#driving-privileges).        | [{"vehicle_category_code": "A","issue_date": 1004("1998-01-01"),"expiry_date": 1004("2060-01-01"),"codes": [{"code": "101"}, {"code": "102"}]}]               |
+| UN distinguishing sign       | `un_distinguishing_sign`       | Internationally recognised code identifying the country that issued the driving licence, as defined by the United Nations.         | UK          |
+| Address          | `resident_address`        | House number, street and town as they appear on the driving licence.         | 12 Home Road, Hometown          |
+| Post code          | `resident_postal_code`        | Post code as it appears on the driving licence.        | AA9 9QQ       |
+| City           | `resident_city`          | City as it appears on the driving licence.        | London         |
+
+### UK-specific attributes
+
+The following UK-specific attributes will be available to include in your verification process:
+
+| Attribute     | Data element identifier         | Description           | Example               |
+|---------------|---------------------------------|----------------------|----------------------|
+| Vehicles you can drive provisionally      | `provisional_driving_privileges`      | An array of [driving privileges](#driving-privileges).     | [{"vehicle_category_code": "A","issue_date": 1004("1998-01-01"),"expiry_date": 1004("2060-01-01"),"codes": [{"code": "101"}, {"code": "102"}]}]          |
+| Driver's title      | `title`          | Title of the licence holder as it appears on the driving licence.     | Miss         |
+| Bilingual licence identifier     | `welsh_licence`      | Confirmation that the licence is available in English and Welsh.       | TRUE       |
+
+### Guidance on age verification
+
+When you include the  `age_over_{nn}` in your verification process, the response will be either `TRUE` or `FALSE`. The user's date of birth will not be shared. The following `age_over_{nn}` attributes are available:
+
+- `age_over_18`
+- `age_over_21`
+- `age_over_25`
+
+### Driving privileges
+
+Driving privileges contain mandatory `vehicle_category_codes` that allow your verification process to include information about types of vehicles the licence holder can drive. Driving privileges may also contain optional `codes` that you can use to verify restrictions and conditions applied to the driving licence.
+
+You can find more information about `vehicle_category_codes`:
+
+- in the [ISO/IEC 18013-5 specification](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)
+- on the [DVLA driving licence categories](https://www.gov.uk/driving-licence-categories) page
+
+You can find more information about `codes` on the [DVLA driving licence codes](https://www.gov.uk/driving-licence-codes) page.

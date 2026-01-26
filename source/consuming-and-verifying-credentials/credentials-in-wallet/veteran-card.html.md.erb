@@ -1,21 +1,13 @@
 ---
 title: Credentials in GOV.UK Wallet
 weight: 2
-last_reviewed_on: 2025-11-20
+last_reviewed_on: 2026-01-23
 review_in: 6 months
 ---
 
-# Credentials in GOV.UK Wallet
+# HM Armed Forces Veteran Card
 
-Credentials are issued by the relevant government department into GOV.UK Wallet. The government department uses the credential schema to define which attributes to include. They are also responsible for the information in the credentials they issue.
-
-We’ll add credentials and their attributes to this documentation as they are released.
-
-## Currently available credentials 
-
-### Veteran card
-
-| Attribute              | Definition                                                                                                                                                   | Example                                                                                                                                                                                                                                                                                                                                                                             |
+| Attribute              | Description                                                                                                                                                   | Example                                                                                                                                                                                                                                                                                                                                                                             |
 |------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Name                   | Given names and family names as they appear on the veteran card.                                                                                             | <pre><code>"name": [<br>    {<br>      "nameParts": [<br>        {<br>          "value": "Sarah",<br>          "type": "GivenName"<br>        }<br>        {<br>          "value": "Elizabeth",<br>          "type": "GivenName"<br>        },<br>        {<br>          "value": "Edwards",<br>          "type": "FamilyName"<br>        }<br>      ]<br>    }<br>  ]</code></pre> |
 | Date of birth          | Day, Month and Year of birth as it appears on the veteran card. Formatted as `YYYY-MM-DD`.                                                                   | <pre><code>"birthDate": [<br>    {<br>      "value": "1985-10-18"<br>    }<br>  ]</code></pre>                                                                                                                                                                                                                                                                                      |
