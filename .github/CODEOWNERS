@@ -1,3 +1,4 @@
 # The following team(s) will be requested for review when someone opens a pull request in this repository.
 
 * @govuk-one-login/mobile-wallet-team @govuk-one-login/mobile-leads @govuk-one-login/mobile-wallet-onboarding-products @govuk-one-login/tech-writers
+/template.yaml @govuk-one-login/reliability-engineering-x
