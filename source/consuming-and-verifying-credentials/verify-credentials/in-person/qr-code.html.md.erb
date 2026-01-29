@@ -38,7 +38,7 @@ The GOV.UK Wallet `DeviceEngagement` structure will contain:
 | `DeviceRetrievalMethod`                  | Array describing supported [options for data sharing](#device-retrieval-method). | `[uint, uint, map]` | 
 | `DeviceRetrievalMethod.RetrievalOptions` | Map describing [supported mdoc modes and identifiers](#retrieval-options).       | `{bool,bool,bstr}`  | 
   
-There is a [complete CBOR example](#qr-code-generation) available at the bottom of this page.                                         
+There is a [complete CBOR example](#example-device-engagement-structure) available.                                         
 
 #### Security
 
@@ -89,7 +89,7 @@ For example:
 │           ├── ? 10 : h'11111111222233334444555555555555' #uuid for mdoc peripheral mode session         
 ```
 
-#### Example device engagement structure 
+#### Example device engagement structure
 
 Below is an example of a `DeviceEngagement` structure, containing all the elements your verification app will be able to use:
 
