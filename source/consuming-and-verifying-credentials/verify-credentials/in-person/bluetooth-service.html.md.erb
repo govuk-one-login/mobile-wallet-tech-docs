@@ -11,7 +11,7 @@ GOV.UK Wallet allows your verification app to retrieve credential information, w
 
 To retrieve credential information from GOV.UK Wallet, your verification device must have this capability. More details of the in-person sharing flow are [available](./#understand-gov-uk-wallet-s-in-person-sharing-flow).
 
-When sharing credential details, GOV.UK Wallet will make the holders device discoverable for you to connect.  This is known as taking the Peripheral role.  GOV.UK Wallet sets this role in the [`RetreivalOptions](qr-code.html#retrieval-options) when you first [read the holders QR code](./device-engagement/).  
+When sharing credential details, GOV.UK Wallet will make the holders device discoverable for you to connect.  This is known as taking the Peripheral role.  GOV.UK Wallet sets this role in the [`RetreivalOptions](qr-code.html#retrieval-options) when you first [read the holders QR code](qr-code).  
 
 Your verification device must take the Central role, and request to connect to the holder's device.  
 
@@ -37,7 +37,7 @@ GOV.UK Will create a GATT service with the following characteristics:
 | `Client2Server` | 00000002-A123-48CE-896B-4C76973373E6 | Write Without Response         |
 | `Server2Client` | 0000003-A123-48CE-896B-4C76973373E6  | Notify                         |
 
-The UUID's of these characteristics are specified in the [ISO 18013-5](LINKLINKLINK) standard.
+The UUID's of these characteristics are specified in the [ISO 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) standard.
 
 [//]: # (session establishment, device request and device response will be covered in more detail in DCMAW-16821, 16822 and 16824)
 
