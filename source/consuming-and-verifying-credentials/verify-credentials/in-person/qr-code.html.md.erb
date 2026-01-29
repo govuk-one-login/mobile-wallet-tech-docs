@@ -13,7 +13,7 @@ Before you begin to verify a credential, you must establish a connection between
 
 To establish a connection successfully your verification app must:
 
-- be able to read an [ISO/IEC 18004](LINKLINKLINK) standard [QR code](#qr-code)
+- be able to read an [ISO/IEC 18004](https://www.iso.org/standard/83389.html) standard [QR code](#qr-code)
 - able to act in the [client role, using the Bluetooth GATT protocol](./data-retrieval)
 - support Curve P-256 for ECDH/ECDSA session encryption
 
@@ -21,9 +21,12 @@ More details of the in-person sharing flow are [available](./#understand-gov-uk-
 
 ## Device data shared in a GOV.UK Wallet QR code
 
-GOV.UK Wallet will use a QR code to begin device engagement, using the [ISO/IEC 18013-5](LINKEYLINK) standard. The use of QR codes is well established, and available across a wide range of devices. GOV.UK Wallet will not currently use other device engagement technologies, such as Near Field Contact (NFC).  
+GOV.UK Wallet will use a QR code to begin device engagement, using the [ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) standard. The use of QR codes is well established, and available across a wide range of devices. GOV.UK Wallet will not currently use other device engagement technologies, such as Near Field Contact (NFC).  
 
-When prompted by a user to share a credential, GOV.UK Wallet will generate a QR code that complies to the [ISO/IEC 18004](LINKLINKLINK) standard.  The QR code will allow you to access GOV.UK Wallet's [device engagement structure](#device-engagement-structure).
+When prompted by a user to share a credential, GOV.UK Wallet will generate the QR code for you to read.  The QR code will allow you to read:
+
+- GOV.UK Wallet's [device engagement structure](#device-engagement-structure)
+- the [ephemeral public key generated](bluetooth-service.html#before-you-connect-to-a-gov-uk-wallet-holders-device) by the credential holders device
 
 ### Device engagement structure
 
