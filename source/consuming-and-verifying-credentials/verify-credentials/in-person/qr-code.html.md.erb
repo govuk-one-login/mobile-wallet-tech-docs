@@ -1,11 +1,11 @@
 ---
-title: Understanding how verification apps connect to GOV.UK Wallet
-weight: 3
+title: Understanding how GOV.UK Wallet generates QR code
+weight: 1
 last_reviewed_on: 2026-01-26
 review_in: 6 months
 ---
 
-# Establishing a connection to GOV.UK Wallet [review page heading]
+# Understanding how GOV.UK Wallet generates QR code
 
 GOV.UK Wallet will allow users to share information from credentials stored on their device with your verification app.  You will be able to programmatically confirm information about users, without revealing unnecessary personal details. 
 
@@ -14,12 +14,12 @@ Before you begin to verify a credential, you must establish a connection between
 To establish a connection successfully your verification app must:
 
 - be able to read an [ISO/IEC 18004](LINKLINKLINK) standard [QR code](#qr-code)
-- be bluetooth enabled
-- be able to use a `Curve P-256` elliptic curve key for ECDH/ECDSA [still need to add detail of this somewhere]
+- able to act in the [client role, using the Bluetooth GATT protocol](./data-retrieval)
+- support Curve P-256 for ECDH/ECDSA session encryption
 
 More details of the in-person sharing flow are [available](./#understand-gov-uk-wallet-s-in-person-sharing-flow).
 
-## Understanding the structure of a GOV.UK Wallet QR code
+## Device data shared in a GOV.UK Wallet QR code
 
 GOV.UK Wallet will use a QR code to begin device engagement, using the [ISO/IEC 18013-5](LINKEYLINK) standard. The use of QR codes is well established, and available across a wide range of devices. GOV.UK Wallet will not currently use other device engagement technologies, such as Near Field Contact (NFC).  
 
@@ -43,7 +43,8 @@ A complete example [CBOR is available](#qr-code-generation).
 #### Device retrieval method
 
 You can use the `DeviceRetrievalMethod` element in your verification app to select the appropriate connection method to begin sharing credentials. 
-Initially GOV.UK Wallet will only support Bluetooth Low Energy (BLE) connections.  GOV.UK Wallet will set this value to `2` to indicate BLE support, for example:
+
+Initially GOV.UK Wallet will only support BLE connections.  GOV.UK Wallet will set this value to `2` to indicate BLE support, for example:
 
 ```
 ── ? 2 : [DeviceRetrievalMethod]+
@@ -126,5 +127,3 @@ Below is an example of the `DeviceEngagement` structure as a CBOR diagnostic:
         ]
     ]
 ```
-
-[//]: # (---- need to cover the GATT server and the role of bluetooth somewhere)

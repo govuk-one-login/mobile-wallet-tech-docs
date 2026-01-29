@@ -1,0 +1,54 @@
+---
+title: Understanding GOV.UK Wallet Bluetooth service requirements
+weight: 2
+last_reviewed_on: 2026-01-26
+review_in: 6 months
+---
+
+# Understanding GOV.UK Wallet Bluetooth service requirements
+
+GOV.UK Wallet allows your verification app to retrieve credential information, when a user agrees to share it.  Credential information is shared over a Bluetooth Low Energy (BLE) connection, using the Generic Attribute Profile (GATT) protocol.
+
+To retrieve credential information from GOV.UK Wallet, your verification device must have this capability. More details of the in-person sharing flow are [available](./#understand-gov-uk-wallet-s-in-person-sharing-flow).
+
+When sharing credential details, GOV.UK Wallet will make the holders device discoverable for you to connect.  This is also known as taking the Peripheral role.  GOV.UK Wallet sets this role in the [device engagement structure](#device-engagement-structure), when you first [read the holders QR code](./device-engagement/).  
+
+Your verification device must take the Central role, and request to connect to the holder's device.  
+
+## Before you connect to a GOV.UK Wallet holders device
+
+Before you establish your connection to a holders device, you must share the public key for your session.  
+
+Your public key must:
+
+- use Curve P-256 for ECDH/ECDSA
+- be ephemeral and used for a single presentation session only
+- stored only in temporary memory and not persisted
+
+
+## Creating a sharing session (session establishment)
+
+GOV.UK Will create a GATT service with the following characteristics:
+
+[//]: # (confirm uuids are right as not same length)
+| Name            | UUID                                 | Properties                     |
+|-----------------|--------------------------------------|--------------------------------|
+| `State`         | 00000001-A123-48CE-896B-4C76973373E6 | Notify, Write Without Response |
+| `Client2Server` | 00000002-A123-48CE-896B-4C76973373E6 | Write Without Response         |
+| `Server2Client` | 0000003-A123-48CE-896B-4C76973373E6  | Notify                         |
+
+The characteristics of the service, including the uuid's are specified in the [ISO 18013-5](LINKLINKLINK) standard.
+
+[//]: # (session establishment, device request and device response will be covered in more detail in DCMAW-16821, 16822 and 16824)
+
+Once your verification device has connected to the holders device, you will be able to:
+
+- set the `State` characteristic to `0x01`, once you are ready to receive messages
+- send a message to the holders device using the `Client2Server` characteristic, to begin `SessionEstablishment`  
+
+The holders device will:
+
+- send `DeviceResponse` messages to your verification device, using the `Server2Client` characteristic 
+
+Once the secure session has been confirmed, your verification app will be able to retrieve encrypted credential information messages for you to use in your verification process. The maximum length of a message is 512 bytes.  Any messages larger than this, for example images, must be divided into parts.
+
