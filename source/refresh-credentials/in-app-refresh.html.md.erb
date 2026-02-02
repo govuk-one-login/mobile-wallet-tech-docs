@@ -1,0 +1,66 @@
+---
+title: Use in-app credential refresh
+weight: 8
+last_reviewed_on: 2026-01-20
+review_in: 6 months
+---
+
+# Use in-app credential refresh
+
+[intro]
+
+List things you need to do, link to its subheading.
+
+Add subheading for each thing that needs to be changed
+Link to its tech docs
+
+
+
+
+## Understand GOV.UK Wallet’s automatic in-app refresh flow
+
+This diagram shows the exchange between a government service (the ‘credential issuer’) and GOV.UK Wallet when the user refreshes a credential with the automatic in-app method. This diagram, and the descriptions below it, are an explanation of each step in the process.
+
+<!--
+this is the sequence diagram for manual refresh - use same syntax for auto diagram
+
+<div aria-hidden="true">
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+</script>
+
+<html lang="en">
+  <body>
+    <pre class="mermaid">
+  sequenceDiagram
+
+  autonumber
+  actor user
+  participant ecri as Credential Issuer
+  participant app as App
+
+  note over ecri,app: On or near <br> credential expiry
+  user->>app: Opens GOV.UK One Login App <br> and goes to the credential
+  activate app
+    app->>ecri: Gets credential issuer metadata <br>`/.well-known/openid-credential-issuer`
+    activate ecri
+    ecri-->>app: Returns credential issuer metadata
+    deactivate ecri
+    app->>app: Finds `credential_refresh_web_journey_url` in metadata
+    app->>app: Validates `credential_refresh_web_journey_url`
+  deactivate app
+  user->>app: Clicks 'Refresh' button
+  app->>user: Opens `credential_refresh_web_journey_url` in user's browser
+  </pre>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    </script>
+  </body>
+</html>
+</div>
+
+-->
+
+[get sequence diagram from Mudassar]
+
+[add steps]
