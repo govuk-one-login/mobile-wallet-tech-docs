@@ -9,9 +9,9 @@ phase: Beta
 
 # Links to show on right-hand-side of header
 header_links:
-  GOV.UK Wallet: /
-  Issue credentials: /issue-credentials/issue-credentials/
-  Verify credentials: /verify-credentials/verify-credentials/
+  GOV.UK Wallet documentation: /
+  Issue credentials: /issue-credentials/
+  Verify credentials: /verify-credentials/
 
   # Links to show in the page footer
 footer_links:
@@ -40,10 +40,6 @@ prevent_indexing: false
 show_contribution_banner: false
 github_repo: govuk-one-login/mobile-wallet-tech-docs
 github_branch: main
-
-redirects:
-  /issue-credentials/index.html: /issue-credentials/issue-credentials/index.html
-  /verify-credentials/index.html: /verify-credentials/verify-credentials/index.html
 
 # API description
 api_path: ./openapi/cri.yaml
