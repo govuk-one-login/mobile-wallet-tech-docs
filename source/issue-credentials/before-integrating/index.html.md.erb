@@ -26,7 +26,7 @@ When you complete the GOV.UK One Login onboarding process, make sure you have:
 
 Your credential template will be created from the following details:
 
-- the credential type - this can be [mdoc](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) or [JWT VC](https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/)
+- the credential type - this can be [mdoc](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) or [JWT VC following the W3C Verifiable Credentials Data Model v2.0](https://www.w3.org/TR/vc-data-model-2.0/)
 - the attributes you want to include in the digital credential and its schema
 - the colour of the digital card
 - whether users can have multiple instances of this credential, or only one at a time
@@ -46,7 +46,7 @@ When you are preparing to issue a credential to GOV.UK Wallet you must align wit
 GOV.UK Wallet will support multiple credential formats to represent government documents. These documents can be: 
 
 - [mdoc-based credentials for the digital driving licence](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)
-- other verifiable credentials (VCs), including [W3C Verifiable Credential Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/) and later [other formats allowing selective disclosure of attributes](https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/)
+- verifiable credentials (VCs) following the [W3C Verifiable Credential Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/) without selective disclosure support
 
 GOV.UK Wallet supports [OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) for its issuance flow.
 
