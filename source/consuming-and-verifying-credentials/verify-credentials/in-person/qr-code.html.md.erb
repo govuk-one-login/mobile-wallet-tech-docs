@@ -1,17 +1,17 @@
 ---
-title: Understanding how GOV.UK Wallet generates QR code
+title: Understanding GOV.UK Wallet QR codes for in person flows
 weight: 1
 last_reviewed_on: 2026-01-26
 review_in: 6 months
 ---
 
-# Understanding how GOV.UK Wallet generates QR code
+# Understanding GOV.UK Wallet QR codes for in person flows
 
-GOV.UK Wallet will allow users to share credential information with your verification app.  You will be able to programmatically confirm this information, without revealing unnecessary personal details. 
+GOV.UK Wallet will allow users to share attributes from credentials, which you can use in your verification process.  You will be able to programmatically confirm this information, without revealing unnecessary personal details. 
 
-Before you begin to verify a credential, you must establish a connection between the device holding the credential and your verification app. This is known as device engagement.
+Before you begin your verification process, you must establish a connection with the device holding the credential. This is known as device engagement.
 
-To establish a connection successfully your verification app must:
+To establish a connection successfully you must:
 
 - be able to read an [ISO/IEC 18004](https://www.iso.org/standard/83389.html) standard [QR code](#qr-code)
 - able to act in the [client role, using the Bluetooth GATT protocol](./data-retrieval)
@@ -30,7 +30,7 @@ When prompted by a user to share a credential, GOV.UK Wallet will generate the Q
 
 ### Device engagement structure
 
-GOV.UK Wallet will share the `DeviceEngagement` structure of a credential when you read the generated QR code,  in the form of a Concise Binary Object Representation (CBOR).  This CBOR will give your verification app the information it will need to configure the data sharing flow. 
+GOV.UK Wallet will share the `DeviceEngagement` structure of a credential when you read the generated QR code,  in the form of a Concise Binary Object Representation (CBOR).  This CBOR will give you the information you need to configure the data sharing flow. 
 
 The GOV.UK Wallet `DeviceEngagement` structure will contain:
 
@@ -77,7 +77,7 @@ This is an example `DeviceRetrievalMethod` CBOR:
 
 #### Retrieval options
 
-When device engagement begins, GOV.UK Wallet will take the peripheral role and wait for your verification app to connect. GOV.UK Wallet will enable this setting in the `RetrievalOptions`, as well as disabling client mode.  GOV.UK will also provide a randomly generated UUID for the sharing session. 
+When device engagement begins, GOV.UK Wallet will take the peripheral role and wait for you to connect. GOV.UK Wallet will enable this setting in the `RetrievalOptions`, as well as disabling client mode.  GOV.UK will also provide a randomly generated UUID for the sharing session. 
 
 For example:
 
@@ -94,7 +94,7 @@ For example:
 
 #### Example device engagement structure
 
-Below is an example of a `DeviceEngagement` structure, containing all the elements your verification app will be able to use:
+Below is an example of a `DeviceEngagement` structure, containing all the elements you will be able to use:
 
 ```
 DeviceEngagement
