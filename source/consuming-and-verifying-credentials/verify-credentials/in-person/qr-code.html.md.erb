@@ -25,10 +25,7 @@ More details of the in-person sharing flow are [available](./#understand-gov-uk-
 
 GOV.UK Wallet will use a QR code to begin device engagement, using the [ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) standard. The use of QR codes is well established, and available across a wide range of devices. GOV.UK Wallet will not currently use other device engagement technologies, such as Near Field Communication (NFC).  
 
-When prompted by a user to share a credential, GOV.UK Wallet will generate the QR code for you to read.  The QR code contains:
-
-- GOV.UK Wallet's [device engagement structure](#device-engagement-structure)
-- the [ephemeral public key generated](bluetooth-service.html#before-you-connect-to-a-gov-uk-wallet-holders-device) by the credential holders device
+When prompted by a user to share a credential, GOV.UK Wallet will generate the QR code for you to read.  The QR code contains GOV.UK Wallet's [device engagement structure](#device-engagement-structure).
 
 ### Personally identifiable information
 
@@ -38,7 +35,7 @@ The QR code does not contain any personally identifiable information about the u
 
 ### Device engagement structure
 
-GOV.UK Wallet will share the `DeviceEngagement` structure of a credential when you read the generated QR code,  in the form of a Concise Binary Object Representation (CBOR).  This CBOR will give you the information you need to configure the data sharing flow. 
+GOV.UK Wallet will share the `DeviceEngagement` structure of a credential when you read the generated QR code, in the form of a Concise Binary Object Representation (CBOR).  This CBOR will give you the information you need to configure the data sharing flow. 
 
 The GOV.UK Wallet `DeviceEngagement` structure will contain:
 
