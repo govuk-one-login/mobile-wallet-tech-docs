@@ -17,7 +17,7 @@ When sharing credential details, GOV.UK Wallet will make the holders device disc
 
 ### Bluetooth service characteristics
 
-When a holders device takes the peripheral role, GOV.UK Wallet will create a GATT service with the following characteristics:
+When a holder's device takes the peripheral role, GOV.UK Wallet will create a GATT service with the following characteristics:
 
 | Name            | UUID                                 | Properties                     |
 |-----------------|--------------------------------------|--------------------------------|
@@ -33,7 +33,7 @@ Once you have connected to a holders device, you can ask GOV.UK Wallet to share 
 
 #### Connecting in the central role
 
-When connected in the central role, you will be able to:
+When connected in the central role, you can:
 
 - set the `State` characteristic to `0x01`, to indicate you are ready to receive messages
 - send a message to the holders device using the `Client2Server` characteristic, to begin `SessionEstablishment`  
@@ -48,10 +48,10 @@ Your public key must:
 
 #### Connecting in the peripheral role
 
-When connected in the peripheral role, GOV.UK Wallet will be able to:
+When connected in the peripheral role, GOV.UK Wallet will:
 
 - send `DeviceResponse` messages to your verification device, using the `Server2Client` characteristic
 
-Once the secure session has been confirmed, your verification app will be able to retrieve encrypted credential information messages for you to use in your verification process. 
+Once the secure session has been confirmed, you will be able to retrieve encrypted credential information messages to use in your verification process. 
 
 The maximum length of a message is 512 bytes.  Any messages larger than this, for example images, must be divided into parts.
