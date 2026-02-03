@@ -7,14 +7,16 @@ review_in: 6 months
 
 # Understanding GOV.UK Wallet QR codes for in person flows
 
-GOV.UK Wallet will allow users to share attributes from credentials, which you can use in your verification process.  You will be able to programmatically confirm this information, without revealing unnecessary personal details. 
+GOV.UK will allow you to verify attributes from credentials, if a user consents to share them with you.  You can use the shared attributes in your verification process.  When a user agrees to share their credential in person this is known as a proximity flow.
+
+Using in person verification you will be able to programmatically confirm information held in a credential, without revealing unnecessary details about the user. 
 
 Before you begin your verification process, you must establish a connection with the device holding the credential. This is known as device engagement.
 
-To establish a connection successfully you must:
+To establish a connection successfully you must be able to:
 
-- be able to read an [ISO/IEC 18004](https://www.iso.org/standard/83389.html) standard [QR code](#qr-code)
-- able to act in the [client role, using the Bluetooth GATT protocol](./data-retrieval)
+- read an [ISO/IEC 18004](https://www.iso.org/standard/83389.html) standard [QR code](#qr-code)
+- act in the [client role, using the Bluetooth GATT protocol](./data-retrieval)
 - support Curve P-256 for ECDH/ECDSA session encryption
 
 More details of the in-person sharing flow are [available](./#understand-gov-uk-wallet-s-in-person-sharing-flow).
@@ -27,6 +29,12 @@ When prompted by a user to share a credential, GOV.UK Wallet will generate the Q
 
 - GOV.UK Wallet's [device engagement structure](#device-engagement-structure)
 - the [ephemeral public key generated](bluetooth-service.html#before-you-connect-to-a-gov-uk-wallet-holders-device) by the credential holders device
+
+### Personally identifiable information
+
+The QR code will allow you to request a secure connection to the user's device.  You will use this connection to request credential attributes you wish to use in your verification process.  
+
+The QR code does not contain any personally identifiable information about the user.
 
 ### Device engagement structure
 
