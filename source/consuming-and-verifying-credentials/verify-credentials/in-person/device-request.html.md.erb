@@ -5,7 +5,7 @@ last_reviewed_on: 2026-02-04
 review_in: 6 months
 ---
 
-# GOV.UK Wallet Bluetooth service requirements
+# Request credential information from a GOV.UK Wallet holder's device
 
 GOV.UK Wallet allows your verification process to receive credential information, when a user agrees to share it.  Credential information is shared over a Bluetooth Low Energy (BLE) connection, using the Generic Attribute Profile (GATT) protocol.
 
@@ -50,7 +50,7 @@ The maximum length of a message is 512 bytes.  Any messages larger than this, fo
 
 When your connection is ready, you will be able to send a message to request encrypted credential information from GOV.UK Wallet.  This must be a `SessionEstablishment` structure, in the form of a Concise Binary Object Representation (CBOR).  This will contain your:
 
-- [device request](#device-request), encrypted with a symmetric Curve P-256 key
+- [device request](#example-device-request-structure), encrypted with a symmetric Curve P-256 key
 - ephemeral public key for the session
 
 Your public key must:
@@ -66,7 +66,7 @@ Below is an example `SessionEstablishment` CBOR, containing the elements GOV.UK 
 ```
 SessionEstablishment
 ├── eReaderKey : #6.24(bstr .cbor EDeviceKey)
-└── data : bstr  ; Encrypted mdoc request
+└── data : bstr  ; Encrypted device request
 ```
 
 Below is an example of the `SessionEstablishment` as a CBOR diagnostic:
@@ -100,4 +100,57 @@ SessionTranscript = [
 ├── EReaderKeyBytes : #6.24(bstr .cbor EReaderKeyBytes)
 └── Handover : QRHandover
     └── null
+```
+### Example device request structure
+
+The `DeviceRequest` structure you include in your [`SessionEstablishment.data` element](#send-a-session-establishment-message), tells GOV.UK Wallet which attributes you wish to use in your verification process.   
+
+Below is an example CBOR diagnostic, requesting mandatory elements from an mDL:
+
+```
+{
+    "version": "1.1",
+    "docRequests": [
+        {
+            "itemsRequest": 24(<<
+            {
+                "docType": "org.iso.18013.5.1.mDL",
+                "nameSpaces": {
+                    "org.iso.18013.5.1": {
+                        "portrait": true,
+                        "given_name": true,
+                        "age_over_21": false,
+                        "family_name": true
+                    }
+                }
+            }
+            >>)
+        }
+    ]
+}
+
+```
+
+You can find details of [credentials that are available in GOV.UK Wallet here](/consuming-and-verifying-credentials/credentials-in-wallet).
+
+## Handling device request errors
+
+If you are unable to successfully establish a connection to a holder's device, you must terminate the session.  Before you terminate the session, you should send a `SessionData` message containing the appropriate status code.  
+
+GOV.UK Wallet will expect one of the following status codes:
+
+| Status code | Description                                            | 
+|-------------|--------------------------------------------------------| 
+| 10          | There was an error encrypting the device request.      | 
+| 11          | There was an error decoding the GOV.UK Wallet QR code. | 
+| 20          | Non-specific error or session termination.             | 
+
+This is an example of a `SessionData` message:
+
+```
+
+SessionData = {
+    ? "status": uint ; status code from table abve
+}
+
 ```
