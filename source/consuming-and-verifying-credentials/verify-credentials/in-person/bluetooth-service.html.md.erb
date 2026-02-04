@@ -1,7 +1,7 @@
 ---
-title: Understanding GOV.UK Wallet Bluetooth service requirements
+title: GOV.UK Wallet Bluetooth service requirements
 weight: 2
-last_reviewed_on: 2026-01-26
+last_reviewed_on: 2026-02-04
 review_in: 6 months
 ---
 
@@ -11,9 +11,9 @@ GOV.UK Wallet allows your verification process to receive credential information
 
 To retrieve credential information from GOV.UK Wallet, you must have this capability. More details of the in-person sharing flow are [available](./#understand-gov-uk-wallet-s-in-person-sharing-flow).
 
-When sharing credential details, GOV.UK Wallet will make the holder's device discoverable for you to connect.  This is known as taking the Peripheral role.  GOV.UK Wallet sets this role in the [`RetrievalOptions`](qr-code.html#retrieval-options) when you first [read the holder's QR code](qr-code).  You must take the Central role, and request to connect to the holder's device.  
+## Connect to a credential holder's device
 
-## Creating a sharing session
+When sharing credential details, GOV.UK Wallet will make the holder's device discoverable for you to connect.  This is known as taking the Peripheral (server) role.  GOV.UK Wallet sets this role in the [`RetrievalOptions`](qr-code.html#retrieval-options) when you first [read the holder's QR code](qr-code).  You must take the Central (client) role, and request to connect to the holder's device.  
 
 ### Bluetooth service characteristics
 
@@ -27,31 +27,77 @@ When a holder's device takes the peripheral role, GOV.UK Wallet will create a GA
 
 The UUID's of these characteristics are specified in the [ISO 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) standard.
 
-### Session establishment
+Once you have connected to a holder's device, you can ask GOV.UK Wallet to share encrypted credential information.
 
-Once you have connected to a holder's device, you can ask GOV.UK Wallet to share credential information.  This is known as session establishment.
-
-#### Connecting in the central role
+### Connect in the central role
 
 When connected in the central role, you can:
 
 - set the `State` characteristic to `0x01`, to indicate you are ready to receive messages
-- send a message to the holder's device using the `Client2Server` characteristic, to begin `SessionEstablishment`  
+- send a [message to the holder's](#send-a-session-establishment-message) device using the `Client2Server` characteristic, to begin session establishment
 
-To establish a sharing session, you must also share your public key.
-
-Your public key must:
-
-- use Curve P-256 for ECDH/ECDSA.  This will also be used for secure session encryption
-- be ephemeral and used for a single presentation session only
-- be stored only in temporary memory and not persisted
-
-#### Connecting in the peripheral role
+### Connect in the peripheral role
 
 When connected in the peripheral role, GOV.UK Wallet will:
 
 - send `DeviceResponse` messages to your verification device, using the `Server2Client` characteristic
 
-Once the secure session has been confirmed, you will be able to retrieve encrypted credential information messages to use in your verification process. 
+Once the secure session has been confirmed, you will be able to retrieve encrypted credential information. You can this information in your verification process. 
 
 The maximum length of a message is 512 bytes.  Any messages larger than this, for example images, must be divided into parts.
+
+## Send a session establishment message
+
+When your connection is ready, you will be able to send a message to request encrypted credential information from GOV.UK Wallet.  This must be a `SessionEstablishment` structure, in the form of a Concise Binary Object Representation (CBOR).  This will contain your:
+
+- [device request](#device-request), encrypted with a symmetric Curve P-256 key
+- ephemeral public key for the session
+
+Your public key must:
+
+- use Curve P-256 for ECDH/ECDSA.  This will also be used for secure session encryption
+- only be used for a single presentation session
+- only be stored in temporary memory and not persisted
+
+### Example session establishment structure
+
+Below is an example `SessionEstablishment` CBOR, containing the elements GOV.UK requires to begin sharing:
+
+```
+SessionEstablishment
+├── eReaderKey : #6.24(bstr .cbor EDeviceKey)
+└── data : bstr  ; Encrypted mdoc request
+```
+
+Below is an example of the `SessionEstablishment` as a CBOR diagnostic:
+
+```
+{
+    "eReaderKey": 24(h'A420010102215820FF7E64F18B0352E789....B')
+    "data": h'41ed0d148104f57dab1a8dc9485f5662ae76.....ff'
+}
+
+```
+
+### Understand session transcript
+
+During session establishment, the peripheral and central device's will create a session transcript in the form of a `SessionTranscript` structure.  This is used when generating a unique key for the sharing session, which helps to prevent a sharing session from being altered or reused. 
+
+The `SessionTranscript` will contain:
+
+| Element                 | Description                                                                                                               | Data type | 
+|-------------------------|---------------------------------------------------------------------------------------------------------------------------|-----------|
+| `DeviceEngagementBytes` | [`DeviceEngagement`](qr-code.html#device-engagement-structure) structure, in the format of a base64 URL encoded CBOR.     | `bstr`    |
+| `EReaderKeyBytes`       | [`SessionEstablishment`](#send-a-session-establishment-message) `eReaderKey`, in the format of a base64 URL encoded CBOR. | `bstr`    | 
+| `Handover`              | GOV.UK Wallet uses QR a code for handover, and will set this element to `null`.                                           | `null`    | 
+
+
+Below is an example of a `SessionTranscript` CBOR:
+
+```
+SessionTranscript = [
+├── DeviceEngagementBytes : #6.24(bstr .cbor DeviceEngagement)
+├── EReaderKeyBytes : #6.24(bstr .cbor EReaderKeyBytes)
+└── Handover : QRHandover
+    └── null
+```
