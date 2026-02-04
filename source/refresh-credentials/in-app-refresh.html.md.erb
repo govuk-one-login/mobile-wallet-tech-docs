@@ -7,19 +7,26 @@ review_in: 6 months
 
 # Use in-app credential refresh
 
-[intro]
+GOV.UK Wallet lets your users get a new credential without going through the full credential issuance journey they used the first time it was issued.
 
-List things you need to do, link to its subheading.
+In-app refresh lets your user refresh their credential in the GOV.UK One Login app without returning to your service’s web journey. It does this by requesting a refresh token from GOV.UK One Login during the pre-authorised code exchange.
 
-Add subheading for each thing that needs to be changed
-Link to its tech docs
+We recommend using automatic in-app refresh as your main refresh method, as it is faster and simpler for your users.
 
+## Update credential offer
 
+For in-app refresh to work, you must add `credential_configuration_ids` to the [pre-authorised code JWT payload](../issue-a-credential/credential-offer/#the-pre-authorised-code) in your credential offer.
+
+The value you set for `credential_configuration_ids` must be the same as the name given in the metadata.
+
+## Add title - different credential endpoint call
+
+Credential endpoint - expect a call on their endpoint with a new access token. The `credential_configuration_ids` in the access token should match the one you gave.
 
 
 ## Understand GOV.UK Wallet’s automatic in-app refresh flow
 
-This diagram shows the exchange between a government service (the ‘credential issuer’) and GOV.UK Wallet when the user refreshes a credential with the automatic in-app method. This diagram, and the descriptions below it, are an explanation of each step in the process.
+This diagram shows the exchange between a government service (the ‘credential issuer’) and GOV.UK Wallet when the user refreshes a credential with the in-app method. This diagram, and the descriptions below it, are an explanation of each step in the process.
 
 <!--
 this is the sequence diagram for manual refresh - use same syntax for auto diagram

@@ -7,40 +7,20 @@ review_in: 6 months
 
 # Refresh credentials
 
-Digital credentials in GOV.UK Wallet have a technical expiry date, which is when the digital version of a user's credential is no longer valid and must be updated. You can set this technical expiry date using the [`validUntil` claim](/issue-a-credential/credential/#payload) in the credential. There is [more guidance on credential expiration](/issue-a-credential/credential/#guidance-on-credential-expiration).
+Digital credentials in GOV.UK Wallet have a technical expiry date, which is when the digital version of a user's credential is no longer valid and must be updated. You can set this technical expiry date using the [`validUntil` claim](/issue-a-credential/credential/#payload) in the credential. There is [more guidance on credential expiry](/issue-a-credential/credential/#guidance-on-credential-expiration).
 
 When a credential passes its `validUntil` date, it will fail programmatic verification and must be rejected by anyone who verifies it. The user will see their expired credential marked as 'Invalid' and greyed out in the app. 
 
 GOV.UK Wallet lets your users get a new credential without going through the longer credential issuance journey they used the first time it was issued.
 
-<!--
-[introduce automatic vs manual here]
--->
-
 Your users can refresh their credentials:
 
-- [in app](#in-app-credential-refresh), which lets your user refresh their credential from within the GOV.UK One Login app
-- [manually](#manual-credential-refresh), which takes your user back to your service to refresh their credential
+- [in app](refresh-credentials/in-app-refresh), which lets your user refresh their credential without leaving the GOV.UK One Login app
+- [manually](refresh-credentials/manual-refresh), which takes your user back to your service to refresh their credential
 
-## In-app credential refresh
-
-In-app refresh lets your user refresh their credential in the GOV.UK One Login app without returning to your service’s web journey.
-
-To use in-app refresh, you must… [get a refresh token and use it]. 
-
-We recommend using automatic in-app refresh as your main refresh method, as it is faster and simpler for your users.
-
-There is [more guidance on in-app credential refresh](in-app-refresh).
-
-## Manual credential refresh
-
-Manual credential refresh takes your user back to your service’s web journey to get a new credential. They will need to log in to GOV.UK One Login again and go through a shortened version of the original credential issuance journey.
-
-To use manual credential refresh, you need to specify a URL where your users can go through the credential refresh web journey in their browser. 
+We recommend using in-app refresh as your main refresh method, as it is faster and simpler for your users.
 
 We recommend using manual credential refresh:
 
 - as a backup method if automatic in-app refresh fails
 - if [user doesn’t meet ID requirement, fraud - check this]
-
-There is [more guidance on manual credential refresh](manual-refresh).
