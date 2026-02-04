@@ -1,7 +1,7 @@
 ---
 title: GOV.UK Wallet QR codes for in person flows
 weight: 1
-last_reviewed_on: 2026-01-26
+last_reviewed_on: 2026-02-04
 review_in: 6 months
 ---
 
@@ -50,10 +50,11 @@ There is a [complete CBOR example](#example-device-engagement-structure) availab
 
 #### Security
 
-
+```
 ├── 1 : Security
 │   ├── int: Cipher Suite ID       
 │   └── EDeviceKeyBytes : #6.24(bstr .cbor EDeviceKey)
+```
 
 #### Device retrieval method
 
