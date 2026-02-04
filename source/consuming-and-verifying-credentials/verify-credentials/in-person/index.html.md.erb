@@ -14,14 +14,14 @@ GOV.UK Wallet will allow users to share their credentials in person, for example
 
 For in-person credential verification, GOV.UK Wallet will support the following:
 
-| Feature             | Support at launch                       |
-|-------------|-----------------------------------------|
-| Device engagement   | QR code                                   |
-| Handover session establishment       | Not supported                     |
-| Reader authentication         | Supported                                |
-| Session encryption       | Only with Curve P-256 for ECDH/ECDSA          |
-| Data retrieval        | Via Bluetooth only, using GATT protocol for transmission where the holder takes the Peripheral role and acts as the GATT server         |
-| Device signature           | COSE EdDSA signatures only            |
+| Feature                        | Support at launch                                                                                                               |
+|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| Device engagement              | QR code                                                                                                                         |
+| Handover session establishment | Not supported                                                                                                                   |
+| Reader authentication          | Supported                                                                                                                       |
+| Session encryption             | Only with Curve P-256 for ECDH/ECDSA                                                                                            |
+| Data retrieval                 | Via Bluetooth only, using GATT protocol for transmission where the holder takes the Peripheral role and acts as the GATT server |
+| Device signature               | COSE EdDSA signatures only                                                                                                      |
 
 We'll publish further details of how we'll support these features, including GOV.UK Wallet’s verification profile, in future updates to this documentation.
 
@@ -68,13 +68,13 @@ This diagram shows an overview of how GOV.UK Wallet will handle in-person creden
 
 1. The credential holder opens the GOV.UK One Login app containing their mobile driving licence to present their information.
 
-1. The GOV.UK One Login app begins device engagement and generates a QR code that contains device engagement information and the app’s ephemeral public key.
+1. The GOV.UK One Login app begins device engagement and [generates a QR code that contains device engagement information](qr-code.html) and the app’s ephemeral public key.
 
 1. The verifier opens the verifier app on their device.
 
 1. Using the verifier app, the verifier scans the QR code displayed on the credential holder’s device.
 
-1. The verifier app begins session establishment by sending its ephemeral public key to the GOV.UK One Login app, and attempts to establish a secure Bluetooth connection.
+1. The verifier app begins session establishment by sending its ephemeral public key to the GOV.UK One Login app, and [attempts to establish a secure Bluetooth connection](bluetooth-service.html).
 
 1. The two devices establish a secure connection, and create a unique session key to encrypt the data shared during the session.
 
