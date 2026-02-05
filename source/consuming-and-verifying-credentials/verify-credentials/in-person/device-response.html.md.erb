@@ -1,0 +1,70 @@
+---
+title: GOV.UK Wallet device response message
+weight: 3
+last_reviewed_on: 2026-02-05
+review_in: 6 months
+---
+
+# Receive credential information from a GOV.UK Wallet holder's device
+
+When you [established your sharing session](bluetooth-service.html#send-a-session-establishment-message), GOV.UK Wallet will ask the user for consent to share their credential information.  If the user agrees, GOV.UK Wallet will send an encrypted `DeviceResponse` message through your secure session in the form of an encrypted Concise Binary Object Representation (CBOR).
+
+[//]: # (Credential information shared by GOV.UK Wallet is in the form of a document - make this fit somewhere)
+
+The GOV.UK Wallet `DeviceResponse` structure will contain:
+
+| Element     | Description                                                     | Data type     | 
+|-------------|-----------------------------------------------------------------|---------------|
+| `version`   | The version of the `DeviceResponse` structure.  Set to `"1.0"`. | `str`         |
+| `documents` | An array containing [signed digital documents]().               | `[Document]+` |
+
+## Understand the structure of a DeviceResponse document
+
+Documents shared in GOV.UK Wallet's `DeviceResponse` structure will contain:
+
+| Element        | Description                                                                               | Data type                                              | 
+|----------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------|
+| `docType`      | The standardised identifier for the document type.                                        | `DocType`                                              |
+| `issuerSigned` | A CBOR map containing mDoc [`nameSpaces` and  `IssuerAuth`](#example-issuer-signed-cbor). | `{<br/>nameSpaces: {str, arr},<br/> issuerAuth: arr }` |
+| `deviceSigned` | A CBOR map containing the [`deviceSignature`](LINKLINK).                                  | `{<br/>nameSpaces: {str, arr},<br/> issuerAuth: arr }` |
+| `errors`       | An optional CBOR map containing `namespace` identifiers and error codes.                  | `errors: {tstr, unit}`                                 |
+
+This is an example `DeviceResponse` CBOR, for an mDL `docType`:
+
+```
+DeviceResponse
+├── version : tstr
+├── ? documents : [Document]+
+│   └── Document
+│       ├── docType : "org.iso.18013.5.1.mDL"
+│       ├── issuerSigned
+│       │   ├── {NAMESPACES}
+│       │   └── issuerAuth : {ISSUER_AUTH}
+│       └── ? errors
+│           └── {ERRORS}
+```
+
+### Example issuer signed CBOR
+
+The `DeviceResponse` document contains `nameSpaces`, taken from the credential stored in the GOV.UK Wallet.  You can use the `elementItendifier` and `elementValue` in each `NameSpace` in your verification process.  These are set by the [credential issuer](LINKLINK). 
+
+`IssuerAuth` is a `COSE_Sign1` object which contains cryptographic information used to verify the `issuerSigned` `namespace`.
+
+This is an example `nameSpaces` CBOR, for an mDL `docType`:
+```
+├── issuerSigned
+│       │   ├── ? nameSpaces : NameSpace => [IssuerSignedItemBytes]+
+│       │   │   └── IssuerSignedItemBytes = #6.24(bstr .cbor IssuerSignedItem)
+│       │   │       └── "org.iso.18013.5.1"
+│       │   │           ├── digestID : 0
+│       │   │           ├── random : h'8798645B20EA200E19FFABAC92624BEE6AEC63
+│       │   │           ├── elementIdentifier : age_over_25
+│       │   │           └── elementValue : false
+│       │   └── issuerAuth : [
+                    ; COSE_Sign1 - copied from initial mdoc issuance
+                ]
+```
+
+
+[//]: # (for the deviceSigned section)
+[//]: # (The [ISO/IEC 18013-5]&#40;https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en&#41; standard also allows the `deviceSigned` element.  GOV.UK Wallet will not present any `deviceSigned` items.)

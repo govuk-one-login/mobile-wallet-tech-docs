@@ -46,6 +46,11 @@ Once the secure session has been confirmed, you will be able to retrieve encrypt
 
 The maximum length of a message is 512 bytes.  Any messages larger than this, for example images, must be divided into parts.
 
+### Cancelling a sharing session
+
+A sharing session can be canceled by the central, or peripheral device. If your verification process needs to cancel a session, you must set the `State` characteristic to `0x02`.  As the holder's device can also update this characteristic, your verification process must listen for any messages which change `State` value.
+
+
 ## Send a session establishment message
 
 When your connection is ready, you will be able to send a message to request encrypted credential information from GOV.UK Wallet.  This must be a `SessionEstablishment` structure, in the form of a Concise Binary Object Representation (CBOR).  This will contain your:
