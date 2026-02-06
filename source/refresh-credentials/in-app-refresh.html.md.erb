@@ -7,8 +7,6 @@ review_in: 6 months
 
 # Use in-app credential refresh
 
-GOV.UK Wallet lets your users get a new credential without going through the full credential issuance journey they used the first time it was issued.
-
 In-app refresh lets your user refresh their credential in the GOV.UK One Login app without returning to your service’s web journey. It does this by requesting a refresh token from GOV.UK One Login during the pre-authorised code exchange.
 
 We recommend using automatic in-app refresh as your main refresh method, as it is faster and simpler for your users.
@@ -24,6 +22,12 @@ The value you set for `credential_configuration_ids` must be the same as the nam
 Credential endpoint - expect a call on their endpoint with a new access token. The `credential_configuration_ids` in the access token should match the one you gave.
 
 Tokens different depending on first time issuance or refresh. Check validity.
+
+
+
+
+
+
 
 
 ## Understand GOV.UK Wallet’s automatic in-app refresh flow
@@ -68,8 +72,9 @@ this is the sequence diagram for manual refresh - use same syntax for auto diagr
 </html>
 </div>
 
--->
+
 
 [get sequence diagram from Mudassar]
 
 [add steps]
+-->
