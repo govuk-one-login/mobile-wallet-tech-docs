@@ -1,7 +1,7 @@
 ---
-title: GOV.UK Wallet QR codes for in person flows
+title: Read GOV.UK Wallet QR codes for in person flows
 weight: 1
-last_reviewed_on: 2026-02-04
+last_reviewed_on: 2026-02-09
 review_in: 6 months
 ---
 
@@ -21,7 +21,7 @@ There is more guidance available on the [in-person sharing flow](./#understand-g
 
 GOV.UK Wallet will use a QR code to begin device engagement using the [ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) standard. GOV.UK Wallet does not currently support other device engagement technologies, such as Near Field Communication (NFC).  
 
-When prompted by a user to share a credential, GOV.UK Wallet will generate the QR code for you to read.  The QR code contains GOV.UK Wallet's [device engagement structure](#device-engagement-structure).
+When prompted by a user to share a credential, GOV.UK Wallet will generate the QR code for you to read.
 
 ### Personally identifiable information
 
@@ -29,122 +29,18 @@ The QR code will allow you to request a secure connection to the user's device. 
 
 The QR code does not contain any personally identifiable information about the user.
 
-### Device engagement structure
+## QR code URL
 
-GOV.UK Wallet will share the `DeviceEngagement` structure of a credential when you read the generated QR code, in the form of a Concise Binary Object Representation (CBOR).  This CBOR will give you the information you need to configure the data sharing flow. 
+GOV.UK Wallet will share information you need to configure the data sharing flow, when you read the generated QR code.  This is in the form of a Concise Binary Object Representation (CBOR) containing details such as:
 
-The GOV.UK Wallet `DeviceEngagement` structure will contain:
+- GOV.UK Wallet's public key
+- encryption methods used in the sharing flow
+- instructions for [how to configure your bluetooth session](device-request.html).
 
-| Element                                  | Description                                                                      | Data type           | 
-|------------------------------------------|----------------------------------------------------------------------------------|---------------------|
-| `Version`                                | The version of the `DeviceEngagement` structure.  Set to `"1.0"`.                | `str`               |
-| `Security`                               | Array containing [encryption and public key information](#security).             | `[int, bstr]`       | 
-| `DeviceRetrievalMethod`                  | Array describing supported [options for data sharing](#device-retrieval-method). | `[uint, uint, map]` | 
-| `DeviceRetrievalMethod.RetrievalOptions` | Map describing [supported mdoc modes and identifiers](#retrieval-options).       | `{bool,bool,bstr}`  | 
-  
-There is a [complete CBOR example](#example-device-engagement-structure) available.                                         
-
-#### Security
-
-Below is an example of a `Security` element, containing the public key and encryption information:
-
-```
-├── 1 : Security
-│   ├── int: Cipher Suite ID       
-│   └── EDeviceKeyBytes : #6.24(bstr .cbor EDeviceKey)
-```
-
-#### Device retrieval method
-
-You can use the `DeviceRetrievalMethod` element to find details about the connection methods GOV.UK Wallet has available. Initially GOV.UK Wallet will only support BLE connections.  
-
-GOV.UK Wallet will set this value to `2` to indicate BLE support, for example:
-
-```
-── ? 2 : [DeviceRetrievalMethod]+
-│   └── DeviceRetrievalMethod
-│       ├── uint: 2  # Sharing type (BLE)
-```
-
-GOV.UK Wallet will specify the `Version` of the `DeviceRetrievalMethod` structure, and will set this value to `1`.  The `DeviceRetrievalMethod` will also contain a CBOR map of [`RetrievalOptions`](#retrieval-options).  
-
-This is an example `DeviceRetrievalMethod` CBOR:
-
-```
-── ? 2 : [DeviceRetrievalMethod]+
-│   └── DeviceRetrievalMethod
-│       ├── uint: 2  # Sharing type (BLE)
-│       ├── uint: 1 
-│       └── RetrievalOptions 
-│           ├──{RETRIVAL_OPTIONS}   
-```
-
-#### Retrieval options
-
-When device engagement begins, GOV.UK Wallet will take the peripheral role and wait for you to connect. GOV.UK Wallet will enable this setting in the `RetrievalOptions`, as well as disabling client mode.  GOV.UK Wallet will also provide a randomly generated UUID for the sharing session. 
-
-For example:
-
-```
-── ? 2 : [DeviceRetrievalMethod]+
-│   └── DeviceRetrievalMethod
-│       ├── uint: 2  # Sharing type (BLE)
-│       ├── uint: 1 
-│       └── RetrievalOptions 
-│           ├── 0 : true # enable mdoc peripheral mode   
-│           ├── 1 : false # disable mdoc client mode       
-│           ├── ? 10 : h'11111111222233334444555555555555' #uuid for mdoc peripheral mode session         
-```
-
-#### Example device engagement structure
-
-Below is an example of a `DeviceEngagement` structure, containing all the elements you will be able to use:
-
-```
-DeviceEngagement
-├── 0 : Version                   
-├── 1 : Security
-│   ├── int: Cipher Suite ID       
-│   └── EDeviceKeyBytes : #6.24(bstr .cbor EDeviceKey)
-├── ? 2 : [DeviceRetrievalMethod]+
-│   └── DeviceRetrievalMethod
-│       ├── uint: Type             ; we will only support type 2 (BLE)
-│       ├── uint: Version          ; hardcoded to 1
-│       └── RetrievalOptions       ; hardcoded to 1
-│           ├── 0 : bool            ; support for mdoc peripheral mode   
-│           ├── 1 : bool            ; support for mdoc client mode       
-│           ├── ? 10 : bstr         ; uuid for mdoc peripheral mode      
-
-```
-
-Below is an example of the `DeviceEngagement` structure as a CBOR diagnostic:
-
-```
-{
-    0: "1.0",
-    1: [
-        1, 
-        24(h'A420010102215820FF7E64F1...')
-    ], 
-    2: [
-        [
-            2,
-            1, 
-            {
-                0: true,
-                1: false,
-                10: h'912f3084-f573-48a3-9bf3-e392262e6a52'
-            }
-        ]
-    ]
-```
-
-### QR code URL
-
-When you read a QR code generated by GOV.UK Wallet, you will receive the base64 URL encoded CBOR [`DeviceEngagement` structure](#device-engagement-structure).  This will be in the format of `mdoc:{URL_ENCODED_CBOR}`.
+When you read a QR code generated by GOV.UK Wallet, you will receive the information as the base64 URL encoded CBOR.  This will be in the format of `mdoc:{URL_ENCODED_CBOR}`.
 
 This is an example of a QR code URL:
 
 ```
-mdoc:owBjMS4wAYIB2BhYS6QgAQECIVgg_35k8YsDUueJExqcPh8UHXaWbJDq5EX4Y5sflISm3ogiWCA8_LpuqlBD3CNI3PIev_rImaLIchXJbEy3D07Zus_pOwKBgwIBowD1AfQKUBEREREiIjMzRERVVVVVVVU
+mdoc:owBjMS4wAYIB2BhYS6QgAQECIVgg_3....
 ```
