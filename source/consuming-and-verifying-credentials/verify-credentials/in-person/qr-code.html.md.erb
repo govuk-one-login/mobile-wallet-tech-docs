@@ -5,11 +5,7 @@ last_reviewed_on: 2026-02-04
 review_in: 6 months
 ---
 
-# GOV.UK Wallet QR codes for in person flows
-
-GOV.UK will allow you to verify attributes from credentials, if a user consents to share them with you.  You can use the shared attributes in your verification process.  When a user agrees to share their credential in person this is known as a proximity flow.
-
-Using in person verification you will be able to programmatically confirm information held in a credential, without revealing unnecessary details about the user. 
+# Read GOV.UK Wallet QR codes for in person flows
 
 Before you begin your verification process, you must establish a connection with the device holding the credential. This is known as device engagement.
 
@@ -19,11 +15,11 @@ To establish a connection successfully you must be able to:
 - act in the [client role, using the Bluetooth GATT protocol](./data-retrieval)
 - support Curve P-256 for ECDH/ECDSA session encryption
 
-More details of the in-person sharing flow are [available](./#understand-gov-uk-wallet-s-in-person-sharing-flow).
+There is more guidance available on the [in-person sharing flow](./#understand-gov-uk-wallet-s-in-person-sharing-flow).
 
 ## Device data shared in a GOV.UK Wallet QR code
 
-GOV.UK Wallet will use a QR code to begin device engagement, using the [ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) standard. The use of QR codes is well established, and available across a wide range of devices. GOV.UK Wallet will not currently use other device engagement technologies, such as Near Field Communication (NFC).  
+GOV.UK Wallet will use a QR code to begin device engagement using the [ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) standard. GOV.UK Wallet does not currently support other device engagement technologies, such as Near Field Communication (NFC).  
 
 When prompted by a user to share a credential, GOV.UK Wallet will generate the QR code for you to read.  The QR code contains GOV.UK Wallet's [device engagement structure](#device-engagement-structure).
 
@@ -50,6 +46,8 @@ There is a [complete CBOR example](#example-device-engagement-structure) availab
 
 #### Security
 
+Below is an example of a `Security` element, containing the public key and encryption information:
+
 ```
 ├── 1 : Security
 │   ├── int: Cipher Suite ID       
@@ -68,7 +66,7 @@ GOV.UK Wallet will set this value to `2` to indicate BLE support, for example:
 │       ├── uint: 2  # Sharing type (BLE)
 ```
 
-GOV.UK Wallet will specify the `Version` of the `DeviceRetrievalMethod` structure, this value will be set to `1`.  The `DeviceRetrievalMethod` will also contain a CBOR map of [`RetrievalOptions`](#retrieval-options).  
+GOV.UK Wallet will specify the `Version` of the `DeviceRetrievalMethod` structure, and will set this value to `1`.  The `DeviceRetrievalMethod` will also contain a CBOR map of [`RetrievalOptions`](#retrieval-options).  
 
 This is an example `DeviceRetrievalMethod` CBOR:
 
@@ -83,7 +81,7 @@ This is an example `DeviceRetrievalMethod` CBOR:
 
 #### Retrieval options
 
-When device engagement begins, GOV.UK Wallet will take the peripheral role and wait for you to connect. GOV.UK Wallet will enable this setting in the `RetrievalOptions`, as well as disabling client mode.  GOV.UK will also provide a randomly generated UUID for the sharing session. 
+When device engagement begins, GOV.UK Wallet will take the peripheral role and wait for you to connect. GOV.UK Wallet will enable this setting in the `RetrievalOptions`, as well as disabling client mode.  GOV.UK Wallet will also provide a randomly generated UUID for the sharing session. 
 
 For example:
 
