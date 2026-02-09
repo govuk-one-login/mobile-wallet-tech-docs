@@ -9,8 +9,6 @@ review_in: 6 months
 
 When you [established your sharing session](bluetooth-service.html#send-a-session-establishment-message), GOV.UK Wallet will ask the user for consent to share their credential information.  If the user agrees, GOV.UK Wallet will send an encrypted `DeviceResponse` message through your secure session in the form of an encrypted Concise Binary Object Representation (CBOR).
 
-[//]: # (Credential information shared by GOV.UK Wallet is in the form of a document - make this fit somewhere)
-
 The GOV.UK Wallet `DeviceResponse` structure will contain:
 
 | Element     | Description                                                     | Data type     | 
@@ -18,7 +16,7 @@ The GOV.UK Wallet `DeviceResponse` structure will contain:
 | `version`   | The version of the `DeviceResponse` structure.  Set to `"1.0"`. | `str`         |
 | `documents` | An array containing [signed digital documents]().               | `[Document]+` |
 
-## Understand the structure of a DeviceResponse document
+## Understand the elements in a DeviceResponse structure
 
 Documents shared in GOV.UK Wallet's `DeviceResponse` structure will contain:
 
@@ -44,13 +42,16 @@ DeviceResponse
 │           └── {ERRORS}
 ```
 
-### Example issuer signed CBOR
+### Example issuerSigned CBOR
 
-The `DeviceResponse` document contains `nameSpaces`, taken from the credential stored in the GOV.UK Wallet.  You can use the `elementItendifier` and `elementValue` in each `NameSpace` in your verification process.  These are set by the [credential issuer](LINKLINK). 
+The `issuerSigned` structure contains `nameSpaces`, taken from the credential stored in the GOV.UK Wallet.  These are set by the [credential issuer](LINKLINK), represent the fields present on the physical document.  
 
-`IssuerAuth` is a `COSE_Sign1` object which contains cryptographic information used to verify the `issuerSigned` `namespace`.
+You can use the `elementItendifier` and `elementValue` in each `NameSpace` in your verification process.  
 
-This is an example `nameSpaces` CBOR, for an mDL `docType`:
+`IssuerAuth` is a `COSE_Sign1` object, containing cryptographic information used when verifying each `NameSpace`.
+
+This is an example `issuerSigned` CBOR, containing an mDL `age_over_25` element:
+
 ```
 ├── issuerSigned
 │       │   ├── ? nameSpaces : NameSpace => [IssuerSignedItemBytes]+
@@ -65,6 +66,72 @@ This is an example `nameSpaces` CBOR, for an mDL `docType`:
                 ]
 ```
 
+More details of [credentials available in GOV.UK Wallet](LINKLINK) are available.
 
-[//]: # (for the deviceSigned section)
-[//]: # (The [ISO/IEC 18013-5]&#40;https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en&#41; standard also allows the `deviceSigned` element.  GOV.UK Wallet will not present any `deviceSigned` items.)
+### Example deviceSigned CBOR
+
+To verify ownership of the document being shared, the `deviceSigned` structure contains a `deviceAuth` CBOR map.  This holds `deviceSignature`, which is signed with private key that matches the public key present in the Mobile Security Object (MSO). 
+
+GOV.UK Wallet's `deviceSigned` structure also contains an empty `nampeSpaces` array.  GOV.UK Wallet will only share [issuer signed credentials](#example-issuersigned-cbor).
+
+This is an example `deviceSigned` CBOR:
+
+```
+├── deviceSigned
+│       │   ├── nameSpaces : DeviceNameSpacesBytes => [Device] # Empty CBOR map
+│       │   └── deviceAuth
+│       │       ├── deviceSignature : DeviceSignature
+```
+
+## Example DeviceResponse CBOR diagnostic
+
+The example below shows a GOV.UK Wallet mDL `DeviceResponse`.  In this example the holder has consented to share their:
+
+- family name
+- confirmation of age over 18
+
+
+```
+{
+    "version": "1.0",
+    "documents": [
+        {
+            "docType": "org.iso.18013.5.1.mDL",
+            "issuerSigned": {
+                "nameSpaces": {
+                    "org.iso.18013.5.1" : [
+                        24(<<
+                            {
+                             "digestID": 0 
+                             "random": h'8798....'
+                             "elementIdentifier": "family_name"
+                             "elementValue": "Johnson"
+                            }
+                        >>),
+                        24(<<
+                            {
+                             "digestID": 0 
+                             "random": h'87986....'
+                             "elementIdentifier": "age_over_18"
+                             "elementValue": "true"
+                            }
+                        >>)
+                    ],
+                }
+                "issuerAuth": [
+                    COSE_Sign1(....
+                ]
+            },
+            "deviceSigned": {
+                "nameSpaces": [ ], 
+                "deviceAuth": {
+                    "deviceSignature": [
+                        COSE_Sign1(....
+                    ]
+                }
+            }
+        }
+    ],
+    "status": 0
+}
+```
