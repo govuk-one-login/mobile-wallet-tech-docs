@@ -1,7 +1,7 @@
 ---
 title: Revoke a credential
 weight: 6
-last_reviewed_on: 2025-10-22
+last_reviewed_on: 2026-02-11
 review_in: 6 months
 ---
 
@@ -71,7 +71,7 @@ The JWT payload must contain the following claims:
 | Claim | Required or optional | Description                                                                                                                                                                                                                                                                     |
 |-------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `iss` | Required             | `iss` stands for 'issuer'. This is the [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.<br><br>Make sure you are using the correct `clientId` for your environment - production or integration. |
-| `iat` | Required             | `iat` stands for 'issued at'. This is the UNIX timestamp when the request JWT was issued, in seconds.                                                                                                                                                                           |
+| `iat` | Required             | `iat` stands for 'issued at'. This is the UNIX timestamp in seconds that the request JWT was issued.                                                                                                                                                                            |
 | `jti` | Required             | `jti` stands for 'JWT ID'. This provides a unique identifier for the JWT. The Status List Service will validate the format provided to make sure it is a lowercase UUID.                                                                                                        |
 | `uri` | Required             | `uri` stands for 'uniform resource identifier'. This is the uri of the status list that holds the status to revoke.                                                                                                                                                             |
 | `idx` | Required             | `idx` stands for 'index'. This is the index of the status to be revoked.                                                                                                                                                                                                        |
@@ -80,7 +80,7 @@ Your `uri` and `idx` must exactly match the response from the [`/issue` endpoint
 
 ### Example Request
 
-```commandline
+```TEXT
 POST /revoke HTTP/1.1
 Host: <API.CRS.ACCOUNT.GOV.UK>
 Content-Type: application/jwt
