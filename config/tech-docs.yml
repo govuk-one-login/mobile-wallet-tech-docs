@@ -4,15 +4,14 @@ host:
 # Header-related options
 show_govuk_logo: true
 service_name: Wallet
-service_link: https://www.gov.uk/wallet
+service_link: /
 phase: Beta
 
 # Links to show on right-hand-side of header
 header_links:
-  #About: 
-  #Get Started: 
-  Documentation: /
-  #Support: 
+  GOV.UK Wallet: /
+  Issue credentials: /issue-credentials/
+  Verify credentials: /verify-credentials/
 
   # Links to show in the page footer
 footer_links:
