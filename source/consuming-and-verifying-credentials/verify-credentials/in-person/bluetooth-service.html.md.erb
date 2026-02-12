@@ -1,0 +1,57 @@
+---
+title: Understanding GOV.UK Wallet Bluetooth service requirements
+weight: 2
+last_reviewed_on: 2026-01-26
+review_in: 6 months
+---
+
+# GOV.UK Wallet Bluetooth service requirements
+
+GOV.UK Wallet allows your verification process to receive credential information, when a user agrees to share it.  Credential information is shared over a Bluetooth Low Energy (BLE) connection, using the Generic Attribute Profile (GATT) protocol.
+
+To retrieve credential information from GOV.UK Wallet, you must have this capability. More details of the in-person sharing flow are [available](./#understand-gov-uk-wallet-s-in-person-sharing-flow).
+
+When sharing credential details, GOV.UK Wallet will make the holder's device discoverable for you to connect.  This is known as taking the Peripheral role.  GOV.UK Wallet sets this role in the [`RetrievalOptions`](qr-code.html#retrieval-options) when you first [read the holder's QR code](qr-code).  You must take the Central role, and request to connect to the holder's device.  
+
+## Creating a sharing session
+
+### Bluetooth service characteristics
+
+When a holder's device takes the peripheral role, GOV.UK Wallet will create a GATT service with the following characteristics:
+
+| Name            | UUID                                 | Properties                     |
+|-----------------|--------------------------------------|--------------------------------|
+| `State`         | 00000001-A123-48CE-896B-4C76973373E6 | Notify, Write Without Response |
+| `Client2Server` | 00000002-A123-48CE-896B-4C76973373E6 | Write Without Response         |
+| `Server2Client` | 0000003-A123-48CE-896B-4C76973373E6  | Notify                         |
+
+The UUID's of these characteristics are specified in the [ISO 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) standard.
+
+### Session establishment
+
+Once you have connected to a holder's device, you can ask GOV.UK Wallet to share credential information.  This is known as session establishment.
+
+#### Connecting in the central role
+
+When connected in the central role, you can:
+
+- set the `State` characteristic to `0x01`, to indicate you are ready to receive messages
+- send a message to the holder's device using the `Client2Server` characteristic, to begin `SessionEstablishment`  
+
+To establish a sharing session, you must also share your public key.
+
+Your public key must:
+
+- use Curve P-256 for ECDH/ECDSA.  This will also be used for secure session encryption
+- be ephemeral and used for a single presentation session only
+- be stored only in temporary memory and not persisted
+
+#### Connecting in the peripheral role
+
+When connected in the peripheral role, GOV.UK Wallet will:
+
+- send `DeviceResponse` messages to your verification device, using the `Server2Client` characteristic
+
+Once the secure session has been confirmed, you will be able to retrieve encrypted credential information messages to use in your verification process. 
+
+The maximum length of a message is 512 bytes.  Any messages larger than this, for example images, must be divided into parts.
