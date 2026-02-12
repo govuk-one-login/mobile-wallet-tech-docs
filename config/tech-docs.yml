@@ -9,7 +9,7 @@ phase: Beta
 
 # Links to show on right-hand-side of header
 header_links:
-  GOV.UK Wallet: /
+  GOV.UK Wallet documentation: /
   Issue credentials: /issue-credentials/
   Verify credentials: /verify-credentials/
 
