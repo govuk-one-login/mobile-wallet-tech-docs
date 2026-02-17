@@ -3,13 +3,13 @@ host:
 
 # Header-related options
 show_govuk_logo: true
-service_name: Wallet
+service_name: Wallet technical documentation
 service_link: /
 phase: Beta
 
 # Links to show on right-hand-side of header
 header_links:
-  GOV.UK Wallet documentation: /
+  GOV.UK Wallet technical documentation: /
   Issue credentials: /issue-credentials/
   Verify credentials: /verify-credentials/
 
