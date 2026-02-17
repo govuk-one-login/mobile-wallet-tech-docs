@@ -8,5 +8,7 @@ gem 'wdm', '~> 0.1.0', platforms: [:mswin, :mingw, :x64_mingw]
 # Windows does not come with time zone data
 gem 'tzinfo-data', platforms: [:mswin, :mingw, :x64_mingw, :jruby]
 
+gem 'html-proofer'
+
 # Include the tech docs gem
 gem 'govuk_tech_docs'
