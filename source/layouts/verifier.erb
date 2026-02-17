@@ -1,8 +1,8 @@
 <% verify_credentials_page = sitemap.resources.find {|resource| resource.path == "verify-credentials/index.html" } %>
 <% content_for :sidebar do %>
   <a href='/' class="toc__back-link govuk-link">&lsaquo; GOV.UK Wallet documentation</a>
-  <%= single_page_table_of_contents(verify_credentials_page.render({ layout: false }, {}), max_level: 3) %>
-  <%= render_page_tree verify_credentials_page.children, current_page, config, nil %>
+  <%= render_page_tree [verify_credentials_page], current_page, config, yield, include_child_resources: false %>
+  <%= render_page_tree verify_credentials_page.children, current_page, config, yield %>
 <% end %>
 
 <% wrap_layout :core do %>

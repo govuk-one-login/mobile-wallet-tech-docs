@@ -26,6 +26,7 @@ ga_tracking_id:
 # Enable multipage navigation in the sidebar
 multipage_nav: true
 
+# generate_unique_page_anchors: false
 # Enable collapsible navigation in the sidebar
 collapsible_nav: true
 
