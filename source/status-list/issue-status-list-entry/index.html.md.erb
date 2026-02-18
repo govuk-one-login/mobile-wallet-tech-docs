@@ -1,7 +1,7 @@
 ---
 title: Issue a status list entry
 weight: 2
-last_reviewed_on: 2025-10-22
+last_reviewed_on: 2026-02-11
 review_in: 6 months
 ---
 
@@ -54,11 +54,11 @@ The JSON Object Signing and Encryption (JOSE) header (based on [RFC-7515](https:
 }
 ```
 
-| Parameter | Required or optional | Description           |
-|-----------|----------------------|-----------------------|
-| `typ`     | Required             | `typ` stands for 'type'. You must set this value to be `JWT`. This is the media type of the complete JWT.    |
-| `alg`     | Required             | `alg` stands for 'algorithm'. You must set this value to be `ES256`. This is the algorithm used to sign the JWT.     |
-| `kid`     | Required             | `kid` stands for 'key ID'. This key ID must be present in your hosted JWKS. This is used to validate the JSON web signature (JWS).     |
+| Parameter | Required or optional | Description                                                                                                                        |
+|-----------|----------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| `typ`     | Required             | `typ` stands for 'type'. You must set this value to be `JWT`. This is the media type of the complete JWT.                          |
+| `alg`     | Required             | `alg` stands for 'algorithm'. You must set this value to be `ES256`. This is the algorithm used to sign the JWT.                   |
+| `kid`     | Required             | `kid` stands for 'key ID'. This key ID must be present in your hosted JWKS. This is used to validate the JSON web signature (JWS). |
 
 
 #### Payload
@@ -74,12 +74,12 @@ The JWT payload must contain the following claims:
 }
 ```
 
-| Claim | Required or optional | Description           |
-|-------|----------------------|-----------------------|
-| `iss` | Required             | `iss` stands for 'issuer'. This is the [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.<br><br>Make sure you are using the correct `clientId` for your environment - production or integration.    |
-| `iat` | Required             | `iat` stands for 'issued at'. This is the UNIX timestamp when the request JWT was issued.    |
-| `jti` | Required             | `jti` stands for 'JWT ID'. This provides a unique identifier for the JWT. The Status List Service will validate the format provided to make sure it is a lowercase UUID.    |
-| `statusExpiry` | Required    | The point after which the status expires. After this date the credential will be removed from the status list.<br><br>`statusExpiry` must be equal to or later than the issued credential's technical expiry time, known as the `validUntil` property. It may be useful to issue a status before the `validUntil` value is known. In this case, we recommend that you keep any resulting difference between `validUntil` and `statusExpiry` to a minimum.<br><br>`statusExpiry` must be a number in seconds, formatted as a UNIX timestamp. The Status List Service does not support credentials lasting over 1 year.    |
+| Claim          | Required or optional | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|----------------|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `iss`          | Required             | `iss` stands for 'issuer'. This is the [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.<br><br>Make sure you are using the correct `clientId` for your environment - production or integration.                                                                                                                                                                                                                                                                                                                                       |
+| `iat`          | Required             | `iat` stands for 'issued at'. This is the UNIX timestamp when the request JWT was issued, in seconds.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `jti`          | Required             | `jti` stands for 'JWT ID'. This provides a unique identifier for the JWT. The Status List Service will validate the format provided to make sure it is a lowercase UUID.                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `statusExpiry` | Required             | The point after which the status expires. After this date the credential will be removed from the status list.<br><br>`statusExpiry` must be equal to or later than the issued credential's technical expiry time, known as the `validUntil` property. It may be useful to issue a status before the `validUntil` value is known. In this case, we recommend that you keep any resulting difference between `validUntil` and `statusExpiry` to a minimum.<br><br>`statusExpiry` must be a number in seconds, formatted as a UNIX timestamp. The Status List Service does not support credentials lasting over 1 year. |
 
 ### Example Request
 
@@ -106,7 +106,7 @@ Content-Type: application/json
 }
 ```
 
-| Parameter | Description           |
-|-----------|-----------------------|
-| `uri`     | `uri` stands for 'uniform resource identifier'. This is the uri to the status list endpoint in which the new credential has been stored.<br><br>This will be formatted as `crs.account.gov.uk` for the production environment, and `crs.integration.account.gov.uk` for the integration environment.    |
-| `idx`     | `idx` stands for 'index'. This is the index at which the credential will be stored in the status list found on the uri.    |
+| Parameter | Description                                                                                                                                                                                                                                                                                          |
+|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `uri`     | `uri` stands for 'uniform resource identifier'. This is the uri to the status list endpoint in which the new credential has been stored.<br><br>This will be formatted as `crs.account.gov.uk` for the production environment, and `crs.integration.account.gov.uk` for the integration environment. |
+| `idx`     | `idx` stands for 'index'. This is the index at which the credential will be stored in the status list found on the uri.                                                                                                                                                                              |
