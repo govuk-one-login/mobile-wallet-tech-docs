@@ -8,7 +8,7 @@ layout: issuer
 
 # Refresh credentials
 
-Digital credentials in GOV.UK Wallet have a technical expiry date, which is when the digital version of a user's credential is no longer valid and must be updated. You can set this technical expiry date using the [`validUntil` claim](/issue-a-credential/credential/#payload) in the credential. There is [more guidance on credential expiration](/issue-a-credential/credential/#guidance-on-credential-expiration).
+Digital credentials in GOV.UK Wallet have a technical expiry date, which is when the digital version of a user's credential is no longer valid and must be updated. You can set this technical expiry date using the [`validUntil` claim](/issue-credentials/credential/#payload) in the credential. There is [more guidance on credential expiration](/issue-credentials/credential/#guidance-on-credential-expiration).
 
 When a credential passes its `validUntil` date, it will fail programmatic verification and must be rejected by anyone who verifies it. The user will see their expired credential marked as 'Invalid' and greyed out in the app. 
 
@@ -16,9 +16,9 @@ GOV.UK Wallet lets your users get a new credential without going through the lon
 
 ## Update credential issuer metadata
 
-GOV.UK Wallet will prompt your users when they need to refresh their valid credential. You can read more about [credential expiry](../issue-a-credential/metadata/#credential-expiry).
+GOV.UK Wallet will prompt your users when they need to refresh their valid credential. You can read more about [credential expiry](../issue-credentials/metadata/#credential-expiry).
 
-When your user taps the 'Refresh' button in the app, the app will take the user to the URL you provided in your [`credential_refresh_web_journey_url` parameter](../issue-a-credential/metadata/#credential-information). This will start their credential refresh journey in their web browser. At the end of this journey, you must provide a new credential offer that GOV.UK Wallet can use to request a new credential.
+When your user taps the 'Refresh' button in the app, the app will take the user to the URL you provided in your [`credential_refresh_web_journey_url` parameter](../issue-credentials/metadata/#credential-information). This will start their credential refresh journey in their web browser. At the end of this journey, you must provide a new credential offer that GOV.UK Wallet can use to request a new credential.
 
 You must also include the `credential_validity_period_max_days` parameter to set a maximum validity period. After this validity period, the credential must be refreshed. 
 
@@ -73,7 +73,7 @@ This diagram shows the exchange between a government service (the 'credential is
 
 3. Your service returns its credential issuer metadata.
 
-4. The app finds the [`credential_refresh_web_journey_url`](../issue-a-credential/metadata/#credential-information) value in the credential issuer metadata.
+4. The app finds the [`credential_refresh_web_journey_url`](../issue-credentials/metadata/#credential-information) value in the credential issuer metadata.
 
 5. The app validates the `credential_refresh_web_journey_url`.
 

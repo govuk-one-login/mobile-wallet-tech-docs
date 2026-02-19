@@ -11,7 +11,7 @@ layout: issuer
 
 You can use the `/issue` endpoint to request a status list slot for a credential you want to issue. This endpoint lets you retrieve a new `uri`/`idx` pair from a status list, which represents a unique credential being issued to a user's wallet.
 
-To use the `/issue` endpoint you must [register as a credential issuer with the Status List service](/status-list/before-issuing-status-record), and you must send your request as a signed JSON Web Token (JWT).
+To use the `/issue` endpoint you must [register as a credential issuer with the Status List service](issue-credentials/status-list/before-issuing-status-record), and you must send your request as a signed JSON Web Token (JWT).
 
 When you request a new `uri`/`idx` pair for a credential on a status list, the Status List service validates your request. If this validation is successful, the Status List service will issue a new `uri`/`idx` pair on one of its status lists.
 
@@ -77,7 +77,7 @@ The JWT payload must contain the following claims:
 
 | Claim | Required or optional | Description           |
 |-------|----------------------|-----------------------|
-| `iss` | Required             | `iss` stands for 'issuer'. This is the [`clientId` of the credential issuer](/status-list/before-issuing-status-record) service generated when registering as a client.<br><br>Make sure you are using the correct `clientId` for your environment - production or integration.    |
+| `iss` | Required             | `iss` stands for 'issuer'. This is the [`clientId` of the credential issuer](issue-credentials/status-list/before-issuing-status-record) service generated when registering as a client.<br><br>Make sure you are using the correct `clientId` for your environment - production or integration.    |
 | `iat` | Required             | `iat` stands for 'issued at'. This is the UNIX timestamp when the request JWT was issued.    |
 | `jti` | Required             | `jti` stands for 'JWT ID'. This provides a unique identifier for the JWT. The Status List Service will validate the format provided to make sure it is a lowercase UUID.    |
 | `statusExpiry` | Required    | The point after which the status expires. After this date the credential will be removed from the status list.<br><br>`statusExpiry` must be equal to or later than the issued credential's technical expiry time, known as the `validUntil` property. It may be useful to issue a status before the `validUntil` value is known. In this case, we recommend that you keep any resulting difference between `validUntil` and `statusExpiry` to a minimum.<br><br>`statusExpiry` must be a number in seconds, formatted as a UNIX timestamp. The Status List Service does not support credentials lasting over 1 year.    |

@@ -101,7 +101,7 @@ This diagram shows the exchange of a credential between a government service (th
 
 ### User authenticates with GOV.UK One Login to use your service
 
-There is [more guidance on authenticating users with GOV.UK One Login](/issue-a-credential/authenticate-users/#authenticate-users-with-one-login)
+There is [more guidance on authenticating users with GOV.UK One Login](/issue-credentials/authenticate-users/#authenticate-users-with-one-login)
 
 <ol>
   <li>Your user accesses your service.</li>
@@ -115,10 +115,10 @@ There's detailed guidance on [how GOV.UK One Login works](https://docs.sign-in.s
 
 ### Your service issues a credential offer
 
-There's more guidance on [generating and issuing a credential offer](/issue-a-credential/credential-offer/#credential-offer).
+There's more guidance on [generating and issuing a credential offer](/issue-credentials/credential-offer/#credential-offer).
 
 <ol start="4">
-  <li>Your service generates a credential offer that includes a <a href="/issue-a-credential/credential-offer/#the-pre-authorised-code">pre-authorised code</a> signed by your service.</li>
+  <li>Your service generates a credential offer that includes a <a href="/issue-credentials/credential-offer/#the-pre-authorised-code">pre-authorised code</a> signed by your service.</li>
 
   <li>Your service renders the credential offer to the user as a QR code or deep-link.</li>
 
@@ -157,7 +157,7 @@ There is more guidance on [publishing your metadata](issue-a-credential/metadata
 
 ### Your service issues a credential
 
-There is more guidance on [issuing a credential](/issue-a-credential/credential/#credential).
+There is more guidance on [issuing a credential](/issue-credentials/credential/#credential).
 
 <ol start="19">
   <li>Your service sends a <code>GET</code> request to the GOV.UK One Login <code>/.well-known/jwks.json</code> to fetch its public keys, which verify the signature on the access token issued by GOV.UK One Login.</li>
@@ -183,7 +183,7 @@ There is more guidance on [issuing a credential](/issue-a-credential/credential/
 
 ### GOV.UK Wallet notifies your service
 
-There is more guidance on [how GOV.UK Wallet notifies your service](/issue-a-credential/notification/).
+There is more guidance on [how GOV.UK Wallet notifies your service](/issue-credentials/notification/).
 
 The following steps are optional. If you do not offer a `/notification` endpoint then GOV.UK Wallet will not send a notification.
 

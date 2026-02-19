@@ -30,10 +30,10 @@ Your metadata must include the following parameters:
 |---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------| 
 | `credential_issuer`                   | The URL of the credential issuer.                                                                                                                | 
 | `authorization_servers`               | An array of URLs for the authorization servers your credential issuer relies on for authorization. This must be set to the GOV.UK One Login URL. | 
-| `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-a-credential/credential/#credential), where credentials can be obtained.        |
+| `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-credentials/credential/#credential), where credentials can be obtained.        |
 | `credential_configurations_supported` | An object [describing the credentials](#credential-information) offered by your credential issuer.                                               |
 
-If your credential issuer implements the optional [notification endpoint](/issue-a-credential/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
+If your credential issuer implements the optional [notification endpoint](/issue-credentials/notification/#notification), then the metadata must include the `notification_endpoint` parameter.
 
 You can define and use additional metadata parameters.
 
