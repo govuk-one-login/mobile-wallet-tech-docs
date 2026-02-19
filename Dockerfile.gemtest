@@ -1,0 +1,29 @@
+FROM ruby:3.3.6-bookworm
+
+EXPOSE 4567:4567
+EXPOSE 35729:35729
+
+WORKDIR /usr/src/gems
+
+COPY ./tech-docs-gem /usr/src/gems/tech-docs-gem
+COPY ./Gemfile /usr/src/gems/
+COPY ./Gemfile.lock* /usr/src/gems
+COPY ./Gemfile.local /usr/src/gems
+COPY ./.ruby-version /usr/src/gems
+
+# The tech-doc-gem needs npm install and git install to run before bundle install, otherwise it won't compile.
+# This is best in the Docker environment, rather than installing a whole node_module on someones machine jsut for the sake
+# of copying it into here.
+RUN apt-get update && apt-get install -y git nodejs npm
+RUN cd /usr/src/gems/tech-docs-gem && \
+    git init && \
+    git add . && \
+    if [ -f package.json ]; then npm install; fi
+
+
+RUN bundle install
+
+WORKDIR /usr/src/docs
+
+#CMD ["ls", "-a", "/usr/src/gems/tech-docs-gem"]
+CMD [ "bundle", "exec", "--gemfile=/usr/src/gems/Gemfile.local", "middleman", "server" ]
