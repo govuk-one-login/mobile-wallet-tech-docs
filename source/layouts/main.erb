@@ -1,8 +1,9 @@
 <% documentation_page = sitemap.resources.find {|resource| resource.path == "index.html" } %>
 <% contact_us_page = sitemap.resources.find {|resource| resource.path == "contact-us.html" } %>
+<% before_integrating_page = sitemap.resources.find {|resource| resource.path == "before-integrating.html" } %>
 
 <% content_for :sidebar do %>
-  <%= render_page_tree [documentation_page,contact_us_page], current_page, config, yield %>
+  <%= render_page_tree [documentation_page,before_integrating_page,contact_us_page], current_page, config, yield %>
 <% end %>
 
 <% wrap_layout :core do %>
