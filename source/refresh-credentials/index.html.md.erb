@@ -9,16 +9,6 @@ review_in: 6 months
 
 GOV.UK Wallet lets your users get a new credential without going through the longer credential issuance journey they used the first time it was issued. This is the credential refresh journey.
 
-## When users should refresh credentials
-
-Digital credentials in GOV.UK Wallet have a technical expiry date, which is when the digital version of a user's credential is no longer valid and must be updated. You can set this technical expiry date using the [`validUntil` claim](/issue-a-credential/credential/#payload) in the credential. There is [more guidance on credential expiry](/issue-a-credential/credential/#guidance-on-credential-expiration).
-
-When a credential passes its `validUntil` date, it will fail programmatic verification and must be rejected by anyone who verifies it. The user will see their expired credential marked as 'Invalid' and greyed out in the app.
-
-You can also revoke a user's credential, for example because they have changed their details. When you revoke a user's credential, it will appear marked as 'Invalid' and greyed out in the app. There is [guidance on revoking credentials](/status-list/revoke-credential). 
-
-You must ask your user to refresh expired or revoked credentials so they can continue to use them.
-
 ## How users can refresh credentials
 
 Your users can refresh their credentials:
@@ -34,9 +24,21 @@ We recommend using manual credential refresh:
 - if your user requires an identity uplift to medium
 - if your user's refresh token has expired
 
-## Guidance on age transitions
+## When users should refresh credentials
 
-When your user reaches a birthday where their entitlements may change (18, 21 or 25), you must prompt them to refresh their credential using in-app refreshing. The previous credential will stay valid until the user completes the refresh, but any `age over {nn}` checks will fail until the new credential is issued.
+### The credential passes its technical expiry date
+
+Digital credentials in GOV.UK Wallet have a technical expiry date, which is when the digital version of a user's credential is no longer valid and must be updated. You can set this technical expiry date using the [`validUntil` claim](/issue-a-credential/credential/#payload) in the credential. There is [more guidance on credential expiry](/issue-a-credential/credential/#guidance-on-credential-expiration).
+
+When a credential passes its `validUntil` date, it will fail programmatic verification and must be rejected by anyone who verifies it. The user will see their expired credential marked as 'Invalid' and greyed out in the app.
+
+### The user's details have changed
+
+You can revoke a user's credential, for example because they have changed their details. When you revoke a user's credential, it will appear marked as 'Invalid' and greyed out in the app. There is [guidance on revoking credentials](/status-list/revoke-credential). 
+
+### The user reaches a birthday where their entitlements change
+
+When your user reaches a birthday where their entitlements change (18, 21 or 25), you must prompt them to refresh their credential using in-app refreshing. The previous credential will stay valid until the user completes the refresh, but any `age over {nn}` checks will fail until the new credential is issued.
 
 ## Guidance on credentials issued before in-app refreshing
 
