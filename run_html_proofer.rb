@@ -37,7 +37,7 @@ html_proofer = HTMLProofer.check_directory(
   "build",
   {
     typhoeus: {
-      headers: { "User-Agent" => "Mozilla/5.0 (Android 14; Mobile; LG-M255; rv:122.0) Gecko/122.0 Firefox/122.0" }
+      headers: { "User-Agent" => "Mozilla/5.0 (Android 14; Mobile; LG-M255; rv:122.0) Gecko/122.0 Firefox/122.0" },
     },
     :root_dir => "build",
     :checks=>['Links'],
@@ -49,7 +49,8 @@ html_proofer = HTMLProofer.check_directory(
     :error_log => "proofer-errors.log",
     :ignore_status_codes=>[401,403], # We often link out to the ISO spec so we want to check those links are still there (e.e not 404), but the fact we can't acess them is ok
     :ignore_files => [
-      %r{^build/(javascripts|assets|images|stylesheets|search)/}
+      %r{^build/(javascripts|assets|images|stylesheets|search)/},
+      %r{/__[^/]+$}
     ],
     :ignore_urls => [
       # Match the URL as it appears in the HTML (starting with /)
