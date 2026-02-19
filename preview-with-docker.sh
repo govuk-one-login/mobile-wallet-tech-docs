@@ -11,6 +11,7 @@ if [ $LOCAl_TD_GEM = "true" ]; then
     cp -r ../tech-docs-gem ./tech-docs-gem
     echo "Running docker build using command:  Dockerfile.gemtest --tag $TAG_NAME"
     docker build -f Dockerfile.gemtest --tag "$TAG_NAME" .
+    rm -rf ./tech-docs-gem
   else
     echo "Error: I couldn't find tech docs gem at ../tech-docs-gem. Did you clone it?"
     echo "Building site with tech_docs_gem stable release"
