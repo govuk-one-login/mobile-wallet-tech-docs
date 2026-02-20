@@ -1,7 +1,7 @@
 ---
 title: Check a credential's status
 weight: 10
-last_reviewed_on: 2025-10-22
+last_reviewed_on: 2026-02-11
 review_in: 6 months
 ---
 
@@ -59,11 +59,11 @@ The JWT response header will contain the following:
 }
 ```
 
-| Parameter | Description           |
-|-----------|-----------------------|
-| `alg`     | `alg` stands for 'algorithm'. This value will be returned as `ES256`. This is the algorithm used to encode the JWT.    |
-| `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List Service's JWKS which can be used to verify the JSON web signature (JWS).    |
-| `typ`     | `typ` stands for 'type'. This is the type of the status list. It is `vc+jwt` for Bitstring status lists.    |
+| Parameter | Description                                                                                                                                         |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `alg`     | `alg` stands for 'algorithm'. This value will be returned as `ES256`. This is the algorithm used to encode the JWT.                                 |
+| `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List Service's JWKS which can be used to verify the JSON web signature (JWS). |
+| `typ`     | `typ` stands for 'type'. This is the type of the status list. It is `vc+jwt` for Bitstring status lists.                                            |
 
 ##### Payload
 
@@ -104,22 +104,22 @@ The JWT response payload for a Bitstring status list will contain the following:
 }
 ```
 
-| Parameter | Description           |
-|-----------|-----------------------|
-| `id`      | A unique URL that represents this status list.    |
-| `type`    | The type of credential.    |
-| `issuer`  | The URL of this status list credential's issuer.    |
-| `validFrom`  | The earliest point in time at which the status list is valid.    |
-| `validUntil` | The latest point in time at which the status list is valid.    |
-| `credentialSubject` | The status list subject about which the claims below are made.    |
-| `credentialSubject.id` | A unique URI that represents this status list.    |
-| `credentialSubject.type` | The type of credential. This will be `BitstringStatusList`.    |
-| `credentialSubject.statusSize` | The size of the status list in bits.    |
-| `credentialSubject.statusPurpose` | The purpose of the status list, as described in statusMessage.    |
-| `credentialSubject.statusMessages` | This is an array of objects, which each contain a status and a message.    |
-| `credentialSubject.statusMessages.status` | This represents the status value in the status list. It is a hexadecimal string, and will be `"0x0"` or `"1x1"`.    |
-| `credentialSubject.statusMessages.message` | The status message representing the status value. This will be `"VALID"` or `"INVALID"`.    |
-| `credentialSubject.encodedList` | This is a multibase-encoded base64url (with no padding) representation of the GZIP-compressed bitstring values for the associated range of verifiable credential status values.    |
+| Parameter                                  | Description                                                                                                                                                                     |
+|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`                                       | A unique URL that represents this status list.                                                                                                                                  |
+| `type`                                     | The type of credential.                                                                                                                                                         |
+| `issuer`                                   | The URL of this status list credential's issuer.                                                                                                                                |
+| `validFrom`                                | The earliest point in time at which the status list is valid.                                                                                                                   |
+| `validUntil`                               | The latest point in time at which the status list is valid.                                                                                                                     |
+| `credentialSubject`                        | The status list subject about which the claims below are made.                                                                                                                  |
+| `credentialSubject.id`                     | A unique URI that represents this status list.                                                                                                                                  |
+| `credentialSubject.type`                   | The type of credential. This will be `BitstringStatusList`.                                                                                                                     |
+| `credentialSubject.statusSize`             | The size of the status list in bits.                                                                                                                                            |
+| `credentialSubject.statusPurpose`          | The purpose of the status list, as described in statusMessage.                                                                                                                  |
+| `credentialSubject.statusMessages`         | This is an array of objects, which each contain a status and a message.                                                                                                         |
+| `credentialSubject.statusMessages.status`  | This represents the status value in the status list. It is a hexadecimal string, and will be `"0x0"` or `"1x1"`.                                                                |
+| `credentialSubject.statusMessages.message` | The status message representing the status value. This will be `"VALID"` or `"INVALID"`.                                                                                        |
+| `credentialSubject.encodedList`            | This is a multibase-encoded base64url (with no padding) representation of the GZIP-compressed bitstring values for the associated range of verifiable credential status values. |
 
 
 ## Token status list
@@ -183,15 +183,15 @@ The JWT response payload for a Token status list will contain the following:
 }
 ```
 
-| Parameter | Description           |
-|-----------|-----------------------|
-| `exp`     | `exp` stands for 'expiry'. This is the expiry of the subject credential.    |
-| `iat`     | `iat` stands for 'issued at'. This is the timestamp the subject credential was originally issued at.    |
-| `iss`     | `iss` stands for 'issuer'. This is the URL of the credential issuer service operated by the organisation sharing the credential.    |
-| `status_list.bits` | The number of bits that represent a status.    |
-| `status_list.lst` | `lst` stands for 'list'. This is an encoded version of this status list.    |
-| `sub` | `sub` stands for 'subject'. This is the URI of the status list that was in the original HTTP request.    |
-| `ttl` | `ttl` stands for 'time-to-live'. This is the lifetime of the cached version of this status list. Status lists are updated at regular and set intervals.    |
+| Parameter          | Description                                                                                                                                             |
+|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `exp`              | `exp` stands for 'expiry'. This is the expiry of the subject credential, expressed in epoch seconds.                                                    |
+| `iat`              | `iat` stands for 'issued at'. This is the UNIX timestamp the subject credential was originally issued at, in seconds.                                    |
+| `iss`              | `iss` stands for 'issuer'. This is the URL of the credential issuer service operated by the organisation sharing the credential.                        |
+| `status_list.bits` | The number of bits that represent a status.                                                                                                             |
+| `status_list.lst`  | `lst` stands for 'list'. This is an encoded version of this status list.                                                                                |
+| `sub`              | `sub` stands for 'subject'. This is the URI of the status list that was in the original HTTP request.                                                   |
+| `ttl`              | `ttl` stands for 'time-to-live'. This is the lifetime of the cached version of this status list. Status lists are updated at regular and set intervals. |
 
 ##  JSON Web Key Set (JWKS)
 
@@ -209,15 +209,15 @@ The endpoint must return a 200 OK HTTP status code and a valid JSON response tha
 
 The JWK for an elliptic curve public key based on the P-256 curve must include the following parameters:
 
-| Parameter   | Definition                                    |
-|-------------|-----------------------------------------------|
-| `kty`       | The family of cryptographic algorithms used with the key. This must be `EC`.    |
-| `kid`       | A unique identifier for a specific key within the set. This value will be referenced in the status list JWT header to show which key must be used for verification. This parameter is important for associating the correct public key with the status list being verified.    |
-| `crv`       | The cryptographic curve used with the key. This must be `P-256`.        |
-| `x`         | The "x" coordinate for the elliptic curve point.      |
-| `y`         | The "y" coordinate for the elliptic curve point.      |
-| `alg`       | The cryptographic algorithm used with the key. This must be `ES256`.       |
-| `use`       | The intended use of the key. This must be `sig` to indicate the key can be used to verify the signature.     |
+| Parameter   | Definition                                                                                                                                                                                                                                                                  |
+|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `kty`       | The family of cryptographic algorithms used with the key. This must be `EC`.                                                                                                                                                                                                |
+| `kid`       | A unique identifier for a specific key within the set. This value will be referenced in the status list JWT header to show which key must be used for verification. This parameter is important for associating the correct public key with the status list being verified. |
+| `crv`       | The cryptographic curve used with the key. This must be `P-256`.                                                                                                                                                                                                            |
+| `x`         | The "x" coordinate for the elliptic curve point.                                                                                                                                                                                                                            |
+| `y`         | The "y" coordinate for the elliptic curve point.                                                                                                                                                                                                                            |
+| `alg`       | The cryptographic algorithm used with the key. This must be `ES256`.                                                                                                                                                                                                        |
+| `use`       | The intended use of the key. This must be `sig` to indicate the key can be used to verify the signature.                                                                                                                                                                    |
 
 ### JWKS example
 
