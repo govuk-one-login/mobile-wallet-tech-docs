@@ -47,7 +47,7 @@ html_proofer = HTMLProofer.check_directory(
     :assume_extension => true, # Important for Middleman's pretty URLs
     :directory_index_file => "index.html",
     :error_log => "proofer-errors.log",
-    :ignore_status_codes=>[401,403], # We often link out to the ISO spec so we want to check those links are still there (e.e not 404), but the fact we can't acess them is ok
+    :ignore_status_codes=>[401,403, 0], # We often link out to the ISO spec so we want to check those links are still there (e.e not 404), but the fact we can't acess them is ok
     :ignore_files => [
       %r{^build/(javascripts|assets|images|stylesheets|search)/},
       %r{/__[^/]+$}

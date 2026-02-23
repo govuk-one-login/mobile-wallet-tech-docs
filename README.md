@@ -4,7 +4,7 @@ This documentation is for government services that want to integrate with GOV.UK
 
 The Wallet technical documentation is based on the [Tech Docs Template](https://github.com/alphagov/tech-docs-template) - a [Middleman template](https://github.com/alphagov/tech-docs-template#:~:text=Template%20is%20a-,Middleman%20template,-that%20you%20can) to build technical documentation using a GOV.UK style.
 
-# Preview the documentation in a browser
+## Preview the documentation in a browser
 
 To preview any changes and additions you have made to the documentation in a browser, clone this repo and use the [Dockerfile in this repo](Dockerfile) to run a Middleman server on your machine without having to set up Ruby locally.
 
@@ -21,6 +21,23 @@ It may take a few minutes to build the docker container, particularly if it is y
 ```bash
 == View your site at "http://localhost:4567", "http://127.0.0.1:4567"
 ```
+
+If you have made changes to the `tech-docs-gem`, you can test your changes by adding the 'true` flag to the preview command, for example: 
+
+```bash
+./preview-with-docker.sh true
+```
+
+The preview script will expect your local gem repository to be in the same parent directory as these tech-docs, for example:
+
+```
+my-computer/projects/
+            ├── tech-docs-repo/ 
+                |── source /
+            ├── tech-docs-gem-repo/ # on the branch you're testing
+
+```
+
 
 ## Making changes to content
 
@@ -125,8 +142,28 @@ In the example above:
 - `<%` and `<%=` are used to indicate line/lines of code.  These will run as the page loads and not be added to the final HTML output
 
 
+## Checking links with HTML Proofer
 
+You can include `gem 'html-proofer'` in your `Gemfile`, to install [the html-proofer gem](https://github.com/gjtorikian/html-proofer/tree/main?tab=readme-ov-file#htmlproofer).  You can use this to check that internal, and external links in your site are valid.  The settings for this gem are managed in `./run_html_proofer.rb`.
 
+The gem works by checking the final middleman build (site) of your site and confirming that links point to a valid file or anchor tag.  You can run this on your local machine before you commit, by running the middleman build command:
+
+```bash
+bundle install && bundle exec "ruby run_html_proofer.rb"
+```
+
+### Running checks with Rake commands
+
+This project has a `Rakefile` to run useful commands.  You can use this to create a clean middleman build on your local machine by running the following commands in your terminal:
+
+```bash
+rake clean_middleman_build 
+```
+You can also use `rake` to run the `html-proofer`
+
+```bash
+rake run_html_proofer 
+```
 
 ## Code of conduct
 
