@@ -7,7 +7,6 @@ WORKDIR /usr/src/gems
 
 COPY ./tech-docs-gem /usr/src/gems/tech-docs-gem
 COPY ./Gemfile /usr/src/gems/
-COPY ./Gemfile.lock* /usr/src/gems
 COPY ./Gemfile.local /usr/src/gems
 COPY ./.ruby-version /usr/src/gems
 
