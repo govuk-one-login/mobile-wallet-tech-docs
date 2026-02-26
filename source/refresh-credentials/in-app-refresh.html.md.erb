@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Use in-app credential refresh
 
-In-app refresh lets your users refresh their credentials in the GOV.UK One Login app without returning to your service’s web journey. It does this by requesting a refresh token from GOV.UK One Login when a credential is first issued. This refresh token lets your users refresh the credential up to 15 months after it was issued.
+In-app refresh lets your users refresh their credentials in the GOV.UK One Login app without returning to your service’s web journey. To do this, GOV.UK Wallet requests a refresh token from GOV.UK One Login when a credential is first issued. This refresh token lets your users refresh the credential up to 15 months after it was issued.
 
 We recommend using in-app refresh as your main refresh method, as it is faster and simpler for your users.
 
@@ -18,6 +18,12 @@ You should use [manual credential refreshing](refresh-credentials/manual-refresh
 For in-app refresh to work, you must add `credential_configuration_ids` to the [pre-authorised code JSON web token (JWT) payload](../issue-a-credential/credential-offer/#the-pre-authorised-code) in your credential offer.
 
 The value you set for `credential_configuration_ids` must be the same as the name given in the metadata.
+
+## Update credential
+
+You must set an `expectedUpdate` date for your credential. In most cases, you should set `expectedUpdate` to a number of days before the credential's `validUntil` date. This lets GOV.UK Wallet refresh the credential before the `validUntil` date passes. We recommend setting `expectedUpdate` to a date 30 days before `validUntil`.
+
+If your user will reach a birthday where their entitlements change (18, 21 or 25) before the issued credential passes its `validUntil` date, you should set the credential's `expectedUpdate` to the user's upcoming birthday. On the `expectedUpdate` date, GOV.UK Wallet will attempt to refresh the credential. The previous credential will be valid until the `validUntil` date, but any `age over {nn}` checks will fail until the user successfully refreshes their credential.
 
 ## Validate new access token
 
