@@ -38,7 +38,7 @@ You can revoke a user's credential, for example because they have changed their 
 
 ### When the user reaches a birthday where their entitlements change
 
-When your user reaches a birthday where their entitlements change (18, 21 or 25), you must prompt them to refresh their credential using in-app refreshing. The previous credential will stay valid until the user completes the refresh, but any `age over {nn}` checks will fail until the new credential is issued.
+When you issue a credential, you should check if the user will reach a birthday where their entitlements change (18, 21 or 25) before that credential passes its `validUntil` date. If they will, you should set the credential's `expectedUpdate` to the user's upcoming birthday. On this date, GOV.UK Wallet will attempt to refresh their credential using in-app refreshing. The previous credential will be valid until the `validUntil` date, but any `age over {nn}` checks will fail until the user successfully refreshes their credential.
 
 ## Guidance on credentials issued before in-app refreshing
 
