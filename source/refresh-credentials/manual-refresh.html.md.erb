@@ -1,0 +1,93 @@
+---
+title: Use manual credential refresh
+weight: 15
+last_reviewed_on: 2026-02-20
+review_in: 6 months
+---
+
+# Use manual credential refresh
+
+GOV.UK Wallet lets your users get a new credential without going through the full issuance journey they used the first time the credential was issued. You can read more about [credential expiry](../issue-a-credential/metadata/#credential-expiry).
+
+Manual credential refresh takes your user back to your service to get a new credential. Your user will need to log in to GOV.UK One Login again and go through your service's credential issuance journey. You can choose whether to take users through your full credential issuance journey or a shorter credential refresh journey.
+
+We recommend using manual credential refresh:
+
+- as a backup method if [in-app refresh](refresh-credentials/in-app-refresh) fails
+- if your user's refresh token has expired
+- if you need to increase your user's identity confidence to medium. There is [guidance on choosing the level of identity confidence in the GOV.UK One Login technical documentation](https://docs.sign-in.service.gov.uk/before-integrating/choose-the-level-of-identity-confidence/#choose-the-level-of-identity-confidence-for-your-service)
+
+## Update credential issuer metadata
+
+For manual credential refresh to work, GOV.UK Wallet requires you to return [`credential_refresh_web_journey_url`](../issue-a-credential/metadata/#credential-information) and `credential_validity_period_max_days` in your metadata endpoint response. These are custom parameters that are not part of the OID4VCI specification.
+
+If you specify a `credential_refresh_web_journey_url`, GOV.UK Wallet will prompt your users when they need to refresh their valid credential. 
+
+When your user taps the 'Refresh' button in the app, the app will take the user to the URL you provided in your `credential_refresh_web_journey_url` parameter. This will start their credential refresh journey in their web browser. At the end of this journey, you must provide a new credential offer that GOV.UK Wallet can use to request a new credential.
+
+You must also include the `credential_validity_period_max_days` parameter to set a maximum validity period. After this validity period, the credential must be refreshed. 
+
+You must get the information about the user's existing credential from your own user records. GOV.UK Wallet does not share any details about the user when they start your manual refresh journey.
+
+If GOV.UK Wallet adds the new credential successfully, the user will only see the new credential in their documents. GOV.UK Wallet will remove the old credential.
+
+## Understand GOV.UK Wallet's manual credential refresh flow
+
+This diagram shows the exchange between a government service (the 'credential issuer') and GOV.UK Wallet when the user refreshes a credential. This diagram, and the descriptions below it, are an explanation of each step in the process.
+
+<div aria-hidden="true">
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+</script>
+
+<html lang="en">
+  <body>
+    <pre class="mermaid">
+  sequenceDiagram
+
+  autonumber
+  actor user
+  participant ecri as Credential Issuer
+  participant app as App
+
+  note over ecri,app: On or near <br> credential expiry
+  user->>app: Opens GOV.UK One Login App <br> and goes to the credential
+  activate app
+    app->>ecri: Gets credential issuer metadata <br>`/.well-known/openid-credential-issuer`
+    activate ecri
+    ecri-->>app: Returns credential issuer metadata
+    deactivate ecri
+    app->>app: Finds `credential_refresh_web_journey_url` in metadata
+    app->>app: Validates `credential_refresh_web_journey_url`
+  deactivate app
+  user->>app: Clicks 'Refresh' button
+  app->>user: Opens `credential_refresh_web_journey_url` in user's browser
+  </pre>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    </script>
+  </body>
+</html>
+</div>
+
+1. Your user opens the app and finds the credential they need to refresh.
+
+2. GOV.UK Wallet sends a GET request to your `/.well-known/openid-credential-issuer` endpoint to fetch your credential issuer metadata.
+
+3. Your service returns its credential issuer metadata.
+
+4. The app finds the [`credential_refresh_web_journey_url`](../issue-a-credential/metadata/#credential-information) value in the credential issuer metadata.
+
+5. The app validates the `credential_refresh_web_journey_url`.
+
+6. The user selects the 'Refresh' button in the app.
+
+7. The app opens the issuer's `credential_refresh_web_journey_url` in a browser on the user's mobile device.
+
+When the user's browser has loaded your `credential_refresh_web_journey_url`, your service should:
+
+1. Authenticate the user with GOV.UK One Login.
+
+2. Determine if the user's credential can be reissued.
+
+3. Reissue the user's credential through [the credential issuance process](/issuing-credentials-to-wallet.html#user-authenticates-with-gov-uk-one-login-to-use-your-service).

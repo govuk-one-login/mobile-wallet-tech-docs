@@ -1,0 +1,103 @@
+---
+title: Use in-app credential refresh
+weight: 8
+last_reviewed_on: 2026-02-20
+review_in: 6 months
+---
+
+# Use in-app credential refresh
+
+In-app refresh lets your users refresh their credentials in the GOV.UK One Login app without returning to your service’s web journey. To do this, GOV.UK Wallet requests a refresh token from GOV.UK One Login when a credential is first issued. This refresh token lets your users refresh the credential up to 15 months after it was issued.
+
+We recommend using in-app refresh as your main refresh method, as it is faster and simpler for your users.
+
+You should use [manual credential refreshing](refresh-credentials/manual-refresh) as a backup in case in-app refresh fails.
+
+## Update credential offer
+
+For in-app refresh to work, you must add `credential_configuration_ids` to the [pre-authorised code JSON web token (JWT) payload](../issue-a-credential/credential-offer/#the-pre-authorised-code) in your credential offer.
+
+The value you set for `credential_configuration_ids` must be the same as the name given in the metadata.
+
+## Update credential
+
+You must set an `expectedUpdate` date for your credential. In most cases, you should set `expectedUpdate` to a number of days before the credential's `validUntil` date. This lets GOV.UK Wallet refresh the credential before the `validUntil` date passes. We recommend setting `expectedUpdate` to a date 30 days before `validUntil`.
+
+If your user will reach a birthday where their entitlements change (18, 21 or 25) before the issued credential passes its `validUntil` date, you should set the credential's `expectedUpdate` to the user's upcoming birthday. On the `expectedUpdate` date, GOV.UK Wallet will attempt to refresh the credential. The previous credential will be valid until the `validUntil` date, but any `age over {nn}` checks will fail until the user successfully refreshes their credential.
+
+## Validate new access token
+
+When you have added `credential_configuration_ids` to your pre-authorised code JWT payload, GOV.UK Wallet will call your credential endpoint with a new access token. You must [validate the access token](../issue-a-credential/credential/#validate-the-payload-claims) and make sure that its `credential_configuration_ids` value matches the value in your pre-authorised code JWT payload.
+
+When your user refreshes their credential in the GOV.UK One Login app, GOV.UK Wallet will get a new access token from GOV.UK One Login. This token is the same as the access token you got the first time the credential was issued, except that it does not contain `credential_identifiers`. You must validate this access token.
+
+## Understand GOV.UK Wallet’s automatic in-app refresh flow
+
+This diagram shows the exchange between a government service (the ‘credential issuer’) and GOV.UK Wallet when the user refreshes a credential with the in-app method. This diagram, and the descriptions below it, are an explanation of each step in the process.
+
+<div aria-hidden="true">
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+</script>
+
+<html lang="en">
+  <body>
+    <pre class="mermaid">
+  sequenceDiagram
+
+autonumber
+actor User as User
+participant CRI as Credential Issuer
+participant App as App
+participant OneLogin as GOV.UK One Login
+
+note over CRI,App: On credential expiry
+    User->>App: Opens GOV.UK One Login App <br>and opens the expired credential
+    activate App
+        App->>App: Credential expired,<br>shows refresh button
+        User->>App: Presses credential refresh button
+        App->>App: Generates DPoP JWT<br>and signs it with private key
+        App->>App: Adds DPoP header with<br>DPoP JWT to the request
+        App->>OneLogin: Exchanges external CRI refresh token <br>for new external CRI access and refresh token
+        activate OneLogin
+            OneLogin->>OneLogin: Verifies signature and<br>validates token
+            OneLogin->>OneLogin: Validates DPoP header
+            OneLogin->>OneLogin: Generates new access and refresh token
+            OneLogin-->>App: Returns new access and refresh token
+        deactivate OneLogin
+        App->>App: Generates proof of possession
+        App->>CRI: Fetches credential:<br> POST /credential
+    deactivate App
+  </pre>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    </script>
+  </body>
+</html>
+</div>
+
+1. Your user opens the app and opens the credential they need to refresh.
+
+2. GOV.UK Wallet checks the credential and finds it has expired, been revoked by the issuer or passed its `expectedUpdate` date. The app shows the user a refresh button.
+
+3. The user presses the credential refresh button in the app.
+
+4. GOV.UK Wallet generates a Demonstrating Proof of Possession (DPoP) JWT and signs it with its private key.
+
+5. GOV.UK Wallet adds a DPoP header containing the DPoP JWT to the request it will send to GOV.UK One Login.
+
+6. GOV.UK Wallet calls GOV.UK One Login to exchange the current refresh token for a new access token and refresh token.
+
+7. GOV.UK One Login verifies the refresh token's signature and validates the token.
+
+8. GOV.UK One Login validates the DPoP header.
+
+9. GOV.UK One Login generates a new access token and refresh token.
+
+10. GOV.UK One Login issues the new access token and refresh token to GOV.UK Wallet. 
+
+11. GOV.UK Wallet generates a [proof of possession](issue-a-credential/credential/#request-body) for the key material.
+
+12. GOV.UK Wallet sends a `POST` request to your `/credential` endpoint to request the credential. This request includes the access token issued by GOV.UK One Login (as a bearer token in the authorization header) and the proof of possession generated by GOV.UK Wallet.
+
+Once GOV.UK One Login issues the new access token and refresh token to GOV.UK Wallet, your service can [continue the credential issuance process](/issuing-credentials-to-wallet/#your-service-issues-a-credential).
