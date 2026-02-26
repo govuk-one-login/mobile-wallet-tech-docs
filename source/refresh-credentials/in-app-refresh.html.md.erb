@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Use in-app credential refresh
 
-In-app refresh lets your users refresh their expired credentials in the GOV.UK One Login app without returning to your service’s web journey. It does this by requesting a refresh token from GOV.UK One Login during the pre-authorised code exchange.
+In-app refresh lets your users refresh their credentials in the GOV.UK One Login app without returning to your service’s web journey. It does this by requesting a refresh token from GOV.UK One Login when a credential is first issued. This refresh token lets your users refresh the credential up to 15 months after it was issued.
 
 We recommend using in-app refresh as your main refresh method, as it is faster and simpler for your users.
 
@@ -21,9 +21,9 @@ The value you set for `credential_configuration_ids` must be the same as the nam
 
 ## Validate new access token
 
-When you have added `credential_configuration_ids` to your pre-authorised code JWT payload, GOV.UK Wallet will call your credential endpoint with a new access token and a refresh token. You should [validate the access token](../issue-a-credential/credential/#validate-the-payload-claims) and make sure that its `credential_configuration_ids` value matches the value in your pre-authorised code JWT payload.
+When you have added `credential_configuration_ids` to your pre-authorised code JWT payload, GOV.UK Wallet will call your credential endpoint with a new access token. You must [validate the access token](../issue-a-credential/credential/#validate-the-payload-claims) and make sure that its `credential_configuration_ids` value matches the value in your pre-authorised code JWT payload.
 
-When your user refreshes their expired credential in the GOV.UK One Login app, GOV.UK Wallet will exchange your refresh token for a new access token. This token is the same as the access token you got the first time the credential was issued, except that it does not contain `credential_identifiers`. You should validate this access token.
+When your user refreshes their credential in the GOV.UK One Login app, GOV.UK Wallet will get a new access token from GOV.UK One Login. This token is the same as the access token you got the first time the credential was issued, except that it does not contain `credential_identifiers`. You must validate this access token.
 
 ## Understand GOV.UK Wallet’s automatic in-app refresh flow
 
@@ -72,7 +72,7 @@ note over CRI,App: On credential expiry
 
 1. Your user opens the app and opens the credential they need to refresh.
 
-2. GOV.UK Wallet checks the credential and finds it is expired. The app shows the user a refresh button.
+2. GOV.UK Wallet checks the credential and finds it has expired, been revoked by the issuer or passed its `expectedUpdate` date. The app shows the user a refresh button.
 
 3. The user presses the credential refresh button in the app.
 
