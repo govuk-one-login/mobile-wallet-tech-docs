@@ -1,0 +1,23 @@
+---
+title: Testing with GOV.UK Wallet's Verifier Integration (Sandbox) environment
+weight: 50
+last_reviewed_on: 2026-03-02
+review_in: 3 months
+# Sandbox is currently being used as a placeholder to describe this suite.Ideally need to confirm the terminology before publishing
+# https://govukverify.atlassian.net/wiki/spaces/DCMAW/pages/6007422995/DCMAW-16461+-+Verifier+Integration+aka+Sandbox+Design#A-note-on-terminology
+---
+
+# Testing with GOV.UK Wallet's Verifier Integration (Sandbox) environment
+
+When you are developing your verification process, you must confirm that you are able to [receive credential information](/consuming-and-verifying-credentials) from a GOV.UK Wallet holders device.  You should use GOV.UK Wallet's Verifier Integration (Sandbox) tools to support this.
+
+The sandbox will allow you to create a sample credential, and save it to a test GOV.UK Wallet instance.  You can then present the credential to your verification process, and confirm you are able to receive a verifiable credential.  You will be able to complete this flow on both Android and iOS devices.
+
+The sandbox tools are for specific testing and development purposes, and must not be used as part of a live integration with GOV.UK Wallet.  Since each verification process is different, the sandbox is limited to testing the Verifiable Presentation of a credential.
+
+Your verification process will depend on the types of credentials you will accept, and the credential information you request.  To ensure this meets your requirements you should:
+
+- understand the credential types you wish to use
+- confirm the credential information you wish to use for each credential type
+- implement testing of your verification requirements, without using the sandbox tools
+
