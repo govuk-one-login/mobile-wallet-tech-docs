@@ -13,6 +13,8 @@ We recommend using in-app refresh as your main refresh method, as it is faster a
 
 You should use [manual credential refreshing](refresh-credentials/manual-refresh) as a backup in case in-app refresh fails.
 
+You must ask the GOV.UK Wallet onboarding team to enable in-app refresh for you when you onboard. You must also make changes to your credential offer and the credential itself for in-app refresh to work.
+
 ## Update credential offer to enable in-app refresh
 
 For in-app refresh to work, you must add `credential_configuration_ids` to the [pre-authorised code JSON web token (JWT) payload](../issue-a-credential/credential-offer/#the-pre-authorised-code) in your credential offer.
