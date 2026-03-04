@@ -13,13 +13,13 @@ We recommend using in-app refresh as your main refresh method, as it is faster a
 
 You should use [manual credential refreshing](refresh-credentials/manual-refresh) as a backup in case in-app refresh fails.
 
-## Update credential offer
+## Update credential offer to enable in-app refresh
 
 For in-app refresh to work, you must add `credential_configuration_ids` to the [pre-authorised code JSON web token (JWT) payload](../issue-a-credential/credential-offer/#the-pre-authorised-code) in your credential offer.
 
 The value you set for `credential_configuration_ids` must be the same as the name given in the metadata.
 
-## Update credential
+## Update credential `expectedUpdate` date
 
 You must set an `expectedUpdate` date for your credential. In most cases, you should set `expectedUpdate` to a number of days before the credential's `validUntil` date. This lets GOV.UK Wallet refresh the credential before the `validUntil` date passes. We recommend setting `expectedUpdate` to a date 30 days before `validUntil`.
 
