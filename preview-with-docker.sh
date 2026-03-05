@@ -14,8 +14,9 @@ if [ $LOCAl_TD_GEM = "true" ]; then
     rm -rf ./tech-docs-gem
   else
     echo "Error: I couldn't find tech docs gem at ../tech-docs-gem. Did you clone it?"
-    echo "Building site with tech_docs_gem stable release"
-    docker build -f --tag mobile-wallet-tech-docs .
   fi
+else
+    echo "Building site with tech_docs_gem stable release"
+    docker build . --tag "$TAG_NAME"
 fi
 docker run -p 4567:4567 -p 35729:35729 -v $(pwd):/usr/src/docs -it "$TAG_NAME"
