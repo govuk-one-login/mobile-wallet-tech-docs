@@ -4,7 +4,7 @@ This documentation is for government services that want to integrate with GOV.UK
 
 The Wallet technical documentation is based on the [Tech Docs Template](https://github.com/alphagov/tech-docs-template) - a [Middleman template](https://github.com/alphagov/tech-docs-template#:~:text=Template%20is%20a-,Middleman%20template,-that%20you%20can) to build technical documentation using a GOV.UK style.
 
-# Preview the documentation in a browser
+## Preview the documentation in a browser
 
 To preview any changes and additions you have made to the documentation in a browser, clone this repo and use the [Dockerfile in this repo](Dockerfile) to run a Middleman server on your machine without having to set up Ruby locally.
 
@@ -22,6 +22,23 @@ It may take a few minutes to build the docker container, particularly if it is y
 == View your site at "http://localhost:4567", "http://127.0.0.1:4567"
 ```
 
+If you have made changes to the `tech-docs-gem`, you can test your changes by adding the 'true` flag to the preview command, for example: 
+
+```bash
+./preview-with-docker.sh true
+```
+
+The preview script will expect your local gem repository to be in the same parent directory as these tech-docs, for example:
+
+```
+my-computer/projects/
+            ├── tech-docs-repo/ 
+                |── source /
+            ├── tech-docs-gem-repo/ # on the branch you're testing
+
+```
+
+
 ## Making changes to content
 
 To add or change content, edit the markdown in the `.html.md.erb` files in the `source` folder.
@@ -29,6 +46,124 @@ To add or change content, edit the markdown in the `.html.md.erb` files in the `
 In order to configure some aspects of layout, like the header, edit `config/tech-docs.yml`.
 
 If you move pages around and URLs change, make sure you set up redirects from the old URLs to the new URLs.
+
+## Using header links to group content
+
+As your site grows you may want to group related content in sections using `header_links`.  These can be set in the `config/tech_docs.yaml` file, for example:
+
+```yaml
+header_links:
+  Homepage: /
+  Types of jam: /jam-types/
+  Types of bacon: /bacon-types/
+```
+
+Your links will now appear in the navigation bar,and take users to the page you defined above.  The config above would look like this:
+
+![Image of header_links rendered in navigation bar](readme-assets/header-links.png)
+
+If you are using a Table of Contents (ToC) your page headings, and subheadings will appear in the left hand menu.  You can make a specific table of contents for each `header_link`, [using layouts you have defined](#creating-layouts).
+
+Including the `/` at the end of your header link path helps `middleman` to open the ToC at the right section.
+
+Header links can also be used to take users to external sites, these will not appear in your ToC.
+
+### Using layouts to generate table of contents
+
+You can use layouts to tailor the content of page or pages, depending on your user needs.  A common use of layouts is to group sections of related [content into a specific ToC](#using-layouts-to-generate-table-of-contents), especially when [combined with header links](#using-header-links-to-group-content).
+
+Layouts can be used to [alter the layout and content of the site](https://middlemanapp.com/basics/layouts/), however we recommend you confirm any changes from the standard structure with user research, design and accessibility communities before publishing.
+
+To use your an existing layout, add the name of the file to [the frontmatter](https://middlemanapp.com/basics/frontmatter/) in the pages you want to include.  For example:
+
+```diff
+    ---
+    title: All about the jam making process
+    weight: 1
+    last_reviewed_on: 1552-01-01
+    review_in: 3 months
++   layout: issuer 
+    ---
+```
+
+####  Example table of contents layout process
+
+To make a layout, create a new file called `your-new-layout.rb` in the `source/layouts` directory.  The example below shows how to use layouts to create a ToC for the `Types of Jam` section.
+
+In this example, you have a tech docs site with the following file structure:
+
+```
+source/
+├── index.html                   
+├── contact.html
+├── jam-types/ # this is the link used in the `header_links` href
+  └── index.html
+       ├── sweet/
+           ├── index.html 
+           ├── strawberry.html     
+           ├── raspberry.html
+       ├── savoury/
+           ├── index.html 
+           ├── chutney.html     
+           ├── marmalade.html
+├── bacon-types/ # this is the link used in the `header_links` href
+  └── index.html
+       ├── smokey/
+           ├── index.html 
+       ├── canadian/
+           ├── index.html
+├── layouts/
+    └── jam_layout.rb # this is the layout you want to use for your jam ToC
+```
+
+Inside `jam_layout.rb` you can [use `ruby`](https://www.ruby-lang.org/en/documentation/quickstart/) to apply the layout:
+
+```
+<% jam_types_index_page = sitemap.resources.find {|resource| resource.path == "jam-types/index.html" } %>
+<% content_for :sidebar do %>
+  <a href='/' class="toc__back-link govuk-link">&lsaquo; Breakfast stats</a>
+  <%= render_page_tree [jam_types_index_page], current_page, config, yield, include_child_resources: false %>
+  <%= render_page_tree jam_types_index_page.children, current_page, config, yield %>
+<% end %>
+
+<% wrap_layout :core do %>
+  <%= yield %>
+  <% content_for(:toc_module, "in-page-navigation") %>
+<% end %>
+```
+
+In the example above:
+
+- `sitemap.resources` is an array containing [`Middleman resource`](https://www.rubydoc.info/gems/middleman-core/Middleman/Sitemap/Resource) objects, such as pages and images.  In this example we filter through the resources until we find a page with the path `jam-types/index.html`
+- `content_for` and `yield`help the Middleman server to understand which part of the page template we want to add our content to
+- `render_page_tree` is used by the [`tech_docs_gem`](https://github.com/alphagov/tech-docs-gem) to generate the ToC
+  - in this example we use it twice to include the root page.  We set `include_child_resources: false` to only include the headings of the specific page. You can read more about this in [this pull request](https://github.com/alphagov/tech-docs-gem/pull/439)
+- an anchor tag is included to take the user back to the homepage.  This will appear at the top of the ToC, and is optional.
+- `<%` and `<%=` are used to indicate line/lines of code.  These will run as the page loads and not be added to the final HTML output
+
+
+## Checking links with HTML Proofer
+
+You can include `gem 'html-proofer'` in your `Gemfile`, to install [the html-proofer gem](https://github.com/gjtorikian/html-proofer/tree/main?tab=readme-ov-file#htmlproofer).  You can use this to check that internal, and external links in your site are valid.  The settings for this gem are managed in `./run_html_proofer.rb`.
+
+The gem works by checking the final middleman build (site) of your site and confirming that links point to a valid file or anchor tag.  You can run this on your local machine before you commit, by running the middleman build command:
+
+```bash
+bundle install && bundle exec "ruby run_html_proofer.rb"
+```
+
+### Running checks with Rake commands
+
+This project has a `Rakefile` to run useful commands.  You can use this to create a clean middleman build on your local machine by running the following commands in your terminal:
+
+```bash
+rake clean_middleman_build 
+```
+You can also use `rake` to run the `html-proofer`
+
+```bash
+rake run_html_proofer 
+```
 
 ## Code of conduct
 
