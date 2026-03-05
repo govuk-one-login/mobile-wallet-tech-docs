@@ -11,7 +11,7 @@ review_in: 3 months
 
 When you are developing your verification process, you must confirm that you are able to [receive credential information](/consuming-and-verifying-credentials) from a GOV.UK Wallet holders device.  You should use GOV.UK Wallet's Verifier Integration (Sandbox) tools to support this.
 
-The sandbox will allow you to create a sample credential, and save it to a test GOV.UK Wallet instance.  You can then present the credential to your verification process, and confirm you are able to receive a verifiable credential.  You will be able to complete this flow on both Android and iOS devices.
+The sandbox will allow you to create an example credential, and save it to a test GOV.UK Wallet instance.  You can then present the credential to your verification process, and confirm you are able to receive a verifiable credential.  You will be able to complete this flow on Android and iOS devices.
 
 The sandbox tools are for specific testing and development purposes, and must not be used as part of a live integration with GOV.UK Wallet.  Since each verification process is different, the sandbox is limited to testing the Verifiable Presentation of a credential.
 
@@ -21,3 +21,46 @@ Your verification process will depend on the types of credentials you will accep
 - confirm the credential information you wish to use for each credential type
 - implement testing of your verification requirements, without using the sandbox tools
 
+You must not use the sandbox tools in your production environment, or as part or your live deployment process.  
+
+## Using the sandbox document builder
+
+You can issue and revoke an example digital driving licence using the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start<<<<<TBC BEFORE PUBLISHING>>>>>).  You should use the licence to test the end-to-end journey of your verification process.
+
+
+### Before using the document builder
+
+Before you use the document builder, you should have:
+
+- completed the enrollment process for a digital verification service
+- been provided access to verifier test tools e.g. (TestFlight / Google Play Console) and installed these on your device
+- received an integration certificate
+
+If you have not completed these steps or encounter any issues, speak to your GOV.UK Wallet engagement manager or [contact us](/contact-us).
+
+### Issue a test credential
+
+When you want to issue a test driving licence you should visit the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start<<<<<TBC BEFORE PUBLISHING>>>>>).  You should check that you have everything you need, and that you understand any information provided before clicking Start now.  You will then be able to select one of the following options:
+
+- Issue a new test digital driving licence
+- Revoke an issued test digital driving licence
+
+You should choose "Issue a new test digital driving licence" and click Continue.  The document builder will then issue a new test driving licence for you to use.  
+
+The test driving licence will have:
+
+- a unique driving licence number in the format `Test-{TIMESTAMP}`
+- a credential issuer of "GDS Verifier Integration"
+
+You should add the document to your non-production GOV.UK Wallet app, and begin testing your verification process.
+
+
+### Revoke a test credential
+
+There are times when an issuer needs to [revoke a credential](/status-list/revoke-credential/).  Your verification process must recognise when a credential has been revoked, and must cancel the verification flow.  The document builder allows you to revoke [test credentials you have previously issued](#issue-a-test-credential).
+
+When you want to revoke an example driving licence you should visit the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start<<<<<TBC BEFORE PUBLISHING>>>>>).  You should make a note of the test driving licence number you wish to revoke before clicking Start now. 
+
+You should choose "Revoke an issued test digital driving licence" and click Continue, you will be then be asked to enter the licence number you wish to revoke.  You should confirm that you have the correct licence number before clicking Continue, as you will not be able to re-issue a revoked credential.  If you incorrectly revoke a credential you should use the document builder to [issue a new licence](#issue-a-test-credential).
+
+GOV.UK Wallet checks the status of credentials in the app when it is opened, and will invalidate your revoked credential.  Before you test your  revoked credential flow, you should set the device with your non-production GOV.UK Wallet app to airplane mode.  If GOV.UK Wallet invalidates the licence you should issue and revoke a new one. 
