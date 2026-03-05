@@ -64,3 +64,38 @@ When you want to revoke an example driving licence you should visit the [sandbox
 You should choose "Revoke an issued test digital driving licence" and click Continue, you will be then be asked to enter the licence number you wish to revoke.  You should confirm that you have the correct licence number before clicking Continue, as you will not be able to re-issue a revoked credential.  If you incorrectly revoke a credential you should use the document builder to [issue a new licence](#issue-a-test-credential).
 
 GOV.UK Wallet checks the status of credentials in the app when it is opened, and will invalidate your revoked credential.  Before you test your  revoked credential flow, you should set the device with your non-production GOV.UK Wallet app to airplane mode.  If GOV.UK Wallet invalidates the licence you should issue and revoke a new one. 
+
+
+## Using the sandbox mock status list
+
+Credential issuers can use the [status list service](/status-list/) to [check a credential's status](status-list/statuslist/#check-a-credential-39-s-status).  When you are testing your verification process, you must use the mock status list for this.
+
+### Check the status of a test credential
+
+You can check the status of [test credentials you have issued](#issue-a-test-credential) with the following urls:
+
+[//]: # (confirm these before publishing - this is still being built at the moment)
+
+- https://status-list-mock.mobile.integration.account.gov.uk/.well-known/jwks.json
+- https://status-list-mock.mobile.integration.account.gov.uk/t/`{STATUS_LIST_IDENDIFIER}` 
+
+The value of `STATUS_LIST_IDENDIFIER` will be unique to your test credential.
+
+The urls for the mock status list are different to those in production.  You must not use live credential status information for your testing environment.
+
+### Understand the capabilities of the mock status list
+
+The mock status list has a limited functionality compared to the live status list service.  You should understand the differences and consider them in your testing.
+
+The mock status list will:
+
+- issue access tokens with a longer validity than the status list service
+- have fewer status options than the status list service
+- set the value of the `exp` claim to the expiry of the credential plus 30 days
+- set the `ttl` claim to a short value
+
+There is more information available about the [`exp` and `ttl` claims](status-list/statuslist/#token-status-list-request-example-request-response-payload).
+
+
+
+
