@@ -14,7 +14,7 @@ GEM
       mutex_m
       securerandom (>= 0.3)
       tzinfo (~> 2.0)
-    addressable (2.8.8)
+    addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
     afm (1.0.0)
     async (2.36.0)
@@ -79,28 +79,28 @@ GEM
     fiber-local (1.1.0)
       fiber-storage
     fiber-storage (1.0.1)
-    google-protobuf (4.33.5)
+    google-protobuf (4.34.0)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.5-aarch64-linux-gnu)
+      rake (~> 13.3)
+    google-protobuf (4.34.0-aarch64-linux-gnu)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.5-aarch64-linux-musl)
+      rake (~> 13.3)
+    google-protobuf (4.34.0-aarch64-linux-musl)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.5-arm64-darwin)
+      rake (~> 13.3)
+    google-protobuf (4.34.0-arm64-darwin)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.5-x86_64-darwin)
+      rake (~> 13.3)
+    google-protobuf (4.34.0-x86_64-darwin)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.5-x86_64-linux-gnu)
+      rake (~> 13.3)
+    google-protobuf (4.34.0-x86_64-linux-gnu)
       bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.5-x86_64-linux-musl)
+      rake (~> 13.3)
+    google-protobuf (4.34.0-x86_64-linux-musl)
       bigdecimal
-      rake (>= 13)
-    govuk_tech_docs (5.2.0)
+      rake (~> 13.3)
+    govuk_tech_docs (5.2.1)
       autoprefixer-rails (~> 10.2)
       base64
       bigdecimal
@@ -142,7 +142,7 @@ GEM
     http_parser.rb (0.8.1)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
-    io-event (1.14.2)
+    io-event (1.14.3)
     json (2.18.1)
     kramdown (2.5.2)
       rexml (>= 3.4.4)
@@ -206,7 +206,8 @@ GEM
     middleman-syntax (3.6.1)
       middleman-core (>= 3.2)
       rouge (~> 3.2)
-    minitest (6.0.1)
+    minitest (6.0.2)
+      drb (~> 2.0)
       prism (~> 1.5)
     multi_json (1.19.1)
     mutex_m (0.3.0)
@@ -242,7 +243,7 @@ GEM
       ruby-rc4
       ttfunk
     prism (1.9.0)
-    public_suffix (7.0.2)
+    public_suffix (7.0.5)
     racc (1.8.1)
     rack (2.2.22)
     rack-livereload (0.3.17)
@@ -300,7 +301,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     webrick (1.9.2)
     yell (2.2.2)
-    zeitwerk (2.7.4)
+    zeitwerk (2.7.5)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -315,7 +316,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  govuk_tech_docs
+  govuk_tech_docs (~> 5.2, >= 5.2.1)
   html-proofer
   tzinfo-data
   wdm (~> 0.1.0)
