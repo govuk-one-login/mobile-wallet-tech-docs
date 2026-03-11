@@ -14,6 +14,7 @@ if [ $LOCAl_TD_GEM = "true" ]; then
     rm -rf ./tech-docs-gem
   else
     echo "Error: I couldn't find tech docs gem at ../tech-docs-gem. Did you clone it?"
+    exit 1
   fi
 else
     echo "Building site with tech_docs_gem stable release"
