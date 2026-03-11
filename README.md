@@ -22,7 +22,7 @@ It may take a few minutes to build the docker container, particularly if it is y
 == View your site at "http://localhost:4567", "http://127.0.0.1:4567"
 ```
 
-If you have made changes to the `tech-docs-gem`, you can test your changes by adding the 'true` flag to the preview command, for example: 
+You can preview the site using a local version of the `tech-docs-gem` by adding the `true` argument to the command.
 
 ```bash
 ./preview-with-docker.sh true
@@ -38,7 +38,6 @@ my-computer/projects/
 
 ```
 
-
 ## Making changes to content
 
 To add or change content, edit the markdown in the `.html.md.erb` files in the `source` folder.
@@ -47,106 +46,60 @@ In order to configure some aspects of layout, like the header, edit `config/tech
 
 If you move pages around and URLs change, make sure you set up redirects from the old URLs to the new URLs.
 
-## Using header links to group content
+## Content structure
 
-As your site grows you may want to group related content in sections using `header_links`.  These can be set in the `config/tech_docs.yaml` file, for example:
+This documentation is split into 3 main sections:
 
-```yaml
-header_links:
-  Homepage: /
-  Types of jam: /jam-types/
-  Types of bacon: /bacon-types/
-```
+- introduction and overview
+- information for verifiers
+- information for issuers
 
-Your links will now appear in the navigation bar,and take users to the page you defined above.  The config above would look like this:
+These are managed by the `header_links` section of the `config/tech-docs.yml` file, and custom layouts for the Table of Contents (ToC).  Including the `/` at the end the header link path helps `middleman` to open the ToC at the right section.
 
-![Image of header_links rendered in navigation bar](readme-assets/header-links.png)
+Your links will now appear in the navigation bar, and take users to the page you defined above. The config above would look like this:
 
-If you are using a Table of Contents (ToC) your page headings, and subheadings will appear in the left hand menu.  You can make a specific table of contents for each `header_link`, [using layouts you have defined](#creating-layouts).
+### Custom layouts
 
-Including the `/` at the end of your header link path helps `middleman` to open the ToC at the right section.
+This documentation uses custom layouts to generate the ToC for each of the main sections outlined above.  The following layouts are in the `source/layouts` directory:
 
-Header links can also be used to take users to external sites, these will not appear in your ToC.
+- `main.erb` - for introduction and overview pages
+- `issuer.erb` - for pages about issuing credentials
+- `verifier.erb` - for pages about verifying credentials
 
-### Using layouts to generate table of contents
-
-You can use layouts to tailor the content of page or pages, depending on your user needs.  A common use of layouts is to group sections of related [content into a specific ToC](#using-layouts-to-generate-table-of-contents), especially when [combined with header links](#using-header-links-to-group-content).
-
-Layouts can be used to [alter the layout and content of the site](https://middlemanapp.com/basics/layouts/), however we recommend you confirm any changes from the standard structure with user research, design and accessibility communities before publishing.
-
-To use your an existing layout, add the name of the file to [the frontmatter](https://middlemanapp.com/basics/frontmatter/) in the pages you want to include.  For example:
+Layouts are applied to a page by including them in the `frontmatter` code block, for example:
 
 ```diff
     ---
-    title: All about the jam making process
+    title: GOV.UK Wallet Technical Documentation
     weight: 1
-    last_reviewed_on: 1552-01-01
-    review_in: 3 months
-+   layout: issuer 
+    last_reviewed_on: 2025-11-27
+    review_in: 6 months
++   layout: main 
     ---
 ```
 
-####  Example table of contents layout process
+#### Update main layout
 
-To make a layout, create a new file called `your-new-layout.rb` in the `source/layouts` directory.  The example below shows how to use layouts to create a ToC for the `Types of Jam` section.
+The `main` layout contains pages in the root directory.  We do not want to include every page in the ToC (for example the accessibility statement).  To add a page to the ToC add a new `page_resource` to the `render_page_tree` function. 
 
-In this example, you have a tech docs site with the following file structure:
-
-```
-source/
-├── index.html                   
-├── contact.html
-├── jam-types/ # this is the link used in the `header_links` href
-  └── index.html
-       ├── sweet/
-           ├── index.html 
-           ├── strawberry.html     
-           ├── raspberry.html
-       ├── savoury/
-           ├── index.html 
-           ├── chutney.html     
-           ├── marmalade.html
-├── bacon-types/ # this is the link used in the `header_links` href
-  └── index.html
-       ├── smokey/
-           ├── index.html 
-       ├── canadian/
-           ├── index.html
-├── layouts/
-    └── jam_layout.rb # this is the layout you want to use for your jam ToC
+```diff
+<% contact_us_page = sitemap.resources.find {|resource| resource.path == "contact-us.html" } %>
++ <% your_new_page = sitemap.resources.find {|resource| resource.path == "new-page.html" } %>
+...
++ <%= render_page_tree [documentation_page,contact_us_page, your_new_page], current_page, config, yield %>
 ```
 
-Inside `jam_layout.rb` you can [use `ruby`](https://www.ruby-lang.org/en/documentation/quickstart/) to apply the layout:
+#### Update issuer or verifier layout
 
-```
-<% jam_types_index_page = sitemap.resources.find {|resource| resource.path == "jam-types/index.html" } %>
-<% content_for :sidebar do %>
-  <a href='/' class="toc__back-link govuk-link">&lsaquo; Breakfast stats</a>
-  <%= render_page_tree [jam_types_index_page], current_page, config, yield, include_child_resources: false %>
-  <%= render_page_tree jam_types_index_page.children, current_page, config, yield %>
-<% end %>
+The `verifier` and `issuer` layouts create their ToC based on the directory structure.  The `verifier` layout finds all the pages that are `children` of `source/verify-credentials`, for example `source/verify-credentials/verification-flows/index.html.md.erb`.   
 
-<% wrap_layout :core do %>
-  <%= yield %>
-  <% content_for(:toc_module, "in-page-navigation") %>
-<% end %>
-```
-
-In the example above:
-
-- `sitemap.resources` is an array containing [`Middleman resource`](https://www.rubydoc.info/gems/middleman-core/Middleman/Sitemap/Resource) objects, such as pages and images.  In this example we filter through the resources until we find a page with the path `jam-types/index.html`
-- `content_for` and `yield`help the Middleman server to understand which part of the page template we want to add our content to
-- `render_page_tree` is used by the [`tech_docs_gem`](https://github.com/alphagov/tech-docs-gem) to generate the ToC
-  - in this example we use it twice to include the root page.  We set `include_child_resources: false` to only include the headings of the specific page. You can read more about this in [this pull request](https://github.com/alphagov/tech-docs-gem/pull/439)
-- an anchor tag is included to take the user back to the homepage.  This will appear at the top of the ToC, and is optional.
-- `<%` and `<%=` are used to indicate line/lines of code.  These will run as the page loads and not be added to the final HTML output
-
+The layouts also include the parent folder (`source/verify-credentials`) in the ToC by passing the optional `include_child_resources: false` parameter.  More information is available about [helper functions in the `tech-docs-gem`](https://github.com/alphagov/tech-docs-gem?tab=readme-ov-file#table-of-contents-helper-functions)
 
 ## Checking links with HTML Proofer
 
-You can include `gem 'html-proofer'` in your `Gemfile`, to install [the html-proofer gem](https://github.com/gjtorikian/html-proofer/tree/main?tab=readme-ov-file#htmlproofer).  You can use this to check that internal, and external links in your site are valid.  The settings for this gem are managed in `./run_html_proofer.rb`.
+You can use the [html-proofer gem](https://github.com/gjtorikian/html-proofer/tree/main?tab=readme-ov-file#htmlproofer) to check that internal and external links in your site are valid. The settings for this gem are managed in `./run_html_proofer.rb`.
 
-The gem works by checking the final middleman build (site) of your site and confirming that links point to a valid file or anchor tag.  You can run this on your local machine before you commit, by running the middleman build command:
+The gem checks the built site and confirms that links point to valid files or anchor tags. Run it locally before committing:
 
 ```bash
 bundle install && bundle exec "ruby run_html_proofer.rb"
