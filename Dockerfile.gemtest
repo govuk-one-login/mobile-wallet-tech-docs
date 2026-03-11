@@ -11,7 +11,7 @@ COPY ./Gemfile.local /usr/src/gems
 COPY ./.ruby-version /usr/src/gems
 
 # The tech-doc-gem needs npm install and git install to run before bundle install, otherwise it won't compile.
-# This is best in the Docker environment, rather than installing a whole node_module on someones machine jsut for the sake
+# This is best in the Docker environment, rather than installing a whole node_module on someones machine just for the sake
 # of copying it into here.
 RUN apt-get update && apt-get install -y git nodejs npm
 RUN cd /usr/src/gems/tech-docs-gem && \
@@ -24,5 +24,4 @@ RUN bundle install
 
 WORKDIR /usr/src/docs
 
-#CMD ["ls", "-a", "/usr/src/gems/tech-docs-gem"]
 CMD [ "bundle", "exec", "--gemfile=/usr/src/gems/Gemfile.local", "middleman", "server" ]
