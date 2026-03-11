@@ -86,6 +86,7 @@ The `main` layout contains pages in the root directory.  We do not want to inclu
 <% contact_us_page = sitemap.resources.find {|resource| resource.path == "contact-us.html" } %>
 + <% your_new_page = sitemap.resources.find {|resource| resource.path == "new-page.html" } %>
 ...
+- <%= render_page_tree [documentation_page,contact_us_page], current_page, config, yield %>
 + <%= render_page_tree [documentation_page,contact_us_page, your_new_page], current_page, config, yield %>
 ```
 
