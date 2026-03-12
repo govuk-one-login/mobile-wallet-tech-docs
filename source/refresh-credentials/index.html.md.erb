@@ -18,13 +18,13 @@ Your users can refresh their credentials:
 
 We recommend using in-app refresh as your main refresh method, as it is faster and simpler for your users.
 
-For a better user experience, we recommend using manual credential refresh:
+You must use manual credential refresh:
 
 - as a backup method if in-app refresh fails
 - if your user's refresh token has expired
 - if you need to increase your user's identity confidence to medium. There is [guidance on choosing the level of identity confidence in the GOV.UK One Login technical documentation](https://docs.sign-in.service.gov.uk/before-integrating/choose-the-level-of-identity-confidence/#choose-the-level-of-identity-confidence-for-your-service)
 
-If you do not use manual credential refresh in these scenarios, your user will need to go back through your full credential issuance journey.
+If you do not provide a link to a shortened manual credential refresh journey in these scenarios, GOV.UK Wallet will redirect your user to the start of your service. In that case, your user will need to go through the full credential issuance journey to refresh their credentials.
 
 ## When to ask the user to refresh credentials
 
