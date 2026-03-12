@@ -45,12 +45,12 @@ This is an example of a credential offer JSON object. The `pre-authorized_code` 
 
 GOV.UK Wallet uses the [pre-authorised code flow](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-3.5) for credential issuance. This flow works as follows:
 
-* your credential issuer authenticates the user with GOV.UK One Login
-* your credential issuer generates a pre-authorised code to start the credential issuance process - this code acts as proof that the user has already been authenticated
-* your credential issuer passes this pre-authorised code to GOV.UK Wallet
-* GOV.UK Wallet uses this pre-authorised code to request an access token and a refresh token (if [in-app refresh](refresh-credentials/in-app-refresh) is implemented) from GOV.UK One Login
-* GOV.UK Wallet uses the access token from GOV.UK One Login to retrieve the credential
-* When the issued credential expires, is revoked or passes its `expectedUpdate` date, GOV.UK Wallet uses the refresh token to request a new access token from GOV.UK One Login and then retrieve a new credential from the issuer
+1. Your credential issuer authenticates the user with GOV.UK One Login.
+1. Your credential issuer generates a pre-authorised code to start the credential issuance process - this code acts as proof that the user has already been authenticated.
+1. Your credential issuer passes this pre-authorised code to GOV.UK Wallet.
+1. GOV.UK Wallet uses this pre-authorised code to request an access token and a refresh token (if [in-app refresh](refresh-credentials/in-app-refresh) is implemented) from GOV.UK One Login.
+1. GOV.UK Wallet uses the access token from GOV.UK One Login to retrieve the credential.
+1. When the issued credential expires, is revoked or passes its `expectedUpdate` date, GOV.UK Wallet uses the refresh token to request a new access token from GOV.UK One Login and then retrieve a new credential from the issuer.
 
 The pre-authorised code flow makes getting credentials simpler by letting your credential issuer start the authorisation flow. In a standard authorisation flow, GOV.UK Wallet would need to start the flow. In the pre-authorised code flow, the credential issuer starts the authorisation flow and passes the details to GOV.UK Wallet (via the pre-authorised code) so that GOV.UK Wallet can continue.
 
