@@ -11,4 +11,4 @@ gem 'tzinfo-data', platforms: [:mswin, :mingw, :x64_mingw, :jruby]
 gem 'html-proofer'
 
 # Include the tech docs gem
-gem 'govuk_tech_docs'
+gem 'govuk_tech_docs', path: '/usr/src/gems/tech-docs-gem/'
