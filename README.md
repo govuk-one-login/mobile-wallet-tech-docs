@@ -102,14 +102,38 @@ You can use the [html-proofer gem](https://github.com/gjtorikian/html-proofer/tr
 
 To run it locally, see [Running checks with Rake commands](#running-checks-with-rake-commands).
 
-### Running checks with Rake commands
+## Running checks with Rake commands
 
 This project includes a `Rakefile` with helpful commands for building and validating the site locally.
 
-#### Build the site
+### Build the site
 
 To create a clean Middleman build, run:
 
+```bash
+bundle exec rake clean_middleman_build
+```
+
+This will:
+
+- Remove any existing `build` directory
+- Run `middleman build` to generate a fresh build
+
+To also reinstall Ruby gems as part of the build (e.g. after updating your `Gemfile`), pass the `update_ruby_gems` flag:
+
+```bash
+bundle exec rake clean_middleman_build\[true\] 
+```
+
+### Run html-proofer
+
+To run `html-proofer` against the build directory:
+
+```bash
+bundle exec rake run_html_proofer
+```
+
+> **Note:** This requires an existing `build` directory. Run `clean_middleman_build` first if you haven't already.
 
 ## Code of conduct
 
