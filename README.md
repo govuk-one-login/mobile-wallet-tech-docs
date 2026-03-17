@@ -100,24 +100,16 @@ The layouts also include the parent folder (`source/verify-credentials`) in the 
 
 You can use the [html-proofer gem](https://github.com/gjtorikian/html-proofer/tree/main?tab=readme-ov-file#htmlproofer) to check that internal and external links in your site are valid. The settings for this gem are managed in `./run_html_proofer.rb`.
 
-The gem checks the built site and confirms that links point to valid files or anchor tags. Run it locally before committing:
-
-```bash
-bundle install && bundle exec "ruby run_html_proofer.rb"
-```
+To run it locally, see [Running checks with Rake commands](#running-checks-with-rake-commands).
 
 ### Running checks with Rake commands
 
-This project has a `Rakefile` to run useful commands.  You can use this to create a clean middleman build on your local machine by running the following commands in your terminal:
+This project includes a `Rakefile` with helpful commands for building and validating the site locally.
 
-```bash
-rake clean_middleman_build 
-```
-You can also use `rake` to run the `html-proofer`
+#### Build the site
 
-```bash
-rake run_html_proofer 
-```
+To create a clean Middleman build, run:
+
 
 ## Code of conduct
 
