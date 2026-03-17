@@ -8,19 +8,19 @@ layout: issuer
 
 # Use manual credential refresh
 
-GOV.UK Wallet lets your users get a new credential without going through the full issuance journey they used the first time the credential was issued. You can read more about [credential expiry](../issue-a-credential/metadata/#credential-expiry).
+GOV.UK Wallet lets your users get a new credential without going through the full issuance journey they used the first time the credential was issued. You can read more about [credential expiry](/issue-credentials/metadata/#credential-expiry).
 
 Manual credential refresh takes your user back to your service to get a new credential. Your user will need to sign in to GOV.UK One Login again and go through your service's credential issuance journey. You can choose whether to take users through your full credential issuance journey or a shorter credential refresh journey.
 
 We recommend using manual credential refresh:
 
-- as a backup method if [in-app refresh](refresh-credentials/in-app-refresh) fails
+- as a backup method if [in-app refresh](issue-credentials/refresh-credentials/in-app-refresh) fails
 - if your user's refresh token has expired
 - if you need to increase your user's identity confidence to medium. There is [guidance on choosing the level of identity confidence in the GOV.UK One Login technical documentation](https://docs.sign-in.service.gov.uk/before-integrating/choose-the-level-of-identity-confidence/#choose-the-level-of-identity-confidence-for-your-service)
 
 ## Update credential issuer metadata
 
-For manual credential refresh to work, you must return [`credential_refresh_web_journey_url`](../issue-a-credential/metadata/#credential-information) and `credential_validity_period_max_days` in your metadata endpoint response. These are custom parameters that are not part of the OID4VCI specification.
+For manual credential refresh to work, you must return [`credential_refresh_web_journey_url`](/issue-credentials/metadata/#credential-information) and `credential_validity_period_max_days` in your metadata endpoint response. These are custom parameters that are not part of the OID4VCI specification.
 
 If you specify a `credential_refresh_web_journey_url`, GOV.UK Wallet will prompt your users when they need to refresh their valid credential. 
 
@@ -77,7 +77,7 @@ This diagram shows the exchange between a government service (the 'credential is
 
 3. Your service returns its credential issuer metadata.
 
-4. The app finds the [`credential_refresh_web_journey_url`](../issue-a-credential/metadata/#credential-information) value in the credential issuer metadata.
+4. The app finds the [`credential_refresh_web_journey_url`](/issue-credentials/metadata/#credential-information) value in the credential issuer metadata.
 
 5. The app validates the `credential_refresh_web_journey_url`.
 

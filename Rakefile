@@ -20,6 +20,10 @@ task :install_gems do
 end
 
 task :build_middleman do
+     if Dir.exist?("build")
+        puts "Build directory found.  Removing old build"
+        FileUtils.rm_rf("build")
+     end
      puts "Creating a new middleman build"
      bundle exec "middleman build"
 end
