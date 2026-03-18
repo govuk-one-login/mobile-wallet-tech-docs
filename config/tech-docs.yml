@@ -3,16 +3,15 @@ host:
 
 # Header-related options
 show_govuk_logo: true
-service_name: Wallet
-service_link: https://www.gov.uk/wallet
+service_name: Wallet technical documentation
+service_link: /
 phase: Beta
 
 # Links to show on right-hand-side of header
 header_links:
-  #About: 
-  #Get Started: 
-  Documentation: /
-  #Support: 
+  GOV.UK Wallet technical documentation: /
+  Issue credentials: /issue-credentials/
+  Verify credentials: /verify-credentials/
 
   # Links to show in the page footer
 footer_links:
@@ -27,6 +26,7 @@ ga_tracking_id:
 # Enable multipage navigation in the sidebar
 multipage_nav: true
 
+# generate_unique_page_anchors: false
 # Enable collapsible navigation in the sidebar
 collapsible_nav: true
 
