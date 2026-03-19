@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - main
-      - ips-2300
 
 defaults:
   run:
