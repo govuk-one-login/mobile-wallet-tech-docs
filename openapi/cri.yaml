@@ -946,7 +946,7 @@ components:
           example: "2025-10-01T14:00:00Z"
         expectedUpdate:
           type: string
-          description: Date when GOV.UK Wallet will allow in-app refreshing. ISO 8601 format with a UTC offset of 00:00, represented by Z YYYY-MM-DDTHH:MM:00Z
+          description: Date when GOV.UK Wallet will allow in-app refreshing. ISO 8601 format YYYY-MM-DDTHH:MM:00Z
           example: "2025-09-01T14:00:00Z"
         credentialSubject:
           type: object
