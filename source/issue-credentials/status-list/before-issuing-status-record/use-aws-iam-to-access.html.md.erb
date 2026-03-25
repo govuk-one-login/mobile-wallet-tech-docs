@@ -80,9 +80,9 @@ The credential helper tool needs:
 Your private key can be:
 
 * a plaintext private key file
-* a PKCS#11 URI (e.g., pkcs11:object=My%20RA%20key)
-* a TPM wrapped key file in the -----BEGIN TSS2 PRIVATE KEY----- format
-* a TPM handle reference (e.g., handle:0x81000001)
+* a PKCS#11 URI (e.g., `pkcs11:object=My%20RA%20key`)
+* a TPM wrapped key file in the `-----BEGIN TSS2 PRIVATE KEY-----` format
+* a TPM handle reference (e.g., `handle:0x81000001`)
 
 This is an example of how to format your request to the credential helper tool:
 
@@ -108,7 +108,7 @@ This request returns a json like the following:
 }
 ```
 
-You can use this response to access the issue and revoke endpoints as follows:
+You can use this response to make authenticated requests to the [`/issue`](issue-credentials/status-list/issue-status-list-entry) and [`/revoke`](issue-credentials/status-list/revoke-credential) endpoints for as long as the access token is valid. This is an example of how to format your request using curl:
 
 ```
 # Export credentials from aws_signing_helper output
