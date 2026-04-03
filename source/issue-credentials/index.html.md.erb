@@ -39,9 +39,9 @@ This diagram shows the exchange of a credential between a government service (th
     activate User
     User->>CRI: Accesses your service
     activate CRI
-    CRI->>OneLogin: Authenticates user
+    CRI->>OneLogin: Authenticates user and<br> fetches walletSubjectId
     activate OneLogin
-    OneLogin-->>CRI: Fetches user's walletSubjectID:<br>GET /userinfo
+    OneLogin-->>CRI: Returns authenticated<br> user's walletSubjectId
     deactivate OneLogin
     CRI->>CRI: Generates credential offer
     CRI-->>User: Renders credential offer<br> as QR code or deep-link
@@ -106,9 +106,9 @@ There is [more guidance on authenticating users with GOV.UK One Login](/issue-cr
 <ol>
   <li>Your user accesses your service.</li>
 
-  <li>Your service authenticates the user with GOV.UK One Login.</li>
+  <li>Your service authenticates the user with GOV.UK One Login and fetches the user’s <code>walletSubjectId</code> from the GOV.UK One Login <a href="https://docs.sign-in.service.gov.uk/integrate-with-integration-environment/authenticate-your-user/#retrieve-user-information"><code>/userinfo</code> endpoint</a>.</li>
 
-  <li>Your service fetches the user’s <code>walletSubjectId</code> from the GOV.UK One Login <a href="https://docs.sign-in.service.gov.uk/integrate-with-integration-environment/authenticate-your-user/#retrieve-user-information"><code>/userinfo</code> endpoint</a>.</li>
+  <li>GOV.UK One Login returns the authenticate user’s <code>walletSubjectId</code>.</li>
 </ol>
 
 There's detailed guidance on [how GOV.UK One Login works](https://docs.sign-in.service.gov.uk/how-gov-uk-one-login-works/) in the GOV.UK One Login technical documentation.
