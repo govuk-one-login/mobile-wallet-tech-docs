@@ -39,7 +39,7 @@ This diagram shows the exchange of a credential between a government service (th
     activate User
     User->>CRI: Accesses your service
     activate CRI
-    CRI->>OneLogin: Authenticates user and<br> fetches walletSubjectId
+    CRI->>OneLogin: Authenticates user and<br> gets walletSubjectId
     activate OneLogin
     OneLogin-->>CRI: Returns authenticated<br> user's walletSubjectId
     deactivate OneLogin
