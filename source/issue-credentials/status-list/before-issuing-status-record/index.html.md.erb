@@ -1,0 +1,36 @@
+---
+title: Before you issue a status record
+weight: 1
+last_reviewed_on: 2025-10-22
+review_in: 6 months
+layout: issuer
+---
+
+# Before you issue a status record
+
+To issue credentials with a status, you must register with the Status List Service. To do this, speak to your GOV.UK Wallet engagement manager or [contact us](contact-us).
+
+## Register a status list client
+
+Only valid status list clients can issue and revoke statuses in the Status List Service.
+
+When registering as a status list client, you must provide:
+
+* a public JSON web key set (JWKS) endpoint - used to verify the signatures of the status list client's signed JSON web tokens (JWTs) for the issue and revoke endpoint
+* a status list type (Bitstring or Token) - the type of status issued for this specific status list client
+
+You can register multiple status list clients if you need to.
+
+When you complete your registration, you get a unique `clientId`. You must include your `clientId` identifier as [the `iss` claim](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1) in the JWTs you send to the [`/issue`](../issue-status-list-entry) and [`/revoke`](../revoke-credential) endpoints.
+
+The requests to and responses from the Status List Service are the same, regardless of the status list type. You must make sure the Status List Service's responses are included in your credential correctly.
+
+## Access the Status List Service APIs
+
+When you register as a status list client, we will work with you to grant access to our APIs and provide the API URLs.
+
+## Test your integration
+
+The Status List Service operates an integration and a production environment. You must register a status list client for each environment.
+
+We recommend that you use the integration environment to test your integration with the Status List Service before you move to production. The integration environment should not be used for publicly issued credentials.

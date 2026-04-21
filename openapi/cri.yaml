@@ -944,6 +944,10 @@ components:
           type: string
           description: Date until the status list credential is valid. ISO 8601 format YYYY-MM-DDTHH:MM:SSZ
           example: "2025-10-01T14:00:00Z"
+        expectedUpdate:
+          type: string
+          description: Date when GOV.UK Wallet will allow in-app refreshing. ISO 8601 format YYYY-MM-DDTHH:MM:00Z
+          example: "2025-09-01T14:00:00Z"
         credentialSubject:
           type: object
           description: The status list subject about which the claims are made.

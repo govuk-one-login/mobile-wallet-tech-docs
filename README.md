@@ -4,7 +4,7 @@ This documentation is for government services that want to integrate with GOV.UK
 
 The Wallet technical documentation is based on the [Tech Docs Template](https://github.com/alphagov/tech-docs-template) - a [Middleman template](https://github.com/alphagov/tech-docs-template#:~:text=Template%20is%20a-,Middleman%20template,-that%20you%20can) to build technical documentation using a GOV.UK style.
 
-# Preview the documentation in a browser
+## Preview the documentation in a browser
 
 To preview any changes and additions you have made to the documentation in a browser, clone this repo and use the [Dockerfile in this repo](Dockerfile) to run a Middleman server on your machine without having to set up Ruby locally.
 
@@ -22,6 +22,22 @@ It may take a few minutes to build the docker container, particularly if it is y
 == View your site at "http://localhost:4567", "http://127.0.0.1:4567"
 ```
 
+You can preview the site using a local version of the `tech-docs-gem` by adding the `true` argument to the command.
+
+```bash
+./preview-with-docker.sh true
+```
+
+The preview script will expect your local gem repository to be in the same parent directory as these tech-docs, for example:
+
+```
+my-computer/projects/
+            ├── tech-docs-repo/ 
+                |── source /
+            ├── tech-docs-gem-repo/ # on the branch you're testing
+
+```
+
 ## Making changes to content
 
 To add or change content, edit the markdown in the `.html.md.erb` files in the `source` folder.
@@ -29,6 +45,95 @@ To add or change content, edit the markdown in the `.html.md.erb` files in the `
 In order to configure some aspects of layout, like the header, edit `config/tech-docs.yml`.
 
 If you move pages around and URLs change, make sure you set up redirects from the old URLs to the new URLs.
+
+## Content structure
+
+This documentation is split into 3 main sections:
+
+- introduction and overview
+- information for verifiers
+- information for issuers
+
+These are managed by the `header_links` section of the `config/tech-docs.yml` file, and custom layouts for the Table of Contents (ToC).  Including the `/` at the end the header link path helps `middleman` to open the ToC at the right section.
+
+Your links will now appear in the navigation bar, and take users to the page you defined above. The config above would look like this:
+
+### Custom layouts
+
+This documentation uses custom layouts to generate the ToC for each of the main sections outlined above.  The following layouts are in the `source/layouts` directory:
+
+- `main.erb` - for introduction and overview pages
+- `issuer.erb` - for pages about issuing credentials
+- `verifier.erb` - for pages about verifying credentials
+
+Layouts are applied to a page by including them in the `frontmatter` code block, for example:
+
+```diff
+    ---
+    title: GOV.UK Wallet Technical Documentation
+    weight: 1
+    last_reviewed_on: 2025-11-27
+    review_in: 6 months
++   layout: main 
+    ---
+```
+
+#### Update main layout
+
+The `main` layout contains pages in the root directory.  We do not want to include every page in the ToC (for example the accessibility statement).  To add a page to the ToC add a new `page_resource` to the `render_page_tree` function. 
+
+```diff
+<% contact_us_page = sitemap.resources.find {|resource| resource.path == "contact-us.html" } %>
++ <% your_new_page = sitemap.resources.find {|resource| resource.path == "new-page.html" } %>
+...
+- <%= render_page_tree [documentation_page,contact_us_page], current_page, config, yield %>
++ <%= render_page_tree [documentation_page,contact_us_page, your_new_page], current_page, config, yield %>
+```
+
+#### Update issuer or verifier layout
+
+The `verifier` and `issuer` layouts create their ToC based on the directory structure.  The `verifier` layout finds all the pages that are `children` of `source/verify-credentials`, for example `source/verify-credentials/verification-flows/index.html.md.erb`.   
+
+The layouts also include the parent folder (`source/verify-credentials`) in the ToC by passing the optional `include_child_resources: false` parameter.  More information is available about [helper functions in the `tech-docs-gem`](https://github.com/alphagov/tech-docs-gem?tab=readme-ov-file#table-of-contents-helper-functions)
+
+## Checking links with HTML Proofer
+
+You can use the [html-proofer gem](https://github.com/gjtorikian/html-proofer/tree/main?tab=readme-ov-file#htmlproofer) to check that internal and external links in your site are valid. The settings for this gem are managed in `./run_html_proofer.rb`.
+
+To run it locally, see [Running checks with Rake commands](#running-checks-with-rake-commands).
+
+## Running checks with Rake commands
+
+This project includes a `Rakefile` with helpful commands for building and validating the site locally.
+
+### Build the site
+
+To create a clean Middleman build, run:
+
+```bash
+bundle exec rake clean_middleman_build
+```
+
+This will:
+
+- Remove any existing `build` directory
+- Run `middleman build` to generate a fresh build
+
+To also reinstall Ruby gems as part of the build (e.g. after updating your `Gemfile`), pass the `update_ruby_gems` flag:
+
+```bash
+bundle exec rake clean_middleman_build\[true\] 
+```
+
+### Run html-proofer
+
+To run `html-proofer` against the build directory:
+
+```bash
+bundle exec rake run_html_proofer
+```
+
+> **Note:** This requires an existing `build` directory. Run `clean_middleman_build` first if you haven't already.
 
 ## Code of conduct
 
