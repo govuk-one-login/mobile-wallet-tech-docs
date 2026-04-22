@@ -39,9 +39,9 @@ This diagram shows the exchange of a credential between a government service (th
     activate User
     User->>CRI: Accesses your service
     activate CRI
-    CRI->>OneLogin: Authenticates user and<br> gets walletSubjectId
+    CRI->>OneLogin: Authenticates user and<br> gets wallet-subject-id
     activate OneLogin
-    OneLogin-->>CRI: Returns authenticated<br> user's walletSubjectId
+    OneLogin-->>CRI: Returns authenticated<br> user's wallet-subject-id
     deactivate OneLogin
     CRI->>CRI: Generates credential offer
     CRI-->>User: Renders credential offer<br> as QR code or deep-link
@@ -74,7 +74,7 @@ This diagram shows the exchange of a credential between a government service (th
         OneLogin-->>CRI: Returns JWKS
         deactivate OneLogin
     CRI->>CRI: Verifies access token and<br> proof of possession content and signature
-    CRI->>CRI: Compares walletSubjectId values
+    CRI->>CRI: Compares wallet-subject-id values
     CRI->>CRI: Generates credential
     CRI->>App: Returns credential
     deactivate CRI
@@ -106,9 +106,9 @@ There is [more guidance on authenticating users with GOV.UK One Login](/issue-cr
 <ol>
   <li>Your user accesses your service.</li>
 
-  <li>Your service authenticates the user with GOV.UK One Login and gets the user’s <code>walletSubjectId</code> from the GOV.UK One Login <a href="https://docs.sign-in.service.gov.uk/integrate-with-integration-environment/authenticate-your-user/#retrieve-user-information"><code>/userinfo</code> endpoint</a>.</li>
+  <li>Your service authenticates the user with GOV.UK One Login and gets the user’s <code>wallet-subject-id</code> from the GOV.UK One Login <a href="https://docs.sign-in.service.gov.uk/integrate-with-integration-environment/authenticate-your-user/#retrieve-user-information"><code>/userinfo</code> endpoint</a>.</li>
 
-  <li>GOV.UK One Login returns the authenticate user’s <code>walletSubjectId</code>.</li>
+  <li>GOV.UK One Login returns the authenticate user’s <code>wallet-subject-id</code>.</li>
 </ol>
 
 There's detailed guidance on [how GOV.UK One Login works](https://docs.sign-in.service.gov.uk/how-gov-uk-one-login-works/) in the GOV.UK One Login technical documentation.
@@ -166,7 +166,7 @@ There is more guidance on [issuing a credential](/issue-credentials/credential/)
 
   <li>Your service verifies the content and signature of the access token and the proof of possession.</li>
 
-  <li>Your service compares the <code>walletSubjectId</code> in the access token’s <code>sub</code> claim with the <code>walletSubjectId</code> retrieved in step 3. If they are the same, this provides assurance that you are issuing the credential to a digital wallet that is logged in as the rightful holder.</li>
+  <li>Your service compares the <code>wallet-subject-id</code> in the access token’s <code>sub</code> claim with the <code>wallet-subject-id</code> retrieved in step 3. If they are the same, this provides assurance that you are issuing the credential to a digital wallet that is logged in as the rightful holder.</li>
 
   <li>Your service builds and signs the credential, and <a href="/issue-credentials/credential/#further-guidance-on-credential-binding">binds it to the <code>did:key</code> provided in the proof of possession</a> to make sure the credential can only be used by the device it is issued to.</li>
 
