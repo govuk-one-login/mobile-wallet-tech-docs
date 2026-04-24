@@ -1,92 +1,98 @@
 ---
 title: Testing your in-person verifier with the GOV.UK Wallet sandbox
 weight: 10
-last_reviewed_on: 2026-03-02
-review_in: 3 months
+last_reviewed_on: 2026-04-23
+review_in: 6 months
 layout: verifier
-# Sandbox is currently being used as a placeholder to describe this suite.Ideally need to confirm the terminology before publishing
-# https://govukverify.atlassian.net/wiki/spaces/DCMAW/pages/6007422995/DCMAW-16461+-+Verifier+Integration+aka+Sandbox+Design#A-note-on-terminology
+
 ---
 
-# Testing your in-person verifier with the GOV.UK Wallet sandbox
+# Testing your in-person verifier with the GOV.UK Wallet Sandbox
 
-When you are developing your verification process, you must confirm that you are able to [receive credential information](/consuming-and-verifying-credentials) from a GOV.UK Wallet holders device.  You should use GOV.UK Wallet's Verifier Integration (Sandbox) tools to support this.
+The GOV.UK Wallet Sandbox will let you create a test driving licence and save it to the GOV.UK Wallet test app. You can then present the test driving licence to your verification service and confirm your service is able to [receive credential information](/consuming-and-verifying-credentials). You will be able to complete this flow on Android and iOS devices.
 
-The sandbox will allow you to create an example credential, and save it to a test GOV.UK Wallet instance.  You can then present the credential to your verification process, and confirm you are able to receive a verifiable credential.  You will be able to complete this flow on Android and iOS devices.
+The GOV.UK Wallet sandbox will contain:
 
-The sandbox tools are for specific testing and development purposes, and must not be used as part of a live integration with GOV.UK Wallet.  Since each verification process is different, the sandbox is limited to testing the Verifiable Presentation of a credential.
+- a [document builder](), which lets you issue test digital driving licences
+- a test app, which lets you store and share a test digital driving licence
+- a [mock status list service](), which lets you revoke or check the status of your test driving licence
+- the certificate authority, which manages the certificates you need to connect to GOV.UK Wallet
 
-Your verification process will depend on the types of credentials you will accept, and the credential information you request.  To ensure this meets your requirements you should:
+The GOV.UK Wallet Sandbox tools are for testing and development only. You must not use the tools in your production environment or as part or your live deployment process. The sandbox is limited to testing the Verifiable Presentation of a credential.
 
-- understand the credential types you wish to use
-- confirm the credential information you wish to use for each credential type
-- implement testing of your verification requirements, without using the sandbox tools
+## Before you use the GOV.UK Wallet Sandbox
 
-You must not use the sandbox tools in your production environment, or as part or your live deployment process.  
+To use the GOV.UK Wallet Sandbox, you must:
 
-## Using the sandbox document builder
+- be a certified Digital Verification Services (DVS) provider on the [digital identity and attribute services register](https://www.digital-identity-services-register.service.gov.uk/)
+- complete the enrollment process for a DVS
+- have been given access to verifier test tools (for example, TestFlight or Google Play Console) and installed these on your device
+- have received an integration certificate from us
 
-You can issue and revoke an example digital driving licence using the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start<<<<<TBC BEFORE PUBLISHING>>>>>).  You should use the licence to test the end-to-end journey of your verification process.
+If you have not completed these steps, speak to your GOV.UK Wallet engagement manager or [contact us](/contact-us).
 
+## Using the GOV.UK Wallet Sandbox document builder
 
-### Before using the document builder
+You can use the [document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start) to:
 
-Before you use the document builder, you should have:
+- [issue a new test digital driving licence]()
+- [revoke an issued test digital driving licence]()
 
-- completed the enrollment process for a digital verification service
-- been provided access to verifier test tools e.g. (TestFlight / Google Play Console) and installed these on your device
-- received an integration certificate
+You should use the test licence to test the end-to-end journey of your verification service.
 
-If you have not completed these steps or encounter any issues, speak to your GOV.UK Wallet engagement manager or [contact us](/contact-us).
+### Issue a test driving licence
 
-### Issue a test credential
+1. Access the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start) to begin issuing a test driving licence. 
 
-When you want to issue a test driving licence you should visit the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start<<<<<TBC BEFORE PUBLISHING>>>>>).  You should check that you have everything you need, and that you understand any information provided before clicking Start now.  You will then be able to select one of the following options:
+1. Click "Start now".
 
-- Issue a new test digital driving licence
-- Revoke an issued test digital driving licence
+1. Choose "Issue a new test digital driving licence" and click Continue.  
 
-You should choose "Issue a new test digital driving licence" and click Continue.  The document builder will then issue a new test driving licence for you to use.  
-
-The test driving licence will have:
+ The document builder will issue a new test driving licence for you to use. The test driving licence will have:
 
 - a unique driving licence number in the format `Test-{TIMESTAMP}`
 - a credential issuer of "GDS Verifier Integration"
 
-You should add the document to your non-production GOV.UK Wallet app, and begin testing your verification process.
-
+You should add the test driving licence to your GOV.UK Wallet test app, and use the licence to test your verification service.
 
 ### Revoke a test credential
 
-There are times when an issuer needs to [revoke a credential](/status-list/revoke-credential/).  Your verification process must recognise when a credential has been revoked, and must cancel the verification flow.  The document builder allows you to revoke [test credentials you have previously issued](#issue-a-test-credential).
+Credential issuers can [revoke a credential](/status-list/revoke-credential/) they have issued. Your verification service must recognise when a credential has been revoked by the issuer and must cancel the verification flow.
 
-When you want to revoke an example driving licence you should visit the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start<<<<<TBC BEFORE PUBLISHING>>>>>).  You should make a note of the test driving licence number you wish to revoke before clicking Start now. 
+The document builder allows you to revoke [test credentials you have previously issued](#issue-a-test-credential).
 
-You should choose "Revoke an issued test digital driving licence" and click Continue, you will be then be asked to enter the licence number you wish to revoke.  You should confirm that you have the correct licence number before clicking Continue, as you will not be able to re-issue a revoked credential.  If you incorrectly revoke a credential you should use the document builder to [issue a new licence](#issue-a-test-credential).
+To revoke a test credential:
 
-GOV.UK Wallet checks the status of credentials in the app when it is opened, and will invalidate your revoked credential.  Before you test your  revoked credential flow, you should set the device with your non-production GOV.UK Wallet app to airplane mode.  If GOV.UK Wallet invalidates the licence you should issue and revoke a new one. 
+1. Make a note of the test driving licence number you want to revoke. 
 
+1. Access the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start).  
+
+1. Choose "Revoke an issued test digital driving licence" and click Continue.
+
+1. Enter the test driving licence number you want to revoke. 
+
+<%= warning_text('You cannot reissue a test driving licence that has been revoked. Make sure you have the correct licence number before you click Continue. If you revoke a test driving licence incorrectly, you must use the document builder to issue a new one.') %>
+
+GOV.UK Wallet checks the status of credentials in the app when it is opened, and will invalidate your revoked driving licence. Before you test your revoked credential flow, you should set the device with your GOV.UK Wallet test app to airplane mode. If GOV.UK Wallet invalidates the licence you should issue and revoke a new one. 
 
 ## Using the sandbox mock status list
 
-Credential issuers can use the [status list service](/status-list/) to [check a credential's status](status-list/statuslist/#check-a-credential-39-s-status).  When you are testing your verification process, you must use the mock status list for this.
+Credential issuers can use the [status list service](/status-list/) to [check a credential's status](status-list/statuslist/#check-a-credential-39-s-status). When you are testing your verification service, you must use the mock status list to check the status of your test driving licence.
 
-### Check the status of a test credential
+### Check the status of a test driving licence
 
-You can check the status of [test credentials you have issued](#issue-a-test-credential) with the following urls:
-
-[//]: # (confirm these before publishing - this is still being built at the moment)
+You can check the status of a [test driving licence you have issued](#issue-a-test-credential) with the following urls:
 
 - https://status-list-mock.mobile.integration.account.gov.uk/.well-known/jwks.json
-- https://status-list-mock.mobile.integration.account.gov.uk/t/`{STATUS_LIST_IDENDIFIER}` 
+- https://status-list-mock.mobile.integration.account.gov.uk/t/`{STATUS_LIST_IDENTIFIER}` 
 
-The value of `STATUS_LIST_IDENDIFIER` will be unique to your test credential.
+The value of `STATUS_LIST_IDENTIFIER` will be unique to your test credential.
 
 The urls for the mock status list are different to those in production.  You must not use live credential status information for your testing environment.
 
 ### Understand the capabilities of the mock status list
 
-The mock status list has a limited functionality compared to the live status list service.  You should understand the differences and consider them in your testing.
+The mock status list has a limited functionality compared to the live status list service. You should understand these differences and consider them in your testing.
 
 The mock status list will:
 
