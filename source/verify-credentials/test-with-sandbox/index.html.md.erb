@@ -9,16 +9,16 @@ layout: verifier
 
 # Testing your in-person verifier with the GOV.UK Wallet Sandbox
 
-The GOV.UK Wallet Sandbox will let you create a test driving licence and save it to the GOV.UK Wallet test app. You can then present the test driving licence to your verification service and confirm your service is able to [receive credential information](/consuming-and-verifying-credentials). You will be able to complete this flow on Android and iOS devices.
+The GOV.UK Wallet Sandbox will let you create a test driving licence and save it to the GOV.UK Wallet test app. You can then present the test driving licence to your verification service and confirm it can [receive credential information](/consuming-and-verifying-credentials). You will be able to complete this flow on Android and iOS devices.
 
-The GOV.UK Wallet sandbox will contain:
+The GOV.UK Wallet Sandbox will contain:
 
-- a [document builder](), which lets you issue test digital driving licences
-- a test app, which lets you store and share a test digital driving licence
-- a [mock status list service](), which lets you revoke or check the status of your test driving licence
-- the certificate authority, which manages the certificates you need to connect to GOV.UK Wallet
+- a [document builder](#using-the-gov-uk-wallet-sandbox-document-builder), which lets you issue a test digital driving licence
+- a GOV.UK Wallet test app, which lets you store and share a test digital driving licence
+- a [mock status list service](#using-the-sandbox-mock-status-list), which lets you revoke or check the status of your test driving licence
+- a mock certificate authority, which provides a certificate that authenticates you when connecting to the GOV.UK Wallet test app
 
-The GOV.UK Wallet Sandbox tools are for testing and development only. You must not use the tools in your production environment or as part or your live deployment process. The sandbox is limited to testing the Verifiable Presentation of a credential.
+You must not use the GOV.UK Wallet Sandbox tools in your production environment or as part of your live deployment process. The tools are limited to validating the integration with your verifier service, and can not be used to test all credential types and attributes. You must write and maintain your own test suite in addition to the GOV.UK Wallet Sandbox tools.
 
 ## Before you use the GOV.UK Wallet Sandbox
 
@@ -27,16 +27,16 @@ To use the GOV.UK Wallet Sandbox, you must:
 - be a certified Digital Verification Services (DVS) provider on the [digital identity and attribute services register](https://www.digital-identity-services-register.service.gov.uk/)
 - complete the enrollment process for a DVS
 - have been given access to verifier test tools (for example, TestFlight or Google Play Console) and installed these on your device
-- have received an integration certificate from us
+- have received an integration certificate from the GOV.UK Wallet team
 
-If you have not completed these steps, speak to your GOV.UK Wallet engagement manager or [contact us](/contact-us).
+If you have not completed these steps, speak to your GOV.UK Wallet engagement manager or [contact us](contact-us).
 
 ## Using the GOV.UK Wallet Sandbox document builder
 
-You can use the [document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start) to:
+You can use the document builder to:
 
-- [issue a new test digital driving licence]()
-- [revoke an issued test digital driving licence]()
+- [issue a new test digital driving licence](#issue-a-test-driving-licence)
+- [revoke an issued test digital driving licence](#revoke-a-test-credential)
 
 You should use the test licence to test the end-to-end journey of your verification service.
 
@@ -59,9 +59,9 @@ You should add the test driving licence to your GOV.UK Wallet test app, and use 
 
 Credential issuers can [revoke a credential](/status-list/revoke-credential/) they have issued. Your verification service must recognise when a credential has been revoked by the issuer and must cancel the verification flow.
 
-The document builder allows you to revoke [test credentials you have previously issued](#issue-a-test-credential).
+The document builder allows you to revoke a test driving licence you have previously issued.
 
-To revoke a test credential:
+To revoke a test driving licence:
 
 1. Make a note of the test driving licence number you want to revoke. 
 
@@ -77,18 +77,18 @@ GOV.UK Wallet checks the status of credentials in the app when it is opened, and
 
 ## Using the sandbox mock status list
 
-Credential issuers can use the [status list service](/status-list/) to [check a credential's status](status-list/statuslist/#check-a-credential-39-s-status). When you are testing your verification service, you must use the mock status list to check the status of your test driving licence.
+You can use the [status list service](/status-list/) to [check the status of a real credential](status-list/statuslist/#check-a-credential-39-s-status). When you are testing your verification service, you must use the mock status list to check the status of your test driving licence.
 
 ### Check the status of a test driving licence
 
-You can check the status of a [test driving licence you have issued](#issue-a-test-credential) with the following urls:
+You can check the status of a test driving licence you have issued using [the same process as the production status list](status-list/statuslist/#check-a-credential-39-s-status). However, you must use the following urls:
 
 - https://status-list-mock.mobile.integration.account.gov.uk/.well-known/jwks.json
 - https://status-list-mock.mobile.integration.account.gov.uk/t/`{STATUS_LIST_IDENTIFIER}` 
 
 The value of `STATUS_LIST_IDENTIFIER` will be unique to your test credential.
 
-The urls for the mock status list are different to those in production.  You must not use live credential status information for your testing environment.
+The urls for the mock status list are different to those in production. You must not use live credential status information for your testing environment.
 
 ### Understand the capabilities of the mock status list
 
@@ -102,7 +102,3 @@ The mock status list will:
 - set the `ttl` claim to a short value
 
 There is more information available about the [`exp` and `ttl` claims](status-list/statuslist/#token-status-list-request-example-request-response-payload).
-
-
-
-
