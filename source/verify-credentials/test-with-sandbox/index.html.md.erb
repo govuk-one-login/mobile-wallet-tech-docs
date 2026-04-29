@@ -34,25 +34,30 @@ If you have not completed these steps, speak to your GOV.UK Wallet engagement ma
 
 You can use the document builder to:
 
-- [issue a new test digital driving licence](#issue-a-test-driving-licence)
+- [issue a test digital driving licence](#issue-a-test-digital-driving-licence)
 - [revoke an issued test digital driving licence](#revoke-a-test-credential)
 
 You should use the test licence to test the end-to-end journey of your verification service.
 
-### Issue a test driving licence
+### Issue a test digital driving licence
 
 1. Access the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start) to begin issuing a test driving licence. 
 
 1. Click "Start now".
 
-1. Choose "Issue a new test digital driving licence" and click Continue.  
+1. Choose "Issue a new test digital driving licence" and click Continue - the document builder will issue a new credential offer for a test driving licence.
 
- The document builder will issue a new test driving licence for you to use. The test driving licence will have:
+You should use this credential offer to add the test driving licence to your GOV.UK Wallet test app:
+
+- by tapping the "Add document" button if you are using the document builder on the same smartphone as the GOV.UK Wallet test app
+- by using the device with the GOV.UK Wallet test app to scan the QR code if you are using the document builder on a different device
+
+The test driving licence will have:
 
 - a unique driving licence number in the format `TST-{TIMESTAMP}`, where the timestamp is in milliseconds
 - a credential issuer of "GDS"
 
-You should add the test driving licence to your GOV.UK Wallet test app, and use the licence to test your verification service.
+When the test driving licence is added to your GOV.UK Wallet test app, you can begin using it to test your verification service.
 
 ### Revoke a test driving licence
 
