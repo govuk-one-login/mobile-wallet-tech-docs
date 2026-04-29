@@ -1,5 +1,5 @@
 ---
-title: Testing your in-person verifier with the GOV.UK Wallet Sandbox
+title: Testing your in-person verification service with the GOV.UK Wallet Sandbox
 weight: 10
 last_reviewed_on: 2026-04-29
 review_in: 6 months
@@ -7,9 +7,9 @@ layout: verifier
 
 ---
 
-# Testing your in-person verifier with the GOV.UK Wallet Sandbox
+# Testing your in-person verification service with the GOV.UK Wallet Sandbox
 
-The GOV.UK Wallet Sandbox will let you create a test driving licence and save it to the GOV.UK Wallet test app. You can then present the test driving licence to your verification service and confirm it can [receive credential information](/verify-credentials). You will be able to complete this flow on Android and iOS devices.
+The GOV.UK Wallet Sandbox will let you create a test driving licence and save it to the GOV.UK Wallet test app. You can then present the test driving licence to your in-person verification service and confirm it can [receive credential information](/verify-credentials). You will be able to complete this flow on Android and iOS devices.
 
 The GOV.UK Wallet Sandbox will contain:
 
@@ -18,7 +18,7 @@ The GOV.UK Wallet Sandbox will contain:
 - a [mock status list service](#using-the-sandbox-mock-status-list), which lets you revoke or check the status of your test driving licence
 - a mock certificate authority, which provides a certificate that authenticates you when connecting to the GOV.UK Wallet test app
 
-You must not use the GOV.UK Wallet Sandbox tools in your production environment or as part of your live deployment process. The tools are limited to validating the integration with your verifier service, and can not be used to test all credential types and attributes. You must write and maintain your own test suite in addition to the GOV.UK Wallet Sandbox tools.
+You must not use the GOV.UK Wallet Sandbox tools in your production environment or as part of your live deployment process. The tools are limited to validating the integration with your verification service, and can not be used to test all credential types and attributes. You must write and maintain your own test suite in addition to the GOV.UK Wallet Sandbox tools.
 
 ## Before you use the GOV.UK Wallet Sandbox
 
@@ -58,7 +58,7 @@ You should add the test driving licence to your GOV.UK Wallet test app, and use 
 
 Credential issuers can [revoke a credential](/issue-credentials/status-list/revoke-credential) they have issued. Your verification service must recognise when a credential has been revoked by the issuer and must cancel the verification flow.
 
-The document builder allows you to revoke a test driving licence you have previously issued. This helps you test your verification flow responds correctly when an issuer revokes a credential.
+The document builder allows you to revoke a test driving licence you have previously issued. This helps you test your verification service responds correctly when an issuer revokes a credential.
 
 When you open the GOV.UK Wallet test app, the app will check the status of its credentials and will invalidate any revoked driving licences. Before you test your revoked credential flow, you should set the device with your GOV.UK Wallet test app to airplane mode to prevent this behaviour. If the GOV.UK Wallet test app invalidates your licence, you must issue and revoke a new one. 
 
