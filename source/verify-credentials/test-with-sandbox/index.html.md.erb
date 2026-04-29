@@ -9,11 +9,11 @@ layout: verifier
 
 # Testing your in-person verification service with the GOV.UK Wallet Sandbox
 
-The GOV.UK Wallet Sandbox will let you create a test driving licence and save it to the GOV.UK Wallet test app. You can then present the test driving licence to your in-person verification service and confirm it can [receive credential information](/verify-credentials). You will be able to complete this flow on Android and iOS devices.
+The GOV.UK Wallet Sandbox will let you create a test digital driving licence and save it to the GOV.UK Wallet test app. You can then present the test driving licence to your in-person verification service and confirm it can [receive credential information](/verify-credentials). You will be able to complete this flow on Android and iOS devices.
 
 The GOV.UK Wallet Sandbox will contain:
 
-- a [document builder](#using-the-gov-uk-wallet-sandbox-document-builder), which lets you issue a test digital driving licence
+- a [document builder](#using-the-gov-uk-wallet-sandbox-document-builder), which lets you issue a credential offer for a test digital driving licence
 - a GOV.UK Wallet test app, which lets you store and share a test digital driving licence
 - a [mock status list service](#using-the-sandbox-mock-status-list), which lets you revoke or check the status of your test driving licence
 - a mock certificate authority, which provides a certificate that authenticates you when connecting to the GOV.UK Wallet test app
@@ -49,8 +49,8 @@ You should use the test licence to test the end-to-end journey of your verificat
 
  The document builder will issue a new test driving licence for you to use. The test driving licence will have:
 
-- a unique driving licence number in the format `Test-{TIMESTAMP}`
-- a credential issuer of "GDS Verifier Integration"
+- a unique driving licence number in the format `Test-{TIMESTAMP}`, where the timestamp is in milliseconds
+- a credential issuer of "GDS"
 
 You should add the test driving licence to your GOV.UK Wallet test app, and use the licence to test your verification service.
 
@@ -84,16 +84,16 @@ You can use the [Status List Service](/issue-credentials/status-list/) to [check
 
 You can check the status of a test driving licence you have issued using [the same process as the production status list](/issue-credentials/status-list/statuslist/#check-a-credential-39-s-status). However, you must use the following urls:
 
-- https://status-list-mock.mobile.integration.account.gov.uk/.well-known/jwks.json
-- https://status-list-mock.mobile.integration.account.gov.uk/t/`{STATUS_LIST_IDENTIFIER}` 
+- https://status-list-mock.wallet-onboarding.integration.account.gov.uk/.well-known/jwks.json
+- https://status-list-mock.wallet-onboarding.integration.account.gov.uk/t/`{STATUS_LIST_IDENTIFIER}` 
 
 The value of `STATUS_LIST_IDENTIFIER` will be unique to your test credential.
 
-The urls for the mock status list are different to those in production. You must not use live credential status information for your testing environment.
+The URLs for the mock status list are different to those in production. You must not use live credential status information for your testing environment.
 
 ### Understand the capabilities of the mock status list
 
-The mock status list has limited functionality compared to the live status list service. You should understand these differences and consider them in your testing.
+The mock status list has limited functionality compared to the live Status List Service. You should understand these differences and consider them in your testing.
 
 The mock status list will:
 
