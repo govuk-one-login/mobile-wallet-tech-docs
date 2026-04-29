@@ -15,7 +15,7 @@ The GOV.UK Wallet Sandbox will contain:
 
 - a [document builder](#using-the-gov-uk-wallet-sandbox-document-builder), which lets you issue a credential offer for a test digital driving licence
 - a GOV.UK Wallet test app, which lets you store and share a test digital driving licence
-- a [mock status list service](#using-the-sandbox-mock-status-list), which lets you revoke or check the status of your test driving licence
+- a [mock Status List Service](#using-the-sandbox-mock-status-list), which lets you revoke or check the status of your test driving licence
 - a mock certificate authority, which provides a certificate that authenticates you when connecting to the GOV.UK Wallet test app
 
 You must not use the GOV.UK Wallet Sandbox tools in your production environment or as part of your live deployment process. The tools are limited to validating the integration with your verification service, and can not be used to test all credential types and attributes. You must write and maintain your own test suite in addition to the GOV.UK Wallet Sandbox tools.
@@ -76,26 +76,26 @@ To revoke a test driving licence:
 
 <%= warning_text('You cannot reissue a test driving licence that has been revoked. Make sure you have the correct licence number before you click Continue. If you revoke a test driving licence incorrectly, you must use the document builder to issue a new one.') %>
 
-## Using the GOV.UK Wallet Sandbox mock status list
+## Using the GOV.UK Wallet Sandbox mock Status List Service
 
-You can use the [Status List Service](/issue-credentials/status-list/) to [check the status of a real credential](/issue-credentials/status-list/statuslist/#check-a-credential-39-s-status). When you are testing your verification service, you must use the mock status list to check the status of your test driving licence.
+You can use the real [Status List Service](/issue-credentials/status-list/) to [check the status of a real credential](/issue-credentials/status-list/statuslist/#check-a-credential-39-s-status). When you are testing your verification service, you must use the mock Status List Service to check the status of your test driving licence.
 
 ### Check the status of a test driving licence
 
-You can check the status of a test driving licence you have issued using [the same process as the production status list](/issue-credentials/status-list/statuslist/#check-a-credential-39-s-status). However, you must use the following urls:
+You can check the status of a test driving licence you have issued using [the same process as the Status List Service](/issue-credentials/status-list/statuslist/#check-a-credential-39-s-status). However, you must use the following urls:
 
 - https://status-list-mock.wallet-onboarding.integration.account.gov.uk/.well-known/jwks.json
 - https://status-list-mock.wallet-onboarding.integration.account.gov.uk/t/`{STATUS_LIST_IDENTIFIER}` 
 
 The value of `STATUS_LIST_IDENTIFIER` will be unique to your test credential.
 
-The URLs for the mock status list are different to those in production. You must not use live credential status information for your testing environment.
+The URLs for the mock Status List Service are different to those in production. You must not use live credential status information for your testing environment.
 
-### Understand the capabilities of the mock status list
+### Understand the capabilities of the mock Status List Service
 
-The mock status list has limited functionality compared to the live Status List Service. You should understand these differences and consider them in your testing.
+The mock Status List Service has limited functionality compared to the Status List Service. You should understand these differences and consider them in your testing.
 
-The mock status list will:
+The mock Status List Service will:
 
 - issue access tokens with a longer validity than the Status List Service
 - have fewer status options than the Status List Service
