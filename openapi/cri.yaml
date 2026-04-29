@@ -577,12 +577,12 @@ components:
         iss:
           type: string
           description: |
-            Issuer: must match a known clientId - As defined in rfc7519
+            Issuer: must match a known clientId - As defined in RFC 7519
           example: "clientId-abcdef"
         iat:
           type: number
           description: |
-            (unix timestamp) Issued At date - As defined in rfc7519
+            (unix timestamp) Issued At date - As defined in RFC 7519
           example: 1758038912
         statusExpiry:
           type: number
@@ -775,12 +775,12 @@ components:
         iss:
           type: string
           description: |
-            Issuer: must match a known clientId - As defined in rfc7519
+            Issuer: must match a known clientId - As defined in RFC 7519
           example: "clientId-abcdef"
         iat:
           type: number
           description: |
-            (unix timestamp) Issued At date - As defined in rfc7519
+            (unix timestamp) Issued At date - As defined in RFC 7519
           example: 1758038912
         idx:
           type: number
@@ -851,7 +851,7 @@ components:
         exp:
           type: number
           description: |
-            expiry date timestamp (as defined in rfc7519) of the status list JWT.
+            expiry date timestamp (as defined in RFC 7519) of the status list JWT.
             The information in the JWT past date may be invalid and it must not be used beyond this date.
             A stale status list may only be used in scenarios where there is an outage and the status list service is unable to serve a fresh status list.
           example: "https://crs.account.gov.uk/"
@@ -861,7 +861,7 @@ components:
           example: "https://crs.account.gov.uk/"
         iat:
           type: number
-          description: (unix timestamp) Issued At date - As defined in rfc7519
+          description: (unix timestamp) Issued At date - As defined in RFC 7519
           example: 1758038912
         sub:
           type: string
@@ -876,7 +876,7 @@ components:
           description: |
             The status list JWT containing the status information of the Referenced Token.
             The status of each Referenced Token is identified using an index that maps to two bits within the byte array.
-            The byte array is compressed using DEFLATE [RFC1951] with the ZLIB [RFC1950] data format and base64url-encoded.
+            The byte array is compressed using DEFLATE [RFC 1951] with the ZLIB [RFC 1950] data format and base64url-encoded.
           example:
             status_list":
               bits: 2,
@@ -893,7 +893,7 @@ components:
               description: |
                 A compressed byte array containing the status information of the Referenced Token.
                 The status of each Referenced Token is identified using an index that maps to two bits within the byte array.
-                The byte array is compressed using DEFLATE [RFC1951] with the ZLIB [RFC1950] data format and base64url-encoded.
+                The byte array is compressed using DEFLATE [RFC 1951] with the ZLIB [RFC 1950] data format and base64url-encoded.
       required:
         - alg
         - typ
@@ -1001,7 +1001,7 @@ components:
             encodedList:
               type: string
               description: |
-                The Multibase-encoded base64url (with no padding) [RFC4648] representation of the GZIP-compressed [RFC1952] bitstring values for the associated range of verifiable credential status values.
+                The Multibase-encoded base64url (with no padding) [RFC 4648] representation of the GZIP-compressed [RFC 1952] bitstring values for the associated range of verifiable credential status values.
               example: "H4sIAAAAAAAAA3MUBABJTAvCAgAAAA"
             ttl:
               type: number
