@@ -76,9 +76,9 @@ To revoke a test driving licence:
 
 <%= warning_text('You cannot reissue a test driving licence that has been revoked. Make sure you have the correct licence number before you click Continue. If you revoke a test driving licence incorrectly, you must use the document builder to issue a new one.') %>
 
-## Using the sandbox mock status list
+## Using the GOV.UK Wallet Sandbox mock status list
 
-You can use the [status list service](/issue-credentials/status-list/) to [check the status of a real credential](/issue-credentials/status-list/statuslist/#check-a-credential-39-s-status). When you are testing your verification service, you must use the mock status list to check the status of your test driving licence.
+You can use the [Status List Service](/issue-credentials/status-list/) to [check the status of a real credential](/issue-credentials/status-list/statuslist/#check-a-credential-39-s-status). When you are testing your verification service, you must use the mock status list to check the status of your test driving licence.
 
 ### Check the status of a test driving licence
 
@@ -97,8 +97,8 @@ The mock status list has limited functionality compared to the live status list 
 
 The mock status list will:
 
-- issue access tokens with a longer validity than the status list service
-- have fewer status options than the status list service
+- issue access tokens with a longer validity than the Status List Service
+- have fewer status options than the Status List Service
 - set the value of the `exp` claim to the expiry of the credential plus 30 days
 - set the `ttl` claim to a short value
 
