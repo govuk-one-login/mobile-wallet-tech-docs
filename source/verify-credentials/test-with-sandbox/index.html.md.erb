@@ -106,6 +106,6 @@ The mock Status List Service will:
 - cover only a small number of token indices, resulting in a much shorter encoded string than the Status List Service
 - support two statuses per token: 0x00 (valid) and 0x01 (invalid)
 - set the value of the `exp` timestamp to the expiry of the credential plus 30 days, in seconds
-- set the `ttl` claim to 259200, which is 30 days in seconds
+- set the `ttl` claim to 2592000, which is 30 days in seconds
 
 There is more information available about the [`exp` and `ttl` claims](/issue-credentials/status-list/statuslist/#token-status-list-request-example-request-response-payload).
