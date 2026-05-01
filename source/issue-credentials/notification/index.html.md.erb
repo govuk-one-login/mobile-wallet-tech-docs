@@ -8,7 +8,7 @@ layout: issuer
 
 # Handle notifications from GOV.UK Wallet
 
-The credential issuer notification endpoint is an optional endpoint defined in the [OID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-notification-endpoint) specification. GOV.UK Wallet uses this endpoint to notify you as the credential issuer of events relating to issued credentials.
+The credential issuer notification endpoint is an optional endpoint defined in the [OID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html#section-9) specification. GOV.UK Wallet uses this endpoint to notify you as the credential issuer of events relating to issued credentials.
 
 GOV.UK Wallet can send notifications about events such as:
 
@@ -22,7 +22,7 @@ You must include a unique `notification_id` parameter in each [credential respon
 
 ### Endpoint location
 
-The notification endpoint’s location is implementation-specific within the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html).
+The notification endpoint’s location is implementation-specific within the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html).
 
 As the credential issuer, you must publish the location of your notification endpoint in your [metadata](/issue-credentials/metadata/api.html#well-known-openid-credential-issuer) using the `notification_endpoint` parameter.
 
@@ -94,7 +94,7 @@ This is an example of a notification when a credential is successfully stored in
 }
 ```
 
-You can find more information about the notification request in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.1).
+You can find more information about the notification request in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html#section-9.1).
 
 ### Response format
 
@@ -115,7 +115,7 @@ This is an example of a notification error response when the notification reques
   "error": "invalid_notification_id"
 }
 ```
-You can find more information about the error notification responses in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-11.3).
+You can find more information about the error notification responses in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html#section-9.3).
 
 ### Idempotency
 
