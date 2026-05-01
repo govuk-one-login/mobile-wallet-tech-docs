@@ -47,5 +47,9 @@ show_contribution_banner: false
 github_repo: govuk-one-login/mobile-wallet-tech-docs
 github_branch: main
 
+# Ownership for page reviews
+default_owner_slack: '#di-mobile-wallet-tech-docs'
+owner_slack_workspace: gds
+
 # API description
 api_path: ./openapi/cri.yaml
