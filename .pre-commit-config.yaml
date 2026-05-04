@@ -12,6 +12,6 @@ repos:
         name: codespell
         description: Checks for common misspellings in text files.
         language: system
-        entry: bash -c 'cd example-credential-issuer && ./gradlew spotlessCheck -q'
+        entry: bash -c 'codespell'
         files: ^\.(erb|md)$
         stages: [pre-commit]
