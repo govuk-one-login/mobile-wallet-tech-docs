@@ -160,3 +160,10 @@ brew install pre-commit
 pre-commit install 
 pre-commit install --hook-type commit-msg
 ```
+
+## Contribut
+
+This project uses [pre-commit](https://pre-commit.com/) to enforce code quality and validate commit messages against
+[Conventional Commits](https://github.com/conventional-changelog/commitlint) standards. Non-conforming messages will be rejected.
+
+Ensure your branch is up to date and all hooks pass before opening a pull request. Avoid using the git `--no-verify` flag to skip these checks unless absolutely necessary.

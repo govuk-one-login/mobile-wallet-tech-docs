@@ -5,3 +5,13 @@ repos:
       - id: conventional-pre-commit
         stages: [commit-msg]
         args: [feat, fix, chore, docs, style, refactor, test, build, ci, perf, revert]
+
+  - repo: local
+    hooks:
+      - id: codespell
+        name: codespell
+        description: Checks for common misspellings in text files.
+        language: system
+        entry: bash -c 'cd example-credential-issuer && ./gradlew spotlessCheck -q'
+        files: ^\.(erb|md)$
+        stages: [pre-commit]
