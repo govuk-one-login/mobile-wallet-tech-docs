@@ -149,3 +149,14 @@ The documentation is [© Crown copyright][copyright] and available under the ter
 [mit]: LICENCE.md
 [copyright]: http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/
 [ogl]: http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+
+## Pre-commit hooks
+
+```bash
+brew install pre-commit
+```
+
+```bash
+pre-commit install 
+pre-commit install --hook-type commit-msg
+```
