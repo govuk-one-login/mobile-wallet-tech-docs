@@ -161,7 +161,7 @@ pre-commit install
 pre-commit install --hook-type commit-msg
 ```
 
-## Contribut
+## Contribu
 
 This project uses [pre-commit](https://pre-commit.com/) to enforce code quality and validate commit messages against
 [Conventional Commits](https://github.com/conventional-changelog/commitlint) standards. Non-conforming messages will be rejected.
