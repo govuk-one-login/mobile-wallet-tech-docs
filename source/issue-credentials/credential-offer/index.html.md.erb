@@ -10,7 +10,7 @@ layout: issuer
 
 A credential offer passes information relevant for credential issuance to GOV.UK Wallet, including a unique credential identifier so the credential can be identified later. Your service must generate a credential offer to begin the credential issuance process. This credential offer is passed to GOV.UK Wallet after an authenticated user gives their consent.
 
-You must build your credential offer using the full `credential_offer` object embedded in a URI. GOV.UK Wallet does not support using the `credential_offer_uri` parameter to reference a JSON object containing credential offer parameters. There is more guidance in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-credential-offer).
+You must build your credential offer using the full `credential_offer` object embedded in a URI. GOV.UK Wallet does not support using the `credential_offer_uri` parameter to reference a JSON object containing credential offer parameters. There is more guidance in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html#name-credential-offer).
 
 ## Technical details
 
@@ -44,7 +44,7 @@ This is an example of a credential offer JSON object. The `pre-authorized_code` 
 
 ### The pre-authorised code
 
-GOV.UK Wallet uses the [pre-authorised code flow](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-3.5) for credential issuance. This flow works as follows:
+GOV.UK Wallet uses the [pre-authorised code flow](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html#section-3.5) for credential issuance. This flow works as follows:
 
 1. Your credential issuer authenticates the user with GOV.UK One Login.
 1. Your credential issuer generates a pre-authorised code to start the credential issuance process - this code acts as proof that the user has already been authenticated.
