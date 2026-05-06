@@ -1,0 +1,17 @@
+repos:
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [feat, fix, chore, docs, style, refactor, test, build, ci, perf, revert]
+
+  - repo: local
+    hooks:
+      - id: codespell
+        name: codespell
+        description: Checks for common misspellings in text files.
+        language: system
+        entry: codespell
+        files: '\.(erb|md)$'
+        stages: [pre-commit]

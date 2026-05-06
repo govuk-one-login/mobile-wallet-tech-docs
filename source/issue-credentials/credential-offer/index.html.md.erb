@@ -1,7 +1,7 @@
 ---
 title: Generate a credential offer
 weight: 4
-last_reviewed_on: 2026-02-20
+last_reviewed_on: 2026-04-22
 review_in: 6 months
 layout: issuer
 ---
@@ -10,7 +10,7 @@ layout: issuer
 
 A credential offer passes information relevant for credential issuance to GOV.UK Wallet, including a unique credential identifier so the credential can be identified later. Your service must generate a credential offer to begin the credential issuance process. This credential offer is passed to GOV.UK Wallet after an authenticated user gives their consent.
 
-You must build your credential offer using the full `credential_offer` object embedded in a URI. GOV.UK Wallet does not support using the `credential_offer_uri` parameter to reference a JSON object containing credential offer parameters. There is more guidance in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-credential-offer).
+You must build your credential offer using the full `credential_offer` object embedded in a URI. GOV.UK Wallet does not support using the `credential_offer_uri` parameter to reference a JSON object containing credential offer parameters. There is more guidance in the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html#name-credential-offer).
 
 ## Technical details
 
@@ -44,7 +44,7 @@ This is an example of a credential offer JSON object. The `pre-authorized_code` 
 
 ### The pre-authorised code
 
-GOV.UK Wallet uses the [pre-authorised code flow](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-3.5) for credential issuance. This flow works as follows:
+GOV.UK Wallet uses the [pre-authorised code flow](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html#section-3.5) for credential issuance. This flow works as follows:
 
 1. Your credential issuer authenticates the user with GOV.UK One Login.
 1. Your credential issuer generates a pre-authorised code to start the credential issuance process - this code acts as proof that the user has already been authenticated.
@@ -100,8 +100,8 @@ The JWT payload must contain the following claims:
 | `clientId`               | Your client ID, which you received when you registered your service to use GOV.UK One Login.                                                                                                                                                                                                |
 | `credential_identifiers` | The unique identifier for the specific credential offer. GOV.UK Wallet currently only supports one identifier per pre-authorised code. This should be a long random value (for example, a UUIDv4) and should not be a personal identifier or account identifier.                            |
 | `credential_configuration_ids`     | The unique name of the credential. This value must match the name of the credential used in the `credential_configurations_supported` parameter of your [credential issuer metadata](../metadata/#response-format).                                                                                                                     |
-| `exp`                    | The expiration date of the pre-authorised code, as per the [IETF RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519). We recommend this is aligned with the length of time a user can remain inactive on your service, up to a maximum of 1 hour. Must be expressed in epoch seconds. |
-| `iat`                    | The time at which the pre-authorised code was issued, as per the [IETF RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519). Must be expressed in epoch seconds.                                                                                                                       |
+| `exp`                    | The expiration date of the pre-authorised code, as per the [RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519). We recommend this is aligned with the length of time a user can remain inactive on your service, up to a maximum of 1 hour. Must be expressed in epoch seconds. |
+| `iat`                    | The time at which the pre-authorised code was issued, as per the [RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519). Must be expressed in epoch seconds.                                                                                                                       |
 | `iss`                    | The URL of your credential issuer.                                                                                                                                                                                                                                                          |
 | `aud`                    | The URL of the authorisation server your credential issuer relies on for authorisation. This must be set to the GOV.UK One Login authorisation server: `https://token.account.gov.uk/`.                                                                                                     |
 
@@ -118,7 +118,7 @@ You need to store some context to track the credential issuance process.
 You must store the:
 
 - credential offer identifier: this is the `credential_identifiers` in the pre-authorised code payload described above
-- GOV.UK Wallet subject identifier (`walletSubjectId`): this was included in the user information your service received when the user authenticated with GOV.UK One Login
+- GOV.UK Wallet subject identifier (`wallet_subject_id`): this was included in the user information your service received when the user authenticated with GOV.UK One Login
 - credential details: this could be an identifier for the record to be issued as a credential and/or other relevant information about the credential itself
 
 You could also choose to store the:
