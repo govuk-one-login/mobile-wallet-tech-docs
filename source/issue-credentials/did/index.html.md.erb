@@ -7,7 +7,16 @@ layout: issuer
 ---
 
 # Publish your Decentralised Identifier (DID) document
-As a credential issuer, you must use decentralised identifiers (DIDs) as they let GOV.UK Wallet verify the credentials it receives from credential issuers.
+
+<div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    This page is specific to issuing JWT credentials. If you are issuing mdoc credentials, you should publish your public certificates on an Issuing Authority Certificate Authority (IACA) API. See the <a href="https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en">ISO/IEC 18013-5 specification</a> for more information.</br></br>We are updating this documentation to add more guidance about the IACA API and mdoc implementations. We will publish a <a href="../../#documentation-updates">documentation update</a> when this guidance is available.
+  </strong>
+</div>
+
+
+As a JWT credential issuer, you must use decentralised identifiers (DIDs) as they let GOV.UK Wallet verify the credentials it receives from credential issuers.
 
 The  DID document endpoint exposes your DID document, which contains the public cryptographic keys used to verify signatures on credentials issued by the credential issuer. This process checks the credentials’ authenticity and integrity.
 
