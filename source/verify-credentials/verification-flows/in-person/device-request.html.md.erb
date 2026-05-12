@@ -1,7 +1,7 @@
 ---
 title: GOV.UK Wallet Bluetooth service requirements
 weight: 2
-last_reviewed_on: 2026-05-11
+last_reviewed_on: 2026-05-12
 review_in: 6 months
 ---
 
@@ -13,7 +13,7 @@ To retrieve credential information from GOV.UK Wallet you must have this capabil
 
 ## Connect to a credential holder's device
 
-When sharing credential details, GOV.UK Wallet will make the holder's device discoverable for you to connect. This is known as taking the Peripheral (server) role. GOV.UK Wallet sets this role in the [`RetrievalOptions`](qr-code.html#retrieval-options) when you first [read the holder's QR code](qr-code). You must take the Central (client) role and request to connect to the holder's device.  
+When sharing credential details, GOV.UK Wallet will make the holder's device discoverable for you to connect. This is known as taking the Peripheral (server) role. GOV.UK Wallet sets this role in the [`RetrievalOptions`](qr-code.html#retrieval-options) when you first [read the holder's QR code](verify-credentials/verification-flows/in-person/qr-code). You must take the Central (client) role and request to connect to the holder's device.  
 
 ### Bluetooth service characteristics
 
@@ -25,7 +25,7 @@ When a holder's device takes the peripheral role, GOV.UK Wallet will create a GA
 | `Client2Server` | 00000002-A123-48CE-896B-4C76973373E6 | Write Without Response         |
 | `Server2Client` | 0000003-A123-48CE-896B-4C76973373E6  | Notify                         |
 
-The UUIDs of these characteristics are specified in the [ISO 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
+The UUIDs of these characteristics are specified in the [ISO/IEC 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
 
 Once you have connected to a holder's device, you can ask GOV.UK Wallet to share encrypted credential information.
 
@@ -34,7 +34,7 @@ Once you have connected to a holder's device, you can ask GOV.UK Wallet to share
 When connected in the central role, you can:
 
 - set the `State` characteristic to `0x01` to indicate you are ready to receive messages
-- send a [message to the holder's](#send-a-session-establishment-message) device using the `Client2Server` characteristic to begin session establishment
+- send a [message to the holder's device](#send-a-session-establishment-message) using the `Client2Server` characteristic to begin session establishment
 
 ### Connect in the peripheral role
 
@@ -136,7 +136,7 @@ Below is an example CBOR diagnostic requesting mandatory elements from an mDL:
 
 ```
 
-There is guidance on the [credentials that are available in GOV.UK Wallet](/consuming-and-verifying-credentials/credentials-in-wallet).
+There is guidance on the [credentials that are available in GOV.UK Wallet](/verify-credentials/credentials-in-wallet).
 
 ## Handling device request errors
 

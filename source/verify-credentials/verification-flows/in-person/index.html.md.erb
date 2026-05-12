@@ -1,7 +1,7 @@
 ---
 title: Verify credentials in person
 weight: 3
-last_reviewed_on: 2026-01-26
+last_reviewed_on: 2026-05-12
 review_in: 6 months
 layout: verifier
 ---
@@ -69,13 +69,13 @@ This diagram shows an overview of how GOV.UK Wallet will handle in-person creden
 
 1. The credential holder opens the GOV.UK One Login app containing their mobile driving licence to present their information.
 
-1. The GOV.UK One Login app begins device engagement and [generates a QR code that contains device engagement information](qr-code.html) and the app’s ephemeral public key.
+1. The GOV.UK One Login app begins device engagement and [generates a QR code that contains device engagement information](verify-credentials/verification-flows/in-person/qr-code) and the app’s ephemeral public key.
 
 1. The verifier opens the verifier app on their device.
 
 1. Using the verifier app, the verifier scans the QR code displayed on the credential holder’s device.
 
-1. The verifier app begins session establishment by sending its ephemeral public key to the GOV.UK One Login app, and [attempts to establish a secure Bluetooth connection](bluetooth-service.html).
+1. The verifier app begins session establishment by sending its ephemeral public key to the GOV.UK One Login app, and [attempts to establish a secure Bluetooth connection](verify-credentials/verification-flows/in-person/device-request).
 
 1. The two devices establish a secure connection, and create a unique session key to encrypt the data shared during the session.
 
