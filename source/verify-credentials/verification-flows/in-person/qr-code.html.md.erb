@@ -56,7 +56,7 @@ Below is an example of a `Security` element containing the public key and encryp
 
 #### Device retrieval method
 
-You can use the `DeviceRetrievalMethod` element to find details about the connection methods GOV.UK Wallet has available. Initially GOV.UK Wallet will only support BLE connections.  
+You can use the `DeviceRetrievalMethod` element to find details about the connection methods GOV.UK Wallet has available. At first, GOV.UK Wallet will only support BLE connections.  
 
 GOV.UK Wallet will set this value to `2` to indicate BLE support, for example:
 
@@ -81,7 +81,7 @@ This is an example `DeviceRetrievalMethod` CBOR:
 
 #### Retrieval options
 
-When device engagement begins, GOV.UK Wallet will take the peripheral role and wait for you to connect. GOV.UK Wallet will enable this setting in the `RetrievalOptions`, as well as disabling client mode.  GOV.UK Wallet will also provide a randomly generated UUID for the sharing session. 
+GOV.UK Wallet will take the peripheral role and wait for you to connect when device engagement begins. GOV.UK Wallet will enable this setting in the `RetrievalOptions` and will disable client mode. GOV.UK Wallet will also provide a randomly generated UUID for the sharing session. 
 
 For example:
 

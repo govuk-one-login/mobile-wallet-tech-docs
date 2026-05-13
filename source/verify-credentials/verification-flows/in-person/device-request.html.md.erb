@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Request credential information from a GOV.UK Wallet holder's device
 
-GOV.UK Wallet allows your verification process to receive credential information when a user agrees to share it. Credential information is shared over a Bluetooth Low Energy (BLE) connection using the Generic Attribute Profile (GATT) protocol.
+GOV.UK Wallet lets your verification process receive credential information when a user agrees to share it. GOV.UK Wallet shares credential information over a Bluetooth Low Energy (BLE) connection using the Generic Attribute Profile (GATT) protocol.
 
 To retrieve credential information from GOV.UK Wallet you must have this capability. There is [more guidance on the in-person sharing flow](./#understand-gov-uk-wallet-s-in-person-sharing-flow).
 
@@ -15,7 +15,7 @@ To retrieve credential information from GOV.UK Wallet you must have this capabil
 
 When sharing credential details, GOV.UK Wallet will make the holder's device discoverable for you to connect. This is known as taking the Peripheral (server) role. GOV.UK Wallet sets this role in the [`RetrievalOptions`](qr-code.html#retrieval-options) when you first [read the holder's QR code](verify-credentials/verification-flows/in-person/qr-code). You must take the Central (client) role and request to connect to the holder's device.  
 
-### Bluetooth service characteristics
+### Sending and receiving messages via Bluetooth
 
 When a holder's device takes the peripheral role, GOV.UK Wallet will create a GATT service with the following characteristics:
 
@@ -29,29 +29,27 @@ The UUIDs of these characteristics are specified in the [ISO/IEC 18013-5 standar
 
 Once you have connected to a holder's device, you can ask GOV.UK Wallet to share encrypted credential information.
 
-### Connect in the central role
+### Connecting in the central role
 
 When connected in the central role, you can:
 
 - set the `State` characteristic to `0x01` to indicate you are ready to receive messages
 - send a [message to the holder's device](#send-a-session-establishment-message) using the `Client2Server` characteristic to begin session establishment
 
-### Connect in the peripheral role
+### Connecting in the peripheral role
 
-When connected in the peripheral role, GOV.UK Wallet will:
-
-- send `DeviceResponse` messages to your verification device using the `Server2Client` characteristic
+When connected in the peripheral role, GOV.UK Wallet will send `DeviceResponse` messages to your verification device using the `Server2Client` characteristic.
 
 Once the secure session has been confirmed, you will be able to retrieve encrypted credential information. You can use this information in your verification service. 
 
-The maximum length of a message is 512 bytes. Any messages larger than this, for example images, must be divided into parts.
+The maximum length of a message is 512 bytes. You must divide any messages larger than this into parts.
 
 ### Cancelling a sharing session
 
-A sharing session can be canceled by the central or peripheral device. If your verification service needs to cancel a session, you must set the `State` characteristic to `0x02`. As the holder's device can also update this characteristic, your verification process must listen for any messages which change `State` value.
+The central device or the peripheral device can cancel a sharing session. If your verification service needs to cancel a session, you must set the `State` characteristic to `0x02`. As the holder's device can also update this characteristic, your verification process must listen for any messages which change the `State` value.
 
 
-## Send a session establishment message
+## Sending a session establishment message
 
 When your connection is ready, you will be able to send a message to request encrypted credential information from GOV.UK Wallet. This must be a `SessionEstablishment` structure in the form of a Concise Binary Object Representation (CBOR). This will contain your:
 
@@ -84,7 +82,7 @@ Below is an example of the `SessionEstablishment` as a CBOR diagnostic:
 
 ```
 
-### Understand session transcript
+### Understand the session transcript
 
 During session establishment, the peripheral and central devices will create a session transcript in the form of a `SessionTranscript` structure. This is used when generating a unique key for the sharing session, which helps to prevent a sharing session from being altered or reused. 
 
@@ -140,7 +138,7 @@ There is guidance on the [credentials that are available in GOV.UK Wallet](/veri
 
 ## Handling device request errors
 
-If you are unable to successfully establish a connection to a holder's device, you must terminate the session. Before you terminate the session, you should send a `SessionData` message containing the appropriate status code.  
+If you can not establish a connection to a holder's device, you must terminate the session. Before you terminate the session, you should send a `SessionData` message containing the appropriate status code.  
 
 GOV.UK Wallet will expect one of the following status codes:
 
