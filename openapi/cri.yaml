@@ -267,7 +267,7 @@ paths:
         '200':
           description: "OK"
           content:
-            application/statuslist+jwt:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TokenStatusListResponse'
         '404':
@@ -302,7 +302,7 @@ paths:
           description: "Unique name representing the specific status list"
       responses:
         '200':
-          description: "OK"
+          description: OK
           content:
             application/vc+jwt:
               schema:
