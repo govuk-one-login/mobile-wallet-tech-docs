@@ -24,9 +24,9 @@ You must not use the GOV.UK Wallet Sandbox tools in your production environment 
 
 To use the GOV.UK Wallet Sandbox, you must:
 
-- complete the enrolment process to become a certified Digital Verification Services (DVS) provider on the [digital identity and attribute services register](https://www.digital-identity-services-register.service.gov.uk/)
-- have been given access to our verifier test tools (for example, TestFlight or Google Play Console) and installed these on your device
-- have received an integration certificate from the GOV.UK Wallet team
+- complete the enrolment process to become a certified Digital Verification Services (DVS) provider on the [register of digital identity and attribute services](https://www.digital-identity-services-register.service.gov.uk/)
+- have access to our verifier test tools (for example, TestFlight or Google Play Console) and installed these on your device
+- have an integration certificate from the GOV.UK Wallet team
 
 If you have not completed these steps, speak to your GOV.UK Wallet engagement manager or [contact us](contact-us).
 
@@ -43,14 +43,14 @@ You should use the test digital driving licence to validate the end-to-end journ
 
 1. Open the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start) in your web browser. 
 
-1. Click "Start now".
+1. Select **Start now**.
 
-1. Choose "Issue a new test digital driving licence" and click "Continue" - the document builder will issue a new credential offer for a test digital driving licence.
+1. Choose **Issue a new test digital driving licence** and select **Continue** - the document builder will issue a new credential offer for a test digital driving licence.
 
 You should use this credential offer to add the test digital driving licence to your GOV.UK Wallet test app by:
 
-- choosing the "Add document" button if the document builder is on the same smartphone as the GOV.UK Wallet test app
-- using the device with the GOV.UK Wallet test app to scan the QR code if the document builder is on a different device
+- choosing **Add document** if the document builder is on the same smartphone as the GOV.UK Wallet test app
+- scanning the QR code using the device with the GOV.UK Wallet test app if the document builder is on a different device
 
 The test digital driving licence will have:
 
@@ -61,7 +61,7 @@ When the test digital driving licence is added to your GOV.UK Wallet test app, y
 
 ### Revoke a test digital driving licence
 
-Credential issuers can [revoke a credential](/issue-credentials/status-list/revoke-credential) they have issued. Your verification service must recognise when a credential has been revoked by the issuer and must cancel the verification flow.
+Credential issuers can [revoke a credential](/issue-credentials/status-list/revoke-credential) they have issued. Your verification service must recognise when an issuer has revoked a credential and must cancel the verification flow.
 
 The document builder allows you to revoke a test digital driving licence you have previously issued. This helps you test your verification service responds correctly when an issuer revokes a credential.
 
@@ -75,7 +75,7 @@ To revoke a test digital driving licence:
 
 1. Access the [sandbox document builder](https://stub-credential-issuer.wallet-onboarding.integration.account.gov.uk/dvs/start).  
 
-1. Choose "Revoke an issued test digital driving licence" and click Continue.
+1. Choose **Revoke an issued test digital driving licence** and select **Continue**.
 
 1. Enter the test digital driving licence number you want to revoke. 
 
@@ -108,8 +108,8 @@ The mock Status List Service has limited functionality compared to the Status Li
 The mock Status List Service will:
 
 - cover only a small number of token indices, resulting in a much shorter encoded string than the Status List Service
-- support two statuses per token: 0x00 (valid) and 0x01 (invalid)
+- support two statuses per token: `0x00` (valid) and `0x01` (invalid)
 - set the value of the `exp` timestamp to the expiry of the credential plus 30 days, in seconds
-- set the `ttl` claim to 2592000, which is 30 days in seconds
+- set the `ttl` claim to `2592000`, which is 30 days in seconds
 
 There is more information available about the [`exp` and `ttl` claims](/issue-credentials/status-list/statuslist/#token-status-list-request-example-request-response-payload).
