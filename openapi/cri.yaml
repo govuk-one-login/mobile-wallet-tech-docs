@@ -144,35 +144,68 @@ paths:
               schema:
                 $ref: "#/components/schemas/IssueResponse"
               example:
-                index: 3
+                idx: 3
                 uri: "https://crs.account.gov.uk/b/A671FED3E9AD"
         '400':
-          description: Bad request (invalid JWT, missing fields, wrong content-type, etc.)
+          description: Bad request (invalid JWT, missing fields, wrong content-type, idempotency conflict, etc.)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Issue400ErrorResponse"
-              example:
-                error: BAD_REQUEST
-                error_description: "No Type in Header"
+              examples:
+                no_body_or_headers:
+                  summary: Missing event body or headers
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No Event Body or Headers Found"
+                missing_content_type:
+                  summary: Missing Content-Type header
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Content-Type header must be application/jwt"
+                missing_jti:
+                  summary: Missing jti in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No jti in Payload"
+                invalid_jti:
+                  summary: Invalid jti format
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "The jti claim is not a lower case uuid string"
+                missing_status_expiry:
+                  summary: Missing statusExpiry in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No Status Expiry in Payload"
+                invalid_status_expiry:
+                  summary: Invalid statusExpiry value
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Status Expiry in Payload must be a non negative number and represent a future expiry date no more than 1 year from now"
+                invalid_idempotent_request:
+                  summary: Same jti reused with different statusExpiry
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Detected invalid changes between idempotent requests, unable to proceed. Please generate a new request."
         '401':
-          description: Unauthorized (client not found)
+          description: Unauthorized (authentication or signature failure)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Issue401ErrorResponse"
               example:
-                error: UNAUTHORISED
-                error_description: "No matching client found with ID: invalidClientId"
-        '403':
-          description: Forbidden (JWT signature verification failure)
+                error: UNAUTHORIZED
+                error_description: "Unauthorized Request"
+        '409':
+          description: Conflict - concurrent request with the same idempotency key already in progress
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Issue403ErrorResponse"
+                $ref: "#/components/schemas/Issue409ErrorResponse"
               example:
-                error: FORBIDDEN
-                error_description: "Failure verifying the signature of the jwt"
+                error: CONFLICT
+                error_description: "Multiple concurrent idempotent requests in progress. Please retry after a short delay."
         '500':
           description: Internal server error
           content:
@@ -181,7 +214,16 @@ paths:
                 $ref: "#/components/schemas/Issue500ErrorResponse"
               example:
                 error: INTERNAL_SERVER_ERROR
-                error_description: "Error receiving messages: ..."
+                error_description: "Unable to successfully issue a status"
+        '503':
+          description: Service temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Issue503ErrorResponse"
+              example:
+                error: TEMPORARILY_UNAVAILABLE
+                error_description: "Service is temporarily unavailable"
   # `crs`
   /revoke:
     post:
@@ -211,9 +253,47 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Revoke400ErrorResponse"
-              example:
-                error: BAD_REQUEST
-                error_description: "No Type in Header"
+              examples:
+                no_body_or_headers:
+                  summary: Missing event body or headers
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No Event Body or Headers Found"
+                missing_content_type:
+                  summary: Missing Content-Type header
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Content-Type header must be application/jwt"
+                missing_jti:
+                  summary: Missing jti in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No jti in Payload"
+                invalid_jti:
+                  summary: Invalid jti format
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "The jti claim is not a lower case uuid string"
+                missing_idx:
+                  summary: Missing idx in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No Index in Payload"
+                invalid_idx:
+                  summary: Invalid idx value
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Index must be a valid non-negative integer"
+                missing_uri:
+                  summary: Missing uri in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No valid URI in Payload"
+                invalid_uri_format:
+                  summary: Invalid URI format
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Invalid URI format in payload"
         '401':
           description: Unauthorized (client not found or client mismatch)
           content:
@@ -221,19 +301,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Revoke401ErrorResponse"
               example:
-                error: "UNAUTHORISED"
-                error_description: "No matching client found with ID: invalidClientId"
+                error: "UNAUTHORIZED"
+                error_description: "Unauthorized Request"
         '403':
-          description: Forbidden (JWT signature verification failure or JWKS fetch failure)
+          description: Forbidden (status list entry not found or issuer mismatch)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Revoke403ErrorResponse"
               example:
                 error: FORBIDDEN
-                error_description: "Failure verifying the signature of the jwt"
+                error_description: "Unable to revoke the specified status list entry"
         "404":
-          description: Entry not found or list type mismatch
+          description: Entry not found in status list table
           content:
             application/json:
               schema:
@@ -247,9 +327,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Revoke500ErrorResponse"
+              examples:
+                database_query_error:
+                  summary: Database query failure
+                  value:
+                    error: "INTERNAL_SERVER_ERROR"
+                    error_description: "Error querying database for status list entry"
+                database_update_error:
+                  summary: Database update failure
+                  value:
+                    error: "INTERNAL_SERVER_ERROR"
+                    error_description: "Failed to update revocation status"
+        "503":
+          description: Service temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revoke503ErrorResponse"
               example:
-                error: "INTERNAL_SERVER_ERROR"
-                error_description: "Error processing revocation request"
+                error: "TEMPORARILY_UNAVAILABLE"
+                error_description: "Service is temporarily unavailable"
 
   # `crs`
   /t/{statusListIdentifier}:
@@ -592,7 +689,7 @@ components:
         jti:
           type: string
           description: |
-            JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks
+            JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks. Its value must be a lowercase UUID.
           example: "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
       required:
         - alg
@@ -633,7 +730,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be `UNAUTHORISED`.
+          description: An error code - must be `UNAUTHORIZED`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -651,11 +748,33 @@ components:
           type: string
       required:
         - error
+    Issue409ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be `CONFLICT`.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
     Issue500ErrorResponse:
       type: object
       properties:
         error:
           description: An error code - must be `INTERNAL_SERVER_ERROR`.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    Issue503ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be `TEMPORARILY_UNAVAILABLE`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -677,7 +796,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be `UNAUTHORISED`.
+          description: An error code - must be `UNAUTHORIZED`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -711,6 +830,17 @@ components:
       properties:
         error:
           description: An error code - must be `INTERNAL_SERVER_ERROR`.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    Revoke503ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be `TEMPORARILY_UNAVAILABLE`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
