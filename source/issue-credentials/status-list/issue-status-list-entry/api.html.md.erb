@@ -12,10 +12,10 @@ api> /issue
 
 ## Idempotency
 
-The `/issue` endpoint is idempotent. If you send multiple requests with the same `iss` and `jti` values within a short window, the service will return the same `idx` and `uri` as the original successful response. This allows you to safely retry requests if you experience a network failure or timeout before receiving a response.
+There may be situations where the same issue request is sent multiple times, for example due to retries after experiencing a network failure or timeout. Identical requests using the same `jti` will return the same `idx` and `uri` as the original successful request during a limited window. Due to this window the must and should not be used as a method for querying existing statuses.
 
-The `jti` claim acts as the idempotency key. You must use a new lowercase UUID `jti` for each new credential you issue. Do not reuse a `jti` across different credentials.
+Unique `jti` values must be used for each new status you wish to issue.
 
-If you send a request with the same `iss` and `jti` but a different `statusExpiry`, the service will return a `400 BAD_REQUEST` error. You must generate a new `jti` for the new request.
+If you send a request with a previously used `jti` but a different `statusExpiry`, the service will return a `400 BAD_REQUEST` error. You must generate a new `jti` for the new request.
 
 If two requests with the same `iss` and `jti` arrive at exactly the same time, the service will return a `409 CONFLICT` error for the second request. Retry after a short delay.
