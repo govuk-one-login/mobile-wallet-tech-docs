@@ -270,6 +270,7 @@ paths:
             application/statuslist+jwt:
               schema:
                 $ref: '#/components/schemas/TokenStatusListResponse'
+              example: "<JWT>"
         '404':
           description: Not Found
           content:
@@ -307,6 +308,7 @@ paths:
             application/vc+jwt:
               schema:
                 $ref: '#/components/schemas/BitstringStatusListResponse'
+              example: "<JWT>"
         '404':
           description: Not Found
           content:
@@ -832,7 +834,6 @@ components:
     TokenStatusListResponse:
       type: string
       description: JOSE signed IETF Token Status List JWT containing the status list.
-      example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJleHAiOjE3NTk5MTg3NTQsImlhdCI6MTc1OTMxMzk1NCwiaXNzIjoiaHR0cHM6Ly9jcnMuYWNjb3VudC5nb3YudWsvIiwic3RhdHVzX2xpc3QiOnsiYml0cyI6MiwibHN0IjoiZU5wemRBRUFBTWdBaGcifSwic3ViIjoiaHR0cHM6Ly9jcnMuYWNjb3VudC5nb3YudWsvdC8zQjBGM0JEMDg3QTciLCJ0dGwiOjM2MDB9.mESUJzZ07hCCdAzHXJZaxkKNdvYBJPwRLvqyP185t72hJUBMdFvVI-ynQjl7KRmcidxBXuI_gCHppAqctk1rAQ"
       properties:
         alg:
           type: string
