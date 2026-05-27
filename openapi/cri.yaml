@@ -304,9 +304,35 @@ paths:
         '200':
           description: OK
           content:
-            application/vc+jwt:
+            application/json:
               schema:
                 $ref: '#/components/schemas/BitstringStatusListResponse'
+              example:
+                alg: "ES256"
+                kid: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
+                context:
+                  - "https://www.w3.org/ns/credentials/v2"
+                  - "https://www.w3.org/ns/credentials/examples/v2"
+                id: "https://crs.account.gov.uk/b/A671FED3E9AD"
+                type:
+                  - "VerifiableCredential"
+                  - "BitstringStatusListCredential"
+                issuer: "https://crs.account.gov.uk/"
+                validFrom: "2025-10-01T14:00:00Z"
+                validUntil: "2025-10-01T14:00:00Z"
+                expectedUpdate: "2025-09-01T14:00:00Z"
+                credentialSubject:
+                  id: "https://crs.account.gov.uk/b/A671FED3E9AD#list"
+                  type: "BitstringStatusList"
+                  statusSize: 2
+                  statusPurpose: "message"
+                  statusMessage:
+                    - status: "0x0"
+                      message: "VALID"
+                    - status: "0x1"
+                      message: "INVALID"
+                  encodedList: "H4sIAAAAAAAAA3MUBABJTAvCAgAAAA"
+                  ttl: 3600
         '404':
           description: Not Found
           content:
@@ -909,6 +935,7 @@ components:
     BitstringStatusListResponse:
       type: string
       description: JOSE signed Bitstring status list credential containing the status list.
+      example: "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTc3OTUzNTI4Nn0.woPK54yGSs0bg26eVwtIn0028Mq4uiUJIygjleL7BG8ytj5sHqkCmhMyXigUKotBhaFWLBsaBKMPyMWuUHxttw"
       properties:
         alg:
           type: string
@@ -923,7 +950,11 @@ components:
         context:
           type: array
           description: Verifiable credential data model v2
-          example: ["https://www.w3.org/ns/credentials/v2", "https://www.w3.org/ns/credentials/examples/v2"]
+          items:
+            type: string
+          example:
+            - "https://www.w3.org/ns/credentials/v2"
+            - "https://www.w3.org/ns/credentials/examples/v2"
         id:
           type: string
           description: A unique URL that represents this status list.
@@ -931,7 +962,11 @@ components:
         type:
           type: array
           description: The type of credential.
-          example: ["VerifiableCredential", "BitstringStatusListCredential"]
+          items:
+            type: string
+          example:
+            - "VerifiableCredential"
+            - "BitstringStatusListCredential"
         issuer:
           type: string
           description: The URL of the issuer of status list credential.
