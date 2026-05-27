@@ -922,6 +922,8 @@ components:
           example: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
         context:
           type: array
+          items:
+            type: string
           description: Verifiable credential data model v2
           example: ["https://www.w3.org/ns/credentials/v2", "https://www.w3.org/ns/credentials/examples/v2"]
         id:
@@ -930,6 +932,8 @@ components:
           example: "https://crs.account.gov.uk/b/A671FED3E9AD"
         type:
           type: array
+          items:
+            type: string
           description: The type of credential.
           example: ["VerifiableCredential", "BitstringStatusListCredential"]
         issuer:
