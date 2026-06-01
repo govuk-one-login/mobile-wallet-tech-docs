@@ -118,7 +118,7 @@ GEM
     google-protobuf (4.35.0-x86_64-linux-musl)
       bigdecimal
       rake (~> 13.3)
-    govuk_tech_docs (6.2.2)
+    govuk_tech_docs (6.2.3)
       autoprefixer-rails
       chronic
       concurrent-ruby
@@ -161,7 +161,7 @@ GEM
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     io-event (1.14.5)
-    json (2.19.5)
+    json (2.19.7)
     kramdown (2.5.2)
       rexml (>= 3.4.4)
     listen (3.10.0)
