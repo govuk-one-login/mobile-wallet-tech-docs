@@ -351,7 +351,7 @@ paths:
   # `crs`
   /t/{statusListIdentifier}:
     get:
-      description: A public endpoint that returns an IETF Token Status List JWT. The list that is returned depends on the list type for the GOV.UK Wallet credential issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
+      description: A public endpoint that returns a signed IETF Token Status List JWT.
       parameters:
         - in: path
           name: statusListIdentifier
@@ -388,7 +388,7 @@ paths:
   # `crs`
   /b/{statusListIdentifier}:
     get:
-      description: A public endpoint that returns a W3C Bitstring Status List credential JWT. The list that is returned depends on the list type for the GOV.UK Wallet credential issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats.
+      description: A public endpoint that returns a signed W3C Bitstring Status List credential JWT.
       parameters:
         - in: path
           name: statusListIdentifier
