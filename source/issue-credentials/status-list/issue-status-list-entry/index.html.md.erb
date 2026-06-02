@@ -22,17 +22,17 @@ For guidance on how to include the Status List Service's response in your creden
 * the [Token status list specification](https://datatracker.ietf.org/doc/draft-ietf-oauth-status-list/) for mdoc credentials
 * the [BitString status list specification](https://www.w3.org/TR/vc-bitstring-status-list/) for JWT-VC credentials
 
-### Technical details
+## Technical details
 
 The requests to and responses from the Status List Service are the same, regardless of the credential or status list type.
 
-#### Endpoint URI
+### Endpoint URI
 
 The URI path for the issue endpoint is `/issue`.
 
 When you register as a credential issuer with the Status List service, you get access to the internal API. You must sign the request with your private key and share public keys on your `/.well-known/jwks.json` endpoint. This is used to verify the JWT.
 
-#### Request format
+### Request format
 The issue endpoint only accepts HTTP POST requests.
 
 The request must include:
@@ -40,10 +40,19 @@ The request must include:
 * `header`: you must provide the `Content-Type` header - the only valid value is `application/jwt`
 * `request body (JWT)`: contains a signed JWT based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), which must follow the requirements below
 
+### Idempotent requests
 
-### Status list JWT definition `/issue`
+Identical requests using the same `jti` will return the same `idx` and `uri` as the original successful request during a limited window. The Status List Service uses this window to deal with issues like connection problems or retries after a timeout. You should not use it as a method to query existing statuses.
 
-#### Header
+You must use unique `jti` values for each new status you wish to issue.
+
+If you send a request with a previously used `jti` but a different `statusExpiry`, the service will return a `400 BAD_REQUEST` error. You must generate a new `jti` for the new request.
+
+If two requests with the same `iss` and `jti` arrive at exactly the same time, the service will return a `409 CONFLICT` error for the second request. Retry after a short delay.
+
+## Status list JWT definition `/issue`
+
+### Header
 
 The JSON Object Signing and Encryption (JOSE) header (based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515#section-4)) must contain the following header parameters:
 
@@ -62,7 +71,7 @@ The JSON Object Signing and Encryption (JOSE) header (based on [RFC 7515](https:
 | `kid`     | Required             | `kid` stands for 'key ID'. This key ID must be present in your hosted JWKS. This is used to validate the JSON web signature (JWS). |
 
 
-#### Payload
+### Payload
 
 The JWT payload must contain the following claims:
 
@@ -82,7 +91,7 @@ The JWT payload must contain the following claims:
 | `jti` | Required             | `jti` stands for 'JWT ID'. This provides a unique identifier for the JWT. The Status List Service will validate the format provided to make sure it is a lowercase UUID.                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `statusExpiry` | Required    | The point after which the status expires. After this date the credential will be removed from the status list.<br><br>`statusExpiry` must be equal to or later than the issued credential's technical expiry time, known as the `validUntil` property. It may be useful to issue a status before the `validUntil` value is known. In this case, we recommend that you keep any resulting difference between `validUntil` and `statusExpiry` to a minimum.<br><br>`statusExpiry` must be a number in seconds, formatted as a UNIX timestamp. The Status List Service does not support credentials lasting over 1 year. |
 
-### Example Request
+## Example Request
 
 Below is an example of the post request signed and encoded as a JWT.
 
@@ -95,7 +104,7 @@ Accept: application/json
 eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjgwODY4Nzk0LTM2MjYtNDNmOC05YTRkLWEwZDk4YWE3ZGE2NiJ9.eyJpc3MiOiJleGFtcGxlQ2xpZW50SWQxMjMzIiwiaWF0IjoxNzU5NDAyMjgzLCJqaXQiOiJiYzBmYmZmMy1jYjA0LTQyODYtYThiYS1mNDk1NmNjYmUyZDciLCJzdGF0dXNFeHBpcnkiOjE3Nzk2MTY1ODN9.yasAT3XhugXJhat_rVnVTkXdA3KS99DCZJV79WohLf18mkbKcuGlDVegmZFVCg6NOts0m3uI7Wet1QNGm07Xag
 ```
 
-### Example Response
+## Example Response
 
 ```
 HTTP/1.1 200 OK
