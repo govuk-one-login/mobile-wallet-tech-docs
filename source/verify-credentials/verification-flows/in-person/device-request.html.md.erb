@@ -23,7 +23,7 @@ When a holder's device takes the peripheral role, GOV.UK Wallet will create a GA
 |-----------------|--------------------------------------|--------------------------------|
 | `State`         | 00000001-A123-48CE-896B-4C76973373E6 | Notify, Write Without Response |
 | `Client2Server` | 00000002-A123-48CE-896B-4C76973373E6 | Write Without Response         |
-| `Server2Client` | 0000003-A123-48CE-896B-4C76973373E6  | Notify                         |
+| `Server2Client` | 00000003-A123-48CE-896B-4C76973373E6  | Notify                         |
 
 The UUIDs of these characteristics are specified in the [ISO/IEC 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
 
@@ -36,13 +36,15 @@ When connected in the central role, you can:
 - set the `State` characteristic to `0x01` to indicate you are ready to receive messages
 - send a [message to the holder's device](#send-a-session-establishment-message) using the `Client2Server` characteristic to begin session establishment
 
+The maximum length of a message is 512 bytes. You must divide any messages larger than this into parts.
+
 ### Connecting in the peripheral role
 
 When connected in the peripheral role, GOV.UK Wallet will send `DeviceResponse` messages to your verification device using the `Server2Client` characteristic.
 
 Once the secure session has been confirmed, you will be able to retrieve encrypted credential information. You can use this information in your verification service. 
 
-The maximum length of a message is 512 bytes. You must divide any messages larger than this into parts.
+You may receive divided messages that need to be assembled. This is likely when requesting photos from a user's credential.
 
 ### Cancelling a sharing session
 
@@ -53,12 +55,12 @@ The central device or the peripheral device can cancel a sharing session. If you
 
 When your connection is ready, you will be able to send a message to request encrypted credential information from GOV.UK Wallet. This must be a `SessionEstablishment` structure in the form of a Concise Binary Object Representation (CBOR). This will contain your:
 
-- [device request](#example-device-request-structure) encrypted with a symmetric Curve P-256 key
+- [device request](#example-device-request-structure) encrypted with an asymmetric key - you must support Curve P-256 and Curve P-384 types
 - ephemeral public key for the session
 
 Your public key must:
 
-- use Curve P-256 for ECDH/ECDSA. This will also be used for secure session encryption
+- support using Curve P-256 and Curve P-384 for ECDH/ECDSA. This will also be used for secure session encryption
 - only be used for a single presentation session
 - only be stored in temporary memory and not persisted
 
