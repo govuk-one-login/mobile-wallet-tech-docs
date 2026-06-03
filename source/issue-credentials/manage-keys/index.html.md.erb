@@ -1,16 +1,23 @@
 ---
 title: Manage keys
 weight: 10
-last_reviewed_on: 2025-11-19
-review_in: 3 months
+last_reviewed_on: 2026-05-27
+review_in: 6 months
 layout: issuer
 ---
 
 # Manage keys
 
+<div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    This page is specific to JWT credentials. When you issue mdoc credentials, you should check the <a href="https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en">ISO/IEC 18013-5 specification</a> for information about credential rotation.</br></br>We are updating this documentation to provide more guidance about mdoc implementations. We will publish a <a href="../../#documentation-updates">documentation update</a> when this guidance is available.
+  </strong>
+</div>
+
 GOV.UK Wallet needs to verify the validity of the credentials your service issues.
 
-When issuing credentials in [W3C Verifiable Credential Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/) format and signing with your private keys, your credentials need to be verified by the public keys you made available in the `did:web` document.
+When issuing credentials in [JWT-VC](https://www.w3.org/TR/vc-data-model-2.0/) format and signing with your private keys, your credentials need to be verified by the public keys you made available in the `did:web` document.
 
 For your credential issuer service, you should include specific key management features:
 
