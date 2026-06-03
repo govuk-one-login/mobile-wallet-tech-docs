@@ -70,7 +70,7 @@ There is more guidance on the [credentials available in GOV.UK Wallet](/verify-c
 
 ### Example deviceSigned CBOR
 
-To verify ownership of the document being shared, the `deviceSigned` structure contains a `deviceAuth` CBOR map. This holds `deviceSignature`, which is signed with the private key that matches the public key present in the Mobile Security Object (MSO). 
+The `deviceSigned` structure contains a `deviceAuth` CBOR map that lets you verify ownership of the credential being shared. The `deviceAuth` holds `deviceSignature`, which is signed with the private key that matches the public key present in the Mobile Security Object (MSO). You must verify the `deviceAuth` to confirm that the credential is being presented from the same device it was issued to. If you are unable to verify the `deviceAuth`, you must not rely on the data in the credential and must discard it. 
 
 GOV.UK Wallet's `deviceSigned` structure also contains an empty `nampeSpaces` array.  GOV.UK Wallet will only share [issuer signed credentials](#example-issuersigned-cbor).
 
