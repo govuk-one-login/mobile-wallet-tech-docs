@@ -1,14 +1,21 @@
 ---
-title: Publish your metadata
+title: Publish your credential issuer metadata
 weight: 5
 last_reviewed_on: 2026-01-20
 review_in: 6 months
 layout: issuer
 ---
 
-# Publish your metadata
+# Publish your credential issuer metadata
 
-The metadata endpoint provides essential configuration information about a credential issuer’s implementation. To issue credentials, you must publish your metadata endpoint so that GOV.UK Wallet and verifiers can learn information about your credential issuer, such as:
+<div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    Some of this information is specific to issuing JWT credentials. </br></br>We are updating this documentation to provide more guidance about mdoc implementations. We will publish a <a href="../../#documentation-updates">documentation update</a> when this guidance is available.
+  </strong>
+</div>
+
+The credential issuer metadata endpoint provides essential configuration information about a credential issuer’s implementation. To issue credentials, you must publish your endpoint so that GOV.UK Wallet and verifiers can learn information about your credential issuer, such as:
 
 - the endpoints used in your issuance flow
 - the supported credential types
@@ -18,13 +25,13 @@ The metadata endpoint provides essential configuration information about a crede
 
 ### Endpoint location
 
-Your metadata must be publicly accessible at the standardised location on your credential issuer domain: `/.well-known/openid-credential-issuer.` The data published is non-sensitive metadata about your service.
+Your credential issuer metadata must be publicly accessible at the standardised location on your credential issuer domain: `/.well-known/openid-credential-issuer.` The data published is non-sensitive metadata about your service.
 
 ### Response format
 
 The endpoint must return a `200 OK` HTTP status code and valid JSON response that follows the [OID4VCI specification](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html#name-metadata).
 
-Your metadata must include the following parameters:
+Your credential issuer metadata must include the following parameters:
 
 | Parameter                             | Description                                                                                                                                      | 
 |---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------| 
@@ -33,9 +40,9 @@ Your metadata must include the following parameters:
 | `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-credentials/credential/), where credentials can be obtained.                    |
 | `credential_configurations_supported` | An object [describing the credentials](#credential-information) offered by your credential issuer.                                               |
 
-If your credential issuer implements the optional [notification endpoint](/issue-credentials/notification), then the metadata must include the `notification_endpoint` parameter.
+If your credential issuer implements the optional [notification endpoint](/issue-credentials/notification), then the credential issuer metadata must include the `notification_endpoint` parameter.
 
-You can define and use additional metadata parameters.
+You can define and use additional credential issuer metadata parameters.
 
 #### Credential information
 
@@ -60,7 +67,7 @@ GOV.UK Wallet also requires your credential issuer’s metadata to support Engli
 
 #### Credential expiry
 
-Your metadata endpoint response must include the following custom parameters:
+Your credential issuer metadata endpoint response must include the following custom parameters:
 
 - `credential_refresh_web_journey_url`
 - `credential_validity_period_max_days`
@@ -71,9 +78,9 @@ If the credential's `validUntil` date or `expiryDate` ends before your chosen va
 
 More information about [refreshing credentials](/issue-credentials/refresh-credentials/) is available.
 
-## Metadata example
+## Credential issuer metadata example
 
-Below is an example of a credential issuer metadata:
+Below is an example of credential issuer metadata:
 
 ```JSON
 {

@@ -35,7 +35,7 @@ When your user refreshes their credential in the GOV.UK One Login app, GOV.UK Wa
 
 If you previously issued credentials before in-app refresh was available, you must add `credential_configuration_ids` to the [pre-authorised code JSON web token (JWT) payload](/issue-credentials/credential-offer/#the-pre-authorised-code) in your credential offer.
 
-The value you set for `credential_configuration_ids` must be the same as the name given in the metadata.
+The value you set for `credential_configuration_ids` must be the same as the name given in the credential issuer metadata.
 
 When you have added `credential_configuration_ids` to your pre-authorised code JWT payload, GOV.UK Wallet will call your credential endpoint with a new access token. You must [validate the access token](/issue-credentials/credential/#request-validation) and make sure that its `credential_configuration_ids` value matches the value in your pre-authorised code JWT payload.
 
