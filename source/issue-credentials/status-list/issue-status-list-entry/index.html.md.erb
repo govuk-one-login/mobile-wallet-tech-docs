@@ -42,7 +42,7 @@ The request must include:
 
 ### Idempotent requests
 
-Identical requests using the same `jti` will return the same `idx` and `uri` as the original successful request during a limited window. The Status List Service uses this window to deal with issues like connection problems or retries after a timeout. You should not use it as a method to query existing statuses.
+Identical requests using the same `jti` will return the same `idx` and `uri` as the original successful request during a limited window. The Status List Service uses this window to deal with issues like connection problems or retries after a timeout. You should not use this window as a method to query existing statuses.
 
 You must use unique `jti` values for each new status you wish to issue.
 
