@@ -659,42 +659,6 @@ components:
           "statusExpiry": 1789574909,
           "jti": "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
         }
-      properties:
-        alg:
-          type: string
-          description: |
-            Algorithm used for signing the JWT (ES256) - Stored in JWT Header
-          example: "ES256"
-        typ:
-          type: string
-          description: |
-            Type of the token, should be "JWT" - Stored in JWT Header
-          example: "JWT"
-        kid:
-          type: string
-          description: |
-            Key ID used to identify the signing key in the credential issuers JWKS endpoint. This will be used to verify the signature of the JWT. - Stored in JWT Header
-          example: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
-        iss:
-          type: string
-          description: |
-            Issuer: must match a known clientId - As defined in RFC 7519
-          example: "clientId-abcdef"
-        iat:
-          type: number
-          description: |
-            (unix timestamp) Issued At date - As defined in RFC 7519
-          example: 1758038912
-        statusExpiry:
-          type: number
-          description: |
-            (unix timestamp) A timestamp representing the moment when the issued credential expires. It should be no further than 1 year past the current timestamp
-          example: 1789574909
-        jti:
-          type: string
-          description: |
-            JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks. Its value must be a lowercase UUID.
-          example: "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
       required:
         - alg
         - typ
@@ -890,48 +854,6 @@ components:
           "uri": "https://crs.account.gov.uk/b/A671FED3E9AD",
           "jti": "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
         }
-      properties:
-        alg:
-          type: string
-          description: |
-            Algorithm used for signing the JWT (ES256) - Stored in JWT Header
-          example: "ES256"
-        typ:
-          type: string
-          description: |
-            Type of the token, should be "JWT" - Stored in JWT Header
-          example: "JWT"
-        kid:
-          type: string
-          description: |
-            Key ID used to identify the signing key in the credential issuers JWKS endpoint. This will be used to verify the signature of the JWT - Stored in JWT Header
-          example: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
-        iss:
-          type: string
-          description: |
-            Issuer: must match a known clientId - As defined in RFC 7519
-          example: "clientId-abcdef"
-        iat:
-          type: number
-          description: |
-            (unix timestamp) Issued At date - As defined in RFC 7519
-          example: 1758038912
-        idx:
-          type: number
-          minimum: 0
-          description: |
-            The index to revoke
-          example: 3
-        uri:
-          type: string
-          description: |
-            The URI of the status list that holds the issued credential. The uri + idx combination is used to uniquely identify the entry to revoke
-          example: "https://crs.account.gov.uk/b/A671FED3E9AD"
-        jti:
-          type: string
-          description: |
-            JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks
-          example: "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
       required:
         - alg
         - typ
