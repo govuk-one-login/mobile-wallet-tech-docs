@@ -1,0 +1,128 @@
+---
+title: Use AWS IAM Roles Anywhere to access status list APIs
+weight: 5
+last_reviewed_on: 2026-03-25
+review_in: 6 months
+layout: issuer
+---
+
+# Use AWS IAM Roles Anywhere to access status list APIs
+
+If you do not use AWS Virtual Private Cloud (VPC), you must use AWS Identity and Access Management (IAM) Roles Anywhere to access the Status List Service's APIs. Roles Anywhere lets you authenticate using X.509 certificates and receive temporary AWS IAM credentials. You can use these temporary credentials to sign your requests to the Status List Service's [`/issue`](issue-credentials/status-list/issue-status-list-entry) and [`/revoke`](issue-credentials/status-list/revoke-credential) APIs.
+
+To use IAM Roles Anywhere to access APIs, you must:
+
+* [onboard with the Status List Service](issue-credentials/status-list/before-issuing-status-record) as a credential issuer
+* generate a keypair
+* generate a Certificate Signing Request (CSR) in the correct format - there is [guidance on the CSR format that the Status List Service needs](#csr-template) 
+* send your CSR to us - you should work with your onboarding manager to make sure you send it securely
+
+When you send your CSR to us, our onboarding team will validate it and send you a client certificate. 
+
+## CSR template
+
+Your CSR must include the following components so that the onboarding team can validate it.
+
+### Subject Distinguished Name (DN)
+
+Your DN must include the following:
+
+| Component   | Value    | Required?     | Character limit     | Description         |
+|-------------|----------|---------------|---------------------|--------------------|
+| C           | GB       | Yes           | 2                   | Country. This should be ISO 3166-1 alpha-2 codes only.                                                                                                |
+| O           |          | Yes           | 64                  | The organisation name.                                                                                                                        |
+| OU          | Integration | Non-production environments only   | 64        | This value is needed only for non-production environments. For production environments, it will be omitted. Should be formatted as `OU=Integration`.                                                                                                               |
+| CN       |              | Yes            | 64       | The common name. For example, `CN=credentialissuer.gov.uk Wallet Credential Issuer`.                                                                                                           |
+
+This is an example of a DN for a production environment:
+
+```
+CN=credentialissuer.gov.uk Wallet Credential Issuer, O=CRI, C=GB
+```
+
+This is an example of a DN for a production environment:
+
+```
+CN=credentialissuer.gov.uk Wallet Credential Issuer, OU=Integration, O=CRI, C=GB
+```
+
+### Public key information
+
+Include the following information about your public key:
+
+* version: X.509 version 3
+* algorithm: ECDSA (P-384)
+* public key: the public part of your key pair
+
+### Request attributes
+
+Include the following attributes in your request:
+
+* key usage: Digital Signature, Key Encipherment
+* extended key usage: Client Authentication
+
+### Digital signature
+
+You must sign the CSR with your private key to prove that you have the corresponding public key.
+
+## Use AWS IAM Roles Anywhere to make API requests
+
+After you get a certificate from us, you can use it to authenticate with IAM Roles Anywhere. You can get temporary credentials from the [IAM Roles Anywhere credential helper tool](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/credential-helper.html) and use them to make requests to the Status List Service's APIs.
+
+The credential helper tool needs:
+
+* your client certificate
+* your private key
+* the Trust Anchor Amazon resource name (ARN)
+* the IAM Roles Anywhere profile ARN
+* the IAM Role ARN
+
+Your private key can be:
+
+* a plaintext private key file
+* a PKCS#11 URI (e.g., `pkcs11:object=My%20RA%20key`)
+* a TPM wrapped key file in the `-----BEGIN TSS2 PRIVATE KEY-----` format
+* a TPM handle reference (e.g., `handle:0x81000001`)
+
+This is an example of how to format your request to the credential helper tool:
+
+```
+# aws_signing_helper command line usage
+aws_signing_helper credential-process \
+  --certificate /path/to/issuer-client-cert.pem \
+  --private-key /path/to/issuer-private-key.pem \
+  --trust-anchor-arn <trust-anchor arn> \
+  --profile-arn <profile arn> \
+  --role-arn <role arn>
+```
+
+The above request returns a json like this:
+
+```
+{
+  "Version":1,
+  "AccessKeyId":"ASIA...",
+  "SecretAccessKey":"TNLJ+...",
+  "SessionToken":"IQoJb...",
+  "Expiration":"2026-01-12T17:49:53Z"
+}
+```
+
+You can use this response to make authenticated requests to the [`/issue`](issue-credentials/status-list/issue-status-list-entry) and [`/revoke`](issue-credentials/status-list/revoke-credential) endpoints for as long as the access token is valid. This is an example of how to format your request using curl:
+
+```
+# Export credentials from aws_signing_helper output
+export AWS_ACCESS_KEY_ID="..."
+export AWS_SECRET_ACCESS_KEY="..."
+export AWS_SESSION_TOKEN="..."
+
+# Test API call
+
+curl -X POST \
+  --aws-sigv4 "aws:amz:eu-west-2:execute-api" \
+  --user "$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" \
+  -H "x-amz-security-token: $AWS_SESSION_TOKEN" \
+  -H "Content-Type: application/jwt" \
+  -d '<jwt payload>' \
+  https://crs.account.gov.uk/issue
+```
