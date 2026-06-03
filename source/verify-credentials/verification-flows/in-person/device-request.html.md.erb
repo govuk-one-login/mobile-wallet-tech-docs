@@ -23,7 +23,7 @@ When a holder's device takes the peripheral role, GOV.UK Wallet will create a GA
 |-----------------|--------------------------------------|--------------------------------|
 | `State`         | 00000001-A123-48CE-896B-4C76973373E6 | Notify, Write Without Response |
 | `Client2Server` | 00000002-A123-48CE-896B-4C76973373E6 | Write Without Response         |
-| `Server2Client` | 00000003-A123-48CE-896B-4C76973373E6  | Notify                         |
+| `Server2Client` | 00000003-A123-48CE-896B-4C76973373E6 | Notify                         |
 
 The UUIDs of these characteristics are specified in the [ISO/IEC 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
 
@@ -44,7 +44,7 @@ When connected in the peripheral role, GOV.UK Wallet will send `DeviceResponse` 
 
 Once the secure session has been confirmed, you will be able to retrieve encrypted credential information. You can use this information in your verification service. 
 
-You may receive divided messages that need to be assembled. This is likely when requesting photos from a user's credential.
+You may receive divided messages that need to be reassembled. This is likely when requesting photos from a user's credential.
 
 ### Cancelling a sharing session
 
