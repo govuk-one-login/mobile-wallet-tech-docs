@@ -133,9 +133,9 @@ paths:
         content:
           application/jwt:
             schema:
-              $ref: '#/components/schemas/IssueRequestBody'
-            example:
-              jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWF0IjoxNzU4MDM4OTEyLCJzdGF0dXNFeHBpcnkiOjE3ODk1NzQ5MDksImp0aSI6IkJDRUE0RTUxLTZFQ0EtNDU0Ny04RDE4LTRCOTcxQjcyQzE0NiJ9.QeR_O8MhZBob2CJeRUZpBn6KaQnazTpHZozJrZxXUjDTgpliUjg7PXCpfckCr3sNDFRxoFfHSnV4HOTZNlrUBg
+              type: string
+              description: JOSE signed JWT containing information about the credential issuer and when their credential will expire.
+            example: <JWT>
       responses:
         '200':
           description: A response that contains a status index and a uri to the status list where this newly issued `VALID` (binary 00) status index value can be found.
@@ -144,35 +144,68 @@ paths:
               schema:
                 $ref: "#/components/schemas/IssueResponse"
               example:
-                index: 3
+                idx: 3
                 uri: "https://crs.account.gov.uk/b/A671FED3E9AD"
         '400':
-          description: Bad request (invalid JWT, missing fields, wrong content-type, etc.)
+          description: Bad request (invalid JWT, missing fields, wrong content-type, idempotency conflict, etc.)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Issue400ErrorResponse"
-              example:
-                error: BAD_REQUEST
-                error_description: "No Type in Header"
+              examples:
+                no_body_or_headers:
+                  summary: Missing event body or headers
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No Event Body or Headers Found"
+                missing_content_type:
+                  summary: Missing Content-Type header
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Content-Type header must be application/jwt"
+                missing_jti:
+                  summary: Missing jti in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No jti in Payload"
+                invalid_jti:
+                  summary: Invalid jti format
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "The jti claim is not a lower case uuid string"
+                missing_status_expiry:
+                  summary: Missing statusExpiry in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No Status Expiry in Payload"
+                invalid_status_expiry:
+                  summary: Invalid statusExpiry value
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Status Expiry in Payload must be a non negative number and represent a future expiry date no more than 1 year from now"
+                invalid_idempotent_request:
+                  summary: Same jti reused with different statusExpiry
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Detected invalid changes between idempotent requests, unable to proceed. Please generate a new request."
         '401':
-          description: Unauthorized (client not found)
+          description: Unauthorized (authentication or signature failure)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Issue401ErrorResponse"
               example:
-                error: UNAUTHORISED
-                error_description: "No matching client found with ID: invalidClientId"
-        '403':
-          description: Forbidden (JWT signature verification failure)
+                error: UNAUTHORIZED
+                error_description: "Unauthorized Request"
+        '409':
+          description: Conflict - concurrent request with the same idempotency key already in progress
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Issue403ErrorResponse"
+                $ref: "#/components/schemas/Issue409ErrorResponse"
               example:
-                error: FORBIDDEN
-                error_description: "Failure verifying the signature of the jwt"
+                error: CONFLICT
+                error_description: "Multiple concurrent idempotent requests in progress. Please retry after a short delay."
         '500':
           description: Internal server error
           content:
@@ -181,7 +214,16 @@ paths:
                 $ref: "#/components/schemas/Issue500ErrorResponse"
               example:
                 error: INTERNAL_SERVER_ERROR
-                error_description: "Error receiving messages: ..."
+                error_description: "Unable to successfully issue a status"
+        '503':
+          description: Service temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Issue503ErrorResponse"
+              example:
+                error: TEMPORARILY_UNAVAILABLE
+                error_description: "Service is temporarily unavailable"
   # `crs`
   /revoke:
     post:
@@ -192,9 +234,9 @@ paths:
         content:
           application/jwt:
             schema:
-              $ref: '#/components/schemas/RevokeRequest'
-            example:
-              jwt: eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWF0IjoxNzU4MDM4OTEyLCJpZHgiOjMsInVyaSI6Imh0dHBzOi8vY3JzLmFjY291bnQuZ292LnVrL3QvM0IwRjNCRDA4N0E3IiwianRpIjoiQkNFQTRFNTEtNkVDQS00NTQ3LThEMTgtNEI5NzFCNzJDMTQ2In0.x6Xh0QRPcuW3TzZkbkarHS5FfyfiY_Wh4zIIWzcw4ZORaKIRIXiRMUSjPcaGRO63_EhbX29BSzsKNEii4qOYIg
+              type: string
+              description: JOSE signed JWT containing details of the status list `idx` and `uri` that holds the credential to be revoked.
+            example: <JWT>
       responses:
         '202':
           description: Revocation processed successfully
@@ -211,9 +253,47 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Revoke400ErrorResponse"
-              example:
-                error: BAD_REQUEST
-                error_description: "No Type in Header"
+              examples:
+                no_body_or_headers:
+                  summary: Missing event body or headers
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No Event Body or Headers Found"
+                missing_content_type:
+                  summary: Missing Content-Type header
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Content-Type header must be application/jwt"
+                missing_jti:
+                  summary: Missing jti in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No jti in Payload"
+                invalid_jti:
+                  summary: Invalid jti format
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "The jti claim is not a lower case uuid string"
+                missing_idx:
+                  summary: Missing idx in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No Index in Payload"
+                invalid_idx:
+                  summary: Invalid idx value
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Index must be a valid non-negative integer"
+                missing_uri:
+                  summary: Missing uri in payload
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "No valid URI in Payload"
+                invalid_uri_format:
+                  summary: Invalid URI format
+                  value:
+                    error: BAD_REQUEST
+                    error_description: "Invalid URI format in payload"
         '401':
           description: Unauthorized (client not found or client mismatch)
           content:
@@ -221,19 +301,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Revoke401ErrorResponse"
               example:
-                error: "UNAUTHORISED"
-                error_description: "No matching client found with ID: invalidClientId"
+                error: "UNAUTHORIZED"
+                error_description: "Unauthorized Request"
         '403':
-          description: Forbidden (JWT signature verification failure or JWKS fetch failure)
+          description: Forbidden (status list entry not found or issuer mismatch)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Revoke403ErrorResponse"
               example:
                 error: FORBIDDEN
-                error_description: "Failure verifying the signature of the jwt"
+                error_description: "Unable to revoke the specified status list entry"
         "404":
-          description: Entry not found or list type mismatch
+          description: Entry not found in status list table
           content:
             application/json:
               schema:
@@ -247,14 +327,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Revoke500ErrorResponse"
+              examples:
+                database_query_error:
+                  summary: Database query failure
+                  value:
+                    error: "INTERNAL_SERVER_ERROR"
+                    error_description: "Error querying database for status list entry"
+                database_update_error:
+                  summary: Database update failure
+                  value:
+                    error: "INTERNAL_SERVER_ERROR"
+                    error_description: "Failed to update revocation status"
+        "503":
+          description: Service temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revoke503ErrorResponse"
               example:
-                error: "INTERNAL_SERVER_ERROR"
-                error_description: "Error processing revocation request"
+                error: "TEMPORARILY_UNAVAILABLE"
+                error_description: "Service is temporarily unavailable"
 
   # `crs`
   /t/{statusListIdentifier}:
     get:
-      description: A public endpoint that returns an IETF Token Status List JWT. The list that is returned depends on the list type for the GOV.UK Wallet credential issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats. There is [more guidance and an example response](https://docs.wallet.service.gov.uk/issue-credentials/status-list/statuslist/#token-status-list-request-example).
+      description: A public endpoint that returns a signed IETF Token Status List JWT. There is [more guidance and an example response](https://docs.wallet.service.gov.uk/issue-credentials/status-list/statuslist/#token-status-list-request-example).
       parameters:
         - in: path
           name: statusListIdentifier
@@ -293,7 +390,7 @@ paths:
   # `crs`
   /b/{statusListIdentifier}:
     get:
-      description: A public endpoint that returns a W3C Bitstring Status List JWT. The list that is returned depends on the list type for the GOV.UK Wallet credential issuer agreed at the time of registration. The response has a signed JWT in one of the two supported status list formats. There is [more guidance and an example response](https://docs.wallet.service.gov.uk/issue-credentials/status-list/statuslist/#bitstring-status-list-request-example).
+      description: A public endpoint that returns a signed W3C Bitstring Status List credential JWT. There is [more guidance and an example response](https://docs.wallet.service.gov.uk/issue-credentials/status-list/statuslist/#bitstring-status-list-request-example).
       parameters:
         - in: path
           name: statusListIdentifier
@@ -508,67 +605,6 @@ components:
           type: string
       required:
         - error
-    IssueRequestBody:
-      type: string
-      description: |
-        JOSE signed JWT containing issuer information and status expiry.
-        Example Header and Payload:
-        {
-            "alg": "ES256",
-            "typ": "JWT",
-            "kid": "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
-        },
-        {
-          "iss": "clientId-abcdef",
-          "iat": 1758038912,
-          "statusExpiry": 1789574909,
-          "jti": "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
-        }
-      properties:
-        alg:
-          type: string
-          description: |
-            Algorithm used for signing the JWT (ES256) - Stored in JWT Header
-          example: "ES256"
-        typ:
-          type: string
-          description: |
-            Type of the token, should be "JWT" - Stored in JWT Header
-          example: "JWT"
-        kid:
-          type: string
-          description: |
-            Key ID used to identify the signing key in the credential issuers JWKS endpoint. This will be used to verify the signature of the JWT. - Stored in JWT Header
-          example: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
-        iss:
-          type: string
-          description: |
-            Issuer: must match a known clientId - As defined in RFC 7519
-          example: "clientId-abcdef"
-        iat:
-          type: number
-          description: |
-            (unix timestamp) Issued At date - As defined in RFC 7519
-          example: 1758038912
-        statusExpiry:
-          type: number
-          description: |
-            (unix timestamp) A timestamp representing the moment when the issued credential expires. It should be no further than 1 year past the current timestamp
-          example: 1789574909
-        jti:
-          type: string
-          description: |
-            JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks
-          example: "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
-      required:
-        - alg
-        - typ
-        - kid
-        - iss
-        - iat
-        - statusExpiry
-        - jti
-      example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWF0IjoxNzU4MDM4OTEyLCJzdGF0dXNFeHBpcnkiOjE3ODk1NzQ5MDksImp0aSI6IkJDRUE0RTUxLTZFQ0EtNDU0Ny04RDE4LTRCOTcxQjcyQzE0NiJ9.QeR_O8MhZBob2CJeRUZpBn6KaQnazTpHZozJrZxXUjDTgpliUjg7PXCpfckCr3sNDFRxoFfHSnV4HOTZNlrUBg"
     IssueResponse:
       type: object
       properties:
@@ -599,7 +635,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be `UNAUTHORISED`.
+          description: An error code - must be `UNAUTHORIZED`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -617,11 +653,33 @@ components:
           type: string
       required:
         - error
+    Issue409ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be `CONFLICT`.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
     Issue500ErrorResponse:
       type: object
       properties:
         error:
           description: An error code - must be `INTERNAL_SERVER_ERROR`.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
+    Issue503ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be `TEMPORARILY_UNAVAILABLE`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -643,7 +701,7 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be `UNAUTHORISED`.
+          description: An error code - must be `UNAUTHORIZED`.
           type: string
         error_description:
           description: A human-readable explanation of the error.
@@ -683,6 +741,17 @@ components:
           type: string
       required:
         - error
+    Revoke503ErrorResponse:
+      type: object
+      properties:
+        error:
+          description: An error code - must be `TEMPORARILY_UNAVAILABLE`.
+          type: string
+        error_description:
+          description: A human-readable explanation of the error.
+          type: string
+      required:
+        - error
     StatusList500ErrorResponse:
       type: object
       properties:
@@ -705,75 +774,6 @@ components:
           type: string
       required:
         - error
-    RevokeRequest:
-      type: string
-      description: |
-        JOSE signed JWT containing the index and URI to revoke.
-        Example Header and Payload:
-        {
-            "alg": "ES256",
-            "typ": "JWT",
-            "kid": "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
-        },
-        {
-          "iss": "clientId-abcdef",
-          "iat": 1758038912,
-          "idx": 3,
-          "uri": "https://crs.account.gov.uk/b/A671FED3E9AD",
-          "jti": "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
-        }
-      properties:
-        alg:
-          type: string
-          description: |
-            Algorithm used for signing the JWT (ES256) - Stored in JWT Header
-          example: "ES256"
-        typ:
-          type: string
-          description: |
-            Type of the token, should be "JWT" - Stored in JWT Header
-          example: "JWT"
-        kid:
-          type: string
-          description: |
-            Key ID used to identify the signing key in the credential issuers JWKS endpoint. This will be used to verify the signature of the JWT - Stored in JWT Header
-          example: "ab2f3738-03ec-4312-a65e-7f0461a34e7b"
-        iss:
-          type: string
-          description: |
-            Issuer: must match a known clientId - As defined in RFC 7519
-          example: "clientId-abcdef"
-        iat:
-          type: number
-          description: |
-            (unix timestamp) Issued At date - As defined in RFC 7519
-          example: 1758038912
-        idx:
-          type: number
-          minimum: 0
-          description: |
-            The index to revoke
-          example: 3
-        uri:
-          type: string
-          description: |
-            The URI of the status list that holds the issued credential. The uri + idx combination is used to uniquely identify the entry to revoke
-          example: "https://crs.account.gov.uk/b/A671FED3E9AD"
-        jti:
-          type: string
-          description: |
-            JWT ID: A unique case sensitive string used as a identifier for the JWT, used to prevent replay attacks
-          example: "b86509bc-ee8a-4bb0-a070-36858b7bfbcb"
-      required:
-        - alg
-        - typ
-        - kid
-        - iss
-        - iat
-        - idx
-        - uri
-        - jti
-      example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImU5YjE1OGI5Y2E2OWJlNDA2ODVjNjUyNTVkN2M3ODE2In0.eyJpc3MiOiJhc0tXbnNqZUVKRVdqandTSHNJa3NJa3NJaEJlIiwiaWF0IjoxNzU4MDM4OTEyLCJpZHgiOjMsInVyaSI6Imh0dHBzOi8vY3JzLmFjY291bnQuZ292LnVrL3QvM0IwRjNCRDA4N0E3IiwianRpIjoiQkNFQTRFNTEtNkVDQS00NTQ3LThEMTgtNEI5NzFCNzJDMTQ2In0.x6Xh0QRPcuW3TzZkbkarHS5FfyfiY_Wh4zIIWzcw4ZORaKIRIXiRMUSjPcaGRO63_EhbX29BSzsKNEii4qOYIg"
       xml:
         name: issuerequest
     RevokeResponse:
