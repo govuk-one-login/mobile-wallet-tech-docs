@@ -1,19 +1,12 @@
 ---
 title: Publish your credential issuer metadata
 weight: 5
-last_reviewed_on: 2026-01-20
+last_reviewed_on: 2026-06-09
 review_in: 6 months
 layout: issuer
 ---
 
 # Publish your credential issuer metadata
-
-<div class="govuk-warning-text">
-  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-  <strong class="govuk-warning-text__text">
-    Some of this information is specific to issuing JWT credentials. </br></br>We are updating this documentation to provide more guidance about mdoc implementations. We will publish a <a href="../../#documentation-updates">documentation update</a> when this guidance is available.
-  </strong>
-</div>
 
 The credential issuer metadata endpoint provides essential configuration information about a credential issuer’s implementation. To issue credentials, you must publish your endpoint so that GOV.UK Wallet and verifiers can learn information about your credential issuer, such as:
 
@@ -38,6 +31,7 @@ Your credential issuer metadata must include the following parameters:
 | `credential_issuer`                   | The URL of the credential issuer.                                                                                                                | 
 | `authorization_servers`               | An array of URLs for the authorization servers your credential issuer relies on for authorization. This must be set to the GOV.UK One Login URL. | 
 | `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-credentials/credential/), where credentials can be obtained.                    |
+| `mdoc_iacas_uri`                      | The URL of your credential issuer’s Issuing Authority Certification Authority (IACA) endpoint, where your IACA root certificate(s) can be obtained.   |
 | `credential_configurations_supported` | An object [describing the credentials](#credential-information) offered by your credential issuer.                                               |
 
 If your credential issuer implements the optional [notification endpoint](/issue-credentials/notification), then the credential issuer metadata must include the `notification_endpoint` parameter.
@@ -55,15 +49,12 @@ Each credential object in `credential_configurations_supported` must include the
 
 | Parameter                                 | Description                                                                                  | 
 |-------------------------------------------|----------------------------------------------------------------------------------------------| 
-| `format`                                  | Format of the credential.                                                                    |
-| `credential_definition`                   | Description of the credential type.                                                          |
-| `cryptographic_binding_methods_supported` | Set of methods available for cryptographically binding the issued credential.                |
+| `format`                                  | Format of the credential. Must be `mso_mdoc`.                                                |
+| `doctype`                                 | The credential's document type identifier.                                                   |
+| `cryptographic_binding_methods_supported` | Set of methods available for cryptographically binding the issued credential.                 |
 | `credential_signing_alg_values_supported` | Set of algorithms that the credential issuer uses to sign the credential.                    |
-| `proof_types_supported`                   | Key proof(s) supported by the credential issuer.                                             |
-| `credential_refresh_web_journey_url`      | The URL where your users can go through the credential refresh web journey in their browser. |
-| `credential_validity_period_max_days`     | The credential’s validity period in days once it’s issued.                                   |
-
-GOV.UK Wallet also requires your credential issuer’s metadata to support English and Welsh translation.
+| `credential_refresh_web_journey_url`      | The URL where your users can go through the credential refresh web journey in their browser.  |
+| `credential_validity_period_max_days`     | The credential's validity period in days once it's issued.                                   |
 
 #### Credential expiry
 
@@ -87,30 +78,20 @@ Below is an example of credential issuer metadata:
   "credential_issuer": "https://example-credential-issuer.gov.uk",
   "authorization_servers": ["https://token.account.gov.uk"],
   "credential_endpoint": "https://example-credential-issuer.gov.uk/credential",
+  "mdoc_iacas_uri": "https://example-credential-issuer.gov.uk/iacas",
   "notification_endpoint": "https://example-credential-issuer.gov.uk/notification",
   "credential_configurations_supported": {
     "FishingLicenceCredential": {
-      "format": "jwt_vc_json",
-      "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh",
-      "credential_validity_period_max_days": 90,
-      "credential_definition": {
-        "type": [
-          "VerifiableCredential",
-          "FishingLicenceCredential"
-      ]},
+      "format": "mso_mdoc",
+      "doctype": "uk.gov.example-credential-issuer.fishingLicence.1",
       "cryptographic_binding_methods_supported": [
-        "did"
+        "cose_key"
       ],
       "credential_signing_alg_values_supported": [
         "ES256"
       ],
-      "proof_types_supported": {
-        "jwt": {
-          "proof_signing_alg_values_supported": [
-            "ES256"
-          ]
-        }
-      }
+      "credential_refresh_web_journey_url": "https://example-credential-issuer.gov.uk/fishing-refresh",
+      "credential_validity_period_max_days": 90
     }
   }
 }
