@@ -813,7 +813,7 @@ components:
             type: string
             format: uri
         mdoc_iacas_uri:
-          description: URL of the credential issue's Issuing Authority Certification Authority (IACA) endpoint.
+          description: URL of the credential issuer's Issuing Authority Certification Authority (IACA) endpoint.
           type: string
           format: uri
         notification_endpoint:
