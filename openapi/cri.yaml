@@ -11,7 +11,7 @@ paths:
   # `cri`
   /credential_offer:
     get:
-      description: An endpoint that generates a credential offer URL for the GOV.UK Wallet.
+      description: An endpoint that generates a credential offer URL for GOV.UK Wallet.
       responses:
         '200':
           description: |-
