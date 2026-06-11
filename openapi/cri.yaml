@@ -583,12 +583,11 @@ components:
       type: object
       properties:
         error:
-          description: An error code - must be `invalid_notification_request`, `invalid_notification_id`, or `invalid_request`.
+          description: An error code - must be `invalid_notification_request` or `invalid_notification_id`.
           type: string
           enum:
             - invalid_notification_request
             - invalid_notification_id
-            - invalid_request
         error_description:
           description: A human-readable explanation of the error.
           type: string
