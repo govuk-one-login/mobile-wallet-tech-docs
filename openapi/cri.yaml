@@ -119,10 +119,12 @@ paths:
             WWW-Authenticate:
               description: Indicates the authentication scheme that should be used to access the resource.
               schema:
-                $ref: "#/components/schemas/Notification401ErrorResponse"
-              example:
-                error: invalid_token
-                error_description: "The access token expired"
+                type: string
+                example: Bearer error="invalid_token"
+            Cache-Control:
+              schema:
+                type: string
+                example: "no-store"
   # `crs`
   /issue:
     post:
@@ -587,19 +589,6 @@ components:
             - invalid_notification_request
             - invalid_notification_id
             - invalid_request
-        error_description:
-          description: A human-readable explanation of the error.
-          type: string
-      required:
-        - error
-    Notification401ErrorResponse:
-      type: object
-      properties:
-        error:
-          description: An error code - must be `invalid_token`.
-          type: string
-          enum:
-            - invalid_token
         error_description:
           description: A human-readable explanation of the error.
           type: string
