@@ -11,7 +11,7 @@ paths:
   # `cri`
   /credential_offer:
     get:
-      description: An endpoint for issuing a credential offer.
+      description: An endpoint that generates a credential offer URL for GOV.UK Wallet.
       responses:
         '200':
           description: |-
@@ -23,7 +23,7 @@ paths:
             application/json:
               schema:
                 type: string
-              example: https://mobile.account.gov.uk/wallet/add?credential_offer=%7B%22credential_configuration_ids%22%3A%5B%22FishingLicence%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22eyJraWQiOiI1ZGNiZWU4NjNiNWQ3Y2MzMGM5YmExZjczOTNkYWNjNmMxNjYxMDc4MmU0YjZhMTkxZjk0YTdlOGIxZTE1MTBmIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJhdWQiOiJodHRwczovL3Rva2VuLmFjY291bnQuZ292LnVrIiwiY2xpZW50SWQiOiJURVNUX0NMSUVOVF9JRCIsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS1jcmVkZW50aWFsLWlzc3Vlci5nb3YudWsiLCJjcmVkZW50aWFsX2lkZW50aWZpZXJzIjpbIjE2NTAwNWYwLTI4YjktNGFhMS05NTM4LTNmZThlZTc0N2Q0YiJdLCJleHAiOjE3Mzk0NTc3ODAsImlhdCI6MTczOTQ1NzQ4MH0.ImEbm6m4IoxW9UD-sPNi4ez26F7qiv5t-g7RFzEtbPegp5jNqulYvlPmRKj-QNBIifgXtrYID9-dHNWOQTybjQ%22%7D%7D%2C%22credential_issuer%22%3A%22https%3A%2F%2Fexample-credential-issuer.gov.uk%22%7D
+              example: "https://mobile.account.gov.uk/wallet/add?credential_offer=<JWT>"
   # `cri`
   /credential:
     post:
@@ -488,7 +488,7 @@ paths:
   /.well-known/jwks.json:
     get:
       description: |-
-        A public endpoint that stores the JSON Web Key Set (JWKS) of public keys issued by a service. These keys can be used by client applications to verify the signature of a JSON Web Token (JWT).
+        A public endpoint that returns the service's public keys in JSON Web Key Set (JWKS) format. These keys are used to verify the signature of JWTs issued by the service.
       responses:
         '200':
           description: Credential issuer's JWKS.
@@ -502,8 +502,8 @@ paths:
                     use: sig
                     crv: P-256
                     kid: 5dcbee863b5d7cc30c9ba1f7393dacc6c16610782e4b6a191f94a7e8b1e1510f
-                    x: 6jCKX_QRrmTeEJi-uiwcYqu8BgMgl70g2pdAst24MPE=
-                    y: icPzjbSk6apD_SNvQt8NWOPlPeGG4KYU55GfnARryoY=
+                    x: 6jCKX_QRrmTeEJi-uiwcYqu8BgMgl70g2pdAst24MPE
+                    y: icPzjbSk6apD_SNvQt8NWOPlPeGG4KYU55GfnARryoY
                     alg: ES256
 components:
   securitySchemes:
@@ -981,7 +981,7 @@ components:
           description: Algorithm. The cryptographic algorithm used with the key.
           type: string
           enum:
-            - P-256
+            - ES256
         use:
           description: The intended use of the key.
           type: string
