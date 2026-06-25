@@ -651,6 +651,38 @@ Resources:
           Value: govuk-one-login/mobile-wallet-tech-docs/template.yaml
     DependsOn: SpokeApplicationLoadBalancerListener
 
+  SpokeContainerAutoScalingTarget:
+  Type: AWS::ApplicationAutoScaling::ScalableTarget
+  Properties:
+    MaxCapacity: 2
+    MinCapacity: 2
+    ResourceId: !Join
+      - '/'
+      - - "service"
+        - !Ref FargateCluster
+        - !GetAtt SpokeContainerService.Name
+    RoleARN: !Sub "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+    ScalableDimension: ecs:service:DesiredCount
+    ServiceNamespace: ecs
+
+SpokeContainerAutoScalingPolicy:
+  DependsOn: SpokeContainerAutoScalingTarget
+  Type: AWS::ApplicationAutoScaling::ScalingPolicy
+  Properties:
+    PolicyName: spokeContainerAutoScalingPolicy
+    PolicyType: TargetTrackingScaling
+    ResourceId: !Join
+      - '/'
+      - - "service"
+        - !Ref FargateCluster
+        - !GetAtt SpokeContainerService.Name
+    ScalableDimension: ecs:service:DesiredCount
+    ServiceNamespace: ecs
+    TargetTrackingScalingPolicyConfiguration:
+      PredefinedMetricSpecification:
+        PredefinedMetricType: ECSServiceAverageCPUUtilization
+      TargetValue: 70
+
   SpokeApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
