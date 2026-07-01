@@ -53,8 +53,8 @@ Resources:
       Type: A
       HostedZoneId: !ImportValue DocsWalletServicePublicHostedZoneId
       AliasTarget:
-        DNSName: !GetAtt ApplicationLoadBalancer.DNSName
-        HostedZoneId: !GetAtt ApplicationLoadBalancer.CanonicalHostedZoneID
+        DNSName: !GetAtt SpokeApplicationLoadBalancer.DNSName
+        HostedZoneId: !GetAtt SpokeApplicationLoadBalancer.CanonicalHostedZoneID
 
   DocsWalletServiceCertificate:
     Type: AWS::CertificateManager::Certificate
