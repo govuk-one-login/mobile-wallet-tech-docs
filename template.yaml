@@ -533,16 +533,7 @@ Outputs:
     Condition: OutputPipelineStackName
     Description: "The name of the pipeline stack that deploys this application stack"
     Value: !Ref PipelineStackName
-  ALBDNS:
-    Description: "The DNS of the application load balancer"
-    Value: !GetAtt ApplicationLoadBalancer.DNSName
-    Export:
-      Name: WalletTechDocsALBDNS
-  ALBHostedZone:
-    Description: "The DNS of the application load balancer"
-    Value: !GetAtt ApplicationLoadBalancer.CanonicalHostedZoneID
-    Export:
-      Name: WalletTechDocsALBHostedZone
+
   
   #
   #Spoke VPC Outputs Start Here
