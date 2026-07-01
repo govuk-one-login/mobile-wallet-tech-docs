@@ -64,6 +64,7 @@ Resources:
         - DomainName: "docs.wallet.service.gov.uk"
           HostedZoneId: !ImportValue DocsWalletServicePublicHostedZoneId
       ValidationMethod: DNS
+
   #
   # Fargate cluster
   #
@@ -262,7 +263,7 @@ Resources:
         - Key: Source
           Value: govuk-one-login/mobile-wallet-tech-docs/template.yaml
 
-
+  #
   # Application Load balancing
   #
 
