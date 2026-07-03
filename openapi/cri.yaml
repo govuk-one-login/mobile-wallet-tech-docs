@@ -852,7 +852,7 @@ components:
             enum:
               - ES256
         credential_refresh_web_journey_url:
-          description: The URL where your users can go through the credential refresh web journey in their browser.
+          description: The URL where your users can go through the credential refresh web journey in their browser. This must be a gov.uk domain.
           type: string
         credential_validity_period_max_days:
           description: The credential’s validity period in days once it’s issued.
