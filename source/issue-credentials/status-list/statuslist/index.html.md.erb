@@ -34,7 +34,7 @@ For consistency between the two different lists that the status list service pub
 The URI path for the Bitstring status list endpoint is `/b/{statusListIdentifier}`. It is presented as a GET request, where:
 
 * `b` represents the type of status list: `BitstringStatusList`
-* `statusListIdentifier` represents an ID for a specific status list 
+* `statusListIdentifier` represents an ID for a specific status list
 
 #### Bitstring status list request example
 
@@ -43,7 +43,6 @@ Below is an example of the `/b/{statusListIdentifier}` request:
 ```TEXT
 GET /b/A671FED3E9AD HTTP/1.1
 Host: crs.account.gov.uk
-Accept: application/json
 ```
 
 #### Request Response
@@ -143,7 +142,6 @@ Below is an example of the `/t/{statusListIdentifier}` request:
 ```TEXT
 GET /t/A671FED3E9AD HTTP/1.1
 Host: crs.account.gov.uk
-Accept: application/statuslist+jwt
 ```
 
 #### Request Response
