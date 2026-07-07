@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Receive credential information from a GOV.UK Wallet holder's device
 
-When you [establish your sharing session](./device-request.html#send-a-session-establishment-message), GOV.UK Wallet will ask the user for consent to share their credential information. If the user agrees, GOV.UK Wallet will send an encrypted `DeviceResponse` message through your secure session in the form of an encrypted Concise Binary Object Representation (CBOR).
+When you [establish your sharing session](./device-request.html#send-a-session-establishment-message), GOV.UK Wallet will ask the user for consent to share their credential information. If the user agrees, GOV.UK Wallet will send a `DeviceResponse` message through your secure session. This message is a Concise Binary Object Representation (CBOR) encrypted with ECDH. You must decrypt it with the same symmetric key you used to encrypt your `DeviceRequest` message.
 
 The GOV.UK Wallet `DeviceResponse` structure will contain:
 

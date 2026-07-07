@@ -53,20 +53,14 @@ The central device or the peripheral device can cancel a sharing session. If you
 
 ## Sending a session establishment message
 
-When your connection is ready, you will be able to send a message to request encrypted credential information from GOV.UK Wallet. This must be a `SessionEstablishment` structure in the form of a Concise Binary Object Representation (CBOR). This will contain your:
+When your connection is ready, you will be able to send a message to request encrypted credential information from GOV.UK Wallet. This must be a `SessionEstablishment` structure in the form of a Concise Binary Object Representation (CBOR). The CBOR will contain your:
 
-- [device request](#example-device-request-structure) encrypted with an asymmetric key - you must support Curve P-256 and Curve P-384 types
-- ephemeral public key for the session
-
-Your public key must:
-
-- support using Curve P-256 and Curve P-384 for ECDH/ECDSA. This will also be used for secure session encryption
-- only be used for a single presentation session
-- only be stored in temporary memory and not persisted
+- encrypted [device request](#device-request-structure)
+- ephemeral [public key](#public-key) used only for this session
 
 ### Example session establishment structure
 
-Below is an example `SessionEstablishment` CBOR containing the elements GOV.UK requires to begin sharing:
+Below is an example `SessionEstablishment` CBOR containing the elements GOV.UK Wallet needs to begin sharing:
 
 ```
 SessionEstablishment
@@ -84,31 +78,11 @@ Below is an example of the `SessionEstablishment` as a CBOR diagnostic:
 
 ```
 
-### Understand the session transcript
-
-During session establishment, the peripheral and central devices will create a session transcript in the form of a `SessionTranscript` structure. This is used when generating a unique key for the sharing session, which helps to prevent a sharing session from being altered or reused. 
-
-The `SessionTranscript` will contain:
-
-| Element                 | Description                                                                                                               | Data type | 
-|-------------------------|---------------------------------------------------------------------------------------------------------------------------|-----------|
-| `DeviceEngagementBytes` | [`DeviceEngagement`](qr-code.html#device-engagement-structure) structure in the format of a base64 URL encoded CBOR.     | `bstr`    |
-| `EReaderKeyBytes`       | [`SessionEstablishment`](#send-a-session-establishment-message) `eReaderKey` in the format of a base64 URL encoded CBOR. | `bstr`    | 
-| `Handover`              | GOV.UK Wallet uses QR a code for handover, and will set this element to `null`.                                           | `null`    | 
-
-
-Below is an example of a `SessionTranscript` CBOR:
-
-```
-SessionTranscript = [
-├── DeviceEngagementBytes : #6.24(bstr .cbor DeviceEngagement)
-├── EReaderKeyBytes : #6.24(bstr .cbor EReaderKeyBytes)
-└── Handover : QRHandover
-    └── null
-```
-### Example device request structure
+### Device request structure
 
 The `DeviceRequest` structure you include in your [`SessionEstablishment.data` element](#send-a-session-establishment-message) tells GOV.UK Wallet which attributes you wish to use in your verification process.   
+
+You must encrypt your `DeviceRequest` using [a symmetric key](#public-key). You must use this same key to decrypt the `DeviceResponse` message you receive from the holder.
 
 Below is an example CBOR diagnostic requesting mandatory elements from an mDL:
 
@@ -137,6 +111,42 @@ Below is an example CBOR diagnostic requesting mandatory elements from an mDL:
 ```
 
 There is guidance on the [credentials that are available in GOV.UK Wallet](/verify-credentials/credentials-in-wallet).
+
+### Public key
+
+You must use your public key to encrypt the session and your `DeviceRequest`.
+
+You must use ECDH to derive a symmetric public key pair from:
+
+- the holder's public key that you received when you scanned [their QR code](./qr-code.html#security)
+- your private key
+
+The key pair you create must match the encryption type of the public key you received from the holder. This will be either Curve P-256 or Curve P-384.
+
+Your must only use your public key for a single presentation session, and only store it in temporary memory.
+
+### Understand the session transcript
+
+During session establishment, the peripheral and central devices will create a session transcript in the form of a `SessionTranscript` structure. This is used when generating a unique key for the sharing session, which helps to prevent a sharing session from being altered or reused. 
+
+The `SessionTranscript` will contain:
+
+| Element                 | Description                                                                                                               | Data type | 
+|-------------------------|---------------------------------------------------------------------------------------------------------------------------|-----------|
+| `DeviceEngagementBytes` | [`DeviceEngagement`](qr-code.html#device-engagement-structure) structure in the format of a base64 URL encoded CBOR.     | `bstr`    |
+| `EReaderKeyBytes`       | [`SessionEstablishment`](#send-a-session-establishment-message) `eReaderKey` in the format of a base64 URL encoded CBOR. | `bstr`    | 
+| `Handover`              | GOV.UK Wallet uses QR a code for handover, and will set this element to `null`.                                           | `null`    | 
+
+
+Below is an example of a `SessionTranscript` CBOR:
+
+```
+SessionTranscript = [
+├── DeviceEngagementBytes : #6.24(bstr .cbor DeviceEngagement)
+├── EReaderKeyBytes : #6.24(bstr .cbor EReaderKeyBytes)
+└── Handover : QRHandover
+    └── null
+```
 
 ## Handling device request errors
 
