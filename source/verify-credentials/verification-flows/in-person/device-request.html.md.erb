@@ -58,26 +58,6 @@ When your connection is ready, you will be able to send a message to request enc
 - encrypted [device request](#device-request-structure)
 - ephemeral [public key](#public-key) used only for this session
 
-### Example session establishment structure
-
-Below is an example `SessionEstablishment` CBOR containing the elements GOV.UK Wallet needs to begin sharing:
-
-```
-SessionEstablishment
-├── eReaderKey : #6.24(bstr .cbor EDeviceKey)
-└── data : bstr  ; Encrypted device request
-```
-
-Below is an example of the `SessionEstablishment` as a CBOR diagnostic:
-
-```
-{
-    "eReaderKey": 24(h'A420010102215820FF7E64F18B0352E789....B')
-    "data": h'41ed0d148104f57dab1a8dc9485f5662ae76.....ff'
-}
-
-```
-
 ### Device request structure
 
 The `DeviceRequest` structure you include in your [`SessionEstablishment.data` element](#send-a-session-establishment-message) tells GOV.UK Wallet which attributes you wish to use in your verification process.   
@@ -124,6 +104,26 @@ You must use ECDH to derive a symmetric public key pair from:
 The key pair you create must match the encryption type of the public key you received from the holder. This will be either Curve P-256 or Curve P-384.
 
 Your must only use your public key for a single presentation session, and only store it in temporary memory.
+
+### Example session establishment structure
+
+Below is an example `SessionEstablishment` CBOR containing the elements GOV.UK Wallet needs to begin sharing:
+
+```
+SessionEstablishment
+├── eReaderKey : #6.24(bstr .cbor EDeviceKey)
+└── data : bstr  ; Encrypted device request
+```
+
+Below is an example of the `SessionEstablishment` as a CBOR diagnostic:
+
+```
+{
+    "eReaderKey": 24(h'A420010102215820FF7E64F18B0352E789....B')
+    "data": h'41ed0d148104f57dab1a8dc9485f5662ae76.....ff'
+}
+
+```
 
 ### Understand the session transcript
 
