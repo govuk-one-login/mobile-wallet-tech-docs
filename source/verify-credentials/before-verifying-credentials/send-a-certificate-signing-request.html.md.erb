@@ -16,7 +16,7 @@ Your CSR must meet strict requirements in cryptography and formatting. These inc
 
 ### Private key algorithm
 
-Your CSR private key algorithm must meet all of the following requirements:
+The private key algorithm for your CSR must meet all of the following requirements:
 
 |Parameter|Required value|
 |-|-|
@@ -107,19 +107,19 @@ The `serialNumber` in the subject DN is the stable identity of your sub-CA. It m
 
 Your `serialNumber` must never be reused by a different sub-CA or DVS. 
 
-Below is an example of a `Serial Number`:
+Below is an example of a serial number in a CSR:
 
     serialNumber=550e8400-e29b-41d4-a716-446655440000
 
 ## Your intermediate certificate
 
-Once your CSR has been checked, you will be issued with an intermediate sub-CA certificate. Your sub-CA has a `NameConstraints` extension so you cannot issue any verifier certificates outside of your own legal business name. 
+Once we have checked your CSR, we'll issue you with an intermediate sub-CA certificate. Your sub-CA has a `NameConstraints` extension so you cannot issue any verifier certificates outside of your own legal business name. 
 
 You can use your sub-CA to issue your own end-entity verifier certificates to your apps, devices and trusted clients. When a verifier starts proximity sharing flow, the verifier certificates will form a chain of trust landing on the root certificate. This chain will authenticate authenticate all your requests for credential data.
 
 ## Renew your CSR
 
-You will need to send a new CSR to renew your intermediate sub-CA certificate. Your CSR must contain the same:
+You'll need to send a new CSR to renew your intermediate sub-CA certificate. Your CSR must contain the same:
 
 * immutable `serialNumber UUID`
 * `CommonName` unless you've changed your legal business name
