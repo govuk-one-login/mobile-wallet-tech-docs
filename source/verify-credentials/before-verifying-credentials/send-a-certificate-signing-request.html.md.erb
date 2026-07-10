@@ -51,9 +51,9 @@ Your CSR body must meet the following format requirements:
 * contain a Subject Distinguished Name as defined further down
 * contain no certificate extensions
 
-Your CSR must have the following request body:
+Your CSR should include the following header and footer lines:
 
-    -----BEGIN CERTIFICATE REQUEST-----\n...\n-----END CERTIFICATE REQUEST-----
+```-----BEGIN CERTIFICATE REQUEST-----\n....\n-----END CERTIFICATE REQUEST-----```.
 
 Your CSR must not contain:
 
@@ -73,19 +73,23 @@ Your CSR must contain a mandatory subject Distinguished Name (DN) that identifie
 
 |Attribute|OID|Requirements|
 |---|---|---|
-|C|2.5.4.6|ISO 3166-1 alpha-2 country code|
-|O|2.5.4.10|Legal organisation name|
-|OU|2.5.4.11|Department or Division. For example, DVS PKI Operations|
-|CN|2.5.4.3|Stable human-readable sub-CA name|
-|serialNumber|2.5.4.5|Universally Unique Identifier v4 (UUID)|
+|`C`|2.5.4.6|ISO 3166-1 alpha-2 country code|
+|`O`|2.5.4.10|Legal organisation name|
+|`OU`|2.5.4.11|Department or Division. For example, DVS PKI Operations|
+|`CN`|2.5.4.3|Stable human-readable sub-CA name|
+|`serialNumber`|2.5.4.5|Universally Unique Identifier v4 (UUID)|
 
 Below is an example of a completed subject DN: 
 
-    C=GB
-    O=Example Verifier Org Ltd
-    OU=Reader Certification Authority
-    CN=Example Verifier Org Reader Sub-CA
-    serialNumber=550e8400-e29b-41d4-a716-446655440000
+```
+C=GB
+O=Example Verifier Org Ltd
+OU=Reader Certification Authority
+CN=Example Verifier Org Reader Sub-CA
+serialNumber=550e8400-e29b-41d4-a716-446655440000
+```
+
+You must include all 5 attributes for your CSR to be accepted. 
 
 #### Common name
 
@@ -101,7 +105,7 @@ The Common Name in the subject DN must:
 
 Below is an example of a Common Name:
 
-    CN=Example Verifier Org Reader Sub-CA
+```CN=Example Verifier Org Reader Sub-CA```
 
 ### Serial number 
 
@@ -115,7 +119,7 @@ Your `serialNumber` must never be reused by a different sub-CA or DVS.
 
 Below is an example of a serial number in a CSR:
 
-    serialNumber=550e8400-e29b-41d4-a716-446655440000
+```serialNumber=550e8400-e29b-41d4-a716-446655440000 ```
 
 ## Your intermediate certificate
 
