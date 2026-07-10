@@ -28,7 +28,7 @@ Your DVS lead will need to [contact GOV.UK Wallet]() to onboard. An engagement m
 
 ## Request an intermediate sub-CA certificate
 
-You'll need to create and [send a certificate signing request (CSR)]() to your engagement manager. You'll need a separate CSR for each environment. GOV.UK Wallet certificate authority (CA) will check your CSR and issue you an intermediate sub-CA certificate. You can use your sub-CA to issue the [end-entity verifier certificate]() you need to present when consuming and verifying credential data. 
+You will not be able to request credential data from GOV.UK Wallet without an authenticated verifier certificate. To create one, you will need to request an intermediate sub-CA certificate that will let you operate your own certificate authority (CA). The intermediate sub-CA is signed by our root CA and you can request it by sending a [certificate signing request (CSR)]() to your engagement manager. You will need to send a separate CSR for each environment.
 
 ## Verify test credentials 
 
