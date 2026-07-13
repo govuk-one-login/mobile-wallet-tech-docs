@@ -13,7 +13,7 @@ GOV.UK Wallet will allow trusted parties to verify and use credentials and attri
 To verify credentials in GOV.UK Wallet, you'll need to:
 
 * [get certified and registered](#get-certified-and-registered-as-a-dvs) as a Digital Verification Service (DVS)
-* [onboard your service](#onboard-your-service-with-govuk-wallet) with GOV.UK Wallet
+* [onboard your service](#onboard-your-service-with-gov-uk-wallet) with GOV.UK Wallet
 * [request an intermediate sub-CA certificate](#request-an-intermediate-sub-ca-certificate) to issue end-entity verifier certificates
 * [use the sandbox](#verify-test-credentials) to verify test credentials
 * [integrate with production](#verify-real-credentials) to verify real credentials
@@ -28,7 +28,7 @@ Your DVS lead will need to contact GOV.UK Wallet to onboard. An engagement manag
 
 ## Request an intermediate sub-CA certificate
 
-You will not be able to request credential data from GOV.UK Wallet without an authenticated verifier certificate. To create one, you will need to request an intermediate sub-CA certificate that will let you operate your own certificate authority (CA). The intermediate sub-CA is signed by our root CA and you can request it by sending a [certificate signing request (CSR)]() to your engagement manager. You will need to send a separate CSR for each environment.
+You will not be able to request credential data from GOV.UK Wallet without an authenticated verifier certificate. To create one, you will need to request an intermediate sub-CA certificate that will let you operate your own certificate authority (CA). The intermediate sub-CA is signed by our root CA and you can request it by sending a [certificate signing request (CSR)](verify-credentials/before-verifying-credentials/send-a-certificate-signing-request) to your engagement manager. You will need to send a separate CSR for each environment.
 
 ## Verify test credentials 
 
