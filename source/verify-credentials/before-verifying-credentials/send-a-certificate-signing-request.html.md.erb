@@ -105,7 +105,9 @@ The Common Name in the subject DN must:
 
 Below is an example of a Common Name:
 
-```CN=Example Verifier Org Reader Sub-CA```
+```
+CN=Example Verifier Org Reader Sub-CA
+```
 
 ### Serial number 
 
@@ -119,7 +121,9 @@ Your `serialNumber` must never be reused by a different sub-CA or DVS.
 
 Below is an example of a serial number in a CSR:
 
-```serialNumber=550e8400-e29b-41d4-a716-446655440000 ```
+```
+serialNumber=550e8400-e29b-41d4-a716-446655440000 
+```
 
 ## Your intermediate certificate
 
@@ -129,9 +133,5 @@ You can use your sub-CA to issue your own end-entity verifier certificates to yo
 
 ## Renew your CSR
 
-You'll need to send a new CSR to renew your intermediate sub-CA certificate. Your CSR must contain the same:
+When your intermediate sub-CA certificate expires, you will need to [renew it](verify-credentials/before-verifying-credentials/renew-an-intermediate-certificate).
 
-* immutable `serialNumber` UUID
-* Common Name unless you've changed your legal business name
-
-GOV.UK Wallet also recommends you generate a new cryptographic key pair to reduce long-term cryptographic risk.
