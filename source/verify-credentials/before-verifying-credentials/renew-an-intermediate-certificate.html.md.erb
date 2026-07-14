@@ -1,0 +1,26 @@
+---
+title: Renew an intermediate certificate
+weight: 3
+last_reviewed_on: 2026-07-14
+review_in: 6 months
+layout: verifier
+---
+
+# Renew an intermediate certificate
+
+Your intermediate sub-CA certificate is valid for the duration of your time as a registered Digital Verification Service (DVS) on the trust framework. Its expiry date is linked to the expiry date of your certificate of conformity from your conformity assessment body (CAB).
+
+You must renew your intermediate sub-CA certificate to continue consuming and verifying credential data. You'll need to create and send a new Certificate Signing Request (CSR) to your engagement manager to start the renewal process.
+
+## CSR requirements
+
+You will need to create and [send a new CSR](verify-credentials/before-verifying-credentials/send-a-certificate-signing-request) to your engagement manager. It must contain the same:
+
+*  immutable `serialNumber UUID` 
+*  `CommonName` unless you've changed your legal business name 
+
+GOV.UK Wallet also recommends you generate a new cryptographic key pair to reduce long-term cryptographic risk.
+
+## Transitioning between certificates
+
+You may use multiple intermediate sub-CA certificates while transitioning between old and new intermediate certificates. Once your old certificate has expired, you can only use your new certificate to issue verifier certificates as a CA.

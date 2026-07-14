@@ -1,0 +1,137 @@
+---
+title: Send a certificate signing request
+weight: 2
+last_reviewed_on: 2026-07-14
+review_in: 6 months
+layout: verifier
+---
+
+# Send a certificate signing request
+
+You can only receive and consume verifiable credentials if you are certified and registered on the trust framework as a [Digital Verification Service (DVS)](./#get-certified-and-registered-as-a-dvs). You'll need an intermediate CA certificate to authenticate requests for data from the GOV.UK Wallet Certificate Authority (CA). For the certificate, you'll need to create and send a Certificate Signing Request (CSR) to your engagement manager. You need to send a separate CSR for the sandbox and production environments.
+
+## CSR requirements
+
+Your CSR must meet strict requirements in cryptography and formatting. These include requirements for the:
+
+* private key algorithm
+* key protection
+* CSR body
+* subject distinguished name
+* serial number
+
+### Private key algorithm
+
+The private key algorithm for your CSR must meet all of the following requirements:
+
+|Parameter|Required value|
+|-|-|
+|Key Type| `EC`|
+|Curve| `P-256`|
+|CSR Signature Algorithm| `ecdsa-with-SHA256` |
+|Hash Function | `SHA-256`|
+
+### Key protection 
+
+Your CSR's private key must:
+
+* be generated inside a HSM or hardware-backed key management system
+* be non-exportable
+* log all key usage events
+* be protected by MFA for administrative access
+* comply with FIPS 140-2 as a minimum
+
+## CSR body
+
+Your CSR body must:
+
+* conform to PKCS #10
+* be PEM encoded
+* contain a valid signature over CertificationRequestInfo
+* contain a [subject Distinguished Name](#subject-distinguished-name)
+* contain no certificate extensions
+
+Your CSR should include the following header and footer lines:
+
+```-----BEGIN CERTIFICATE REQUEST-----\n....\n-----END CERTIFICATE REQUEST-----```.
+
+Your CSR must not contain:
+
+* basicConstraints
+* keyUsage
+* extendedKeyUsage
+* certificatePolicies
+* nameConstraints
+* policyConstraints
+* any custom extensions
+
+GOV.UK Wallet will reject any CSR containing extensions.
+
+### Subject Distinguished Name
+
+Your CSR must contain a mandatory subject Distinguished Name (DN) that identifies the issuing authority with the following attributes:
+
+|Attribute|OID|Requirements|
+|---|---|---|
+|`C`|2.5.4.6|ISO 3166-1 alpha-2 country code|
+|`O`|2.5.4.10|Legal organisation name|
+|`OU`|2.5.4.11|Department or Division. For example, DVS PKI Operations|
+|`CN`|2.5.4.3|Stable human-readable sub-CA name|
+|`serialNumber`|2.5.4.5|Universally Unique Identifier v4 (UUID)|
+
+Below is an example of a completed subject DN: 
+
+```
+C=GB
+O=Example Verifier Org Ltd
+OU=Reader Certification Authority
+CN=Example Verifier Org Reader Sub-CA
+serialNumber=550e8400-e29b-41d4-a716-446655440000
+```
+
+If you do not include all 5 of these attributes, we will reject your CSR. 
+
+#### Common name
+
+The Common Name in the subject DN must:
+
+* be human-readable
+* specify the sub-CA name
+* not contain UUID
+* not contain numbering suffix
+* not contain environment markers
+* remain stable across renewals
+* be updated if your organisation's legal name changes
+
+Below is an example of a Common Name:
+
+```
+CN=Example Verifier Org Reader Sub-CA
+```
+
+### Serial number 
+
+The `serialNumber` in the subject DN is the stable identity of your sub-CA. It must be:
+
+* a UUID version 4
+* globally unique
+* immutable
+
+Your `serialNumber` must never be reused by a different sub-CA or DVS. 
+
+Below is an example of a serial number in a CSR:
+
+```
+serialNumber=550e8400-e29b-41d4-a716-446655440000 
+```
+
+## Your intermediate certificate
+
+Once we have checked your CSR, we'll issue you with an intermediate sub-CA certificate. Your sub-CA has a `NameConstraints` extension so you cannot issue any verifier certificates outside of your own legal business name. 
+
+You can use your sub-CA to issue your own end-entity verifier certificates to your apps, devices and trusted clients. When a verifier starts proximity sharing flow, the verifier certificates will form a chain of trust landing on the root certificate. This chain will authenticate all your requests for credential data.
+
+## Renew your CSR
+
+When your intermediate sub-CA certificate expires, you will need to [renew it](verify-credentials/before-verifying-credentials/renew-an-intermediate-certificate).
+
