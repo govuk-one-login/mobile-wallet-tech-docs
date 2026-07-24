@@ -94,16 +94,16 @@ There is guidance on the [credentials that are available in GOV.UK Wallet](/veri
 
 ### Public key
 
-You must use your public key to encrypt the session and your `DeviceRequest`.
+You must derive a symmetric key to encrypt the session and your `DeviceRequest`.
 
-You must use ECDH to derive a symmetric public key pair from:
+You must use ECDH to derive a symmetric key (shared secret) from:
 
 - the holder's public key that you received when you scanned [their QR code](./qr-code.html#security)
 - your private key
 
 The key pair you create must match the encryption type of the public key you received from the holder. This will be either Curve P-256 or Curve P-384.
 
-Your must only use your public key for a single presentation session, and only store it in temporary memory.
+You should only use your key pair for a single presentation session, and only store it in temporary memory.
 
 ### Example session establishment structure
 
