@@ -19,8 +19,8 @@ For in-person credential verification, GOV.UK Wallet will support the following:
 |--------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
 | Device engagement              | QR code                                                                                                                         |
 | Handover session establishment | Not supported                                                                                                                   |
-| Reader authentication          | Supported and required                                                                                                                       |
-| Session encryption             | Only with Curve P-256 for ECDH/ECDSA                                                                                            |
+| Reader authentication          | Supported and required to receive credentials from GOV.UK Wallet                                                                                                                       |
+| Session encryption             | With Curve P-256 or P-384 for ECDH/ECDSA                                                                                            |
 | Data retrieval                 | Via Bluetooth only, using GATT protocol for transmission where the holder takes the Peripheral role and acts as the GATT server |
 | Device signature               | COSE EdDSA signatures only                                                                                                      |
 
