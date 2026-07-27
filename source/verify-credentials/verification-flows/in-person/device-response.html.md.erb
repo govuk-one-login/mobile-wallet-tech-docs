@@ -1,8 +1,9 @@
 ---
 title: Receive credential information from a GOV.UK Wallet holder's device
 weight: 3
-last_reviewed_on: 2026-05-12
+last_reviewed_on: 2026-07-27
 review_in: 6 months
+layout: verifier
 ---
 
 # Receive credential information from a GOV.UK Wallet holder's device
@@ -16,7 +17,7 @@ The GOV.UK Wallet `DeviceResponse` structure will contain:
 | `version`   | The version of the `DeviceResponse` structure. Set to `"1.0"`. | `str`         |
 | `documents` | An array containing signed digital documents.               | `[Document]+` |
 
-## Understand the elements in a DeviceResponse structure
+## Understand the elements in a device response structure
 
 Documents shared in GOV.UK Wallet's `DeviceResponse` structure will contain:
 
@@ -42,7 +43,7 @@ DeviceResponse
 │           └── {ERRORS}
 ```
 
-### Example issuerSigned CBOR
+### Example issuer signed CBOR
 
 The `issuerSigned` structure contains `nameSpaces` taken from the credential stored in the GOV.UK Wallet. These are set by the credential issuer and represent the fields present on the physical document.  
 
@@ -68,9 +69,11 @@ This is an example `issuerSigned` CBOR, containing an mDL `age_over_25` element:
 
 There is more guidance on the [credentials available in GOV.UK Wallet](/verify-credentials/credentials-in-wallet).
 
-### Example deviceSigned CBOR
+### Example device signed CBOR
 
-The `deviceSigned` structure contains a `deviceAuth` CBOR map that lets you verify ownership of the credential being shared. The `deviceAuth` holds `deviceSignature`, which is signed with the private key that matches the public key present in the Mobile Security Object (MSO). You must verify the `deviceAuth` to confirm that the credential is being presented from the same device it was issued to. If you are unable to verify the `deviceAuth`, you must not rely on the data in the credential and must discard it. There is more guidance on validating the MSO in [the ISO/IEC 18013-5 specification](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
+The `deviceSigned` structure contains a `deviceAuth` CBOR map that lets you verify ownership of the credential being shared. The `deviceAuth` holds `deviceSignature`, which is signed with the private key that matches the public key present in the Mobile Security Object (MSO).
+
+You must verify the `deviceAuth` to confirm that the credential is being presented from the same device it was issued to. If you can not verify the `deviceAuth`, you must not rely on the data in the credential and must discard it. There is more guidance on validating the MSO in [the ISO/IEC 18013-5 specification](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
 
 GOV.UK Wallet's `deviceSigned` structure also contains an empty `nameSpaces` array.  GOV.UK Wallet will only share [issuer signed credentials](#example-issuersigned-cbor).
 
@@ -83,7 +86,7 @@ This is an example `deviceSigned` CBOR:
 │       │       ├── deviceSignature : DeviceSignature
 ```
 
-## Example DeviceResponse CBOR diagnostic
+## Example device response CBOR diagnostic
 
 The example below shows a GOV.UK Wallet mDL `DeviceResponse`. In this example the holder has consented to share their:
 

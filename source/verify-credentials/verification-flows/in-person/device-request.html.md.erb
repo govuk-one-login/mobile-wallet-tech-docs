@@ -1,8 +1,9 @@
 ---
 title: Request credential information from a GOV.UK Wallet holder's device
 weight: 2
-last_reviewed_on: 2026-05-12
+last_reviewed_on: 2026-07-27
 review_in: 6 months
+layout: verifier
 ---
 
 # Request credential information from a GOV.UK Wallet holder's device
@@ -25,7 +26,7 @@ When a holder's device takes the peripheral role, GOV.UK Wallet will create a GA
 | `Client2Server` | 00000002-A123-48CE-896B-4C76973373E6 | Write Without Response         |
 | `Server2Client` | 00000003-A123-48CE-896B-4C76973373E6 | Notify                         |
 
-The UUIDs of these characteristics are specified in the [ISO/IEC 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
+You can find the UUIDs of these characteristics in the [ISO/IEC 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
 
 Once you have connected to a holder's device, you can ask GOV.UK Wallet to share encrypted credential information.
 
@@ -42,13 +43,13 @@ The maximum length of a message is 512 bytes. You must divide any messages large
 
 When connected in the peripheral role, GOV.UK Wallet will send `DeviceResponse` messages to your verification device using the `Server2Client` characteristic.
 
-Once the secure session has been confirmed, you will be able to retrieve encrypted credential information. You can use this information in your verification service. 
+Once GOV.UK Wallet and your verification device have confirmed the secure session, you will be able to retrieve encrypted credential information. You can use this information in your verification service. 
 
-You may receive divided messages that need to be reassembled. This is likely when requesting photos from a user's credential.
+You may receive divided messages that need to be reassembled. This is likely when you request photos from a user's credential.
 
 ### Cancelling a sharing session
 
-The central device or the peripheral device can cancel a sharing session. If your verification service needs to cancel a session, you must set the `State` characteristic to `0x02`. As the holder's device can also update this characteristic, your verification process must listen for any messages which change the `State` value.
+The central device or the peripheral device can cancel a sharing session. If your verification service needs to cancel a session, you must set the `State` characteristic to `0x02`. Your verification process must listen for any messages which change the `State` value because the holder's device can also update this characteristic.
 
 
 ## Sending a session establishment message
@@ -101,9 +102,9 @@ You must use ECDH to derive a symmetric key (shared secret) from:
 - the holder's public key that you received when you scanned [their QR code](./qr-code.html#security)
 - your private key
 
-The key pair you create must match the encryption type of the public key you received from the holder. This will be either Curve P-256 or Curve P-384.
+The key you create must match the encryption type of the public key you received from the holder. This will be either Curve P-256 or Curve P-384.
 
-You should only use your key pair for a single presentation session, and only store it in temporary memory.
+You should only use your key for a single presentation session, and only store it in temporary memory.
 
 ### Example session establishment structure
 
@@ -127,7 +128,7 @@ Below is an example of the `SessionEstablishment` as a CBOR diagnostic:
 
 ### Understand the session transcript
 
-During session establishment, the peripheral and central devices will create a session transcript in the form of a `SessionTranscript` structure. This is used when generating a unique key for the sharing session, which helps to prevent a sharing session from being altered or reused. 
+During session establishment, the peripheral and central devices will create a session transcript in the form of a `SessionTranscript` structure. This transcript is used when generating a unique key for the sharing session, which helps to prevent a sharing session from being altered or reused. 
 
 The `SessionTranscript` will contain:
 
