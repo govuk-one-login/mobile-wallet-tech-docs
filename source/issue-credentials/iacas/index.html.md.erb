@@ -30,7 +30,7 @@ Your endpoint must return a JSON object containing the `data` property, which is
 
 Each entry in the array is one IACA root certificate. You must not include the document signing certificate, or any intermediate certificates, in your IACA `data` array.
 
-You must include the document signing certificate in the mdoc credential’s Mobile Security Object (MSO). Verifiers will use the MSO to validate your credential’s signature. The MSO is a data structure that proves your credential was issued by you and has not been tampered with.
+You must include the document signing certificate in the mdoc credential’s Mobile Security Object (MSO). The MSO is a data structure that proves your credential was issued by you and has not been tampered with. Verifiers will use the MSO to validate your mdoc credential’s signature.
 
 Your `data` object must include the following parameters.
 
@@ -48,7 +48,7 @@ The `certificateData` object contains the following parameters.
 |-----------------------|----------------------|----------------------------|
 | `notAfter`            | Required             | The date the certificate’s validity period ends. This must be a maximum of 20 years after the `notBefore` date.                                                                                                                                                                                       |
 | `notBefore`           | Required             | The date the certificate’s validity period begins.                                                                                                                                                                                       |
-| `country`.            | Required             | The \[ISO 3166-1 alpha-2 code\]([https://www.iso.org/iso-3166-country-codes.html](https://www.iso.org/iso-3166-country-codes.html)) of the issuing country.                                                                                                                                                                                       |
+| `country`             | Required             | The [ISO 3166-1 alpha-2 code](https://www.iso.org/iso-3166-country-codes.html) of the issuing country.                                                                                                                                                                                       |
 | `commonName`          | Required             | The stable human-readable name for the IACA.                                                                                                                                                                                       |
 | `stateOrProvinceName` | Optional             | The jurisdiction of the credential issuer. If you include this parameter, its value must exactly match the value of the `issuing_jurisdiction` in the mdoc credential.                                                                                                                                                                                       |
 
