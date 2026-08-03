@@ -82,6 +82,41 @@ paths:
                 type: string
                 example: "no-store"
   # `cri`
+  /iacas:
+    get:
+      description: >
+        Retrieves the list of IACA (Issuing Authority Certificate Authority)
+        certificates. IACAs are X.509 certificates that serve as trust anchors
+        for mdoc issuers and are used to sign Document Signer Certificates.
+      responses:
+        '200':
+          description: Successfully retrieved the list of IACA certificates.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                example: no-store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Iacas'
+
+        '500':
+          description: Internal server error.
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                example: no-store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IACAsErrorResponse'
+              example:
+                error: INTERNAL_SERVER_ERROR
+                error_description: Unable to retrieve IACA certificates
+
+  # `cri`
   /notification:
     post:
       description: An endpoint used by GOV.UK Wallet to notify the credential issuer of events concerning issued credentials.
@@ -561,6 +596,88 @@ components:
         error:
           description: An error code, such as `invalid_proof` or `invalid_nonce`.
           type: string
+    IACAsErrorResponse:
+      type: object
+      required:
+        - error
+        - error_description
+      properties:
+        error:
+          type: string
+          description: Machine-readable error code.
+          example: INTERNAL_SERVER_ERROR
+        error_description:
+          type: string
+          description: Human-readable error message.
+          example: Unable to retrieve IACA certificates
+    Iacas:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Iaca'
+    Iaca:
+      type: object
+      required:
+        - id
+        - active
+        - certificatePem
+        - certificateData
+        - certificateFingerprint
+        - publicKeyJwk
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the IACA.
+          example: iaca-001
+        active:
+          type: boolean
+          description: Indicates whether this IACA is currently active and valid for use.
+          example: true
+        certificatePem:
+          type: string
+          description: PEM-encoded X.509 certificate.
+          example: |
+            -----BEGIN CERTIFICATE-----
+            MIIB...
+            -----END CERTIFICATE-----
+        certificateData:
+          $ref: '#/components/schemas/CertificateData'
+        certificateFingerprint:
+          type: string
+          description: SHA-256 fingerprint of the certificate as a lowercase hexadecimal string.
+          example: a1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef
+        publicKeyJwk:
+          $ref: '#/components/schemas/PublicKeyJwk'
+    CertificateData:
+      type: object
+      required:
+        - notAfter
+        - notBefore
+        - country
+        - commonName
+      properties:
+        notAfter:
+          type: string
+          format: date-time
+          description: The date and time (ISO 8601) when the certificate expires.
+          example: '2030-06-18T00:00:00.000Z'
+        notBefore:
+          type: string
+          format: date-time
+          description: The date and time (ISO 8601) when the certificate becomes valid.
+          example: '2025-06-18T00:00:00.000Z'
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code of the IACA issuer.
+          example: GB
+        commonName:
+          type: string
+          description: The issuer common name (CN).
+          example: GOV.UK Wallet IACA
     NotificationRequestBody:
       type: object
       properties:
