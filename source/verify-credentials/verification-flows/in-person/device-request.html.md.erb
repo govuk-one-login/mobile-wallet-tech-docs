@@ -136,7 +136,7 @@ The `SessionTranscript` will contain:
 |-------------------------|---------------------------------------------------------------------------------------------------------------------------|-----------|
 | `DeviceEngagementBytes` | [`DeviceEngagement`](qr-code.html#device-engagement-structure) structure in the format of a base64 URL encoded CBOR.     | `bstr`    |
 | `EReaderKeyBytes`       | [`SessionEstablishment`](#send-a-session-establishment-message) `eReaderKey` in the format of a base64 URL encoded CBOR. | `bstr`    | 
-| `Handover`              | GOV.UK Wallet uses QR a code for handover, and will set this element to `null`.                                           | `null`    | 
+| `Handover`              | GOV.UK Wallet uses a QR code for handover, and will set this element to `null`.                                           | `null`    | 
 
 
 Below is an example of a `SessionTranscript` CBOR:
@@ -166,7 +166,7 @@ This is an example of a `SessionData` message:
 ```
 
 SessionData = {
-    ? "status": uint ; status code from table abve
+    ? "status": uint ; status code from table above
 }
 
 ```

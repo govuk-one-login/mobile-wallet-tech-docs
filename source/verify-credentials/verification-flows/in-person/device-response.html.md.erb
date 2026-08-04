@@ -25,8 +25,8 @@ Documents shared in GOV.UK Wallet's `DeviceResponse` structure will contain:
 |----------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------|
 | `docType`      | The standardised identifier for the document type.                                        | `DocType`                                              |
 | `issuerSigned` | A CBOR map containing mdoc [`nameSpaces` and  `IssuerAuth`](#example-issuersigned-cbor). | `{`<br/>`nameSpaces: {str, arr},`<br/>`issuerAuth: arr }` |
-| `deviceSigned` | A CBOR map containing the [`deviceSignature`](#example-devicesigned-cbor).                                  | `{`<br/>`nameSpaces: {str, arr},`<br/>`issuerAuth: arr }` |
-| `errors`       | An optional CBOR map containing `namespace` identifiers and error codes.                  | `errors: {tstr, unit}`                                 |
+| `deviceSigned` | A CBOR map containing the [`deviceSignature`](#example-devicesigned-cbor).                                  | `{`<br/>`nameSpaces: {str, arr},`<br/>`deviceAuth: map }` |
+| `errors`       | An optional CBOR map containing `namespace` identifiers and error codes.                  | `errors: {tstr, uint}`                                 |
 
 This is an example `DeviceResponse` CBOR for an mDL `docType`:
 
