@@ -1,12 +1,30 @@
 ---
 title: Check a credential is valid
 weight: 5
-last_reviewed_on: 2026-07-27
+last_reviewed_on: 2026-08-04
 review_in: 6 months
 layout: verifier
 ---
 
 # Check a credential is valid
 
-You can check a credential is valid by completing the full validation and inspection procedures as laid out in the ISO-5 specification section 9.3 including checking the credential status recorded on the Status List Service.
+You can check a credential is valid by looking at its:
+
+* [certificate path](#certificate-path)
+* [status information](#status-information)
+
+You must not trust a credential with errors in its credential status or certificate pathway. 
+
+## Certificate path
+
+You can check a credential's validity by inspecting its full certificate path back to its Issuing Authority Certificate Authority (IACAS). The procedure is laid out in section 9.3 of the [ISO/IEC 18013-5 specification](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) for a mdoc credential. The specification covers areas of validation including certificate signatures, expiration dates, certificate usage constraints, name constraints and certificate revocation lists (CRLS) following [RFC 5280](https://datatracker.ietf.org/doc/html/rfc5280#section-6).
+
+## Status information 
+
+You can use the Status List Service to [check a live credential’s status](statuslist/index.html) information. This will tell you whether the credential is valid or revoked.
+
+
+
+
+
 
