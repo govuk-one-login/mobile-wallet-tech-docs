@@ -1,0 +1,68 @@
+---
+title: Sign your mdoc credentials
+weight: 3.5
+last_reviewed_on: 2026-07-29
+review_in: 6 months
+layout: issuer
+---
+
+# Sign your mdoc credentials
+
+You must sign your mdoc credentials so GOV.UK Wallet can verify they are genuine.
+
+[ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) specifies you should implement X.509 certificates and certificate chains so verifiers can validate the signature of your mdoc credential’s Mobile Security Object (MSO). The MSO is a data structure that verifiers can use to prove your credential was issued by you and has not been tampered with.
+
+To sign your mdoc credentials, you must:
+
+- [set up an Issuing Authority Certificate Authority (IACA) to issue root certificates](#set-up-an-iaca-to-issue-root-certificates)
+- [add your IACA details to your credential issuer metadata](#add-iaca-details-to-your-metadata)
+- [create a Document Signing Certificate (DSC)](#create-a-document-signing-certificate-dsc) and include it in the MSO for your mdoc credentials
+- [set up certificate revocation](#set-up-certificate-revocation)
+
+## Set up an IACA to issue root certificates
+
+You must set up a private Certificate Authority (CA) to act as your IACA.
+
+You must create one or more self-signed root certificates. These certificates establish the chain of trust that authenticates the credentials your service issues. You can find the profile for a root certificate in [ISO 18013-5:2021 Annex B](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
+
+You must keep your IACA secure. You are responsible for setting up security measures like cryptographic protection, certificate lifecycle management, access controls and secure credential storage.
+
+You should follow the National Cyber Security Centre (NCSC) guidance on [managing certificates](https://www.ncsc.gov.uk/guidance/provisioning-and-managing-certificates-in-the-web-pki) and [developing a public key infrastructure (PKI)](https://www.ncsc.gov.uk/collection/in-house-public-key-infrastructure).
+
+You must use strong physical and management controls for your root certificates to prevent them being compromised. You could use a managed service like AWS Private CA to do this.
+
+### Set certificate expiry
+
+You must rotate your root certificates on a regular cycle. You should generate a new keypair when you rotate certificates. [ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) specifies that root certificates must be valid for no more than 9 years.
+
+Your root certificates should expire on or after the expiry date of all the certificates they have signed. For example, if you use a root key to sign certificates for the next 4 years and those certificates can be used to verify credentials which can be valid for 1 year, your root certificate must expire in 5 years.
+
+## Add IACA details to your metadata
+
+You must publish your `/iacas` endpoint to expose your root certificates and public key material. There is [guidance on how to implement this endpoint](/issue-credentials/iacas).
+
+You must add the `mdoc_iacas_uri` property to your credential issuer metadata so that it points to your `/iacas` endpoint. There is [guidance on the `mdoc_iacas_uri` property](/issue-credentials/metadata/#response-format).
+
+## Create a Document Signing Certificate (DSC)
+
+You must create a Document Signing Certificate (DSC) and include this in the MSO for your mdoc credentials. You can find the profile for a DSC in [ISO 18013-5:2021 Annex B](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en). 
+
+To create a DSC:
+
+1. Create one or more document signing keys.
+2. Create a certificate that includes your document signing key.
+3. Sign that certificate with your IACA to create a DSC.
+
+When you have created the DSC, include it in the `x5chain` element list in your mdoc.
+
+You should rotate your document signing keys regularly. You should destroy the old private key material after rotation to prevent it being used to sign credentials. You must keep the certificate containing the public key until the last credential it was used to sign has expired.
+
+### Set DSC expiry period
+
+[ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) specifies that DSCs are valid for no longer than 457 days, which is around 1 year and 3 months.
+
+Your DSC must have a longer validity period than the mdoc credential it will be used to verify. The DSC’s validity period must also include its document signing key. For example, if your credential is valid for 1 year and your document signing key is valid for 3 months, your DSC must be valid for 1 year and 3 months.
+
+## Set up certificate revocation
+
+You must build a way to revoke your certificates in case a document signing key or a root key is compromised. [ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) specifies you should use a Certificate Revocation List (CRL) to do this. You can set up some managed CA offerings to handle this for you, such as AWS Private CA.
