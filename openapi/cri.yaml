@@ -85,7 +85,7 @@ paths:
   /iacas:
     get:
       description: >
-        Retrieves the list of IACA (Issuing Authority Certificate Authority)
+        Retrieves the list of Issuing Authority Certificate Authority (IACA)
         certificates. IACAs are X.509 certificates that serve as trust anchors
         for mdoc issuers and are used to sign Document Signer Certificates.
       responses:
