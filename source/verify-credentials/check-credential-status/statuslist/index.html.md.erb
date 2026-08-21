@@ -8,48 +8,58 @@ layout: verifier
 
 # Check a credential's status
 
-The Status List Service hosts all status lists publicly. Each list is a signed JSON web token (JWT). You can verify the JWT's signature by accessing [the Status List Service's JSON web key set (JWKS)](#json-web-key-set-jwks) hosted at `https://crs.account.gov.uk/.well-known/jwks.json` (production) or `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration).
+You can check whether a credential is valid or revoked by using the Status List Service. It supports and publicly hosts two different list formats:
 
-There are two formats that the Status List Service supports: [Bitstring status lists](#bitstring-status-list) and [Token status lists](#token-status-list).
+* [Bitstring status lists](#bitstring-status-list-endpoints)
+* [Token status lists](#token-status-list-endpoints)
 
-You can use the status list `uri` in the credential to check a credential's status.
+A status list is a signed JSON web token (JWT). You can verify the JWT's signature by accessing the Status List service's [JSON web key set (JWKS)](#json-web-key-set-jwks) hosted at:
 
-Each status at a specific index in the status list uses 2 bits. Each status index may contain one of the following bit combinations:
+* `https://crs.account.gov.uk/.well-known/jwks.json` (production)
+* `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration)
 
-* `00` (VALID). Represents a valid credential
-* `01` (INVALID). Represents a credential that has been permanently revoked (marked as invalid)
-* `10` (NOT USED). Currently not used
-* `11` (NOT USED). Currently not used
+Each credential status is stored at a specific index in the status lists and is represented by 2 bits. A status index may contain one of the following bit combinations:
 
-## Bitstring status list
+|Bit combination |Validity|Explanation |
+|----------------|--------|------------|
+|00              |VALID   |Represents a valid credential. |
+|01              |INVALID |Represents a credential that has been permeanently revoked. Marked as invalid. |
+|10              |NOT USED|Currently not used. |
+|11              |NOT USED|Currently not used. |
 
-Status lists where the URI path begins with `/b/` are Bitstring status lists that follow the [W3C Bitstring Status List specification](https://www.w3.org/TR/vc-bitstring-status-list/).
+To check the status of a credential, you can query a status list by:
 
-For consistency between the two different lists that the status list service publishes, the Status List Service uses the more [complex implementation of Bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
+1.  Decoding the credential 
+2.  Sending a `GET` request to the Status List endpoint
 
-### Technical details
+## Decode the credential 
 
-#### Endpoint URI
+You can decode the credential to find the:
 
-The URI path for the Bitstring status list endpoint is `/b/{statusListIdentifier}`. It is presented as a GET request, where:
+* status `uri` that identifies the specific status list you need to query
+* credential's universally unique identifier (UUID) to locate the right status index
 
-* `b` represents the type of status list: `BitstringStatusList`
-* `statusListIdentifier` represents an ID for a specific status list
+## Send your request to the status list endpoint
 
-#### Bitstring status list request example
+You can send a `GET` request to the status list endpoint you've identified. The process is the same for both lists. 
 
-Below is an example of the `/b/{statusListIdentifier}` request:
+### Bitstring status list endpoints
+
+Bitstring status lists have URI paths that begin with `/b/`. They also follow the [W3C Bitstring Status List specification](https://www.w3.org/TR/vc-bitstring-status-list/). For consistency between the two different lists published, the Status List Service uses the more [complex implementation of Bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
+
+You can send a `GET` request to the Bitstring status list endpoint with the decoded identifier for the credential you want to check.
+
+For example you could send a `GET` request to `/b/{statusListIdentifier}` like below:
 
 ```TEXT
 GET /b/A671FED3E9AD HTTP/1.1
 Host: crs.account.gov.uk
 ```
 
-#### Request Response
-
-##### Header
+You will receive the credential's status information as a JWT  with a header and a payload. 
 
 The JWT response header will contain the following:
+
 
 ```JSON
 {
@@ -64,8 +74,6 @@ The JWT response header will contain the following:
 | `alg`     | `alg` stands for 'algorithm'. This value will be returned as `ES256`. This is the algorithm used to encode the JWT.                                 |
 | `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List Service's JWKS which can be used to verify the JSON web signature (JWS). |
 | `typ`     | `typ` stands for 'type'. This is the type of the status list. It is `vc+jwt` for Bitstring status lists.                                            |
-
-##### Payload
 
 The JWT response payload for a Bitstring status list will contain the following:
 
@@ -121,34 +129,22 @@ The JWT response payload for a Bitstring status list will contain the following:
 | `credentialSubject.statusMessages.message` | The status message representing the status value. This will be `"VALID"` or `"INVALID"`.                                                                                        |
 | `credentialSubject.encodedList`            | This is a multibase-encoded base64url (with no padding) representation of the GZIP-compressed bitstring values for the associated range of verifiable credential status values. |
 
+### Token status list endpoints
 
-## Token status list
+Token status lists have URI paths that begin with `/t/` and follow the [IETF Token Status List specification](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-12.html).
 
-Status lists where the URI path begins with `/t/` are Token status lists that follow the [IETF Token Status List specification](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-12.html).
+You can send a `GET` request to the Token status list endpoint with the decoded identifier for the credential you want to check.
 
-### Technical details
-
-#### Endpoint URI
-
-The URI path for the Token status list endpoint is `/t/{statusListIdentifier}`. It is presented as a GET request, where:
-
-* `t` represents the type of status list: `TokenStatusList`
-* `statusListIdentifier` represents an ID for a specific status list
-
-### Token Status List Request Example
-
-Below is an example of the `/t/{statusListIdentifier}` request:
+For example you could send a `GET` request to `/t/{statusListIdentifier}` like below:
 
 ```TEXT
 GET /t/A671FED3E9AD HTTP/1.1
 Host: crs.account.gov.uk
 ```
 
-#### Request Response
+You will receive the credential’s status information as a JWT response with a header and a payload.
 
-##### Header
-
-The JWT response header will contain the following:
+The JTW response header will contain the following:
 
 ```JSON
 {
@@ -163,8 +159,6 @@ The JWT response header will contain the following:
 | `alg`     | `alg` stands for 'algorithm'. This value will be returned as `ES256`. This is the algorithm used to encode the JWT.    |
 | `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List Service's JWKS which can be used to verify the JSON web signature (JWS).    |
 | `typ`     | `typ` stands for 'type'. This is the type of the status list. This will be `statuslist+jwt` for a Token status list.    |
-
-##### Payload
 
 The JWT response payload for a Token status list will contain the following:
 
@@ -185,18 +179,20 @@ The JWT response payload for a Token status list will contain the following:
 | Parameter          | Description                                                                                                                                             |
 |--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `exp`              | `exp` stands for 'expiry'. This is the expiry of the subject credential, expressed in epoch seconds.                                                    |
-| `iat`              | `iat` stands for 'issued at'. This is the UNIX timestamp the subject credential was originally issued at, in seconds.                                    |
+| `iat`              | `iat` stands for 'issued at'. This is the UNIX timestamp the subject credential was originally issued at, in epoch seconds.                             |
 | `iss`              | `iss` stands for 'issuer'. This is the URL of the credential issuer service operated by the organisation sharing the credential.                        |
 | `status_list.bits` | The number of bits that represent a status.                                                                                                             |
 | `status_list.lst`  | `lst` stands for 'list'. This is an encoded version of this status list.                                                                                |
 | `sub`              | `sub` stands for 'subject'. This is the URI of the status list that was in the original HTTP request.                                                   |
 | `ttl`              | `ttl` stands for 'time-to-live'. This is the lifetime of the cached version of this status list. Status lists are updated at regular and set intervals. |
 
-##  JSON Web Key Set (JWKS)
+### Mock status list service
+
+You can also use the Mock Status List Service to test querying a credential's status in the GOV.UK Wallet Sandbox.
+
+###  JSON Web Key Set (JWKS)
 
 The JWKS endpoint exposes the Status List Service's public cryptographic keys in JSON Web Key Set (JWKS) format. You can use a public key to verify the signature of a status list. This verification lets you make sure that the status list was published by the Status List Service and it has not been tampered with.
-
-### Technical details
 
 #### Endpoint location
 
@@ -237,3 +233,5 @@ Below is an example of a JWKS containing one elliptic curve public key based on 
   ]
 }
 ```
+
+
