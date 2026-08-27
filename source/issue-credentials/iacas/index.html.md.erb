@@ -1,0 +1,93 @@
+---
+title: Publish your root certificates
+weight: 3.8
+last_reviewed_on: 2026-07-29
+review_in: 6 months
+layout: issuer
+---
+
+# Publish your root certificates
+
+You must [set up an Issuing Authority Certificate Authority (IACA) to issue root certificates](/issue-credentials/sign-mdoc-credentials/#set-up-an-iaca-to-issue-root-certificates). You must then publish your root certificates on your public `/iacas` endpoint.
+
+You need a root certificate to verify the document signing certificate (DSC) that you include in the mdoc credentials your service issues. These 2 certificates form part of the chain of trust that lets GOV.UK Wallet and Digital Verification Services (DVSs) validate that your credential was genuinely issued by your service.
+
+Each root certificate contains a public key. You will normally publish 1 root certificate, but you need to publish 2 when you rotate your certificates.
+
+There is more guidance on [signing your credentials](/issue-credentials/sign-mdoc-credentials).
+
+## Technical details
+
+### Endpoint location
+
+Your root certificates and public keys must be publicly accessible at the standardised location `/iacas` on your domain.
+
+You must specify your IACA URL in your [credential issuer metadata](/issue-credentials/metadata/#response-format) using the `mdoc_iacas_uri` parameter.
+
+### Response format
+
+Your endpoint must return a JSON object containing the `data` property, which is an array of IACA public keys and certificates.
+
+Each entry in the array is one IACA root certificate. You must not include the document signing certificate, or any intermediate certificates, in your IACA `data` array.
+
+You must include the document signing certificate in the mdoc credential’s Mobile Security Object (MSO). The MSO is a data structure that proves your credential was issued by you and has not been tampered with. Verifiers will use the MSO to validate your mdoc credential’s signature.
+
+Your `data` object must include the following parameters.
+
+| Parameter         | Description                        |
+|-------------------|------------------------------------|
+| `id`              | The randomly assigned stable ID for this certificate.                                                                                                                                                                                 |
+| `active`          | A boolean true/false that indicates whether this certificate is currently active.                                                                                                                                                                                      |
+| `certificatePem`  | Your encoded pem file \- this should be the whole pem file beginning with `-----BEGIN CERTIFICATE-----` and ending with `-----END CERTIFICATE-----.`                                                                                                                 |
+| `certificateData` | An object describing the details of your certificate.                                                                                                                                 |
+| `publicKeyJwk`    | An object describing your public key \- this is represented as a JSON Web Key (JWK) and contains details of the elliptic curve algorithm used (P-256).                                                                                                                                                 |
+
+The `certificateData` object contains the following parameters.
+
+| Parameter             | Required or optional | Description                |
+|-----------------------|----------------------|----------------------------|
+| `notAfter`            | Required             | The date the certificate’s validity period ends in ISO 8601 `YYYY-MM-DDTHH:MM:SSZ` format. This must be a maximum of 20 years after the `notBefore` date.                                                                                                                                                                                       |
+| `notBefore`           | Required             | The date the certificate’s validity period begins in ISO 8601 `YYYY-MM-DDTHH:MM:SSZ` format.                                                                                                                                                                                       |
+| `country`             | Required             | The [ISO 3166-1 alpha-2 code](https://www.iso.org/iso-3166-country-codes.html) of the issuing country.                                                                                                                                                                                       |
+| `commonName`          | Required             | The stable human-readable name for the IACA.                                                                                                                                                                                       |
+| `stateOrProvinceName` | Optional             | The jurisdiction of the credential issuer. If you include this parameter, its value must exactly match the value of the `issuing_jurisdiction` in the mdoc credential.                                                                                                                                                                                       |
+
+The `publicKeyJwk` object contains the following parameters.
+
+| Parameter | Required or optional | Description |
+|-----------|----------------------|----------------------------|
+| `kty`     | Required             | The family of cryptographic algorithms used with the key. For example, `EC` for elliptic curve.                                                                                                                                                                                                                     |
+| `crv`     | Required             | The cryptographic curve used with the key.                                                                                                                                                                                                                     |
+| `x`       | Required             | The “x” coordinate for the elliptic curve point.                                                                                                                                                                                                                     |
+| `y`       | Required             | The “y” coordinate for the elliptic curve point.                                                                                                                                                                                                                     |
+| `alg`     | Required             | The cryptographic algorithm used with the key.                                                                                                                                                                                                                     |
+| `kid`     | Optional             | The unique identifier for the key.                                                                                                                                                                                                                     |
+
+This is an example of a response from the `/iacas` endpoint containing a public key and certificate:
+
+```
+{
+  "data": [
+    {
+      "id": "12345678-1234-1234-1234-123456789012",
+      "active": true,
+      "certificatePem": "-----BEGIN CERTIFICATE-----MIIB4zCCAYmgAwIBAgIQc0eZylfqidND9QzLQMogqTAKBggqhkjOPQQDAjAlMQswCQYDVQQGEwJVSzEWMBQGA1UEAwwNbURMIElBQ0EgUm9vdDAeFw0yNTAyMTAxMDU1NTVaFw0zNDAyMDgxMTU1NTVaMCUxCzAJBgNVBAYTAlVLMRYwFAYDVQQDDA1tREwgSUFDQSBSb290MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsMVSr5//PjDO7ppexutBAPyQDIxumFmrCPeu1RVTs3z2jNyefCr8B9wqDomyBNGrAz48x+DdGH/CQAAT4yqKTKOBmjCBlzASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdDgQWBBQ30L312ul2W44S059RdtnJFsXhKDAPBgNVHQ8BAf8EBQMDBwYAMFEGA1UdHwRKMEgwRqBEoEKGQGh0dHA6Ly9leGFtcGxlLmNvbS9jcmwvMDExNnoxMjMtZHY3YS01OWIxLXg3YmUtMTIzMXY3MjU3MTEzNi5jcmwwCgYIKoZIzj0EAwIDSAAwRQIhAI9Z9CXT5vd+Zpa9+O7IKrJDRP91k6eZSfGmuCtKhrliAiATaSvYNWy8hKTY7rMYo8JYTRcgyPrPfHcFxx7KzShqTA==-----END CERTIFICATE-----"
+      "certificateData": {  
+        "notAfter": "2034-02-08T11:55:55Z",
+        "notBefore": "2025-02-08T10:55:55Z",
+        "country": "UK",
+        "commonName": "mDL IACA Root",
+        "stateOrProvinceName": ""
+      }
+      "publicKeyJwk": {  
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "LfLS5elaJkyyD-U8R4oHaiBOofKbjQJFwY7rxYC7QmI",
+        "y": "ckcbqXYxduumNraXxH4Lq5cWBLXea7C9VGj_kzKnFDA",
+        "kid": "7474165864437df684d8b",
+        "alg": "ES256"
+      }
+    }
+  ]
+}
+```

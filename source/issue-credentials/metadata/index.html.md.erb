@@ -31,7 +31,7 @@ Your credential issuer metadata must include the following parameters:
 | `credential_issuer`                   | The URL of the credential issuer.                                                                                                                | 
 | `authorization_servers`               | An array of URLs for the authorization servers your credential issuer relies on for authorization. This must be set to the GOV.UK One Login URL. | 
 | `credential_endpoint`                 | The URL of your credential issuer’s [credential endpoint](/issue-credentials/credential/), where credentials can be obtained.                    |
-| `mdoc_iacas_uri`                      | The URL of your credential issuer’s Issuing Authority Certification Authority (IACA) endpoint, where your IACA root certificate(s) can be obtained.   |
+| `mdoc_iacas_uri`                      | The URL of your credential issuer’s Issuing Authority Certification Authority (IACA) endpoint, where a credential verifier can obtain your IACA root certificate(s). There is [guidance on the `/iacas` endpoint](/issue-credentials/iacas).  |
 | `credential_configurations_supported` | An object [describing the credentials](#credential-information) offered by your credential issuer.                                               |
 
 If your credential issuer implements the optional [notification endpoint](/issue-credentials/notification), then the credential issuer metadata must include the `notification_endpoint` parameter.

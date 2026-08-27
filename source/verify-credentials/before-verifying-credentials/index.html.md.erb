@@ -1,0 +1,39 @@
+---
+title: Before you can verify credentials
+weight: 1
+last_reviewed_on: 2026-07-14
+review_in: 6 months
+layout: verifier
+---
+
+# Before you can verify credentials 
+
+GOV.UK Wallet will allow trusted parties to verify and use credentials and attributes in person and online. There are systems in place to identify and authorise consumers of credentials. These systems will make sure personal data is only accessible to verified departments and organisations and not malicious apps or services.
+
+To verify credentials in GOV.UK Wallet, you'll need to:
+
+* [get certified and registered](#get-certified-and-registered-as-a-dvs) as a Digital Verification Service (DVS)
+* [onboard your service](#onboard-your-service-with-gov-uk-wallet) with GOV.UK Wallet
+* [request an intermediate sub-CA certificate](#request-an-intermediate-sub-ca-certificate) to issue end-entity verifier certificates
+* [use the sandbox](#verify-test-credentials) to verify test credentials
+* [integrate with production](#verify-real-credentials) to verify real credentials
+
+## Get certified and registered as a DVS
+
+You'll need to [join the register of digital identity and attributes services](https://www.gov.uk/guidance/join-the-register-of-digital-identity-and-attribute-services) by certifying against the [UK digital identity and attributes trust framework](https://www.gov.uk/government/collections/uk-digital-verification-services-trust-framework). This will demonstrate your organisation meets government standards as a safe, secure and reliable provider of digital verification services.
+
+## Onboard your service with GOV.UK Wallet
+
+Your DVS lead will need to contact GOV.UK Wallet to onboard. An engagement manager will guide them through the process to integrate with the sandbox and production environments.
+
+## Request an intermediate sub-CA certificate
+
+You will not be able to request credential data from GOV.UK Wallet without an authenticated verifier certificate. To create one, you will need to request an intermediate sub-CA certificate that will let you operate your own certificate authority (CA). The intermediate sub-CA is signed by our root CA and you can request it by sending a [certificate signing request (CSR)](verify-credentials/before-verifying-credentials/send-a-certificate-signing-request) to your engagement manager. You will need to send a separate CSR for each environment.
+
+## Verify test credentials 
+
+You can create and verify test credentials in the sandbox environment. You'll need to use the sub-CA issued for the sandbox environment to authenticate all the requests you make.
+
+## Verify real credentials
+
+Once you have tested verifying credentials in the sandbox, you need to speak to your engagement manager about getting access to the production environment. You will need to use your intermediate certificate issued for production to validate requests for personal data from users.
