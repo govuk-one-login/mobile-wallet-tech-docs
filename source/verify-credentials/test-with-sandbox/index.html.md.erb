@@ -9,9 +9,9 @@ layout: verifier
 
 # Testing your in-person verification service with the GOV.UK Wallet Sandbox
 
-The GOV.UK Wallet Sandbox will let you create a test digital driving licence and save it to your GOV.UK Wallet test app. You can then present the test digital driving licence to your in-person verification service and confirm it can [receive credential information](/verify-credentials). You will be able to complete this flow on Android and iOS devices.
+The GOV.UK Wallet Sandbox lets you create a test digital driving licence and save it to your GOV.UK Wallet test app. You can then present the test digital driving licence to your in-person verification service and confirm it can [receive credential information](/verify-credentials). You can complete this flow on Android and iOS devices.
 
-The GOV.UK Wallet Sandbox will contain:
+The GOV.UK Wallet Sandbox contains:
 
 - a [document builder](#using-the-gov-uk-wallet-sandbox-document-builder) that lets you issue a credential offer for a test digital driving licence
 - a GOV.UK Wallet test app that lets you store and share a test digital driving licence
@@ -89,28 +89,34 @@ To revoke a test digital driving licence:
 
 ## Using the GOV.UK Wallet Sandbox mock Status List Service
 
-You can use the real Status List Service to [check the status of a real credential](/verify-credentials/check-credential-status/statuslist/). When you are testing your verification service, you must use the mock Status List Service to check the status of your test digital driving licence.
+You can use the Status List Service to [check the status of a real credential](/verify-credentials/check-credential-status/statuslist/). When you are testing your verification service with the GOV.UK Wallet Sandbox, you must use the mock Status List Service to check the status of your test digital driving licence. 
+
+The mock Status List Service interacts with the GOV.UK Wallet test app in a similar way to the Status List Service. You should use the mock Status List Service to help you understand how to query the production Status List Service and get an expected result.
 
 ### Check the status of a test digital driving licence
 
-You can check the status of a test digital driving licence you have issued using [the same process as the Status List Service](/verify-credentials/check-credential-status/statuslist/). However, you must use the following URLs:
+You can check the status of a test digital driving licence you have issued using [the same process as the Status List Service](/verify-credentials/check-credential-status/statuslist/). You must use the following URLs instead of the production Status List Service URLs:
 
 - `https://status-list-mock.wallet-onboarding.integration.account.gov.uk/.well-known/jwks.json`
 - `https://status-list-mock.wallet-onboarding.integration.account.gov.uk/t/{STATUS_LIST_IDENTIFIER}` 
 
-The value of `STATUS_LIST_IDENTIFIER` will be unique to your test credential.
+The value of `STATUS_LIST_IDENTIFIER` is unique to your test credential.
 
-The URLs for the mock Status List Service are different to those in production. You must not use live credential status information for your testing environment.
+You must not use the URLs for the production Status List Service, or use live credential status information in your testing environment.
 
 ### Understand the capabilities of the mock Status List Service
 
-The mock Status List Service has limited functionality compared to the Status List Service. You should understand these differences and consider them in your testing.
+The mock Status List Service has limited functionality compared to the Status List Service. 
 
-The mock Status List Service will:
+The mock Status List Service:
 
-- cover only a small number of token indices, resulting in a much shorter encoded string than the Status List Service
-- support two statuses per token: `0x00` (valid) and `0x01` (invalid)
-- set the value of the `exp` timestamp to the expiry of the credential plus 30 days, in seconds
-- set the `ttl` claim to `2592000`, which is 30 days in seconds
+- can issue or revoke the status of a test digital driving licence
+- issues statuses valid for no longer than 30 days
+- covers only a small number of token indices, resulting in a much shorter encoded string than the Status List Service
+- supports two statuses per token: `0x00` (valid) and `0x01` (invalid)
 
-There is more information available about the [`exp` and `ttl` claims](/issue-credentials/status-list/statuslist/#token-status-list-request-example-request-response-payload).
+The mock Status List Service does not:
+
+- need you to onboard with the Status List Service before you can use it
+- include all the security features of the Status List Service
+- check if credentials are genuine or trusted - it only decodes them
