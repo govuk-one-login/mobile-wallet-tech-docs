@@ -15,7 +15,7 @@ To verify credentials in GOV.UK Wallet, you'll need to:
 * [get certified and registered](#get-certified-and-registered-as-a-dvs) as a Digital Verification Service (DVS)
 * [onboard your service](#onboard-your-service-with-gov-uk-wallet) with GOV.UK Wallet
 * [request an intermediate sub-CA certificate](#request-an-intermediate-sub-ca-certificate) to issue end-entity verifier certificates
-* [use the sandbox](#verify-test-credentials) to verify test credentials
+* [use the GOV.UK Wallet Sandbox](#verify-test-credentials) to verify test credentials
 * [integrate with production](#verify-real-credentials) to verify real credentials
 
 ## Get certified and registered as a DVS
@@ -32,8 +32,8 @@ You will not be able to request credential data from GOV.UK Wallet without an au
 
 ## Verify test credentials 
 
-You can create and verify test credentials in the sandbox environment. You'll need to use the sub-CA issued for the sandbox environment to authenticate all the requests you make.
+You can create and verify test credentials in the [GOV.UK Wallet Sandbox](verify-credentials/test-with-sandbox). You'll need to use the sub-CA issued for your GOV.UK Wallet Sandbox environment to authenticate all the requests you make.
 
 ## Verify real credentials
 
-Once you have tested verifying credentials in the sandbox, you need to speak to your engagement manager about getting access to the production environment. You will need to use your intermediate certificate issued for production to validate requests for personal data from users.
+Once you have tested verifying credentials in the GOV.UK Wallet Sandbox, you need to speak to your engagement manager about getting access to the production environment. You will need to use your intermediate certificate issued for production to validate requests for personal data from users.
