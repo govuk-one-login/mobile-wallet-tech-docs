@@ -10,8 +10,8 @@ layout: verifier
 
 You can check whether a credential is valid or revoked by using the Status List Service. It supports and publicly hosts 2 different list formats:
 
-* [Bitstring status lists](#bitstring-status-list-endpoints)
-* [Token status lists](#token-status-list-endpoints)
+* [bitstring status lists](#bitstring-status-list-endpoints)
+* [token status lists](#token-status-list-endpoints)
 
 A status list is a signed JSON web token (JWT). You can verify the JWT's signature by accessing the Status List Service's [JSON web key set (JWKS)](#json-web-key-set-jwks) hosted at:
 
@@ -43,11 +43,11 @@ You can decode the credential to find the:
 
 You can send a `GET` request to the status list endpoint you've identified. The process is the same for both lists. 
 
-### Bitstring status list endpoints
+### bitstring status list endpoints
 
-Bitstring status lists have URI paths that begin with `/b/`. They also follow the [W3C Bitstring Status List specification](https://www.w3.org/TR/vc-bitstring-status-list/). For consistency between the two different lists published, the Status List Service uses the more [complex implementation of Bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
+bitstring status lists have URI paths that begin with `/b/`. They also follow the [W3C Bitstring Status List specification](https://www.w3.org/TR/vc-bitstring-status-list/). For consistency between the 2 different lists published, the Status List Service uses the more [complex implementation of bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
 
-You can send a `GET` request to the Bitstring status list endpoint with the decoded identifier for the credential you want to check.
+You can send a `GET` request to the bitstring status list endpoint with the decoded identifier for the credential you want to check.
 
 For example you could send a `GET` request to `/b/{statusListIdentifier}` like below:
 
@@ -56,7 +56,7 @@ GET /b/A671FED3E9AD HTTP/1.1
 Host: crs.account.gov.uk
 ```
 
-You will receive the credential's status information as a JWT  with a header and a payload. 
+You'll receive the credential's status information as a JWT  with a header and a payload. 
 
 The JWT response header will contain the following:
 
@@ -75,7 +75,7 @@ The JWT response header will contain the following:
 | `kid`     | `kid` stands for 'key ID'. This key ID represents a key in the Status List Service's JWKS which can be used to verify the JSON web signature (JWS). |
 | `typ`     | `typ` stands for 'type'. This is the type of the status list. It is `vc+jwt` for Bitstring status lists.                                            |
 
-The JWT response payload for a Bitstring status list will contain the following:
+The JWT response payload for a bitstring status list will contain the following:
 
 ```JSON
 {
@@ -142,7 +142,7 @@ GET /t/A671FED3E9AD HTTP/1.1
 Host: crs.account.gov.uk
 ```
 
-You will receive the credential’s status information as a JWT response with a header and a payload.
+You'll receive the credential’s status information as a JWT response with a header and a payload.
 
 The JWT response header will contain the following:
 
