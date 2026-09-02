@@ -8,12 +8,12 @@ layout: verifier
 
 # Check a credential's status
 
-You can check whether a credential is valid or revoked by using the Status List Service. It supports and publicly hosts two different list formats:
+You can check whether a credential is valid or revoked by using the Status List Service. It supports and publicly hosts 2 different list formats:
 
 * [Bitstring status lists](#bitstring-status-list-endpoints)
 * [Token status lists](#token-status-list-endpoints)
 
-A status list is a signed JSON web token (JWT). You can verify the JWT's signature by accessing the Status List service's [JSON web key set (JWKS)](#json-web-key-set-jwks) hosted at:
+A status list is a signed JSON web token (JWT). You can verify the JWT's signature by accessing the Status List Service's [JSON web key set (JWKS)](#json-web-key-set-jwks) hosted at:
 
 * `https://crs.account.gov.uk/.well-known/jwks.json` (production)
 * `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration)
@@ -144,7 +144,7 @@ Host: crs.account.gov.uk
 
 You will receive the credential’s status information as a JWT response with a header and a payload.
 
-The JTW response header will contain the following:
+The JWT response header will contain the following:
 
 ```JSON
 {
@@ -192,7 +192,7 @@ You can also use the Mock Status List Service to test querying a credential's st
 
 ###  JSON Web Key Set (JWKS)
 
-The JWKS endpoint exposes the Status List Service's public cryptographic keys in JSON Web Key Set (JWKS) format. You can use a public key to verify the signature of a status list. This verification lets you make sure that the status list was published by the Status List Service and it has not been tampered with.
+The JWKS endpoint exposes the Status List Service's public cryptographic keys in JSON Web Key Set (JWKS) format. You can use a public key to verify the signature of a status list. This verification lets you make sure the Status List Service published this status list and it has not been tampered with.
 
 #### Endpoint location
 
