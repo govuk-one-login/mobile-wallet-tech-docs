@@ -18,7 +18,7 @@ A status list is a signed JSON web token (JWT). You can verify the JWT's signatu
 * `https://crs.account.gov.uk/.well-known/jwks.json` (production)
 * `https://crs.integration.account.gov.uk/.well-known/jwks.json` (integration)
 
-Each credential status is stored at a specific index in the status lists and is represented by 2 bits. A status index may contain one of the following bit combinations:
+The Status List Service stores each credential status at a specific index in a status list. A status is represented by 2 bits. A status index may contain one of the following bit combinations:
 
 |Bit combination |Validity|Explanation |
 |----------------|--------|------------|
