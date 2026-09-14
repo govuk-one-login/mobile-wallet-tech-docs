@@ -8,7 +8,7 @@ layout: verifier
 
 # Check a credential's status
 
-You can check whether a credential is valid or revoked by using the Status List Service. It supports and publicly hosts 2 different list formats:
+You can check whether a credential is valid or revoked by using the Status List Service. The Status List Service supports and publicly hosts 2 different list formats:
 
 * [bitstring status lists](#bitstring-status-list-endpoints)
 * [token status lists](#token-status-list-endpoints)
@@ -34,15 +34,15 @@ To check the status of a credential, you can query the Status List Service by se
 
 ## Send your request to the status list endpoint
 
-Your `GET` request format depends on the status list type. Include the decoded credential details as shown below. 
+To check a credential's status, send a `GET` request to the status list endpoint you identified when you decoded the credential. You must include the decoded credential UUID in your request.
 
 You can use the same process for each request, but the format depends on the list type as shown in the examples below. You must include the decoded credential UUID in your request.
 
 ### Bitstring status list endpoints
 
-Bitstring status lists have URI paths that begin with `/b/`. They also follow the [W3C Bitstring Status List specification](https://www.w3.org/TR/vc-bitstring-status-list/). For consistency between the 2 different lists published, the Status List Service uses the more [complex implementation of bitstring status lists](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
+Bitstring status lists have URI paths that begin with `/b/`. These status lists follow the more complex implementation of the [W3C Bitstring Status List specification](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
 
-For example you could send a `GET` request to `/b/{statusListIdentifier}` like below:
+This is an example of a `GET` request to `/b/{statusListIdentifier}`:
 
 ```TEXT
 GET /b/A671FED3E9AD HTTP/1.1
@@ -124,9 +124,9 @@ The JWT response payload for a bitstring status list will contain the following:
 
 ### Token status list endpoints
 
-Token status lists have URI paths that begin with `/t/` and follow the [IETF Token Status List specification](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-12.html).
+Token status lists have URI paths that begin with `/t/`. These status lists follow the [IETF Token Status List specification](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-12.html).
 
-For example you could send a `GET` request to `/t/{statusListIdentifier}` like below:
+This is an example of a `GET` request to `/t/{statusListIdentifier}`:
 
 ```TEXT
 GET /t/A671FED3E9AD HTTP/1.1
