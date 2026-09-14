@@ -36,7 +36,7 @@ To check the status of a credential, you can query the Status List Service by se
 
 To check a credential's status, send a `GET` request to the status list endpoint you identified when you decoded the credential. You must include the decoded credential UUID in your request.
 
-### Bitstring status list endpoints
+### Query a bitstring status list
 
 Bitstring status lists have URI paths that begin with `/b/`. These status lists follow the more complex implementation of the [W3C Bitstring Status List specification](https://www.w3.org/TR/vc-bitstring-status-list/#example-example-statuslistcredential-using-more-complex-entries).
 
@@ -120,7 +120,7 @@ The JWT response payload for a bitstring status list will contain the following:
 | `credentialSubject.statusMessages.message` | The status message representing the status value. This will be `"VALID"` or `"INVALID"`.                                                                                        |
 | `credentialSubject.encodedList`            | This is a multibase-encoded base64url (with no padding) representation of the GZIP-compressed bitstring values for the associated range of verifiable credential status values. |
 
-### Token status list endpoints
+### Query a token status list
 
 Token status lists have URI paths that begin with `/t/`. These status lists follow the [IETF Token Status List specification](https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-12.html).
 
