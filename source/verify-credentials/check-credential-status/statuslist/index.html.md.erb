@@ -10,10 +10,10 @@ layout: verifier
 
 You can check whether a credential is valid or revoked by using the Status List Service. The Status List Service supports and publicly hosts 2 different list formats:
 
-* [bitstring status lists](#bitstring-status-list-endpoints)
-* [token status lists](#token-status-list-endpoints)
+* [bitstring status lists](#query-a-bitstring-status-list)
+* [token status lists](#query-a-token-status-list)
 
-A status list is a signed JSON web token (JWT). You can [verify the JWT's signature by accessing the Status List Service's JSON web key set (JWKS)](#json-web-key-set-jwks) hosted at:
+A status list is a signed JSON web token (JWT). You can [verify the JWT's signature by accessing the Status List Service's JSON web key set (JWKS)](#verify-a-status-list-39-s-json-web-key-set-jwks) hosted at:
 
 * [https://crs.account.gov.uk/.well-known/jwks.json](https://crs.account.gov.uk/.well-known/jwks.json) (production)
 * [https://crs.integration.account.gov.uk/.well-known/jwks.json](https://crs.account.gov.uk/.well-known/jwks.json) (integration)
@@ -23,7 +23,7 @@ The Status List Service stores each credential status at a specific index in a s
 |Bit combination |Validity|Explanation |
 |----------------|--------|------------|
 |00              |VALID   |Represents a valid credential. |
-|01              |INVALID |Represents a credential that has been permanently revoked by the Status List Service. Marked as invalid. |
+|01              |INVALID |Represents a credential that has been permanently revoked by the Status List Service. |
 
 ## Decode the credential 
 
