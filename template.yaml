@@ -9,11 +9,6 @@ Parameters:
       The name of the stack that defines the VPC in which this container will
       run.
     Type: String
-  
-  SpokeVpcStackName:
-    Description: >
-      The name of the stack that defines the Spoke VPC.
-    Type: String
 
   PipelineStackName:
     Description: "The name of the pipeline stack that deploys this application stack"
