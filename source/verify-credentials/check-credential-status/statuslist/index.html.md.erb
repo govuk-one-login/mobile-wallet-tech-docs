@@ -15,8 +15,8 @@ You can check whether a credential is valid or revoked by using the Status List 
 
 A status list is a signed JSON web token (JWT). You can [verify the JWT's signature by accessing the Status List Service's JSON web key set (JWKS)](#verify-a-status-list-39-s-json-web-key-set-jwks) hosted at:
 
-* [https://crs.account.gov.uk/.well-known/jwks.json](https://crs.account.gov.uk/.well-known/jwks.json) (production)
-* [https://crs.integration.account.gov.uk/.well-known/jwks.json](https://crs.account.gov.uk/.well-known/jwks.json) (integration)
+* `https://crs.account.gov.uk/.well-known/jwks.json` (production)
+* `https://crs.integration.account.gov.uk/.well-known/jwks.json`(integration)
 
 The Status List Service stores each credential status at a specific index in a status list. A status is represented by 2 bits. A status index may contain one of the following bit combinations:
 
