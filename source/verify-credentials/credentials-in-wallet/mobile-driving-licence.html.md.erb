@@ -1,7 +1,7 @@
 ---
 title: Mobile driving licence
 weight: 8
-last_reviewed_on: 2026-01-26
+last_reviewed_on: 2026-08-20
 review_in: 6 months
 layout: verifier
 ---
@@ -29,7 +29,7 @@ The following [ISO/IEC 18013-5 standard](https://www.iso.org/obp/ui/en/#iso:std:
 | Issuing authority        | `issuing_authority`       | The organisation or authority that issued the driving licence.       | DVLA         |
 | Licence number       | `document_number`        | Identification code of the driving licence.        | USER9801180MA9PC       |
 | Place of birth       | `birth_place`           | Birthplace of the driving licence holder.      | UNITED KINGDOM      |
-| Vehicles you can drive       | `driving_privileges`      | An array of [driving privileges](#driving-privileges).        | [{"vehicle_category_code": "A","issue_date": 1004("1998-01-01"),"expiry_date": 1004("2060-01-01"),"codes": [{"code": "101"}, {"code": "102"}]}]               |
+| Vehicles you can drive       | `driving_privileges`      | An array of [driving privileges](#driving-privileges).        | [{"vehicle_category_code": "A","issue_date": "1998-01-01","expiry_date": "2060-01-01","codes": [{"code": "101"}, {"code": "102"}]}]               |
 | UN distinguishing sign       | `un_distinguishing_sign`       | Internationally recognised code identifying the country that issued the driving licence, as defined by the United Nations.         | UK          |
 | Address          | `resident_address`        | House number, street and town as they appear on the driving licence.         | 12 Home Road, Hometown          |
 | Post code          | `resident_postal_code`        | Post code as it appears on the driving licence.        | AA9 9QQ       |
@@ -41,7 +41,7 @@ The following UK-specific attributes will be available to include in your verifi
 
 | Attribute     | Data element identifier         | Description           | Example               |
 |---------------|---------------------------------|----------------------|----------------------|
-| Vehicles you can drive provisionally      | `provisional_driving_privileges`      | An array of [driving privileges](#driving-privileges).     | [{"vehicle_category_code": "A","issue_date": 1004("1998-01-01"),"expiry_date": 1004("2060-01-01"),"codes": [{"code": "101"}, {"code": "102"}]}]          |
+| Vehicles you can drive provisionally      | `provisional_driving_privileges`      | An array of [driving privileges](#driving-privileges).     | [{"vehicle_category_code": "A","issue_date": "1998-01-01","expiry_date": "2060-01-01","codes": [{"code": "101"}, {"code": "102"}]}]          |
 | Driver's title      | `title`          | Title of the licence holder as it appears on the driving licence.     | Miss         |
 | Bilingual licence identifier     | `welsh_licence`      | Confirmation that the licence is available in English and Welsh.       | TRUE       |
 
