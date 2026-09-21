@@ -28,9 +28,9 @@ CN=Example Verifier Org Reader Sub-CA
 serialNumber=550e8400-e29b-41d4-a716-446655440000
 ```
 
-Your CSR will not be accepted without these attributes declared.
+If your CSR does not contain these 5 attributes, we will reject it.
 
-## CSR body
+## Format your CSR body correctly
 
 Your CSR should start and end with the following header and footer lines: 
 
@@ -114,9 +114,9 @@ Below is an example of a serial number in a CSR:
 serialNumber=550e8400-e29b-41d4-a716-446655440000 
 ```
 
-## CSR key protection
+## Use keys to protect your CSR
 
-Your CSR must be protected with public key cryptography. The private key algorithm for your CSR must meet all of the following requirements: 
+You must protect your CSR with public key cryptography. The private key algorithm for your CSR must meet all of the following requirements: 
 
 |Parameter|Required value|
 |-|-|
@@ -133,7 +133,7 @@ Your CSR's private key must:
 * be protected by MFA for administrative access
 * comply with FIPS 140-2 as a minimum
 
-## Your intermediate certificate
+## Get your intermediate certificate
 
 Once we have checked your CSR, we'll issue you with an intermediate sub-CA certificate. Your sub-CA has a `NameConstraints` extension so you cannot issue any verifier certificates outside of your own legal business name. 
 
