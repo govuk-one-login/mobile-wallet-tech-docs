@@ -27,7 +27,16 @@ The requests to and responses from the Status List Service are the same, regardl
 
 ## Access the Status List Service APIs
 
-When you register as a status list client, we will work with you to grant access to our APIs and provide the API URLs.
+When you register as a status list client, we will help you to grant access to our APIs. 
+
+The status list APIs are: 
+
+* api.crs.integration.account.gov.uk
+* api.crs.account.gov.uk
+
+### API protection
+
+[Amazon Web Services Signature Version 4 (AWS SigV4)](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv.html) signing protocol protects the Public Status APIs. Therefore, your request must include an [AWS SigV4 HTTP header](https://github.com/aws-samples/sigv4-signing-examples/blob/main/README.md) and you must share your [Amazon Resource Name (ARNs)](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html).
 
 ## Test your integration
 
