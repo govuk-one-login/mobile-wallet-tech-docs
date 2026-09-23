@@ -36,9 +36,9 @@ Your CSR body must:
 * contain a [subject DN](#subject-distinguished-name)
 * contain no certificate extensions
 
-Your CSR must not contain:
+Your CSR body can contain `basicConstraints`. GOV.UK Wallet will accept a CSR with or without `basicConstraints`.
 
-* basicConstraints
+Your CSR must not contain:
 * keyUsage
 * extendedKeyUsage
 * certificatePolicies
