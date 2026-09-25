@@ -36,7 +36,7 @@ The status list APIs are:
 
 ### API protection
 
-[Amazon Web Services Signature Version 4 (AWS SigV4)](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv.html) signing protocol protects the Public Status APIs. Therefore, your request must include an [AWS SigV4 HTTP header](https://github.com/aws-samples/sigv4-signing-examples/blob/main/README.md) and you must share your [Amazon Resource Name (ARNs)](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html).
+[Amazon Web Services Signature Version 4 (AWS SigV4)](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv.html) signing protocol protects the Public Status APIs. Therefore, your request must include an [AWS SigV4 HTTP header](https://github.com/aws-samples/sigv4-signing-examples/blob/main/README.md). Additionally, you must share the [Amazon Resource Name (ARNs)](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html) of all the AWS Identity and Management (IAM) roles you will use to sign the requests.
 
 ## Test your integration
 
