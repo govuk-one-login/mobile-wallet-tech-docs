@@ -52,7 +52,22 @@ GOV.UK Wallet will reject any CSR containing extensions.
 
 Your CSR body must contain a subject DN that identifies the issuing authority with the following attributes:
 
-|Attribute|OID|Requirements|
+|Attribute|Description|OID|Format|
+|---|---|---|-------|
+|`C`| Two character country code, for example `GB`     |2.5.4.6|ISO 3166-1 alpha-2 country code|
+|`O`|  Legal organisation name, for example  `Example Verifier Org Ltd`  |2.5.4.10|String|
+|`OU`|  Department or division, for example DVS PKI Operations   |2.5.4.11|String|
+|`CN`| [Common name](#common-name), for example Example Verifier Org Reader Sub-CA   |2.5.4.3|Stable human-readable sub-CA name|
+|`serialNumber`| Serial Number, for example `550e8400-e29b-41d4-a716-446655440000`   |2.5.4.5|Universally Unique Identifier v4 (UUID)|
+
+Below is an example of a completed subject DN:
+
+C={COUNTRY_CODE}
+O={ORGANISATION_NAME}
+OU={DEPARTMENT}
+CN={COMMON_NAME}
+serialNumber={SERIAL_NUMBER}
+
 |---|---|---|
 |`C`|2.5.4.6|ISO 3166-1 alpha-2 country code|
 |`O`|2.5.4.10|Legal organisation name|
