@@ -21,8 +21,7 @@ Your CSR body must:
 * conform to PKCS #10
 * be Privacy-Enhanced Mail (PEM) encoded
 * contain a valid signature over CertificationRequestInfo
-* contain a [subject DN](#subject-distinguished-name)
-* contain no certificate extensions
+* contain a [subject Distinguished Name](#subject-distinguished-name) (DN)
 
 Your CSR body can contain `basicConstraints`. GOV.UK Wallet will accept a CSR with or without `basicConstraints`.
 
@@ -37,7 +36,7 @@ Your CSR must not contain:
 
 GOV.UK Wallet will reject any CSR containing extensions.
 
-## Specify your Subject Distinguished Name 
+## Specify your subject DN 
 
 Your CSR body must contain a subject DN that identifies the issuing authority with the following attributes:
 
