@@ -20,18 +20,18 @@ Your CSR body must:
 
 * conform to PKCS #10
 * be Privacy-Enhanced Mail (PEM) encoded
-* contain a valid signature over CertificationRequestInfo
-* contain a [subject Distinguished Name](#subject-distinguished-name) (DN)
+* contain a valid signature over `CertificationRequestInfo`
+* contain a [subject Distinguished Name](#specify-your-subject-dn) (DN)
 
 Your CSR body can contain `basicConstraints`. GOV.UK Wallet will accept a CSR with or without `basicConstraints`.
 
 Your CSR must not contain:
 
-* keyUsage
-* extendedKeyUsage
-* certificatePolicies
-* nameConstraints
-* policyConstraints
+* `keyUsage`
+* `extendedKeyUsage`
+* `certificatePolicies`
+* `nameConstraints`
+* `policyConstraints`
 * any custom extensions
 
 GOV.UK Wallet will reject any CSR containing extensions.
@@ -57,7 +57,7 @@ C=GB
 O=Example Verifier Org Ltd
 OU=Reader Certification Authority
 CN=Example Verifier Org Reader Sub-CA
-serialNumber=550e8400-e29b-41d4-a716-446655440000`
+serialNumber=550e8400-e29b-41d4-a716-446655440000
 ```
 
 ### Common name
@@ -117,7 +117,7 @@ Your CSR's private key must:
 
 Once we have checked your CSR, we'll issue you with an intermediate sub-CA certificate. Your sub-CA has a `NameConstraints` extension so you cannot issue any verifier certificates outside of your own legal business name. 
 
-You can use your sub-CA to issue your own end-entity verifier certificates to your apps, devices and trusted clients. When a verifier starts proximity sharing flow, the verifier certificates will form a chain of trust landing on the root certificate. This chain will authenticate all your requests for credential data.
+You can use your sub-CA to issue your own end-entity verifier certificates to your apps, devices and trusted clients. When a verifier starts proximity sharing, the verifier certificates will form a chain of trust landing on the root certificate. This chain will authenticate all your requests for credential data.
 
 ## Renew your CSR
 
