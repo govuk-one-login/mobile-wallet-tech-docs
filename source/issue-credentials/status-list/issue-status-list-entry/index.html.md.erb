@@ -38,14 +38,14 @@ The issue endpoint only accepts HTTP POST requests.
 
 #### Request Header
 
-You must provide the following headers in your request to the endpoint:
+Your request to the endpoint must include:
 
 * AWS SigV4 HTTP headers to authenticate your request
-* Content-type header where the only valid value is application/jwt
+* the `Content-Type` header where the only valid value is `application/jwt`
 
 #### Request body
 
-You must include a signed JWT based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515) that follows the requirements mentioned in the example on this page.
+You must include a signed JWT based on [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515) that follows the requirements shown in the [example request](#example-request).
 
 ### Idempotent requests
 
@@ -100,7 +100,7 @@ The JWT payload must contain the following claims:
 
 ## Example Request
 
-Below is an example of a POST request signed and encoded as a JWT.
+This is an example of a POST request signed and encoded as a JWT.
 
 ```
 POST /issue HTTP/2
@@ -115,7 +115,7 @@ eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjgwODY4Nzk0LTM2MjYtNDNmOC05YTRkLWEw
 
 ## Example Response
 
-Below is an example of a response you could get:
+This is an example of a response from the `/issue` endpoint:
 
 ```
 HTTP/1.1 200 OK
