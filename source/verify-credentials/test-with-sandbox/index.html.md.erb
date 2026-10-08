@@ -1,5 +1,5 @@
 ---
-title: Testing your in-person verification service with the GOV.UK Wallet Sandbox
+title: Testing your in-person verification service with the GOV.UK Wallet sandbox
 weight: 10
 last_reviewed_on: 2026-08-27
 review_in: 6 months
@@ -7,7 +7,7 @@ layout: verifier
 
 ---
 
-# Testing your in-person verification service with the GOV.UK Wallet Sandbox
+# Testing your in-person verification service with the GOV.UK Wallet sandbox
 
 The GOV.UK Wallet Sandbox lets you create a test digital driving licence and save it to your GOV.UK Wallet test app. You can then present the test digital driving licence to your in-person verification service and confirm it can [receive credential information](/verify-credentials). You can complete this flow on compatible Android and iOS devices. 
 
@@ -16,27 +16,27 @@ Device|Operating system (OS)|Phone model
 Apple| iOS 16.7 or higher| iPhone 8 or higher
 Android | Version 10 or higher| Compatible phone
 
-The GOV.UK Wallet Sandbox contains:
+The GOV.UK Wallet sandbox contains:
 
 - a [document builder](#using-the-gov-uk-wallet-sandbox-document-builder) that lets you issue a credential offer for a test digital driving licence
 - a GOV.UK Wallet test app that lets you store and share a test digital driving licence
 - a [mock Status List Service](#using-the-gov-uk-wallet-sandbox-mock-status-list-service) that lets you revoke or check the status of your test digital driving licence
 - a certificate authority that provides a certificate that authenticates you when connecting to the GOV.UK Wallet test app
 
-You must not use the GOV.UK Wallet Sandbox tools in your production environment or as part of your live deployment process. The tools are limited to validating the integration with your verification service, and can not be used to test all credential types and attributes. You must write and maintain your own test suite in addition to the GOV.UK Wallet Sandbox tools.
+You must not use the GOV.UK Wallet sandbox tools in your production environment or as part of your live deployment process. The tools are limited to validating the integration with your verification service, and can not be used to test all credential types and attributes. You must write and maintain your own test suite in addition to the GOV.UK Wallet sandbox tools.
 
-## Before you use the GOV.UK Wallet Sandbox
+## Before you use the GOV.UK Wallet sandbox
 
-To use the GOV.UK Wallet Sandbox, you must:
+To use the GOV.UK Wallet sandbox, you must:
 
 - complete the enrolment process to become a certified Digital Verification Services (DVS) provider on the [register of digital identity and attribute services](https://www.digital-identity-services-register.service.gov.uk/)
-- contact the GOV.UK Wallet team to [request access to the GOV.UK Wallet Sandbox](https://www.gov.uk/guidance/how-to-access-the-govuk-wallet-sandbox)
+- contact the GOV.UK Wallet team to [request access to the GOV.UK Wallet sandbox](https://www.gov.uk/guidance/how-to-access-the-govuk-wallet-sandbox)
 - have access to our verifier test tools (for example, TestFlight or Google Play Console) and installed these on your device
 - have an integration certificate from the GOV.UK Wallet team - there is guidance on how to [send us a certificate signing request (CSR)](verify-credentials/before-verifying-credentials/send-a-certificate-signing-request) to get your integration certificate
 
 If you have not completed these steps, speak to your GOV.UK Wallet engagement manager or [contact us](contact-us).
 
-## Using the GOV.UK Wallet Sandbox document builder
+## Using the GOV.UK Wallet sandbox document builder
 
 You can use the document builder to:
 
@@ -92,9 +92,9 @@ To revoke a test digital driving licence:
     </strong>
 </div>
 
-## Using the GOV.UK Wallet Sandbox mock Status List Service
+## Using the GOV.UK Wallet sandbox mock Status List Service
 
-You can use the Status List Service to [check the status of a real credential](/verify-credentials/check-credential-status/statuslist/). When you are testing your verification service with the GOV.UK Wallet Sandbox, you must use the mock Status List Service to check the status of your test digital driving licence. 
+You can use the Status List Service to [check the status of a real credential](/verify-credentials/check-credential-status/statuslist/). When you are testing your verification service with the GOV.UK Wallet sandbox, you must use the mock Status List Service to check the status of your test digital driving licence. 
 
 The mock Status List Service interacts with the GOV.UK Wallet test app in a similar way to the Status List Service. You should use the mock Status List Service to help you understand how to query the production Status List Service and get an expected result.
 
