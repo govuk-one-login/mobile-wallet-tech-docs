@@ -63,8 +63,11 @@ Make sure that:
 - the value of the `iss` (issuer) claim matches the GOV.UK One Login URL: `"https://token.integration.account.gov.uk"` (integration) or `"https://token.account.gov.uk"` (production)
 - the value of the `aud` (audience) claim is the credential issuer URL
 - the value of the `sub` (subject - this is the wallet subject identifier) claim matches the value stored in your cache for this specific credential issuance flow
-- the value of the `credential_identifiers` claim matches the value stored in your cache for this specific credential issuance flow
 - this API has not received another access token with the same `jti` (JWT ID) that is still within its validity period
+- the value of the `credential_identifiers` claim matches the value you have stored for this specific credential issuance flow (for first-time credential issuance only)
+- the value of the `credential_configuration_ids` claim matches the value you have stored for this credential issuance flow. Although this is an array, only one value should be allowed
+
+There is [guidance on the `credential_identifiers` and `credential_configuration_ids` parameters](/issue-credentials/credential/#authorization-header).
 
 #### Request body
 
