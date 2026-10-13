@@ -10,10 +10,10 @@ layout: issuer
 
 The credential issuer notification endpoint is an optional endpoint defined in the [OID4VCI](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-14.html#section-9) specification. GOV.UK Wallet uses this endpoint to notify you as the credential issuer of events relating to issued credentials.
 
-GOV.UK Wallet can send notifications about events such as:
+GOV.UK Wallet can send notifications about credential events, such as when:
 
-- the credential has been successfully stored in the GOV.UK Wallet
-- the credential could not be stored in the GOV.UK Wallet because it is invalid
+- the credential has been successfully stored in GOV.UK Wallet
+- the credential could not be stored in GOV.UK Wallet because it is invalid
 - the user has taken specific actions related to the offered credential, such as declining to save it
 
 You must include a unique `notification_id` parameter in each [credential response](/issue-credentials/credential/#response-format) for GOV.UK Wallet to be able to send notifications.
@@ -84,6 +84,13 @@ The value of the `event` parameter must be one of the following enums:
 - `credential_accepted` (GOV.UK Wallet accepted the credential)
 - `credential_failure` (GOV.UK Wallet rejected the credential)
 - `credential_deleted` (user declined the credential) 
+
+<div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    A value of `credential_deleted` means that an action the user took (such as declining the credential) caused the credential issuance to fail. It does not mean that the user has deleted their issued credential. The notification endpoint cannot notify you when a user deletes an issued credential.
+  </strong>
+</div>
 
 Your credential issuer must validate the contents of the request body and should ignore any unrecognised parameters.
 
