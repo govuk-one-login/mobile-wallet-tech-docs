@@ -33,7 +33,7 @@ If you do not provide a link to a shortened manual credential refresh journey in
 
 Digital credentials in GOV.UK Wallet have a technical expiry date, which is when the digital version of a user's credential is no longer valid and must be updated. You must set this technical expiry date using the [`validUntil` claim](/issue-credentials/credential/#payload) in the credential. There is [more guidance on credential expiry](/issue-credentials/credential/#guidance-on-credential-expiration).
 
-When a credential passes its `validUntil` date, it will fail programmatic verification and must be rejected by anyone who verifies it. The user will see their expired credential marked as 'Invalid' and greyed out in the app.
+When a credential passes its `validUntil` date, it will fail programmatic verification and must be rejected by anyone who verifies it. The user will see their expired credential marked as 'Invalid' and greyed out in the app. You can use the `credential_validity_period_max_days` parameter from the credential issuer's metadata to remind your user when the credential is due for refresh. 
 
 ### When the user's details have changed
 
