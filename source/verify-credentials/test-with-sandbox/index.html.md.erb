@@ -1,7 +1,7 @@
 ---
 title: Testing your in-person verification service with the GOV.UK Wallet sandbox
 weight: 10
-last_reviewed_on: 2026-08-27
+last_reviewed_on: 2026-10-16
 review_in: 6 months
 layout: verifier
 
@@ -9,7 +9,7 @@ layout: verifier
 
 # Testing your in-person verification service with the GOV.UK Wallet sandbox
 
-The GOV.UK Wallet sandbox lets you create a test digital driving licence and save it to your GOV.UK Wallet test app. You can then present the test digital driving licence to your in-person verification service and confirm it can [receive credential information](/verify-credentials). You can complete this flow on Android and iOS devices.
+The GOV.UK Wallet sandbox lets you create a test digital driving licence and save it to your GOV.UK Wallet test app. You can then present the test digital driving licence to your in-person verification service and confirm it can [receive credential information](/verify-credentials).
 
 The GOV.UK Wallet sandbox contains:
 
@@ -19,6 +19,13 @@ The GOV.UK Wallet sandbox contains:
 - a certificate authority that provides a certificate that authenticates you when connecting to the GOV.UK Wallet test app
 
 You must not use the GOV.UK Wallet sandbox tools in your production environment or as part of your live deployment process. The tools are limited to validating the integration with your verification service, and can not be used to test all credential types and attributes. You must write and maintain your own test suite in addition to the GOV.UK Wallet sandbox tools.
+
+To use the document builder and the GOV.UK Wallet test app on an Android or iOS device, your device must meet these compatibility requirements:
+
+Device|Operating system (OS)|Phone model
+|-|-|-|
+Apple| iOS 16.7 or higher| iPhone 8 or higher
+Android | Version 10 or higher| Compatible phone
 
 ## Before you use the GOV.UK Wallet sandbox
 
