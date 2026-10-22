@@ -35,7 +35,7 @@ Digital credentials in GOV.UK Wallet have a technical expiry date. This is when 
 
 When a credential passes its `validUntil` date, it will fail programmatic verification. Anyone verifying an expired credential must reject it. Users will see their expired credential marked as ‘Invalid’ and greyed out in the app. 
 
-The GOV.UK Wallet app also uses an in app banner to remind users when to refresh their credential. The banner recalls the `credential_validity_period_max` parameter from the credential issuer’s metadata. 
+The GOV.UK Wallet app also uses an in app banner to remind users when to refresh their credential. The banner displays the value of the `credential_validity_period_max` parameter from the credential issuer’s metadata. 
 
 ### When the user's details have changed
 
