@@ -33,13 +33,15 @@ If you do not provide a link to a shortened manual credential refresh journey in
 
 Digital credentials in GOV.UK Wallet have a technical expiry date. This is when the digital version of a user's credential is no longer valid and must be updated. You must set this technical expiry date using the [`validUntil` claim](/issue-credentials/credential/#payload) in the credential. There is [more guidance on credential expiry](/issue-credentials/credential/#guidance-on-credential-expiration).
 
-When a credential passes its `validUntil` date, it will fail programmatic verification. Anyone verifying an expired credential must reject it. Users will see their expired credential marked as ‘Invalid’ and greyed out in the app. 
+When a credential passes its `validUntil` date, it will fail programmatic verifications. If you're verifying credentials, you must reject any that are expired. Users will see their expired credential marked as `invalid` and greyed out in the app. 
 
-The GOV.UK Wallet app also uses an in app banner to remind users when to refresh their credential. The banner recalls the `credential_validity_period_max` parameter from the credential issuer’s metadata. 
+GOV.UK Wallet also uses the `credential_validity_period_max` parameter to display a banner to remind users when to refresh their credentials.
 
 ### When the user's details have changed
 
 You can revoke a user's credential, for example because they have changed their details. When you revoke a user's credential, it will appear marked as 'Invalid' and greyed out in the app. It can take up to 8 hours for a credential to be marked as 'Invalid'. There is [guidance on revoking credentials](/issue-credentials/status-list/revoke-credential). 
+
+When a credential passes its `ValidUntil` date, it will fail programmatic verification. If you're verifying credentials, you must reject any that are expired. 
 
 ### When the user reaches a birthday where their entitlements change
 
