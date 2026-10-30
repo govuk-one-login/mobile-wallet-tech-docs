@@ -63,6 +63,42 @@ You should rotate your document signing keys regularly. You should destroy the o
 
 Your DSC must have a longer validity period than the mdoc credential it will be used to verify. The DSC’s validity period must also include its document signing key. For example, if your credential is valid for 1 year and your document signing key is valid for 3 months, your DSC must be valid for 1 year and 3 months.
 
+## Include certificates in the `x5chain` element
+
+When you have created the DSC, you must include it in the `x5chain` element list in your mdoc’s [unprotected headers](/issue-credentials/credential/#issuerauth).
+
+`x5chain` (COSE label 33) carries the credential issuer’s DSC and any intermediate certificates. [RFC9360](https://www.rfc-editor.org/rfc/rfc9360.html#name-x509-cose-header-parameters) contains more guidance on the `x5chain` element. 
+
+`x5chain` can be:
+
+- a single certificate carried as a byte string
+- two or more certificates carried as an array of byte strings
+
+Each certificate is DER encoded.
+
+If `x5chain` is an array, you must put the certificate that contains the end-entity key and verifies the credential’s signature first in the array. After this, you should put the certificates in order so that each certificate is followed by the certificate that signed it. You should make sure that `x5chain` contains a link certificate for any credential issued while there are 2 valid root certificates, which happens during certificate rotation.
+
+The mdoc’s unprotected headers are not covered by the credential signature, so `x5chain` can be changed by holders and verifiers (for example, to remove expired links).
+
+This is an example of an `x5chain` structure containing 2 certificates. Each certificate is a DER-encoded X.509 certificate byte.
+
+```
+33: [                           / x5chain /
+    h'308202A130820248...',     / DSC /
+    h'30820312308202B8...'/    / issuing CA certificate /
+]
+```
+
+Each decoded X.509 certificate in the `x5chain` structure contains the following parameters.
+
+| Parameter       | Description                             |
+|-----------------|-----------------------------------------|
+| `subject` | Contains information to identify the certificate owner. `CN` is the owner’s common name, and `C` is the country of the owner.                                                                                        |
+| `issuer` | Contains information to identify who signed the certificate. `CN` is the signer’s common name, and `C` is the country of the signer.                                                                                      |
+| `validity` | Contains the validity period for this certificate - it is valid between the times defined for `notBefore` and `notAfter`.                                                                                                           |
+| `publicKey` | Contains the public key half of the key pair that belongs to the `subject`. This key verifies signatures created by the corresponding private key.                                                                                                           |
+| `signatureAlgorithm` | The cryptographic algorithm used to sign the X.509 certificate.                                                                                                           |
+
 ## Set up certificate revocation
 
 You must build a way to revoke your certificates in case a document signing key or a root key is compromised. [ISO/IEC 18013-5](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en) specifies you should use a Certificate Revocation List (CRL) to do this. You can set up some managed CA offerings to handle this for you, such as AWS Private CA.
