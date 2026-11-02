@@ -38,5 +38,6 @@ updates:
       default-days: 7
     labels:
       - dependencies
+      - runtime
     commit-message:
       prefix: chore
