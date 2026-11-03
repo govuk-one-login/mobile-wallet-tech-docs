@@ -48,7 +48,7 @@ Your CSR body must contain a subject DN that identifies the issuing authority wi
 |`CN`| [Common name](#common-name), for example Example `Verifier Org Reader Sub-CA`   |2.5.4.3|Stable human-readable sub-CA name|
 |`serialNumber`| [Serial Number](#serial-number), for example `550e8400-e29b-41d4-a716-446655440000`   |2.5.4.5|Universally Unique Identifier v4 (UUID)|
 
-Your CSR body must include only these 5 attributes. GOV.UK Wallet will reject CSRs that:
+Your CSR body must include these 5 attributes only. GOV.UK Wallet will reject CSRs that:
 
 - do not contain all 5 of these attributes
 - contain any additional attributes
