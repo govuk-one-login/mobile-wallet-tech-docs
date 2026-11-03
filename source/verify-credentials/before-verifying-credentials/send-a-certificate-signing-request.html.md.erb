@@ -21,9 +21,9 @@ Your CSR body must:
 * conform to PKCS #10
 * be Privacy-Enhanced Mail (PEM) encoded
 * contain a valid signature over `CertificationRequestInfo`
-* contain a [subject Distinguished Name](#specify-your-subject-dn) (DN)
+* contain a [subject Distinguished Name](#specify-your-subject-dn) (DN) with the correct attributes
 
-Your CSR body can contain `basicConstraints`. GOV.UK Wallet will accept a CSR with or without `basicConstraints`.
+GOV.UK Wallet will accept a CSR with or without `basicConstraints` included in the body. If you include `basicConstraints`, it must be set to `CA=TRUE` and `pathLen=0`.
 
 Your CSR must not contain:
 
@@ -42,13 +42,17 @@ Your CSR body must contain a subject DN that identifies the issuing authority wi
 
 |Attribute|Description|OID|Format|
 |---|---|---|-------|
-|`C`| Two character country code, for example `GB`     |2.5.4.6|ISO 3166-1 alpha-2 country code|
+|`C`| Two character [country code](#country-code). This must be set to `GB`     |2.5.4.6|ISO 3166-1 alpha-2 country code|
 |`O`|  Legal organisation name, for example  `Example Verifier Org Ltd`  |2.5.4.10|String|
 |`OU`|  Department or division, for example `DVS PKI Operations`   |2.5.4.11|String|
 |`CN`| [Common name](#common-name), for example Example `Verifier Org Reader Sub-CA`   |2.5.4.3|Stable human-readable sub-CA name|
 |`serialNumber`| [Serial Number](#serial-number), for example `550e8400-e29b-41d4-a716-446655440000`   |2.5.4.5|Universally Unique Identifier v4 (UUID)|
 
-If your CSR does not contain these 5 attributes, we will reject it.
+Your CSR body must include only these 5 attributes. GOV.UK Wallet will reject CSRs that:
+
+- do not contain all 5 of these attributes
+- contain any additional attributes
+- contain duplicate attributes
 
 Below is an example of a completed subject DN: 
 
@@ -59,6 +63,10 @@ OU=Reader Certification Authority
 CN=Example Verifier Org Reader Sub-CA
 serialNumber=550e8400-e29b-41d4-a716-446655440000
 ```
+
+### Country code
+
+You must set the country code in the subject DN to `GB` for Great Britain. If your subject DN is set to any other country code, GOV.UK Wallet will reject your CSR.
 
 ### Common name
 
@@ -96,7 +104,7 @@ serialNumber=550e8400-e29b-41d4-a716-446655440000
 
 ## Encrypt your CSR
 
-You must protect your CSR with encryption. The private key algorithm for your CSR must meet all of the following requirements: 
+You must encrypt your CSR. The private key algorithm for your CSR must meet all of the following requirements: 
 
 |Parameter|Required value|
 |-|-|
