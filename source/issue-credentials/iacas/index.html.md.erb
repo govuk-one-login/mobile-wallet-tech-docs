@@ -10,9 +10,11 @@ layout: issuer
 
 You must [set up an Issuing Authority Certificate Authority (IACA) to issue root certificates](/issue-credentials/sign-mdoc-credentials/#set-up-an-iaca-to-issue-root-certificates). You must then publish your root certificates on your public `/iacas` endpoint.
 
-You need a root certificate to verify the document signing certificate (DSC) that you include in the mdoc credentials your service issues. These 2 certificates form part of the chain of trust that lets GOV.UK Wallet and Digital Verification Services (DVSs) validate that your credential was genuinely issued by your service.
+You need a root certificate to verify the Document Signing Certificate (DSC) that you include in the mdoc credentials your service issues. These 2 certificates form part of the chain of trust that lets GOV.UK Wallet and Digital Verification Services (DVSs) validate that your credential was genuinely issued by your service.
 
-Each root certificate contains a public key. You will normally publish 1 root certificate, but you need to publish 2 when you rotate your certificates.
+Each root certificate contains a public key. You will normally publish one root certificate, but you need to publish 2 when you rotate your certificates.
+
+You must provide validated Subject Public Key Info (SPKI) hashes for all your root certificates. Your SPKI hashes must be compatible with all [versions of iOS and Android that One Login supports](/verify-credentials/test-with-sandbox/#testing-your-in-person-verification-service-with-the-gov-uk-wallet-sandbox).
 
 There is more guidance on [signing your credentials](/issue-credentials/sign-mdoc-credentials).
 

@@ -25,7 +25,9 @@ You must set up a private Certificate Authority (CA) to act as your IACA.
 
 You must create one or more self-signed root certificates. These certificates establish the chain of trust that authenticates the credentials your service issues. You can find the profile for a root certificate in [ISO 18013-5:2021 Annex B](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en).
 
-You must keep your IACA secure. You are responsible for setting up security measures like cryptographic protection, certificate lifecycle management, access controls and secure credential storage.
+You must keep your IACA secure. You are responsible for setting up security measures like cryptographic protection, certificate lifecycle management, access controls and secure credential storage. 
+
+You must validate the Subject Public Key Info (SPKI) hashes for all your certificates. Your certificates must be compatible with all versions of iOS and Android that One Login supports.
 
 You should follow the National Cyber Security Centre (NCSC) guidance on [managing certificates](https://www.ncsc.gov.uk/guidance/provisioning-and-managing-certificates-in-the-web-pki) and [developing a public key infrastructure (PKI)](https://www.ncsc.gov.uk/collection/in-house-public-key-infrastructure).
 
