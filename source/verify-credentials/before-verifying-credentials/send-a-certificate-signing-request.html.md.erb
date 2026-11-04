@@ -23,7 +23,7 @@ Your CSR body must:
 * contain a valid signature over `CertificationRequestInfo`
 * contain a [subject Distinguished Name](#specify-your-subject-dn) (DN) with the correct attributes
 
-GOV.UK Wallet will accept a CSR with or without `basicConstraints` included in the body. If you include `basicConstraints`, it must be set to `CA=TRUE` and `pathLen=0`.
+GOV.UK Wallet will accept a CSR with or without `basicConstraints` included in the body. If you include `basicConstraints`, it must be set to `CA:TRUE` and `pathLen` unset or set to `0`. GOV.UK Wallet will reject any CSR with `basicConstraints` set to `CA:FALSE` or with a `pathLen` greater than or equal to `1`.
 
 Your CSR must not contain:
 
@@ -34,25 +34,24 @@ Your CSR must not contain:
 * `policyConstraints`
 * any custom extensions
 
-GOV.UK Wallet will reject any CSR containing extensions.
-
 ## Specify your subject DN 
 
-Your CSR body must contain a subject DN that identifies the issuing authority with the following attributes:
+Your CSR body must contain a subject DN that identifies the issuing authority with the following 5 attributes:
 
 |Attribute|Description|OID|Format|
 |---|---|---|-------|
 |`C`| Two character [country code](#country-code). This must be set to `GB`     |2.5.4.6|ISO 3166-1 alpha-2 country code|
 |`O`|  Legal organisation name, for example  `Example Verifier Org Ltd`  |2.5.4.10|String|
-|`OU`|  Department or division, for example `DVS PKI Operations`   |2.5.4.11|String|
+|`OU`|  Department or division, for example `Reader Certification Authority`   |2.5.4.11|String|
 |`CN`| [Common name](#common-name), for example Example `Verifier Org Reader Sub-CA`   |2.5.4.3|Stable human-readable sub-CA name|
 |`serialNumber`| [Serial Number](#serial-number), for example `550e8400-e29b-41d4-a716-446655440000`   |2.5.4.5|Universally Unique Identifier v4 (UUID)|
 
-Your CSR body must include these 5 attributes only. GOV.UK Wallet will reject CSRs that:
+GOV.UK Wallet will reject CSRs where the subject DN:
 
-- do not contain all 5 of these attributes
-- contain any additional attributes
-- contain duplicate attributes
+- does not contain all 5 of these attributes
+- contains any additional attributes
+- contains duplicate attributes
+- contains empty attributes
 
 Below is an example of a completed subject DN: 
 
@@ -66,7 +65,7 @@ serialNumber=550e8400-e29b-41d4-a716-446655440000
 
 ### Country code
 
-You must set the country code in the subject DN to `GB` for Great Britain. If your subject DN is set to any other country code, GOV.UK Wallet will reject your CSR.
+You must set your country code (`C`) in the subject DN to `GB` for Great Britain. If you specify any other country code, GOV.UK Wallet will reject your CSR.
 
 ### Common name
 
