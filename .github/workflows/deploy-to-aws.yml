@@ -23,7 +23,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install Ruby
-        uses: ruby/setup-ruby@bec3f19a76460dbe12f60def7d1a77585f07516c # pin@v1.322.0
+        uses: ruby/setup-ruby@b1da4809b005e0178fe08a1d57317bffc00b7b4c # pin@v1.332.0
         with:
           bundler-cache: true
       - name: Install Gems
@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: bundle exec middleman build --verbose
       - name: Upload to ECR and tag
-        uses: govuk-one-login/devplatform-upload-action-ecr@d839fc3ead8c9d9f18f7a8cceb7ab4a3eab18a58 # pin@1.7.0
+        uses: govuk-one-login/devplatform-upload-action-ecr@256c057b61bb6795fccf00a439a895c678525863 # pin@1.7.1
         with:
           role-to-assume-arn: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           container-sign-kms-key-arn: ${{ secrets.CONTAINER_SIGN_KMS_KEY }}
