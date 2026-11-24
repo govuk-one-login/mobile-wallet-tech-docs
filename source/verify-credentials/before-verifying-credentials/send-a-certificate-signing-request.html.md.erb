@@ -40,11 +40,11 @@ Your CSR body must contain a subject DN that identifies the issuing authority wi
 
 |Attribute|Description|OID|Format|
 |---|---|---|-------|
-|`C`| Two character [country code](#country-code). This must be set to `GB`     |2.5.4.6|ISO 3166-1 alpha-2 country code|
-|`O`|  Legal organisation name, for example  `Example Verifier Org Ltd`  |2.5.4.10|String|
-|`OU`|  Department or division, for example `Reader Certification Authority`   |2.5.4.11|String|
-|`CN`| [Common name](#common-name), for example Example `Verifier Org Reader Sub-CA`   |2.5.4.3|Stable human-readable sub-CA name|
-|`serialNumber`| [Serial Number](#serial-number), for example `550e8400-e29b-41d4-a716-446655440000`   |2.5.4.5|Universally Unique Identifier v4 (UUID)|
+|`C`| Two character [country code](#country-code). You must set this to `GB` for GOV.UK Wallet sandbox CSRs.     |2.5.4.6|ISO 3166-1 alpha-2 country code|
+|`O`|  Legal organisation name, for example  `Example Verifier Org Ltd`.  |2.5.4.10|String|
+|`OU`|  Department or division, for example `Reader Certification Authority`.   |2.5.4.11|String|
+|`CN`| [Common name](#common-name), for example Example `Verifier Org Reader Sub-CA`.   |2.5.4.3|Stable human-readable sub-CA name|
+|`serialNumber`| [Serial Number](#serial-number), for example `550e8400-e29b-41d4-a716-446655440000`.   |2.5.4.5|Universally Unique Identifier v4 (UUID)|
 
 GOV.UK Wallet will reject CSRs where the subject DN:
 
@@ -65,7 +65,9 @@ serialNumber=550e8400-e29b-41d4-a716-446655440000
 
 ### Country code
 
-You must set your country code (`C`) in the subject DN to `GB` for Great Britain. If you specify any other country code, GOV.UK Wallet will reject your CSR.
+If your CSR is for the GOV.UK Wallet sandbox, you must set your country code (`C`) in the subject DN to `GB` for Great Britain. If you specify any other country code, the GOV.UK Wallet sandbox will reject your CSR.
+
+You will be able to use any ISO 3166-1 alpha-2 country code if your CSR is for the GOV.UK Wallet production environment.
 
 ### Common name
 
