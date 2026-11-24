@@ -16,5 +16,5 @@ There is more guidance on [issuing a credential offer](/issue-credentials/creden
 
 You service will obtain user information for users who authenticate themselves with GOV.UK One Login. This includes their unique subject identifier (`wallet_subject_id`) for your service. You can use this pairwise identifier to carry out a rightful holder check when issuing them a digital credential. This check makes sure the user logged in to your service and the GOV.UK wallet receiving the credential is the same person.
 
-The GOV.UK Wallet subject identifier `wallet_subject_id` links a user to a service, not a device. Your service receives the same `wallet_subject_id` whenever that user interacts with it, even from a different mobile device. If the same user interacts with another service, that service receives a different `wallet_subject_id`. This helps protect the user's privacy across multiple services.
+The GOV.UK Wallet subject identifier `wallet_subject_id` links a user to a service, not a device. Your service receives the same `wallet_subject_id` whenever that user interacts with it, even from a different mobile device. If the same user interacts with another service, that service receives a different `wallet_subject_id`. This non-standard approach helps protect the user's privacy across different services.
 
