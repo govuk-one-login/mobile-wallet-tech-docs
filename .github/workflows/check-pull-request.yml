@@ -12,7 +12,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Ruby
-        uses: ruby/setup-ruby@bec3f19a76460dbe12f60def7d1a77585f07516c # v1.322.0
+        uses: ruby/setup-ruby@de492cf36cbab201753d720ce4f4e336cd688c94 # v1.336.0
         with:
           bundler-cache: true
       - name: Build Middleman
