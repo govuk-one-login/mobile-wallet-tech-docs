@@ -8,10 +8,13 @@ layout: issuer
 
 # Authenticate users with GOV.UK One Login
 
-If your service wants to issue credentials you must use GOV.UK One Login to authenticate your users. This process makes sure that credentials are issued into a user’s wallet that is logged in as the same user the credential is for.
+You must use GOV.UK One Login to authenticate every user your service will issue a credential to. This makes sure the user logged in to the user wallet receiving the credential is its rightful holder. 
 
-When registering your service with GOV.UK One Login, you get a unique client identifier. You must include this identifier as a `clientId` claim in the pre-authorised code your service generates as part of issuing a credential offer.
+You will get a unique client identifier when registering your service with GOV.UK One Login. You must include this identifier as a `clientId` claim in the pre-authorised code you generate when issuing a credential offer.
 
 There is more guidance on [issuing a credential offer](/issue-credentials/credential-offer).
 
-When your user authenticates with GOV.UK One Login, you obtain their user information which includes their GOV.UK Wallet subject identifier (`wallet_subject_id`). This subject identifier is a pairwise identifier you can use to carry out a rightful holder check at the point where you issue the digital credential. This check makes sure that the user logged in to your service and GOV.UK Wallet are the same user.
+You service will obtain user information for users who authenticate themselves with GOV.UK One Login. This includes their unique subject identifier (`wallet_subject_id`) for your service. You can use this pairwise identifier to carry out a rightful holder check when issuing them a digital credential. This check makes sure the user logged in to your service and the GOV.UK wallet receiving the credential is the same person.
+
+The GOV.UK Wallet subject identifier `wallet_subject_id` links a user to a service, not a device. Your service receives the same `wallet_subject_id` whenever that user interacts with it, even from a different mobile device. If the same user interacts with another service, that service receives a different `wallet_subject_id`. This non-standard approach helps protect the user's privacy across different services.
+
