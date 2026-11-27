@@ -51,3 +51,13 @@ You should also:
 - use findings identified by your user research to meet your users’ needs, as specified in the [Government Design Principles](https://www.gov.uk/guidance/government-design-principles#start-with-user-needs)
 
 To get started, you need to [authenticate users with GOV.UK One Login](authenticate-users).
+
+## Share compatible Transport Layer Security certificates
+
+GOV.UK Wallet connects to your credential issuer endpoints over HTTPS.
+
+You must provide all the Transport Layer Security (TLS) certificates that GOV.UK Wallet needs for certificate pining. This may include intermediate and cross-signed certificates that support older operating systems (OS). Your TLS certificate chain must work with [every operating system that GOV.UK Wallet supports](/verify-credentials/test-with-sandbox/). 
+
+If you do not provide compatible certificates, GOV.UK Wallet can not retrieve your credential issuer metadata or your issued digital credential.  This is because certificate validation fails and prevents a successful TLS handshake.
+
+You must tell us before you renew or replace a TLS certificate. This includes replacing a compromised certificate. We must update the pinned certificates before you make the change, so let us know as early as possible to minimise disruption to your service.
